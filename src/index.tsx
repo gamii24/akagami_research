@@ -302,7 +302,7 @@ app.delete('/api/pdfs/:id', async (c) => {
 // Home page (public view)
 app.get('/', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
+    <div class="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header class="bg-primary shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
@@ -314,25 +314,29 @@ app.get('/', (c) => {
               </h1>
               <p class="text-white text-sm mt-1 opacity-90">資料管理システム</p>
             </div>
-            <a 
-              href="/admin" 
-              class="inline-flex items-center px-5 py-2.5 bg-white text-primary rounded-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg font-medium border-2 border-white"
-            >
-              <i class="fas fa-cog mr-2"></i>管理画面
-            </a>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar - Filters */}
-          <aside class="lg:col-span-1">
-            <div class="bg-white rounded-xl shadow-lg p-6 sticky top-8 border-2 border-primary">
+          {/* PDF List - Show first on mobile */}
+          <div class="lg:col-span-3 order-1 lg:order-2">
+            <div id="pdf-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="col-span-full text-center py-12 text-gray-600">
+                <i class="fas fa-spinner fa-spin text-5xl mb-4 text-primary"></i>
+                <p class="text-lg">読み込み中...</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar - Show second on mobile (below cards) */}
+          <aside class="lg:col-span-1 order-2 lg:order-1">
+            <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 border-2 border-primary">
               {/* Search */}
               <div class="mb-8">
-                <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
+                <h2 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
                   <i class="fas fa-search mr-2 text-primary"></i>検索
                 </h2>
                 <div class="flex gap-2">
@@ -358,18 +362,20 @@ app.get('/', (c) => {
               <div id="tag-filter"></div>
             </div>
           </aside>
-
-          {/* PDF List */}
-          <div class="lg:col-span-3">
-            <div id="pdf-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="col-span-full text-center py-12 text-dark">
-                <i class="fas fa-spinner fa-spin text-5xl mb-4 text-primary"></i>
-                <p class="text-lg">読み込み中...</p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer class="bg-gray-50 border-t border-gray-200 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <a 
+            href="/admin" 
+            class="text-sm text-gray-500 hover:text-primary transition-colors"
+          >
+            管理画面
+          </a>
+        </div>
+      </footer>
     </div>
   )
 })

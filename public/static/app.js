@@ -138,31 +138,27 @@ function renderPDFList() {
             </div>
           </div>
           <div class="flex-1 min-w-0">
-            <h3 class="text-lg font-bold text-gray-800 mb-2 leading-tight">
+            <h3 class="text-base font-bold text-gray-800 leading-tight truncate">
               ${escapeHtml(pdf.title)}
             </h3>
           </div>
         </div>
         
         ${pdf.description ? `
-          <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+          <p class="text-gray-600 mb-4 text-sm leading-relaxed line-clamp-2">
             ${escapeHtml(pdf.description)}
           </p>
         ` : ''}
         
-        <div class="flex flex-wrap gap-2 mb-4">
-          ${pdf.category_name ? `
-            <span class="badge badge-category text-xs shadow-sm">
-              <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
-            </span>
-          ` : ''}
-          
-          ${pdf.tags ? pdf.tags.map(tag => `
-            <span class="badge badge-tag text-xs">
-              <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
-            </span>
-          `).join('') : ''}
-        </div>
+        ${pdf.tags && pdf.tags.length > 0 ? `
+          <div class="flex flex-wrap gap-2 mb-4">
+            ${pdf.tags.map(tag => `
+              <span class="badge badge-tag text-xs">
+                <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
+              </span>
+            `).join('')}
+          </div>
+        ` : ''}
         
         <div class="flex items-center gap-3 text-xs text-gray-500 mb-4 flex-wrap">
           ${pdf.file_size ? `
