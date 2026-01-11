@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "webapp",
+  "name": "akagami-research",
   "compatibility_date": "2026-01-11",
   "pages_build_output_dir": "./dist",
   "compatibility_flags": [
@@ -9,8 +9,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "webapp-production",
-      "database_id": "local-db"
+      "database_name": "akagami-research-production",
+      "database_id": "c5d4dce7-e94e-489a-880f-36e6056f74c6"
     }
   ]
 }
