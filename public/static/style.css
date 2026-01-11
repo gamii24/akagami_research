@@ -171,6 +171,24 @@ select:focus {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Mobile Sidebar */
+#sidebar {
+  transition: transform 0.3s ease-in-out;
+}
+
+#sidebar.show-mobile {
+  transform: translateX(0);
+}
+
+#sidebar-overlay {
+  transition: opacity 0.3s ease-in-out;
+}
+
+#sidebar-overlay.show {
+  display: block !important;
+  opacity: 1;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .category-btn, .tag-btn {

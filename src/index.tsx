@@ -323,21 +323,34 @@ app.get('/', (c) => {
           <div class="flex items-center justify-between">
             <div>
               <h1 class="text-3xl font-bold text-white tracking-wide">
-                <i class="fas fa-flask mr-3"></i>
                 Akagami Research
               </h1>
               <p class="text-white text-sm mt-1 opacity-90">資料管理システム</p>
             </div>
+            {/* Mobile Menu Button */}
+            <button 
+              onclick="toggleMobileMenu()"
+              class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+            >
+              <i class="fas fa-bars text-2xl"></i>
+            </button>
           </div>
         </div>
       </header>
+
+      {/* Sidebar Overlay for Mobile */}
+      <div 
+        id="sidebar-overlay" 
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"
+        onclick="toggleMobileMenu()"
+      ></div>
 
       {/* Main Content */}
       <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* PDF List - Show first on mobile */}
           <div class="lg:col-span-3 order-1 lg:order-2">
-            <div id="pdf-list" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div id="pdf-list" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
               <div class="col-span-full text-center py-12 text-gray-600">
                 <i class="fas fa-spinner fa-spin text-5xl mb-4 text-primary"></i>
                 <p class="text-lg">読み込み中...</p>
@@ -346,8 +359,19 @@ app.get('/', (c) => {
           </div>
 
           {/* Sidebar - Show second on mobile (below cards) */}
-          <aside class="lg:col-span-1 order-2 lg:order-1">
-            <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 border-2 border-primary">
+          <aside 
+            id="sidebar"
+            class="lg:col-span-1 order-2 lg:order-1 fixed lg:static inset-y-0 right-0 transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-50 lg:z-auto w-80 lg:w-auto"
+          >
+            <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 border-2 border-primary h-full lg:h-auto overflow-y-auto">
+              {/* Close button for mobile */}
+              <button 
+                onclick="toggleMobileMenu()"
+                class="lg:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              >
+                <i class="fas fa-times text-2xl"></i>
+              </button>
+              
               {/* Search */}
               <div class="mb-8">
                 <h2 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
