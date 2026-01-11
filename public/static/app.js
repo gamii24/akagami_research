@@ -765,7 +765,7 @@ function renderPDFList() {
           <h3 class="text-sm font-bold text-gray-800 leading-snug break-words flex-1">
             ${escapeHtml(pdf.title)}
           </h3>
-          ${isNew ? '<span class="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-xs font-medium rounded border border-gray-300 flex-shrink-0">NEW</span>' : ''}
+          ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300 flex-shrink-0">NEW</span>' : ''}
         </div>
         
         ${pdf.tags && pdf.tags.length > 0 ? `
