@@ -172,7 +172,7 @@ function renderPDFList() {
       class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 block cursor-pointer"
     >
       <div class="p-4">
-        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
+        <h3 class="text-sm font-bold text-gray-800 mb-2 truncate" title="${escapeHtml(pdf.title)}">
           ${escapeHtml(pdf.title)}
         </h3>
         
