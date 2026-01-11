@@ -132,17 +132,37 @@ function renderPDFList() {
   
   // Show bulk download button if category is selected
   if (state.selectedCategory) {
-    html += `
-      <div class="col-span-full mb-4">
-        <button 
-          onclick="bulkDownloadCategory()"
-          class="w-full px-6 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg flex items-center justify-center gap-3"
-        >
-          <i class="fas fa-download text-2xl"></i>
-          <span>このカテゴリのファイルをすべてまとめてダウンロードする</span>
-        </button>
-      </div>
-    `
+    const selectedCat = state.categories.find(cat => cat.id === state.selectedCategory)
+    const downloadUrl = selectedCat?.download_url
+    
+    if (downloadUrl) {
+      // If download URL is set, redirect to that URL
+      html += `
+        <div class="col-span-full mb-4">
+          <a 
+            href="${escapeHtml(downloadUrl)}"
+            target="_blank"
+            class="block w-full px-6 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg text-center"
+          >
+            <i class="fas fa-download text-2xl mr-2"></i>
+            <span>カテゴリ内のファイルを全ダウンロード</span>
+          </a>
+        </div>
+      `
+    } else {
+      // If no download URL, use the old bulk download function
+      html += `
+        <div class="col-span-full mb-4">
+          <button 
+            onclick="bulkDownloadCategory()"
+            class="w-full px-6 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg flex items-center justify-center gap-3"
+          >
+            <i class="fas fa-download text-2xl"></i>
+            <span>カテゴリ内のファイルを全ダウンロード</span>
+          </button>
+        </div>
+      `
+    }
   }
   
   html += state.pdfs.map(pdf => `

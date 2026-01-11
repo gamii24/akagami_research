@@ -546,7 +546,7 @@ async function deletePdf(id) {
 function showManageCategoriesModal() {
   const modalHtml = `
     <div class="fixed inset-0 modal-overlay flex items-center justify-center z-50" onclick="closeModal(event)">
-      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
         <div class="px-6 py-4 border-b flex items-center justify-between">
           <h2 class="text-xl font-bold text-gray-800">
             <i class="fas fa-folder mr-2"></i>カテゴリ管理
@@ -573,16 +573,35 @@ function showManageCategoriesModal() {
             </button>
           </form>
           
-          <div class="space-y-2" id="categories-list">
+          <div class="space-y-3" id="categories-list">
             ${adminState.categories.map(cat => `
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <span class="font-medium">${escapeHtml(cat.name)}</span>
-                <button 
-                  onclick="deleteCategory(${cat.id})"
-                  class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm"
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
+              <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-bold text-lg">${escapeHtml(cat.name)}</span>
+                  <div class="flex gap-2">
+                    <button 
+                      onclick="editCategory(${cat.id})"
+                      class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm"
+                    >
+                      <i class="fas fa-edit"></i> 編集
+                    </button>
+                    <button 
+                      onclick="deleteCategory(${cat.id})"
+                      class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                ${cat.download_url ? `
+                  <div class="text-sm text-gray-600 mt-2">
+                    <i class="fas fa-link mr-1"></i>
+                    <span class="font-medium">ダウンロードURL:</span>
+                    <a href="${escapeHtml(cat.download_url)}" target="_blank" class="text-blue-600 hover:underline ml-1">
+                      ${escapeHtml(cat.download_url)}
+                    </a>
+                  </div>
+                ` : '<div class="text-sm text-gray-400 mt-2"><i class="fas fa-info-circle mr-1"></i>ダウンロードURL未設定</div>'}
               </div>
             `).join('')}
           </div>
@@ -592,6 +611,106 @@ function showManageCategoriesModal() {
   `
   
   document.getElementById('modal-container').innerHTML = modalHtml
+}
+
+function editCategory(id) {
+  const category = adminState.categories.find(cat => cat.id === id)
+  if (!category) return
+  
+  const modalHtml = `
+    <div class="fixed inset-0 modal-overlay flex items-center justify-center z-50" onclick="closeModal(event)">
+      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+          <h2 class="text-xl font-bold text-gray-800">
+            <i class="fas fa-edit mr-2"></i>カテゴリ編集
+          </h2>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+        </div>
+        
+        <form onsubmit="updateCategory(event, ${id})" class="px-6 py-4 space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">カテゴリ名</label>
+            <input 
+              type="text" 
+              id="edit-category-name"
+              value="${escapeHtml(category.name)}"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">説明（オプション）</label>
+            <input 
+              type="text" 
+              id="edit-category-description"
+              value="${escapeHtml(category.description || '')}"
+              placeholder="カテゴリの説明"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-download mr-1 text-blue-500"></i>
+              一括ダウンロードURL（オプション）
+            </label>
+            <input 
+              type="url" 
+              id="edit-category-download-url"
+              value="${escapeHtml(category.download_url || '')}"
+              placeholder="https://drive.google.com/..."
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p class="mt-1 text-xs text-gray-500">
+              <i class="fas fa-info-circle mr-1"></i>
+              このURLが設定されている場合、「カテゴリ内のファイルを全ダウンロード」ボタンをクリックするとこのURLに飛びます
+            </p>
+          </div>
+          
+          <div class="flex gap-4 pt-4">
+            <button 
+              type="submit"
+              class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <i class="fas fa-save mr-2"></i>更新
+            </button>
+            <button 
+              type="button"
+              onclick="showManageCategoriesModal()"
+              class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
+            >
+              戻る
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `
+  
+  document.getElementById('modal-container').innerHTML = modalHtml
+}
+
+async function updateCategory(event, id) {
+  event.preventDefault()
+  
+  const name = document.getElementById('edit-category-name').value
+  const description = document.getElementById('edit-category-description').value
+  const download_url = document.getElementById('edit-category-download-url').value
+  
+  try {
+    await axios.put(`/api/categories/${id}`, { 
+      name, 
+      description: description || '',
+      download_url: download_url || null
+    })
+    await loadAdminData()
+    showManageCategoriesModal()
+  } catch (error) {
+    alert('カテゴリの更新に失敗しました')
+  }
 }
 
 async function addCategory(event) {

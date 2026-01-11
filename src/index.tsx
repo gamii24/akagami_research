@@ -39,6 +39,18 @@ app.post('/api/categories', async (c) => {
   })
 })
 
+// Update category
+app.put('/api/categories/:id', async (c) => {
+  const id = c.req.param('id')
+  const { name, description, download_url } = await c.req.json()
+  
+  await c.env.DB.prepare(
+    'UPDATE categories SET name = ?, description = ?, download_url = ? WHERE id = ?'
+  ).bind(name || '', description || '', download_url || null, id).run()
+  
+  return c.json({ success: true })
+})
+
 // Delete category
 app.delete('/api/categories/:id', async (c) => {
   const id = c.req.param('id')
@@ -321,12 +333,12 @@ app.get('/', (c) => {
       <header class="bg-primary shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
-            <div>
+            <a href="/" class="hover:opacity-80 transition-opacity">
               <h1 class="text-3xl font-bold text-white tracking-wide">
                 Akagami Research
               </h1>
               <p class="text-white text-sm mt-1 opacity-90">資料管理システム</p>
-            </div>
+            </a>
             {/* Mobile Menu Button */}
             <button 
               onclick="toggleMobileMenu()"
