@@ -65,21 +65,21 @@ function renderCategoryFilter() {
   if (!container) return
   
   const html = `
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold mb-3 text-gray-700">
-        <i class="fas fa-folder mr-2"></i>カテゴリ
+    <div class="mb-8">
+      <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
+        <i class="fas fa-layer-group mr-2 text-primary"></i>カテゴリ
       </h2>
       <div class="space-y-2">
         <button 
           onclick="filterByCategory(null)" 
-          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-4 py-2 rounded-lg transition-colors"
+          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg"
         >
-          <i class="fas fa-list mr-2"></i>すべて
+          <i class="fas fa-th-large mr-2"></i>すべて
         </button>
         ${state.categories.map(cat => `
           <button 
             onclick="filterByCategory(${cat.id})" 
-            class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-4 py-2 rounded-lg transition-colors"
+            class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg"
           >
             <i class="fas fa-folder mr-2"></i>${escapeHtml(cat.name)}
           </button>
@@ -96,14 +96,14 @@ function renderTagFilter() {
   
   const html = `
     <div class="mb-6">
-      <h2 class="text-lg font-semibold mb-3 text-gray-700">
-        <i class="fas fa-tags mr-2"></i>タグ
+      <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
+        <i class="fas fa-tags mr-2 text-primary"></i>タグ
       </h2>
       <div class="flex flex-wrap gap-2">
         ${state.tags.map(tag => `
           <button 
             onclick="toggleTag(${tag.id})" 
-            class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-1 rounded-full text-sm transition-colors"
+            class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-2 rounded-full text-sm font-medium"
           >
             <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
           </button>
@@ -120,59 +120,61 @@ function renderPDFList() {
   
   if (state.pdfs.length === 0) {
     container.innerHTML = `
-      <div class="text-center py-12 text-gray-500">
-        <i class="fas fa-file-pdf text-6xl mb-4"></i>
-        <p class="text-lg">資料が見つかりませんでした</p>
+      <div class="text-center py-16 text-dark">
+        <i class="fas fa-inbox text-7xl mb-4 text-accent opacity-50"></i>
+        <p class="text-xl font-medium">資料が見つかりませんでした</p>
       </div>
     `
     return
   }
   
   const html = state.pdfs.map(pdf => `
-    <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
+    <div class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border-2">
       <div class="flex items-start gap-4">
         <div class="flex-shrink-0">
-          <i class="fas fa-file-pdf text-5xl text-red-500"></i>
+          <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-md">
+            <i class="fas fa-file-pdf text-3xl text-white"></i>
+          </div>
         </div>
         <div class="flex-1 min-w-0">
-          <h3 class="text-xl font-semibold text-gray-800 mb-2">
+          <h3 class="text-xl font-bold text-darker mb-2 hover:text-primary transition-colors">
             ${escapeHtml(pdf.title)}
           </h3>
           
           ${pdf.description ? `
-            <p class="text-gray-600 mb-3 line-clamp-2">
+            <p class="text-dark mb-4 line-clamp-2 leading-relaxed">
               ${escapeHtml(pdf.description)}
             </p>
           ` : ''}
           
-          <div class="flex flex-wrap gap-2 mb-3">
+          <div class="flex flex-wrap gap-2 mb-4">
             ${pdf.category_name ? `
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+              <span class="badge badge-category shadow-sm">
                 <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
               </span>
             ` : ''}
             
             ${pdf.tags ? pdf.tags.map(tag => `
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
+              <span class="badge badge-tag">
                 <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
               </span>
             `).join('') : ''}
           </div>
           
-          <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+          <div class="flex items-center gap-4 text-sm text-dark/70 mb-4">
             ${pdf.file_size ? `
-              <span><i class="fas fa-file mr-1"></i>${escapeHtml(pdf.file_size)}</span>
+              <span class="flex items-center"><i class="fas fa-file mr-1.5"></i>${escapeHtml(pdf.file_size)}</span>
             ` : ''}
             ${pdf.page_count ? `
-              <span><i class="fas fa-book mr-1"></i>${pdf.page_count}ページ</span>
+              <span class="flex items-center"><i class="fas fa-book mr-1.5"></i>${pdf.page_count}ページ</span>
             ` : ''}
-            <span><i class="fas fa-clock mr-1"></i>${formatDate(pdf.created_at)}</span>
+            <span class="flex items-center"><i class="fas fa-clock mr-1.5"></i>${formatDate(pdf.created_at)}</span>
           </div>
           
           <a 
             href="${escapeHtml(pdf.google_drive_url)}" 
             target="_blank"
-            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg font-medium"
           >
             <i class="fas fa-external-link-alt mr-2"></i>Google Driveで開く
           </a>

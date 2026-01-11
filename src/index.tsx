@@ -302,18 +302,21 @@ app.delete('/api/pdfs/:id', async (c) => {
 // Home page (public view)
 app.get('/', (c) => {
   return c.render(
-    <div class="min-h-screen">
+    <div class="min-h-screen bg-light">
       {/* Header */}
-      <header class="bg-white shadow-sm">
+      <header class="bg-darker shadow-lg border-b-4 border-primary">
         <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold text-gray-900">
-              <i class="fas fa-file-pdf text-red-500 mr-3"></i>
-              PDF資料管理システム
-            </h1>
+            <div>
+              <h1 class="text-3xl font-bold text-white tracking-wide">
+                <i class="fas fa-flask text-secondary mr-3"></i>
+                Akagami Research
+              </h1>
+              <p class="text-light text-sm mt-1 opacity-80">資料管理システム</p>
+            </div>
             <a 
               href="/admin" 
-              class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              class="inline-flex items-center px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all duration-300 shadow-md hover:shadow-lg font-medium"
             >
               <i class="fas fa-cog mr-2"></i>管理画面
             </a>
@@ -322,26 +325,26 @@ app.get('/', (c) => {
       </header>
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar - Filters */}
           <aside class="lg:col-span-1">
-            <div class="bg-white rounded-lg shadow-md p-6 sticky top-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 sticky top-8 border border-primary/10">
               {/* Search */}
-              <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-3 text-gray-700">
-                  <i class="fas fa-search mr-2"></i>検索
+              <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
+                  <i class="fas fa-search mr-2 text-primary"></i>検索
                 </h2>
                 <div class="flex gap-2">
                   <input 
                     type="text" 
                     id="search-input"
                     placeholder="キーワードで検索..."
-                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="flex-1 px-4 py-2.5 border border-dark/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-light"
                   />
                   <button 
                     id="search-btn"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    class="px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all duration-300 shadow-md"
                   >
                     <i class="fas fa-search"></i>
                   </button>
@@ -359,9 +362,9 @@ app.get('/', (c) => {
           {/* PDF List */}
           <div class="lg:col-span-3">
             <div id="pdf-list" class="space-y-6">
-              <div class="text-center py-12 text-gray-500">
-                <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
-                <p>読み込み中...</p>
+              <div class="text-center py-12 text-dark">
+                <i class="fas fa-spinner fa-spin text-5xl mb-4 text-primary"></i>
+                <p class="text-lg">読み込み中...</p>
               </div>
             </div>
           </div>

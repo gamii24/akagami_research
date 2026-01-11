@@ -25,32 +25,38 @@ function showLoginForm() {
   if (!app) return
   
   app.innerHTML = `
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
-      <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800">
-          <i class="fas fa-lock mr-2"></i>管理者ログイン
-        </h2>
-        <form onsubmit="handleLogin(event)" class="space-y-4">
+    <div class="min-h-screen flex items-center justify-center bg-light">
+      <div class="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border-2 border-primary/20">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full mb-4 shadow-lg">
+            <i class="fas fa-flask text-3xl text-white"></i>
+          </div>
+          <h2 class="text-3xl font-bold text-darker">
+            Akagami Research
+          </h2>
+          <p class="text-dark mt-2">管理者ログイン</p>
+        </div>
+        <form onsubmit="handleLogin(event)" class="space-y-6">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">パスワード</label>
+            <label class="block text-sm font-semibold text-darker mb-2">パスワード</label>
             <input 
               type="password" 
               id="admin-password"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full px-4 py-3 border-2 border-dark/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-light transition-all"
               placeholder="パスワードを入力"
               required
             />
           </div>
           <button 
             type="submit"
-            class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            class="w-full px-4 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg font-semibold"
           >
             <i class="fas fa-sign-in-alt mr-2"></i>ログイン
           </button>
         </form>
-        <p class="mt-4 text-sm text-gray-600">
+        <p class="mt-6 text-sm text-dark text-center">
           <i class="fas fa-info-circle mr-1"></i>
-          デフォルトパスワード: <code class="bg-gray-100 px-2 py-1 rounded">admin123</code>
+          デフォルトパスワード: <code class="bg-light px-3 py-1 rounded border border-primary/30 font-mono">admin123</code>
         </p>
       </div>
     </div>
@@ -100,19 +106,23 @@ function renderAdminPage() {
   if (!app) return
   
   app.innerHTML = `
-    <div class="min-h-screen bg-gray-50">
+    <div class="min-h-screen bg-light">
       {/* Header */}
-      <header class="bg-gray-800 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+      <header class="bg-gradient-to-r from-darker to-dark shadow-xl border-b-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold">
-              <i class="fas fa-cog mr-2"></i>管理画面
-            </h1>
-            <div class="flex gap-4">
-              <a href="/" class="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+            <div>
+              <h1 class="text-2xl font-bold text-white flex items-center">
+                <i class="fas fa-flask text-secondary mr-3"></i>
+                Akagami Research
+              </h1>
+              <p class="text-light text-sm mt-1 opacity-80">管理画面</p>
+            </div>
+            <div class="flex gap-3">
+              <a href="/" class="px-5 py-2.5 bg-primary rounded-lg hover:bg-secondary transition-all duration-300 text-white font-medium shadow-md">
                 <i class="fas fa-home mr-2"></i>公開ページへ
               </a>
-              <button onclick="logout()" class="px-4 py-2 bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+              <button onclick="logout()" class="px-5 py-2.5 bg-accent rounded-lg hover:bg-dark transition-all duration-300 text-white font-medium shadow-md">
                 <i class="fas fa-sign-out-alt mr-2"></i>ログアウト
               </button>
             </div>
@@ -120,28 +130,28 @@ function renderAdminPage() {
         </div>
       </header>
 
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         {/* Action Buttons */}
         <div class="mb-8 flex flex-wrap gap-4">
-          <button onclick="showAddPdfModal()" class="admin-btn px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md">
+          <button onclick="showAddPdfModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl hover:from-secondary hover:to-primary transition-all duration-300 shadow-lg font-semibold">
             <i class="fas fa-plus mr-2"></i>PDF追加
           </button>
-          <button onclick="showManageCategoriesModal()" class="admin-btn px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-md">
-            <i class="fas fa-folder mr-2"></i>カテゴリ管理
+          <button onclick="showManageCategoriesModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-accent to-primary text-white rounded-xl hover:from-primary hover:to-accent transition-all duration-300 shadow-lg font-semibold">
+            <i class="fas fa-layer-group mr-2"></i>カテゴリ管理
           </button>
-          <button onclick="showManageTagsModal()" class="admin-btn px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-md">
+          <button onclick="showManageTagsModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-dark to-accent text-white rounded-xl hover:from-accent hover:to-dark transition-all duration-300 shadow-lg font-semibold">
             <i class="fas fa-tags mr-2"></i>タグ管理
           </button>
         </div>
 
         {/* PDF List */}
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-          <div class="px-6 py-4 bg-gray-50 border-b">
-            <h2 class="text-xl font-semibold text-gray-800">
-              <i class="fas fa-list mr-2"></i>登録済みPDF一覧
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-primary/10">
+          <div class="px-6 py-5 bg-gradient-to-r from-light to-white border-b-2 border-primary/20">
+            <h2 class="text-2xl font-bold text-darker">
+              <i class="fas fa-list mr-2 text-primary"></i>登録済みPDF一覧
             </h2>
           </div>
-          <div id="admin-pdf-list" class="divide-y">
+          <div id="admin-pdf-list" class="divide-y divide-primary/10">
             ${renderAdminPdfList()}
           </div>
         </div>
@@ -156,41 +166,41 @@ function renderAdminPage() {
 function renderAdminPdfList() {
   if (adminState.pdfs.length === 0) {
     return `
-      <div class="px-6 py-12 text-center text-gray-500">
-        <i class="fas fa-inbox text-6xl mb-4"></i>
-        <p class="text-lg">PDFが登録されていません</p>
+      <div class="px-6 py-16 text-center text-dark">
+        <i class="fas fa-inbox text-7xl mb-4 text-accent opacity-50"></i>
+        <p class="text-xl font-medium">PDFが登録されていません</p>
       </div>
     `
   }
   
   return adminState.pdfs.map(pdf => `
-    <div class="px-6 py-4 hover:bg-gray-50 transition-colors">
+    <div class="px-6 py-5 hover:bg-light/50 transition-all duration-200">
       <div class="flex items-center justify-between">
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-gray-800 mb-1">
+          <h3 class="text-lg font-bold text-darker mb-2">
             ${escapeHtml(pdf.title)}
           </h3>
-          <p class="text-sm text-gray-600 mb-2">
+          <p class="text-sm text-dark mb-3">
             ${escapeHtml(pdf.description || '')}
           </p>
           <div class="flex flex-wrap gap-2">
             ${pdf.category_name ? `
-              <span class="inline-flex items-center px-2 py-1 rounded text-xs bg-blue-100 text-blue-800">
+              <span class="badge badge-category text-xs shadow-sm">
                 <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
               </span>
             ` : ''}
             ${pdf.tags ? pdf.tags.map(tag => `
-              <span class="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-100 text-gray-700">
+              <span class="badge badge-tag text-xs">
                 <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
               </span>
             `).join('') : ''}
           </div>
         </div>
         <div class="flex gap-2 ml-4">
-          <button onclick="editPdf(${pdf.id})" class="px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors">
+          <button onclick="editPdf(${pdf.id})" class="px-4 py-2.5 bg-gradient-to-r from-accent to-dark text-white rounded-lg hover:from-dark hover:to-accent transition-all duration-300 shadow-md font-medium">
             <i class="fas fa-edit"></i>
           </button>
-          <button onclick="deletePdf(${pdf.id})" class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+          <button onclick="deletePdf(${pdf.id})" class="px-4 py-2.5 bg-gradient-to-r from-secondary to-primary text-white rounded-lg hover:from-primary hover:to-secondary transition-all duration-300 shadow-md font-medium">
             <i class="fas fa-trash"></i>
           </button>
         </div>

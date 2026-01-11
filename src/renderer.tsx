@@ -6,12 +6,30 @@ export const renderer = jsxRenderer(({ children }) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PDF資料管理システム</title>
+        <title>Akagami Research</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#BB666A',
+                    secondary: '#e75556',
+                    accent: '#916769',
+                    dark: '#665a5a',
+                    darker: '#3c2d2e',
+                    light: '#f4eee0',
+                  }
+                }
+              }
+            }
+          `
+        }} />
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
       </head>
-      <body class="bg-gray-50">
+      <body class="bg-light">
         {children}
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/app.js"></script>

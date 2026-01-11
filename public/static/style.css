@@ -1,35 +1,61 @@
-/* Custom styles for PDF Management System */
+/* Akagami Research - Custom Styles */
 
+:root {
+  --primary: #BB666A;
+  --secondary: #e75556;
+  --accent: #916769;
+  --dark: #665a5a;
+  --darker: #3c2d2e;
+  --light: #f4eee0;
+}
+
+/* Category Buttons */
 .category-btn {
-  background-color: #f3f4f6;
-  color: #374151;
+  background: linear-gradient(135deg, #f4eee0 0%, #ffffff 100%);
+  color: var(--darker);
+  border: 2px solid transparent;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .category-btn:hover {
-  background-color: #e5e7eb;
+  background: linear-gradient(135deg, #ffffff 0%, #f4eee0 100%);
+  border-color: var(--primary);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(187, 102, 106, 0.15);
 }
 
 .category-btn.active {
-  background-color: #3b82f6;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   color: white;
+  border-color: var(--secondary);
+  box-shadow: 0 4px 12px rgba(187, 102, 106, 0.3);
 }
 
+/* Tag Buttons */
 .tag-btn {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: var(--dark);
+  border: 2px solid var(--primary);
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .tag-btn:hover {
-  background-color: #e5e7eb;
+  background-color: var(--light);
+  border-color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(187, 102, 106, 0.2);
 }
 
 .tag-btn.active {
-  background-color: #10b981;
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
   color: white;
-  border-color: #10b981;
+  border-color: var(--secondary);
+  box-shadow: 0 4px 12px rgba(231, 85, 86, 0.3);
 }
 
+/* Line Clamp */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -37,23 +63,120 @@
   overflow: hidden;
 }
 
-/* Admin styles */
+/* Admin Modal */
 .modal-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(60, 45, 46, 0.75);
+  backdrop-filter: blur(4px);
 }
 
 .admin-btn {
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 .admin-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Responsive */
+/* PDF Card Styles */
+.pdf-card {
+  background: white;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.pdf-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px rgba(187, 102, 106, 0.15);
+  transform: translateY(-4px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Elegant Typography */
+h1, h2, h3 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* Button Focus States */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: var(--primary);
+}
+
+/* Smooth Transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .category-btn, .tag-btn {
     font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
   }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Badge Styles */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.badge-category {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+}
+
+.badge-tag {
+  background-color: var(--light);
+  color: var(--darker);
+  border: 1px solid var(--primary);
 }
