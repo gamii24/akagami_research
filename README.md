@@ -18,9 +18,9 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://2df34f63.akagami-research.pages.dev
+- **最新デプロイ**: https://58308043.akagami-research.pages.dev
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
-- **管理画面**: `/admin` - PDF登録・編集・削除（**ダークモード完全対応**）
+- **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・視認性最優先**）
   - **パスワード**: `TaylorAlisonSwift`
   - **セッション**: JWTトークンでログイン状態を30日間保持
   - **自動ログイン**: 一度ログインすると、再度パスワード入力不要

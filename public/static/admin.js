@@ -132,53 +132,53 @@ function renderAdminPage() {
   
   app.innerHTML = `
     <div class="min-h-screen" style="background-color: #1a1a1a;">
-      {/* Header */}
+      <!-- Header -->
       <header style="background-color: #2d2d2d; border-bottom: 2px solid #4b5563;">
-        <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
             <div>
-              <h1 class="text-2xl font-bold flex items-center" style="color: #f3f4f6;">
-                <i class="fas fa-flask mr-3" style="color: #e75556;"></i>
+              <h1 class="text-xl font-bold flex items-center" style="color: #f3f4f6;">
+                <i class="fas fa-flask mr-2" style="color: #e75556;"></i>
                 Akagami Research
               </h1>
-              <p class="text-sm mt-1" style="color: #d1d5db;">管理画面</p>
+              <p class="text-xs mt-0.5" style="color: #d1d5db;">管理画面</p>
             </div>
-            <div class="flex gap-3">
-              <a href="/" class="px-5 py-2.5 rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #e75556; color: white;">
-                <i class="fas fa-home mr-2"></i>公開ページへ
+            <div class="flex gap-2">
+              <a href="/" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #e75556; color: white;">
+                <i class="fas fa-home mr-1"></i>公開ページへ
               </a>
-              <button onclick="logout()" class="px-5 py-2.5 rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #dc2626; color: white;">
-                <i class="fas fa-sign-out-alt mr-2"></i>ログアウト
+              <button onclick="logout()" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #dc2626; color: white;">
+                <i class="fas fa-sign-out-alt mr-1"></i>ログアウト
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <main class="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-        {/* Action Buttons */}
-        <div class="mb-8 flex flex-wrap gap-4">
-          <button onclick="showAddPdfModal()" class="px-6 py-3 rounded-xl transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;">
-            <i class="fas fa-plus mr-2"></i>PDF追加
+      <main class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+        <!-- Action Buttons -->
+        <div class="mb-4 flex flex-wrap gap-2">
+          <button onclick="showAddPdfModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;">
+            <i class="fas fa-plus mr-1"></i>PDF追加
           </button>
-          <button onclick="showBulkUploadModal()" class="px-6 py-3 rounded-xl transition-all duration-300 shadow-lg font-semibold" style="background-color: #16a34a; color: white;">
-            <i class="fas fa-upload mr-2"></i>テキスト一括アップロード
+          <button onclick="showBulkUploadModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #16a34a; color: white;">
+            <i class="fas fa-upload mr-1"></i>テキスト一括アップロード
           </button>
-          <button onclick="showManageCategoriesModal()" class="px-6 py-3 rounded-xl transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;">
-            <i class="fas fa-layer-group mr-2"></i>カテゴリ管理
+          <button onclick="showManageCategoriesModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;">
+            <i class="fas fa-layer-group mr-1"></i>カテゴリ管理
           </button>
-          <button onclick="showManageTagsModal()" class="px-6 py-3 rounded-xl transition-all duration-300 shadow-lg font-semibold" style="background-color: #6b7280; color: white;">
-            <i class="fas fa-tags mr-2"></i>タグ管理
+          <button onclick="showManageTagsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #6b7280; color: white;">
+            <i class="fas fa-tags mr-1"></i>タグ管理
           </button>
-          <button onclick="showExcludedTagsModal()" class="px-6 py-3 rounded-xl transition-all duration-300 shadow-lg font-semibold" style="background-color: #4b5563; color: white;">
-            <i class="fas fa-ban mr-2"></i>除外タグ管理
+          <button onclick="showExcludedTagsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #4b5563; color: white;">
+            <i class="fas fa-ban mr-1"></i>除外タグ管理
           </button>
         </div>
 
-        {/* PDF List */}
-        <div class="rounded-2xl shadow-xl overflow-hidden" style="background-color: #2d2d2d; border: 2px solid #4b5563;">
-          <div class="px-6 py-5" style="background-color: #3a3a3a; border-bottom: 2px solid #4b5563;">
-            <h2 class="text-2xl font-bold" style="color: #f3f4f6;">
+        <!-- PDF List -->
+        <div class="rounded-xl shadow-xl overflow-hidden" style="background-color: #2d2d2d; border: 2px solid #4b5563;">
+          <div class="px-4 py-3" style="background-color: #3a3a3a; border-bottom: 2px solid #4b5563;">
+            <h2 class="text-lg font-bold" style="color: #f3f4f6;">
               <i class="fas fa-list mr-2" style="color: #e75556;"></i>登録済みPDF一覧
             </h2>
           </div>
@@ -189,7 +189,7 @@ function renderAdminPage() {
       </main>
     </div>
 
-    {/* Modal Container */}
+    <!-- Modal Container -->
     <div id="modal-container"></div>
   `
 }
@@ -205,30 +205,30 @@ function renderAdminPdfList() {
   }
   
   return adminState.pdfs.map(pdf => `
-    <div class="px-6 py-5 transition-all duration-200" style="border-bottom: 1px solid #4b5563; background-color: #2d2d2d;">
+    <div class="px-4 py-2.5 transition-all duration-200" style="border-bottom: 1px solid #4b5563; background-color: #2d2d2d;">
       <div class="flex items-center justify-between">
         <div class="flex-1">
-          <h3 class="text-lg font-bold mb-2" style="color: #f3f4f6;">
+          <h3 class="text-sm font-bold mb-1.5" style="color: #f3f4f6;">
             ${escapeHtml(pdf.title)}
           </h3>
-          <div class="flex flex-wrap gap-2">
+          <div class="flex flex-wrap gap-1.5">
             ${pdf.category_name ? `
-              <span class="text-xs px-3 py-1 rounded-full" style="background-color: #e75556; color: white;">
+              <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: #e75556; color: white;">
                 <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
               </span>
             ` : ''}
             ${pdf.tags ? pdf.tags.map(tag => `
-              <span class="text-xs px-3 py-1 rounded-full" style="background-color: #4b5563; color: #d1d5db;">
+              <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: #4b5563; color: #d1d5db;">
                 <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
               </span>
             `).join('') : ''}
           </div>
         </div>
-        <div class="flex gap-2 ml-4">
-          <button onclick="editPdf(${pdf.id})" class="px-4 py-2.5 rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #e75556; color: white;">
+        <div class="flex gap-1.5 ml-4">
+          <button onclick="editPdf(${pdf.id})" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #e75556; color: white;">
             <i class="fas fa-edit"></i>
           </button>
-          <button onclick="deletePdf(${pdf.id})" class="px-4 py-2.5 rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #dc2626; color: white;">
+          <button onclick="deletePdf(${pdf.id})" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #dc2626; color: white;">
             <i class="fas fa-trash"></i>
           </button>
         </div>
