@@ -1,0 +1,263 @@
+/* Admin Dark Mode Styles */
+
+/* Override body background for admin pages */
+body.admin-dark {
+  background-color: #1a1a1a;
+  color: #e5e7eb;
+}
+
+/* Dark mode color scheme */
+.admin-dark {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #3a3a3a;
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-color: #4b5563;
+  --accent-color: #e75556;
+}
+
+/* Login form dark mode */
+.admin-dark .login-container {
+  background-color: var(--bg-primary);
+}
+
+.admin-dark .login-box {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+.admin-dark .login-title {
+  color: var(--text-primary);
+}
+
+.admin-dark .login-subtitle {
+  color: var(--text-secondary);
+}
+
+.admin-dark .login-input {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.admin-dark .login-input::placeholder {
+  color: var(--text-muted);
+}
+
+.admin-dark .login-input:focus {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+/* Admin main container */
+.admin-dark .admin-container {
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+}
+
+/* Header */
+.admin-dark .admin-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-dark .admin-header h1 {
+  color: var(--text-primary);
+}
+
+/* Tabs */
+.admin-dark .tab-btn {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.admin-dark .tab-btn:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.admin-dark .tab-btn.active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Cards and containers */
+.admin-dark .card,
+.admin-dark .modal-content {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+/* Tables */
+.admin-dark table {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.admin-dark th {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.admin-dark td {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.admin-dark tr:hover td {
+  background-color: var(--bg-tertiary);
+}
+
+/* Form elements */
+.admin-dark input,
+.admin-dark textarea,
+.admin-dark select {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.admin-dark input::placeholder,
+.admin-dark textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.admin-dark input:focus,
+.admin-dark textarea:focus,
+.admin-dark select:focus {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+}
+
+.admin-dark label {
+  color: var(--text-primary);
+}
+
+/* Buttons */
+.admin-dark .btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.admin-dark .btn-primary:hover {
+  background-color: #d14445;
+}
+
+.admin-dark .btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.admin-dark .btn-secondary:hover {
+  background-color: var(--bg-secondary);
+}
+
+.admin-dark .btn-danger {
+  background-color: #dc2626;
+  color: white;
+}
+
+.admin-dark .btn-danger:hover {
+  background-color: #b91c1c;
+}
+
+/* Modal */
+.admin-dark .modal-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.admin-dark .modal-header {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-dark .modal-footer {
+  background-color: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Stats cards */
+.admin-dark .stat-card {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.admin-dark .stat-label {
+  color: var(--text-secondary);
+}
+
+.admin-dark .stat-value {
+  color: var(--text-primary);
+}
+
+/* Text colors */
+.admin-dark .text-gray-800 {
+  color: var(--text-primary) !important;
+}
+
+.admin-dark .text-gray-700 {
+  color: var(--text-primary) !important;
+}
+
+.admin-dark .text-gray-600 {
+  color: var(--text-secondary) !important;
+}
+
+.admin-dark .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+/* Background colors */
+.admin-dark .bg-white {
+  background-color: var(--bg-secondary) !important;
+}
+
+.admin-dark .bg-gray-50 {
+  background-color: var(--bg-primary) !important;
+}
+
+.admin-dark .bg-gray-100 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+/* Border colors */
+.admin-dark .border-gray-200 {
+  border-color: var(--border-color) !important;
+}
+
+.admin-dark .border-gray-300 {
+  border-color: var(--border-color) !important;
+}
+
+/* Tag/Badge */
+.admin-dark .badge {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Scrollbar */
+.admin-dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.admin-dark ::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+.admin-dark ::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+}
+
+.admin-dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}

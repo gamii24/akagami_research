@@ -8,6 +8,12 @@ let adminState = {
   authenticated: false
 }
 
+// Enable dark mode for admin pages
+function enableAdminDarkMode() {
+  document.body.classList.add('admin-dark')
+  document.documentElement.classList.add('admin-dark')
+}
+
 // Check authentication
 function checkAuth() {
   const isAuth = sessionStorage.getItem('admin_authenticated')
@@ -21,35 +27,36 @@ function checkAuth() {
 
 // Login form
 function showLoginForm() {
+  enableAdminDarkMode() // Enable dark mode
   const app = document.getElementById('admin-app')
   if (!app) return
   
   app.innerHTML = `
-    <div class="min-h-screen flex items-center justify-center bg-gray-50">
-      <div class="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border-2 border-primary">
+    <div class="min-h-screen flex items-center justify-center login-container">
+      <div class="login-box p-10 rounded-2xl shadow-2xl w-full max-w-md border-2">
         <div class="text-center mb-8">
           <div class="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-full mb-4 shadow-lg">
             <i class="fas fa-flask text-3xl text-white"></i>
           </div>
-          <h2 class="text-3xl font-bold text-gray-800">
+          <h2 class="text-3xl font-bold login-title">
             Akagami Research
           </h2>
-          <p class="text-gray-600 mt-2">管理者ログイン</p>
+          <p class="login-subtitle mt-2">管理者ログイン</p>
         </div>
         <form onsubmit="handleLogin(event)" class="space-y-6">
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">パスワード</label>
+            <label class="block text-sm font-semibold mb-2">パスワード</label>
             <input 
               type="password" 
               id="admin-password"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              class="login-input w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
               placeholder="パスワードを入力"
               required
             />
           </div>
           <button 
             type="submit"
-            class="w-full px-4 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg font-semibold"
+            class="btn-primary w-full px-4 py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-semibold"
           >
             <i class="fas fa-sign-in-alt mr-2"></i>ログイン
           </button>
@@ -75,6 +82,7 @@ function handleLogin(event) {
 
 // Initialize admin app
 async function initAdminApp() {
+  enableAdminDarkMode() // Enable dark mode
   if (!checkAuth()) return
   
   await loadAdminData()
@@ -179,9 +187,6 @@ function renderAdminPdfList() {
           <h3 class="text-lg font-bold text-darker mb-2">
             ${escapeHtml(pdf.title)}
           </h3>
-          <p class="text-sm text-dark mb-3">
-            ${escapeHtml(pdf.description || '')}
-          </p>
           <div class="flex flex-wrap gap-2">
             ${pdf.category_name ? `
               <span class="badge badge-category text-xs shadow-sm">
@@ -313,12 +318,10 @@ async function saveBulkPdfs(event) {
   for (let i = 0; i < 10; i++) {
     const title = document.getElementById(`bulk-title-${i}`).value.trim()
     const url = document.getElementById(`bulk-url-${i}`).value.trim()
-    const description = document.getElementById(`bulk-desc-${i}`).value.trim()
     
     if (title && url) {
       pdfs.push({
         title,
-        description: description || '',
         google_drive_url: url,
         category_id: commonCategoryId,
         tag_ids: []
@@ -430,7 +433,6 @@ async function saveBulkPdfsFromText(event) {
       if (title && url) {
         pdfs.push({
           title,
-          description: '',
           google_drive_url: url,
           category_id: categoryId,
           tag_ids: []
@@ -502,15 +504,6 @@ function showPdfModal() {
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">説明</label>
-            <textarea 
-              id="pdf-description"
-              rows="3"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >${escapeHtml(pdf.description || '')}</textarea>
-          </div>
-          
-          <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Google Drive URL ${isEdit ? '' : '*'}</label>
             <input 
               type="url" 
@@ -525,10 +518,9 @@ function showPdfModal() {
             </p>
           </div>
           
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">カテゴリ</label>
-              <select 
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">カテゴリ</label>
+            <select 
                 id="pdf-category"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
@@ -540,29 +532,6 @@ function showPdfModal() {
                 `).join('')}
               </select>
             </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">ページ数</label>
-              <input 
-                type="number" 
-                id="pdf-pages"
-                value="${pdf.page_count || ''}"
-                placeholder="例: 50"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">ファイルサイズ</label>
-            <input 
-              type="text" 
-              id="pdf-size"
-              value="${escapeHtml(pdf.file_size || '')}"
-              placeholder="例: 5.2 MB"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
           
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">タグ</label>
@@ -612,22 +581,16 @@ async function savePdf(event) {
   event.preventDefault()
   
   const title = document.getElementById('pdf-title').value
-  const description = document.getElementById('pdf-description').value
   const google_drive_url = document.getElementById('pdf-url').value
   const category_id = document.getElementById('pdf-category').value || null
-  const page_count = document.getElementById('pdf-pages').value || null
-  const file_size = document.getElementById('pdf-size').value || null
   
   const tagCheckboxes = document.querySelectorAll('input[name="pdf-tags"]:checked')
   const tag_ids = Array.from(tagCheckboxes).map(cb => parseInt(cb.value))
   
   const data = {
     title,
-    description,
     google_drive_url,
     category_id,
-    page_count: page_count ? parseInt(page_count) : null,
-    file_size,
     tag_ids
   }
   
@@ -859,11 +822,23 @@ async function addCategory(event) {
   const name = document.getElementById('new-category-name').value
   
   try {
-    await axios.post('/api/categories', { name, description: '' })
+    console.log('Adding category:', name)
+    const response = await axios.post('/api/categories', { name, description: '' })
+    console.log('Category added successfully:', response.data)
+    
+    console.log('Loading admin data...')
     await loadAdminData()
+    console.log('Admin data loaded successfully')
+    
+    console.log('Showing manage categories modal...')
     showManageCategoriesModal()
+    console.log('Done!')
   } catch (error) {
-    alert('カテゴリの追加に失敗しました')
+    console.error('Failed to add category:', error)
+    console.error('Error response:', error.response)
+    console.error('Error message:', error.message)
+    console.error('Error stack:', error.stack)
+    alert('カテゴリの追加に失敗しました: ' + (error.response?.data?.error || error.message))
   }
 }
 

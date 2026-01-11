@@ -26,14 +26,14 @@ export const renderer = jsxRenderer(({ children }) => {
             }
           `
         }} />
-        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
+        <noscript><link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" /></noscript>
         <link href="/static/style.css" rel="stylesheet" />
+        <link href="/static/styles.css" rel="stylesheet" />
       </head>
       <body class="bg-white">
         {children}
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/app.js"></script>
-        <script src="/static/admin.js"></script>
       </body>
     </html>
   )

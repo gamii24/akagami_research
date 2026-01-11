@@ -137,27 +137,28 @@ app.delete('/api/tags/:id', async (c) => {
 // API Routes - PDFs
 // ============================================
 
-// Get all PDFs with filters
+// Get all PDFs with filters (Optimized - Single Query with GROUP_CONCAT)
 app.get('/api/pdfs', async (c) => {
   const category = c.req.query('category')
   const tag = c.req.query('tag')
   const search = c.req.query('search')
   
+  // Optimized query: Get PDFs with tags in a single query using GROUP_CONCAT
+  // Only select necessary fields to reduce response size
   let query = `
-    SELECT DISTINCT 
+    SELECT 
       p.id, 
       p.title, 
-      p.description, 
       p.google_drive_url,
       p.category_id,
-      p.thumbnail_url,
-      p.file_size,
-      p.page_count,
+      p.download_count,
       p.created_at,
-      p.updated_at,
-      c.name as category_name
+      c.name as category_name,
+      GROUP_CONCAT(t.id || ':' || t.name, '||') as tags_concat
     FROM pdfs p
     LEFT JOIN categories c ON p.category_id = c.id
+    LEFT JOIN pdf_tags pt ON p.id = pt.pdf_id
+    LEFT JOIN tags t ON pt.tag_id = t.id
   `
   
   const conditions = []
@@ -169,7 +170,6 @@ app.get('/api/pdfs', async (c) => {
   }
   
   if (tag) {
-    query += ' INNER JOIN pdf_tags pt ON p.id = pt.pdf_id'
     conditions.push('pt.tag_id = ?')
     bindings.push(tag)
   }
@@ -183,19 +183,21 @@ app.get('/api/pdfs', async (c) => {
     query += ' WHERE ' + conditions.join(' AND ')
   }
   
-  query += ' ORDER BY p.created_at DESC'
+  query += ' GROUP BY p.id ORDER BY p.created_at DESC'
   
   const { results } = await c.env.DB.prepare(query).bind(...bindings).all()
   
-  // Get tags for each PDF
+  // Parse tags from concatenated string
   for (const pdf of results as any[]) {
-    const { results: tags } = await c.env.DB.prepare(`
-      SELECT t.id, t.name
-      FROM tags t
-      INNER JOIN pdf_tags pt ON t.id = pt.tag_id
-      WHERE pt.pdf_id = ?
-    `).bind(pdf.id).all()
-    pdf.tags = tags
+    if (pdf.tags_concat) {
+      pdf.tags = pdf.tags_concat.split('||').map((tagStr: string) => {
+        const [id, name] = tagStr.split(':')
+        return { id: parseInt(id), name }
+      })
+    } else {
+      pdf.tags = []
+    }
+    delete pdf.tags_concat // Remove temporary field
   }
   
   return c.json(results)
@@ -233,33 +235,21 @@ app.get('/api/pdfs/:id', async (c) => {
 app.post('/api/pdfs', async (c) => {
   const { 
     title, 
-    description, 
     google_drive_url, 
     category_id, 
-    thumbnail_url,
-    file_size,
-    page_count,
     tag_ids 
   } = await c.req.json()
   
   const result = await c.env.DB.prepare(`
     INSERT INTO pdfs (
       title, 
-      description, 
       google_drive_url, 
-      category_id,
-      thumbnail_url,
-      file_size,
-      page_count
-    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+      category_id
+    ) VALUES (?, ?, ?)
   `).bind(
     title, 
-    description, 
     google_drive_url, 
-    category_id,
-    thumbnail_url || null,
-    file_size || null,
-    page_count || null
+    category_id
   ).run()
   
   const pdf_id = result.meta.last_row_id
@@ -276,7 +266,6 @@ app.post('/api/pdfs', async (c) => {
   return c.json({ 
     id: pdf_id, 
     title, 
-    description, 
     google_drive_url 
   })
 })
@@ -286,12 +275,8 @@ app.put('/api/pdfs/:id', async (c) => {
   const id = c.req.param('id')
   const { 
     title, 
-    description, 
     google_drive_url, 
     category_id,
-    thumbnail_url,
-    file_size,
-    page_count,
     tag_ids 
   } = await c.req.json()
   
@@ -299,22 +284,13 @@ app.put('/api/pdfs/:id', async (c) => {
     UPDATE pdfs 
     SET 
       title = ?, 
-      description = ?, 
       google_drive_url = ?, 
-      category_id = ?,
-      thumbnail_url = ?,
-      file_size = ?,
-      page_count = ?,
-      updated_at = CURRENT_TIMESTAMP
+      category_id = ?
     WHERE id = ?
   `).bind(
     title, 
-    description, 
     google_drive_url, 
     category_id,
-    thumbnail_url || null,
-    file_size || null,
-    page_count || null,
     id
   ).run()
   
@@ -339,6 +315,28 @@ app.delete('/api/pdfs/:id', async (c) => {
   const id = c.req.param('id')
   await c.env.DB.prepare(
     'DELETE FROM pdfs WHERE id = ?'
+  ).bind(id).run()
+  
+  return c.json({ success: true })
+})
+
+// Increment download count for a single PDF
+app.post('/api/pdfs/:id/download', async (c) => {
+  const id = c.req.param('id')
+  
+  await c.env.DB.prepare(
+    'UPDATE pdfs SET download_count = download_count + 1 WHERE id = ?'
+  ).bind(id).run()
+  
+  return c.json({ success: true })
+})
+
+// Increment download count for all PDFs in a category
+app.post('/api/categories/:id/download', async (c) => {
+  const id = c.req.param('id')
+  
+  await c.env.DB.prepare(
+    'UPDATE pdfs SET download_count = download_count + 1 WHERE category_id = ?'
   ).bind(id).run()
   
   return c.json({ success: true })
@@ -464,12 +462,7 @@ app.get('/', (c) => {
       {/* Footer */}
       <footer class="bg-gray-50 border-t border-gray-200 py-6 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <a 
-            href="/admin" 
-            class="text-sm text-gray-500 hover:text-primary transition-colors"
-          >
-            管理画面
-          </a>
+          <p class="text-sm text-gray-500">&copy; 2026 Akagami Research. All rights reserved.</p>
         </div>
       </footer>
     </div>
@@ -478,13 +471,46 @@ app.get('/', (c) => {
 
 // Admin page
 app.get('/admin', (c) => {
-  return c.render(
-    <div id="admin-app">
-      <div class="text-center py-12 text-gray-500">
-        <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
-        <p>読み込み中...</p>
-      </div>
-    </div>
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Akagami Research - 管理画面</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    secondary: '#e75556',
+                    accent: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                    light: '#ffffff',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+        <link href="/static/admin-dark.css" rel="stylesheet" />
+      </head>
+      <body class="bg-white">
+        <div id="admin-app">
+          <div class="text-center py-12 text-gray-500">
+            <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+            <p>読み込み中...</p>
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/admin.js"></script>
+      </body>
+    </html>
   )
 })
 
