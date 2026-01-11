@@ -136,6 +136,9 @@ function renderAdminPage() {
           <button onclick="showAddPdfModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl hover:from-secondary hover:to-primary transition-all duration-300 shadow-lg font-semibold">
             <i class="fas fa-plus mr-2"></i>PDF追加
           </button>
+          <button onclick="showBulkUploadModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg font-semibold">
+            <i class="fas fa-upload mr-2"></i>一括アップロード
+          </button>
           <button onclick="showManageCategoriesModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-accent to-primary text-white rounded-xl hover:from-primary hover:to-accent transition-all duration-300 shadow-lg font-semibold">
             <i class="fas fa-layer-group mr-2"></i>カテゴリ管理
           </button>
@@ -210,6 +213,135 @@ function renderAdminPdfList() {
 }
 
 // PDF operations
+function showBulkUploadModal() {
+  const modalHtml = `
+    <div class="fixed inset-0 modal-overlay flex items-center justify-center z-50" onclick="closeModal(event)">
+      <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+        <div class="px-6 py-4 border-b flex items-center justify-between bg-gradient-to-r from-green-500 to-green-600">
+          <h2 class="text-xl font-bold text-white">
+            <i class="fas fa-upload mr-2"></i>一括アップロード（最大10件）
+          </h2>
+          <button onclick="closeModal()" class="text-white hover:text-gray-200">
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+        </div>
+        
+        <form onsubmit="saveBulkPdfs(event)" class="px-6 py-4 space-y-4">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">共通カテゴリ（オプション）</label>
+            <select 
+              id="bulk-category"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option value="">なし</option>
+              ${adminState.categories.map(cat => `
+                <option value="${cat.id}">${escapeHtml(cat.name)}</option>
+              `).join('')}
+            </select>
+          </div>
+          
+          <div id="bulk-items" class="space-y-4">
+            ${Array.from({length: 10}, (_, i) => `
+              <div class="border-2 border-gray-200 rounded-lg p-4 bg-gray-50">
+                <h3 class="font-bold text-gray-700 mb-3">${i + 1}件目</h3>
+                <div class="grid grid-cols-1 gap-3">
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">タイトル</label>
+                    <input 
+                      type="text" 
+                      id="bulk-title-${i}"
+                      placeholder="PDFのタイトル"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Google Drive URL</label>
+                    <input 
+                      type="url" 
+                      id="bulk-url-${i}"
+                      placeholder="https://drive.google.com/file/d/..."
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">説明（オプション）</label>
+                    <input 
+                      type="text" 
+                      id="bulk-desc-${i}"
+                      placeholder="PDFの説明"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="flex gap-4 pt-4 border-t">
+            <button 
+              type="submit"
+              class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all font-semibold shadow-lg"
+            >
+              <i class="fas fa-check mr-2"></i>一括登録
+            </button>
+            <button 
+              type="button"
+              onclick="closeModal()"
+              class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-semibold"
+            >
+              キャンセル
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  `
+  
+  document.getElementById('modal-container').innerHTML = modalHtml
+}
+
+async function saveBulkPdfs(event) {
+  event.preventDefault()
+  
+  const commonCategoryId = document.getElementById('bulk-category').value || null
+  const pdfs = []
+  
+  // Collect all PDFs with title and URL
+  for (let i = 0; i < 10; i++) {
+    const title = document.getElementById(`bulk-title-${i}`).value.trim()
+    const url = document.getElementById(`bulk-url-${i}`).value.trim()
+    const description = document.getElementById(`bulk-desc-${i}`).value.trim()
+    
+    if (title && url) {
+      pdfs.push({
+        title,
+        description: description || '',
+        google_drive_url: url,
+        category_id: commonCategoryId,
+        tag_ids: []
+      })
+    }
+  }
+  
+  if (pdfs.length === 0) {
+    alert('少なくとも1件のPDF（タイトルとURL）を入力してください')
+    return
+  }
+  
+  try {
+    // Upload all PDFs
+    const promises = pdfs.map(pdf => axios.post('/api/pdfs', pdf))
+    await Promise.all(promises)
+    
+    alert(`${pdfs.length}件のPDFを登録しました！`)
+    closeModal()
+    await loadAdminData()
+    renderAdminPage()
+  } catch (error) {
+    alert('一括登録に失敗しました: ' + error.message)
+  }
+}
+
 function showAddPdfModal() {
   adminState.editingPdf = null
   showPdfModal()

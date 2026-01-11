@@ -128,7 +128,24 @@ function renderPDFList() {
     return
   }
   
-  const html = state.pdfs.map(pdf => `
+  let html = ''
+  
+  // Show bulk download button if category is selected
+  if (state.selectedCategory) {
+    html += `
+      <div class="col-span-full mb-4">
+        <button 
+          onclick="bulkDownloadCategory()"
+          class="w-full px-6 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg flex items-center justify-center gap-3"
+        >
+          <i class="fas fa-download text-2xl"></i>
+          <span>このカテゴリのファイルをすべてまとめてダウンロードする</span>
+        </button>
+      </div>
+    `
+  }
+  
+  html += state.pdfs.map(pdf => `
     <div class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2">
       <div class="p-4 flex items-center gap-4">
         <div class="flex-shrink-0">
@@ -174,6 +191,32 @@ function renderPDFList() {
 }
 
 // Filter functions
+async function bulkDownloadCategory() {
+  if (!state.selectedCategory) return
+  
+  try {
+    const response = await axios.get(`/api/categories/${state.selectedCategory}/download-urls`)
+    const urls = response.data
+    
+    if (urls.length === 0) {
+      alert('このカテゴリにはファイルがありません')
+      return
+    }
+    
+    // Open each URL in a new tab with a small delay to avoid browser blocking
+    for (let i = 0; i < urls.length; i++) {
+      setTimeout(() => {
+        window.open(urls[i].google_drive_url, '_blank')
+      }, i * 500) // 500ms delay between each
+    }
+    
+    alert(`${urls.length}件のファイルを新しいタブで開きます`)
+  } catch (error) {
+    alert('一括ダウンロードに失敗しました')
+    console.error(error)
+  }
+}
+
 function filterByCategory(categoryId) {
   state.selectedCategory = categoryId
   renderCategoryFilter()

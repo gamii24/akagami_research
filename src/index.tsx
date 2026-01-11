@@ -49,6 +49,20 @@ app.delete('/api/categories/:id', async (c) => {
   return c.json({ success: true })
 })
 
+// Get all PDF URLs for a category (for bulk download)
+app.get('/api/categories/:id/download-urls', async (c) => {
+  const id = c.req.param('id')
+  
+  const { results } = await c.env.DB.prepare(`
+    SELECT google_drive_url, title
+    FROM pdfs
+    WHERE category_id = ?
+    ORDER BY created_at DESC
+  `).bind(id).all()
+  
+  return c.json(results)
+})
+
 // ============================================
 // API Routes - Tags
 // ============================================
