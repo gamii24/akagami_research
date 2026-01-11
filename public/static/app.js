@@ -16,7 +16,8 @@ let state = {
   multiSelectMode: false, // Multi-select mode
   selectedPdfs: new Set(), // Selected PDFs in multi-select mode
   showAllMobile: false, // Show all cards on mobile (default: false, show 15)
-  viewMode: 'grid' // View mode: 'grid' or 'list'
+  viewMode: 'grid', // View mode: 'grid' or 'list'
+  darkMode: false // Dark mode
 }
 
 // Load downloaded PDFs from localStorage
@@ -58,6 +59,17 @@ function loadDownloadedPdfs() {
     }
   } catch (error) {
     console.error('Failed to load view mode:', error)
+  }
+  
+  // Load dark mode preference
+  try {
+    const darkMode = localStorage.getItem('dark_mode')
+    if (darkMode === 'true') {
+      state.darkMode = true
+      applyDarkMode()
+    }
+  } catch (error) {
+    console.error('Failed to load dark mode:', error)
   }
 }
 
@@ -985,23 +997,24 @@ function renderPDFList() {
           title="${state.showOnlyFavorites ? `お気に入りのみ表示中 (${state.favoritePdfs.size})` : 'お気に入りのみ表示'}"
         >
           <i class="fas fa-heart"></i>
+          <span class="hidden sm:inline">お気に入り</span>
           ${state.showOnlyFavorites ? `<span class="text-xs">(${state.favoritePdfs.size})</span>` : ''}
         </button>
         
-        <!-- Separator -->
-        <div class="w-px h-6 bg-gray-300 flex-shrink-0"></div>
+        <!-- Separator (PC only) -->
+        <div class="w-px h-6 bg-gray-300 flex-shrink-0 hidden lg:block"></div>
         
-        <!-- View Mode Toggle -->
+        <!-- View Mode Toggle (PC only) -->
         <button 
           onclick="changeViewMode('grid')" 
-          class="view-mode-btn ${state.viewMode === 'grid' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+          class="view-mode-btn ${state.viewMode === 'grid' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 hidden lg:flex"
           title="グリッド表示"
         >
           <i class="fas fa-th"></i>
         </button>
         <button 
           onclick="changeViewMode('list')" 
-          class="view-mode-btn ${state.viewMode === 'list' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+          class="view-mode-btn ${state.viewMode === 'list' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 hidden lg:flex"
           title="リスト表示"
         >
           <i class="fas fa-list"></i>
@@ -1677,4 +1690,64 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp)
 } else {
   initApp()
+}
+
+// Dark Mode Functions
+function toggleDarkMode() {
+  state.darkMode = !state.darkMode
+  
+  // Save to localStorage
+  try {
+    localStorage.setItem('dark_mode', state.darkMode.toString())
+  } catch (error) {
+    console.error('Failed to save dark mode:', error)
+  }
+  
+  // Apply dark mode
+  if (state.darkMode) {
+    applyDarkMode()
+  } else {
+    removeDarkMode()
+  }
+  
+  // Update button text and icons
+  updateDarkModeButtons()
+}
+
+function applyDarkMode() {
+  document.body.classList.add('dark-mode')
+}
+
+function removeDarkMode() {
+  document.body.classList.remove('dark-mode')
+}
+
+function updateDarkModeButtons() {
+  // Update footer button
+  const footerIcon = document.getElementById('dark-mode-icon-footer')
+  const footerText = document.getElementById('dark-mode-text-footer')
+  
+  if (footerIcon && footerText) {
+    if (state.darkMode) {
+      footerIcon.className = 'fas fa-sun'
+      footerText.textContent = 'ライトモードに切り替え'
+    } else {
+      footerIcon.className = 'fas fa-moon'
+      footerText.textContent = 'ダークモードに切り替え'
+    }
+  }
+  
+  // Update sidebar button
+  const sidebarIcon = document.getElementById('dark-mode-icon-sidebar')
+  const sidebarText = document.getElementById('dark-mode-text-sidebar')
+  
+  if (sidebarIcon && sidebarText) {
+    if (state.darkMode) {
+      sidebarIcon.className = 'fas fa-sun'
+      sidebarText.textContent = 'ライトモード'
+    } else {
+      sidebarIcon.className = 'fas fa-moon'
+      sidebarText.textContent = 'ダークモード'
+    }
+  }
 }

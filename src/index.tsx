@@ -689,10 +689,36 @@ app.get('/', (c) => {
                   <span>ダウンロード履歴</span>
                 </button>
               </div>
+
+              {/* Dark Mode Toggle */}
+              <div class="mt-4">
+                <button 
+                  onclick="toggleDarkMode()"
+                  class="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium shadow-sm border-2 border-gray-300 flex items-center justify-center gap-2"
+                  id="dark-mode-toggle-sidebar"
+                >
+                  <i class="fas fa-moon" id="dark-mode-icon-sidebar"></i>
+                  <span id="dark-mode-text-sidebar">ダークモード</span>
+                </button>
+              </div>
             </div>
           </aside>
         </div>
       </main>
+
+      {/* Dark Mode Toggle - Before Footer */}
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+        <div class="flex justify-center">
+          <button 
+            onclick="toggleDarkMode()"
+            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors text-sm font-medium shadow-sm border border-gray-300 flex items-center gap-2"
+            id="dark-mode-toggle-footer"
+          >
+            <i class="fas fa-moon" id="dark-mode-icon-footer"></i>
+            <span id="dark-mode-text-footer">ダークモードに切り替え</span>
+          </button>
+        </div>
+      </div>
 
       {/* Footer */}
       <footer class="bg-gray-50 border-t border-gray-200 py-6 mt-8">
