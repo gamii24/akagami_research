@@ -442,6 +442,121 @@ app.get('/api/pdfs/:id/download', async (c) => {
   })
 })
 
+// Bulk upload PDFs with auto-categorization
+app.post('/api/pdfs/bulk-upload', async (c) => {
+  try {
+    const formData = await c.req.formData()
+    const files = formData.getAll('files') as File[]
+    
+    if (!files || files.length === 0) {
+      return c.json({ error: 'ファイルが選択されていません' }, 400)
+    }
+    
+    // Get all categories
+    const { results: categories } = await c.env.DB.prepare(
+      'SELECT id, name FROM categories ORDER BY name'
+    ).all()
+    
+    const categoryMap = new Map(categories.map((cat: any) => [cat.name.toLowerCase(), cat.id]))
+    const otherCategoryId = categoryMap.get('その他') || null
+    
+    const uploadResults = []
+    const errors = []
+    
+    for (const file of files) {
+      try {
+        // Check file size
+        if (file.size > 500 * 1024) {
+          errors.push(`${file.name}: ファイルサイズが大きすぎます（最大500KB）`)
+          continue
+        }
+        
+        // Extract title from filename (remove .pdf extension)
+        let title = file.name.replace(/\.pdf$/i, '')
+        
+        // Auto-detect category from filename
+        const filenameLower = title.toLowerCase()
+        let category_id = otherCategoryId
+        
+        // Category detection logic
+        if (filenameLower.includes('youtube') || filenameLower.includes('ユーチューブ')) {
+          category_id = categoryMap.get('youtube')
+        } else if (filenameLower.includes('threads') || filenameLower.includes('スレッズ')) {
+          category_id = categoryMap.get('threads')
+        } else if (filenameLower.includes('podcast') || filenameLower.includes('ポッドキャスト')) {
+          category_id = categoryMap.get('podcast')
+        } else if (filenameLower.includes('line') || filenameLower.includes('ライン')) {
+          category_id = categoryMap.get('line公式')
+        } else if (filenameLower.includes('instagram') || filenameLower.includes('インスタ') || filenameLower.includes('インスタグラム')) {
+          category_id = categoryMap.get('instagram')
+        } else if (filenameLower.includes('tiktok') || filenameLower.includes('ティックトック')) {
+          category_id = categoryMap.get('tiktok')
+        } else if (filenameLower.includes('twitter') || filenameLower.includes('ツイッター') || filenameLower.includes(' x ') || filenameLower.startsWith('x ')) {
+          category_id = categoryMap.get('x')
+        } else if (filenameLower.includes('note') || filenameLower.includes('ノート')) {
+          category_id = categoryMap.get('note')
+        } else if (filenameLower.includes('blog') || filenameLower.includes('ブログ')) {
+          category_id = categoryMap.get('ブログ')
+        } else if (filenameLower.includes('marketing') || filenameLower.includes('マーケティング')) {
+          category_id = categoryMap.get('マーケティング')
+        } else if (filenameLower.includes('aeo') || filenameLower.includes('seo')) {
+          category_id = categoryMap.get('aeo対策')
+        } else if (filenameLower.includes('ai') || filenameLower.includes('生成ai') || filenameLower.includes('gpt') || filenameLower.includes('chatgpt')) {
+          category_id = categoryMap.get('生成ai')
+        } else if (filenameLower.includes('画像') || filenameLower.includes('動画') || filenameLower.includes('image') || filenameLower.includes('video') || filenameLower.includes('生成')) {
+          category_id = categoryMap.get('画像&動画生成')
+        }
+        
+        // Read file as base64
+        const arrayBuffer = await file.arrayBuffer()
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+        
+        // Insert PDF
+        const result = await c.env.DB.prepare(`
+          INSERT INTO pdfs (
+            title, 
+            description, 
+            category_id,
+            file_name,
+            file_size,
+            pdf_file_data
+          ) VALUES (?, ?, ?, ?, ?, ?)
+        `).bind(
+          title,
+          '',
+          category_id,
+          file.name,
+          `${(file.size / 1024).toFixed(2)} KB`,
+          base64
+        ).run()
+        
+        const categoryName = Array.from(categoryMap.entries())
+          .find(([_, id]) => id === category_id)?.[0] || 'その他'
+        
+        uploadResults.push({
+          id: result.meta.last_row_id,
+          title,
+          category: categoryName,
+          file_name: file.name
+        })
+      } catch (error) {
+        errors.push(`${file.name}: ${error.message}`)
+      }
+    }
+    
+    return c.json({
+      success: true,
+      uploaded: uploadResults.length,
+      total: files.length,
+      results: uploadResults,
+      errors
+    })
+  } catch (error) {
+    console.error('Bulk upload error:', error)
+    return c.json({ error: '一括アップロードに失敗しました' }, 500)
+  }
+})
+
 // ============================================
 // Frontend Routes
 // ============================================
