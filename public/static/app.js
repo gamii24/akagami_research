@@ -5,11 +5,40 @@ let state = {
   tags: [],
   selectedCategory: null,
   selectedTags: [],
-  searchQuery: ''
+  searchQuery: '',
+  downloadedPdfs: new Set()
+}
+
+// Load downloaded PDFs from localStorage
+function loadDownloadedPdfs() {
+  try {
+    const downloaded = localStorage.getItem('downloaded_pdfs')
+    if (downloaded) {
+      state.downloadedPdfs = new Set(JSON.parse(downloaded))
+    }
+  } catch (error) {
+    console.error('Failed to load downloaded PDFs:', error)
+  }
+}
+
+// Save downloaded PDF to localStorage
+function markAsDownloaded(pdfId) {
+  state.downloadedPdfs.add(pdfId)
+  try {
+    localStorage.setItem('downloaded_pdfs', JSON.stringify([...state.downloadedPdfs]))
+  } catch (error) {
+    console.error('Failed to save downloaded PDF:', error)
+  }
+}
+
+// Check if PDF is downloaded
+function isDownloaded(pdfId) {
+  return state.downloadedPdfs.has(pdfId)
 }
 
 // Initialize app
 async function initApp() {
+  loadDownloadedPdfs()
   await loadCategories()
   await loadTags()
   await loadPDFs()
@@ -168,11 +197,13 @@ function renderPDFList() {
   html += state.pdfs.map((pdf, index) => {
     // Only use Google Drive URL
     const downloadUrl = pdf.google_drive_url || ''
+    const downloaded = isDownloaded(pdf.id)
+    const bgColor = downloaded ? 'bg-[#f4eee0]' : 'bg-white'
     
     return `
     <div 
-      onclick="${downloadUrl ? `openGoogleDrive('${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`}"
-      class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
+      onclick="${downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`}"
+      class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
     >
       <div class="p-4">
         <h3 class="text-sm font-bold text-gray-800 mb-2 leading-snug break-words">
@@ -200,15 +231,75 @@ function renderPDFList() {
   container.innerHTML = html
 }
 
-// Open Google Drive URL directly
-function openGoogleDrive(title, url) {
+// Show download confirmation modal
+function showDownloadConfirmation(pdfId, title, url) {
   if (!url) {
     alert('このPDFのURLが設定されていません')
     return
   }
   
+  // Create modal HTML
+  const modalHtml = `
+    <div id="download-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick="closeDownloadModal(event)">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all" onclick="event.stopPropagation()">
+        <div class="text-center">
+          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-primary bg-opacity-10 mb-4">
+            <i class="fas fa-download text-3xl text-primary"></i>
+          </div>
+          
+          <h3 class="text-xl font-bold text-gray-900 mb-2">
+            PDFをダウンロードしますか？
+          </h3>
+          
+          <p class="text-sm text-gray-600 mb-6 break-words">
+            ${escapeHtml(title)}
+          </p>
+          
+          <div class="flex gap-3">
+            <button 
+              onclick="closeDownloadModal()"
+              class="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+            >
+              キャンセル
+            </button>
+            <button 
+              onclick="confirmDownload(${pdfId}, '${url}')"
+              class="flex-1 px-4 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors font-semibold shadow-lg"
+            >
+              <i class="fas fa-check mr-2"></i>ダウンロード
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+  
+  // Add modal to page
+  document.body.insertAdjacentHTML('beforeend', modalHtml)
+}
+
+// Close download modal
+function closeDownloadModal(event) {
+  if (event && event.target.id !== 'download-modal') return
+  const modal = document.getElementById('download-modal')
+  if (modal) {
+    modal.remove()
+  }
+}
+
+// Confirm and start download
+function confirmDownload(pdfId, url) {
+  // Mark as downloaded
+  markAsDownloaded(pdfId)
+  
   // Open Google Drive URL in new tab
   window.open(url, '_blank')
+  
+  // Close modal
+  closeDownloadModal()
+  
+  // Re-render PDF list to update card color
+  renderPDFList()
 }
 
 // Filter functions
