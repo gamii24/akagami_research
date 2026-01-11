@@ -1,12 +1,22 @@
-# PDF資料管理システム
+# Akagami Research
 
-GoogleドライブのリンクでPDF資料を管理できるシステムです。カテゴリとタグで整理し、簡単に検索・閲覧できます。
+PDF資料をGoogleドライブのリンクで管理できる、大人っぽくおしゃれなデザインの資料管理システムです。
 
 ## 🎯 プロジェクト概要
 
-- **目的**: 個人のPDF資料をカテゴリ・タグで整理して管理
-- **特徴**: Googleドライブのリンク方式でシンプルに運用
+- **サイト名**: Akagami Research
+- **目的**: SNSマーケティング・生成AI関連のPDF資料を整理して管理
+- **デザイン**: 落ち着いたカラーパレットで大人の雰囲気
 - **技術スタック**: Hono + TypeScript + Cloudflare D1 + TailwindCSS
+
+## 🎨 カラーパレット
+
+- **Primary**: #BB666A - メインカラー
+- **Secondary**: #e75556 - アクセントカラー
+- **Accent**: #916769 - サブカラー
+- **Dark**: #665a5a - テキスト用ダーク
+- **Darker**: #3c2d2e - ヘッダー背景
+- **Light**: #f4eee0 - 背景色
 
 ## 🌐 公開URL
 
@@ -17,31 +27,47 @@ GoogleドライブのリンクでPDF資料を管理できるシステムです�
 ## ✨ 完成済み機能
 
 ### 公開ページ（`/`）
-- ✅ PDF一覧表示
-- ✅ カテゴリでフィルタリング
+- ✅ おしゃれなグラデーションデザイン
+- ✅ カテゴリでフィルタリング（11カテゴリ）
 - ✅ タグでフィルタリング（複数選択可）
 - ✅ キーワード検索
 - ✅ GoogleドライブへのリンクでPDFを開く
 - ✅ レスポンシブデザイン
+- ✅ ホバーアニメーション
 
 ### 管理画面（`/admin`）
-- ✅ シンプルなパスワード認証（セッションストレージ）
+- ✅ エレガントなログイン画面
 - ✅ PDF登録・編集・削除
 - ✅ カテゴリ管理（追加・削除）
 - ✅ タグ管理（追加・削除）
 - ✅ 複数タグの一括選択
-- ✅ メタデータ入力（ファイルサイズ、ページ数など）
+- ✅ メタデータ入力
+
+## 📂 カテゴリ一覧
+
+### SNS関連
+- YouTube - YouTube関連の資料
+- Threads - Threads関連の資料
+- Podcast - Podcast関連の資料
+- LINE公式 - LINE公式アカウント関連の資料
+- Instagram - Instagram関連の資料
+- TikTok - TikTok関連の資料
+- X - X (旧Twitter)関連の資料
+
+### その他
+- マーケティング - マーケティング全般の資料
+- 生成AI - 生成AI関連の資料
+- 画像&動画生成 - 画像・動画生成関連の資料
+- その他 - その他の資料
 
 ## 📊 データ構造
 
 ### データベース（Cloudflare D1）
 
 **categoriesテーブル**
-- カテゴリ情報（名前、説明）
-- デフォルト: 技術資料、ビジネス、学術論文、マニュアル、その他
+- 11種類のカテゴリ（SNS、マーケティング、AI関連）
 
 **tagsテーブル**
-- タグ情報（名前）
 - デフォルト: 重要、参照頻度高、最新、アーカイブ、要確認
 
 **pdfsテーブル**
@@ -58,20 +84,17 @@ GoogleドライブのリンクでPDF資料を管理できるシステムです�
 # 依存関係のインストール
 npm install
 
-# データベースマイグレーション（ローカル）
-npm run db:migrate:local
-
-# 初期データ投入
-npm run db:seed
+# データベースリセット（マイグレーション + シード）
+npm run db:reset
 
 # ビルド
 npm run build
 
-# 開発サーバー起動
-npm run dev:sandbox
-
-# PM2で起動（推奨）
+# PM2で起動
 pm2 start ecosystem.config.cjs
+
+# テスト
+curl http://localhost:3000
 ```
 
 ### API エンドポイント
@@ -104,10 +127,9 @@ pm2 start ecosystem.config.cjs
    - タイトル（必須）
    - 説明
    - GoogleドライブURL（必須）
-   - カテゴリ
-   - タグ（複数選択可）
-   - ページ数
-   - ファイルサイズ
+   - カテゴリ選択（YouTube、Instagram、マーケティング等）
+   - タグ選択（複数可）
+   - ページ数、ファイルサイズ
 4. 「追加」ボタンで保存
 
 ### Googleドライブの共有設定
@@ -121,30 +143,24 @@ PDFを公開ページで開けるようにするには：
 ### PDFを閲覧する
 
 1. `/`（公開ページ）にアクセス
-2. カテゴリやタグでフィルタリング
-3. 検索ボックスでキーワード検索
-4. 「Google Driveで開く」ボタンでPDFを閲覧
+2. サイドバーのカテゴリでフィルタリング
+3. タグボタンで絞り込み（複数選択可）
+4. 検索ボックスでキーワード検索
+5. 「Google Driveで開く」ボタンでPDFを閲覧
 
-## 🔧 カスタマイズ
+## 🎨 デザインの特徴
 
-### 管理画面のパスワード変更
+### カラースキーム
+- 落ち着いた赤系（#BB666A、#e75556）をメインに
+- ダーク系（#3c2d2e、#665a5a）で高級感
+- ベージュ（#f4eee0）で温かみのある背景
 
-`public/static/admin.js`の以下の部分を編集：
-
-```javascript
-// 55行目あたり
-if (password === 'admin123') {  // ← ここを変更
-  sessionStorage.setItem('admin_authenticated', 'true')
-  ...
-}
-```
-
-### カテゴリ・タグの追加
-
-管理画面から簡単に追加できます：
-
-- カテゴリ管理ボタン → 新しいカテゴリ名を入力 → 追加
-- タグ管理ボタン → 新しいタグ名を入力 → 追加
+### UIエレメント
+- グラデーションボタンで高級感
+- ホバー時のアニメーション
+- シャドウとボーダーで立体感
+- カスタムスクロールバー
+- レスポンシブデザイン
 
 ## 📁 プロジェクト構造
 
@@ -152,18 +168,52 @@ if (password === 'admin123') {  // ← ここを変更
 webapp/
 ├── src/
 │   ├── index.tsx          # メインアプリケーション（Hono）
-│   └── renderer.tsx       # HTMLレンダラー
+│   └── renderer.tsx       # HTMLレンダラー（カスタムカラー設定）
 ├── public/
 │   └── static/
 │       ├── app.js         # 公開ページのJavaScript
 │       ├── admin.js       # 管理画面のJavaScript
-│       └── style.css      # カスタムCSS
+│       └── style.css      # カスタムCSS（Akagami Researchスタイル）
 ├── migrations/
 │   └── 0001_initial_schema.sql  # データベーススキーマ
-├── seed.sql               # 初期データ
+├── seed.sql               # 初期データ（11カテゴリ）
 ├── ecosystem.config.cjs   # PM2設定
 ├── wrangler.jsonc         # Cloudflare設定
 └── package.json           # 依存関係とスクリプト
+```
+
+## 🔧 カスタマイズ
+
+### カラーの変更
+
+`src/renderer.tsx`のTailwind設定を編集：
+
+```tsx
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#BB666A',    // メインカラー
+        secondary: '#e75556',  // アクセント
+        accent: '#916769',     // サブカラー
+        dark: '#665a5a',       // ダーク
+        darker: '#3c2d2e',     // 最ダーク
+        light: '#f4eee0',      // 背景
+      }
+    }
+  }
+}
+```
+
+### 管理画面のパスワード変更
+
+`public/static/admin.js`の55行目あたり：
+
+```javascript
+if (password === 'admin123') {  // ← ここを変更
+  sessionStorage.setItem('admin_authenticated', 'true')
+  ...
+}
 ```
 
 ## 🚀 本番デプロイ（Cloudflare Pages）
@@ -185,33 +235,18 @@ npm run build
 npx wrangler pages deploy dist --project-name webapp
 ```
 
-## 🔒 セキュリティについて
-
-**現在の認証方式**:
-- 管理画面は簡易パスワード認証（セッションストレージ）
-- **本番環境では適切な認証システムの導入を推奨**
-
-**推奨改善策**:
-- Cloudflare Access による認証
-- JWT トークンベース認証
-- OAuth 2.0 認証（Google, GitHub等）
-
-## 🎨 デザイン
-
-- **フレームワーク**: TailwindCSS（CDN）
-- **アイコン**: Font Awesome 6.4.0
-- **レスポンシブ対応**: モバイル・タブレット・デスクトップ
-
 ## 📄 ライセンス
 
 MIT License
 
 ## 🙏 最後に
 
-このシステムで、PDF資料を効率的に管理できます！
+Akagami Researchへようこそ！
 
-- カテゴリとタグで整理
-- 素早く検索して見つける
-- GoogleドライブでPDFを開く
+このシステムで、SNSマーケティングや生成AI関連のPDF資料を効率的に管理できます。
+
+- 11種類のカテゴリで整理
+- タグで詳細な分類
+- 美しいUIで快適な閲覧体験
 
 何か質問や改善提案があれば、お気軽にお知らせください！
