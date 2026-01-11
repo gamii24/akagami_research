@@ -754,9 +754,12 @@ function showMultiSelectToolbar() {
   toolbar.innerHTML = `
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <span class="text-lg font-bold text-primary">
+        <span class="text-lg font-bold text-primary flex items-center">
           <i class="fas fa-check-circle mr-2"></i>
-          <span id="selected-count">${state.selectedPdfs.size}</span>件選択中
+          <span class="flex flex-col leading-tight">
+            <span id="selected-count">${state.selectedPdfs.size}</span>
+            <span class="text-xs">選択</span>
+          </span>
         </span>
       </div>
       <div class="flex items-center gap-2">
@@ -765,14 +768,16 @@ function showMultiSelectToolbar() {
           class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-all font-semibold shadow-lg flex items-center gap-2"
         >
           <i class="fas fa-external-link-alt"></i>
-          <span>まとめて開く</span>
+          <span class="flex flex-col leading-tight text-left">
+            <span>まとめて</span>
+            <span>ひらく</span>
+          </span>
         </button>
         <button 
           onclick="exitMultiSelectMode()"
-          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold"
+          class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold"
         >
-          <i class="fas fa-times mr-1"></i>
-          キャンセル
+          やめる
         </button>
       </div>
     </div>
