@@ -399,6 +399,46 @@ app.post('/api/categories/:id/download', async (c) => {
   return c.json({ success: true })
 })
 
+// Regenerate tags for all existing PDFs
+app.post('/api/pdfs/regenerate-tags', async (c) => {
+  try {
+    // Get all PDFs
+    const { results: pdfs } = await c.env.DB.prepare('SELECT id, title FROM pdfs').all()
+    
+    let processedCount = 0
+    let tagsCreated = 0
+    
+    for (const pdf of pdfs as any[]) {
+      // Extract keywords from title
+      const keywords = extractKeywordsFromTitle(pdf.title)
+      
+      if (keywords.length > 0) {
+        // Create or get tags
+        for (const keyword of keywords) {
+          const tagId = await createOrGetTag(c.env.DB, keyword)
+          
+          // Add tag to PDF (ignore if already exists)
+          await c.env.DB.prepare(
+            'INSERT OR IGNORE INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
+          ).bind(pdf.id, tagId).run()
+          
+          tagsCreated++
+        }
+        processedCount++
+      }
+    }
+    
+    return c.json({ 
+      success: true, 
+      processed: processedCount,
+      totalPdfs: pdfs.length,
+      tagsCreated: tagsCreated
+    })
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500)
+  }
+})
+
 // Note: Direct PDF upload is disabled.
 // All PDFs should be stored on Google Drive and referenced by URL.
 
