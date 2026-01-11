@@ -363,7 +363,7 @@ async function uploadBulkFiles(event) {
   // Check for oversize files
   const oversizeFiles = files.filter(f => f.size > 500 * 1024)
   if (oversizeFiles.length > 0) {
-    alert(\`以下のファイルはサイズが大きすぎます（最大500KB）：\\n\${oversizeFiles.map(f => f.name).join('\\n')}\`)
+    alert(`以下のファイルはサイズが大きすぎます（最大500KB）：\n${oversizeFiles.map(f => f.name).join('\n')}`)
     return
   }
   
@@ -381,7 +381,7 @@ async function uploadBulkFiles(event) {
       formData.append('files', file)
     })
     
-    statusText.textContent = \`\${files.length}件のファイルをアップロード中...\`
+    statusText.textContent = `${files.length}件のファイルをアップロード中...`
     progressBar.style.width = '50%'
     
     const response = await axios.post('/api/pdfs/bulk-upload', formData, {
@@ -394,14 +394,14 @@ async function uploadBulkFiles(event) {
     
     const data = response.data
     
-    let message = \`アップロード完了！\\n\\n成功: \${data.uploaded}件 / 全体: \${data.total}件\`
+    let message = `アップロード完了！\n\n成功: ${data.uploaded}件 / 全体: ${data.total}件`
     
     if (data.errors && data.errors.length > 0) {
-      message += \`\\n\\nエラー:\\n\${data.errors.join('\\n')}\`
+      message += `\n\nエラー:\n${data.errors.join('\n')}`
     }
     
     if (data.results && data.results.length > 0) {
-      message += \`\\n\\n登録されたPDF:\\n\${data.results.map(r => \`- \${r.title} → カテゴリ: \${r.category}\`).join('\\n')}\`
+      message += `\n\n登録されたPDF:\n${data.results.map(r => `- ${r.title} → カテゴリ: ${r.category}`).join('\n')}`
     }
     
     alert(message)
