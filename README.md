@@ -61,6 +61,10 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - ✅ カテゴリ管理（追加・編集・削除）
   - カテゴリごとのダウンロードURL設定
 - ✅ タグ管理（追加・削除）
+- ✅ **除外タグ管理（NEW!）**
+  - 指定した単語の自動生成を防止
+  - タグ削除時に自動的に除外リストに追加
+  - デフォルト除外: ツール、戦略、活用、運用、ガイド、入門、初心者
 - ✅ 複数タグの一括選択
 
 ## 📂 カテゴリ一覧
@@ -157,6 +161,22 @@ npx wrangler pages deploy dist --project-name akagami-research
 
 ## 📝 使い方
 
+### 除外タグの管理
+
+1. 管理画面の「除外タグ管理」ボタンをクリック
+2. 自動生成したくない単語を入力して「除外リストに追加」
+3. 除外したタグは、今後PDFタイトルから自動生成されなくなります
+4. タグ管理で削除したタグは、自動的に除外リストに追加されます
+
+**デフォルトで除外される単語:**
+- ツール
+- 戦略
+- 活用
+- 運用
+- ガイド
+- 入門
+- 初心者
+
 ### 一括アップロード（推奨）
 
 1. `/admin`にアクセス
@@ -202,8 +222,9 @@ webapp/
 │       ├── admin.js       # 管理画面のJavaScript
 │       └── style.css      # カスタムCSS
 ├── migrations/
-│   ├── 0001_initial_schema.sql      # データベーススキーマ
-│   └── 0002_add_category_download_url.sql  # ダウンロードURL追加
+│   ├── 0001_initial_schema.sql                # データベーススキーマ
+│   ├── 0002_add_category_download_url.sql     # ダウンロードURL追加
+│   └── 0003_add_excluded_tags.sql             # 除外タグテーブル追加
 ├── seed.sql               # 初期データ（11カテゴリ）
 ├── .dev.vars              # ローカル環境変数（JWT_SECRET, ADMIN_PASSWORD）
 ├── ecosystem.config.cjs   # PM2設定（開発用）
