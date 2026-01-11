@@ -54,35 +54,39 @@ function markAsDownloaded(pdfId) {
   } catch (error) {
     console.error('Failed to save downloaded PDF:', error)
   }
-  
-  // Check if reached 5 downloads milestone
-  checkDownloadMilestone()
 }
 
 // Check download milestone and show celebration
-function checkDownloadMilestone() {
+function checkDownloadMilestone(url) {
   const downloadCount = state.downloadedPdfs.size
   
   // Check if first download
   const firstDownloadShown = localStorage.getItem('first_download_shown')
   if (downloadCount === 1 && !firstDownloadShown) {
-    showFirstDownloadMessage()
+    showFirstDownloadMessage(url)
     localStorage.setItem('first_download_shown', 'true')
-    return // Don't check other milestones
+    return true // Milestone shown
   }
   
   // Check if reached 5 downloads milestone
   const celebrationShown = localStorage.getItem('celebration_5_shown')
   if (downloadCount === 5 && !celebrationShown) {
-    showCelebration()
+    showCelebration(url)
     localStorage.setItem('celebration_5_shown', 'true')
+    return true // Milestone shown
   }
+  
+  return false // No milestone
 }
 
+// Store pending download URL
+let pendingDownloadUrl = null
+
 // Show first download message (simple and clean)
-function showFirstDownloadMessage() {
+function showFirstDownloadMessage(url) {
+  pendingDownloadUrl = url
   const modalHtml = `
-    <div class="first-download-modal" id="first-download-modal" onclick="closeFirstDownload(event)">
+    <div class="first-download-modal" id="first-download-modal">
       <div class="first-download-content" onclick="event.stopPropagation()">
         <div class="first-download-emoji">📚</div>
         <h2 class="first-download-title">はじめてのダウンロード</h2>
@@ -91,8 +95,9 @@ function showFirstDownloadMessage() {
           ありがとうございます！<br>
           素敵な学びの時間をお過ごしください 😊
         </p>
-        <button class="first-download-button" onclick="closeFirstDownload()">
-          ありがとう！
+        <button class="first-download-button" onclick="proceedToDownload()">
+          <i class="fas fa-download mr-2"></i>
+          ダウンロードページへ
         </button>
       </div>
     </div>
@@ -110,6 +115,18 @@ function closeFirstDownload(event) {
     setTimeout(() => {
       modal.remove()
     }, 300)
+  }
+}
+
+// Proceed to download from first download modal
+function proceedToDownload() {
+  const modal = document.getElementById('first-download-modal')
+  if (modal) {
+    modal.remove()
+  }
+  if (pendingDownloadUrl) {
+    window.open(pendingDownloadUrl, '_blank')
+    pendingDownloadUrl = null
   }
 }
 
@@ -170,9 +187,10 @@ function closeWelcome(event) {
 }
 
 // Show celebration modal
-function showCelebration() {
+function showCelebration(url) {
+  pendingDownloadUrl = url
   const modalHtml = `
-    <div class="celebration-modal" id="celebration-modal" onclick="closeCelebration(event)">
+    <div class="celebration-modal" id="celebration-modal">
       <div class="celebration-content" onclick="event.stopPropagation()">
         ${generateConfetti()}
         <div class="celebration-emoji">🎉</div>
@@ -183,8 +201,9 @@ function showCelebration() {
           これからも素敵な学びを<br>
           お届けできるよう頑張ります💪
         </p>
-        <button class="celebration-button" onclick="closeCelebration()">
-          ありがとう！ 🎊
+        <button class="celebration-button" onclick="proceedToCelebrationDownload()">
+          <i class="fas fa-download mr-2"></i>
+          ダウンロードページへ 🎊
         </button>
       </div>
     </div>
@@ -193,11 +212,16 @@ function showCelebration() {
   document.body.insertAdjacentHTML('beforeend', modalHtml)
 }
 
-// Generate confetti elements
+// Generate confetti elements (more confetti!)
 function generateConfetti() {
   let confetti = ''
-  for (let i = 0; i < 10; i++) {
-    confetti += `<div class="confetti"></div>`
+  const emojis = ['🎉', '🎊', '✨', '🌟', '💫', '⭐', '🎈', '🎁']
+  for (let i = 0; i < 30; i++) {
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)]
+    const left = Math.random() * 100
+    const animationDelay = Math.random() * 3
+    const animationDuration = 3 + Math.random() * 2
+    confetti += `<div class="confetti" style="left: ${left}%; animation-delay: ${animationDelay}s; animation-duration: ${animationDuration}s;">${emoji}</div>`
   }
   return confetti
 }
@@ -211,6 +235,18 @@ function closeCelebration(event) {
     setTimeout(() => {
       modal.remove()
     }, 300)
+  }
+}
+
+// Proceed to download from celebration modal
+function proceedToCelebrationDownload() {
+  const modal = document.getElementById('celebration-modal')
+  if (modal) {
+    modal.remove()
+  }
+  if (pendingDownloadUrl) {
+    window.open(pendingDownloadUrl, '_blank')
+    pendingDownloadUrl = null
   }
 }
 
@@ -893,11 +929,16 @@ async function confirmDownload(pdfId, url) {
     console.error('Failed to increment download count:', error)
   }
   
-  // Open Google Drive URL in new tab
-  window.open(url, '_blank')
-  
-  // Close modal
+  // Close download confirmation modal
   closeDownloadModal()
+  
+  // Check if milestone reached
+  const milestoneShown = checkDownloadMilestone(url)
+  
+  // If no milestone, open URL directly
+  if (!milestoneShown) {
+    window.open(url, '_blank')
+  }
   
   // Re-render PDF list to update card color and count
   renderPDFList()

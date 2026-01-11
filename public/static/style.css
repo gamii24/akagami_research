@@ -300,3 +300,356 @@ select:focus {
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Celebration Modal Styles */
+.celebration-modal,
+.first-download-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.celebration-content,
+.first-download-content {
+  background: white;
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: modalBounce 0.5s ease-out;
+}
+
+@keyframes modalBounce {
+  0% {
+    transform: scale(0.3) translateY(-100px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.celebration-emoji,
+.first-download-emoji {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  animation: emojiRotate 1s ease-in-out infinite;
+}
+
+@keyframes emojiRotate {
+  0%, 100% {
+    transform: rotate(-10deg) scale(1);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.1);
+  }
+}
+
+.celebration-title,
+.first-download-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.celebration-message,
+.first-download-message {
+  font-size: 1.1rem;
+  color: var(--dark);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.celebration-button,
+.first-download-button {
+  background: linear-gradient(135deg, var(--primary) 0%, #ff6b6b 100%);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(231, 85, 86, 0.4);
+}
+
+.celebration-button:hover,
+.first-download-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(231, 85, 86, 0.5);
+}
+
+.celebration-button:active,
+.first-download-button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Confetti Animation - Much More Spectacular! */
+.confetti {
+  position: absolute;
+  font-size: 2rem;
+  animation: confettiFall linear forwards;
+  pointer-events: none;
+  z-index: 1;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes confettiFall {
+  0% {
+    top: -10%;
+    transform: translateX(0) rotateZ(0deg);
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    transform: translateX(calc(-50px + 100px * var(--random))) rotateZ(calc(360deg * 3));
+    opacity: 0;
+  }
+}
+
+/* Share Button (Small) */
+.share-btn-small {
+  background: transparent;
+  color: #9ca3af;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.share-btn-small:hover {
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+/* Favorite Button (Small) */
+.favorite-btn-small {
+  background: transparent;
+  color: #d1d5db;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.favorite-btn-small:hover {
+  color: var(--primary);
+  transform: scale(1.2);
+}
+
+.favorite-btn-small.active {
+  color: var(--primary);
+  animation: heartBeat 0.3s ease;
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(1.25);
+  }
+}
+
+/* Skeleton Screen */
+.skeleton-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-title {
+  height: 1.5rem;
+  width: 80%;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-tag {
+  height: 1.5rem;
+  width: 4rem;
+}
+
+.skeleton-date {
+  height: 1rem;
+  width: 50%;
+}
+
+/* Welcome Modal Styles */
+.welcome-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.welcome-content {
+  background: white;
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: modalBounce 0.5s ease-out;
+}
+
+.welcome-heart {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  animation: heartPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.welcome-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.welcome-message {
+  font-size: 1.1rem;
+  color: var(--dark);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.welcome-button {
+  background: linear-gradient(135deg, var(--primary) 0%, #ff6b6b 100%);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(231, 85, 86, 0.4);
+}
+
+.welcome-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(231, 85, 86, 0.5);
+}
+
+/* Floating Hearts Animation */
+.floating-hearts {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.floating-heart {
+  position: absolute;
+  font-size: 2rem;
+  animation: floatHeart 4s ease-in-out infinite;
+  opacity: 0;
+}
+
+.floating-heart:nth-child(1) {
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.floating-heart:nth-child(2) {
+  left: 30%;
+  animation-delay: 0.8s;
+}
+
+.floating-heart:nth-child(3) {
+  left: 50%;
+  animation-delay: 1.6s;
+}
+
+.floating-heart:nth-child(4) {
+  left: 70%;
+  animation-delay: 2.4s;
+}
+
+.floating-heart:nth-child(5) {
+  left: 90%;
+  animation-delay: 3.2s;
+}
+
+@keyframes floatHeart {
+  0% {
+    bottom: -10%;
+    opacity: 0;
+    transform: translateX(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    bottom: 110%;
+    opacity: 0;
+    transform: translateX(calc(-30px + 60px * var(--random, 0.5))) rotate(360deg);
+  }
+}
