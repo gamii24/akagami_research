@@ -165,14 +165,18 @@ function renderPDFList() {
     }
   }
   
-  html += state.pdfs.map(pdf => `
+  html += state.pdfs.map((pdf, index) => {
+    // Calculate background color for mobile (alternating pattern)
+    const mobileColorClass = index % 2 === 0 ? 'bg-white' : 'bg-beige'
+    
+    return `
     <a 
       href="${escapeHtml(pdf.google_drive_url)}" 
       target="_blank"
-      class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 block cursor-pointer"
+      class="pdf-card ${mobileColorClass} lg:bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 block cursor-pointer"
     >
       <div class="p-4">
-        <h3 class="text-sm font-bold text-gray-800 mb-2 truncate" title="${escapeHtml(pdf.title)}">
+        <h3 class="text-sm font-bold text-gray-800 mb-2 leading-snug break-words">
           ${escapeHtml(pdf.title)}
         </h3>
         
@@ -191,7 +195,8 @@ function renderPDFList() {
         </div>
       </div>
     </a>
-  `).join('')
+  `
+  }).join('')
   
   container.innerHTML = html
 }
