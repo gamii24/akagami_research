@@ -653,3 +653,80 @@ select:focus {
     transform: translateX(calc(-30px + 60px * var(--random, 0.5))) rotate(360deg);
   }
 }
+
+/* Floating SNS Logos Animation */
+.floating-sns-logos {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.floating-sns-logo {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: fallSNSLogo 4s ease-in infinite;
+  opacity: 0;
+  color: var(--primary);
+  text-shadow: 0 0 10px rgba(231, 85, 86, 0.5);
+}
+
+.floating-sns-logo:nth-child(1) {
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.floating-sns-logo:nth-child(2) {
+  left: 15%;
+  animation-delay: 0.3s;
+}
+
+.floating-sns-logo:nth-child(3) {
+  left: 30%;
+  animation-delay: 0.6s;
+}
+
+.floating-sns-logo:nth-child(4) {
+  left: 45%;
+  animation-delay: 0.9s;
+}
+
+.floating-sns-logo:nth-child(5) {
+  left: 60%;
+  animation-delay: 1.2s;
+}
+
+.floating-sns-logo:nth-child(6) {
+  left: 70%;
+  animation-delay: 1.5s;
+}
+
+.floating-sns-logo:nth-child(7) {
+  left: 85%;
+  animation-delay: 1.8s;
+}
+
+.floating-sns-logo:nth-child(8) {
+  left: 95%;
+  animation-delay: 2.1s;
+}
+
+@keyframes fallSNSLogo {
+  0% {
+    top: -10%;
+    opacity: 0;
+    transform: translateY(0) rotate(0deg) scale(0.5);
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+    transform: translateY(0) rotate(720deg) scale(1.5);
+  }
+}

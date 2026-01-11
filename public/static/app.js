@@ -143,17 +143,20 @@ function checkFirstVisit() {
   }
 }
 
-// Show welcome message (Instagram like style)
+// Show welcome message (Instagram like style with SNS logos)
 function showWelcomeMessage() {
   const modalHtml = `
     <div class="welcome-modal" id="welcome-modal" onclick="closeWelcome(event)">
       <div class="welcome-content" onclick="event.stopPropagation()">
-        <div class="floating-hearts">
-          <div class="floating-heart">❤️</div>
-          <div class="floating-heart">❤️</div>
-          <div class="floating-heart">❤️</div>
-          <div class="floating-heart">❤️</div>
-          <div class="floating-heart">❤️</div>
+        <div class="floating-sns-logos">
+          <div class="floating-sns-logo"><i class="fab fa-youtube"></i></div>
+          <div class="floating-sns-logo"><i class="fab fa-instagram"></i></div>
+          <div class="floating-sns-logo"><i class="fab fa-tiktok"></i></div>
+          <div class="floating-sns-logo"><i class="fab fa-x-twitter"></i></div>
+          <div class="floating-sns-logo"><i class="fab fa-threads"></i></div>
+          <div class="floating-sns-logo"><i class="fas fa-podcast"></i></div>
+          <div class="floating-sns-logo"><i class="fab fa-line"></i></div>
+          <div class="floating-sns-logo"><i class="fas fa-robot"></i></div>
         </div>
         <div class="welcome-heart">❤️</div>
         <h2 class="welcome-title">ようこそ！</h2>
@@ -762,9 +765,10 @@ function renderPDFList() {
         <button 
           onclick="toggleFavoriteFilter()" 
           class="favorite-filter-btn ${state.showOnlyFavorites ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap flex-shrink-0"
+          title="${state.showOnlyFavorites ? `お気に入りのみ表示中 (${state.favoritePdfs.size})` : 'お気に入りのみ表示'}"
         >
           <i class="fas fa-heart"></i>
-          <span>お気に入り${state.showOnlyFavorites ? `(${state.favoritePdfs.size})` : ''}</span>
+          ${state.showOnlyFavorites ? `<span class="text-xs">(${state.favoritePdfs.size})</span>` : ''}
         </button>
       </div>
     </div>
