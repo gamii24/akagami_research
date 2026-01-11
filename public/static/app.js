@@ -138,17 +138,11 @@ function renderPDFList() {
             </div>
           </div>
           <div class="flex-1 min-w-0">
-            <h3 class="text-base font-bold text-gray-800 leading-tight truncate">
+            <h3 class="text-base font-bold text-gray-800 leading-tight">
               ${escapeHtml(pdf.title)}
             </h3>
           </div>
         </div>
-        
-        ${pdf.description ? `
-          <p class="text-gray-600 mb-4 text-sm leading-relaxed line-clamp-2">
-            ${escapeHtml(pdf.description)}
-          </p>
-        ` : ''}
         
         ${pdf.tags && pdf.tags.length > 0 ? `
           <div class="flex flex-wrap gap-2 mb-4">
