@@ -578,7 +578,7 @@ app.get('/', (c) => {
     <div class="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
             <a href="/" class="hover:opacity-80 transition-opacity">
               <h1 class="text-3xl font-bold text-white tracking-wide">
