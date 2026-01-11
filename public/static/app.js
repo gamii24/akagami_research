@@ -1192,7 +1192,7 @@ function renderPDFList() {
     `
   }
   
-  // Mobile: Show Download History button and Tags after cards
+  // Mobile: Show Download History button (only on top page)
   if (isMobile && isTopPage) {
     html += `
       <!-- Mobile: Download History Button -->
@@ -1205,7 +1205,12 @@ function renderPDFList() {
           <span>ダウンロード履歴</span>
         </button>
       </div>
-      
+    `
+  }
+  
+  // Mobile: Show Tags Section (on all pages including category and download history)
+  if (isMobile) {
+    html += `
       <!-- Mobile: Tags Section -->
       <div class="col-span-full mt-6 lg:hidden">
         <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-200">
