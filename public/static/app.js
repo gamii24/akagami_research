@@ -1213,7 +1213,7 @@ function renderPDFList() {
     html += `
       <!-- Mobile: Tags Section -->
       <div class="col-span-full mt-6 lg:hidden">
-        <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-200">
+        <div class="p-6">
           <h2 class="text-lg font-bold mb-4 text-gray-800 flex items-center">
             <i class="fas fa-tags mr-2 text-primary"></i>タグ一覧
           </h2>
@@ -1223,7 +1223,7 @@ function renderPDFList() {
                 onclick="toggleTag(${tag.id})" 
                 class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-2 rounded-full text-sm font-medium"
               >
-                <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
+                ${escapeHtml(tag.name)}
               </button>
             `).join('')}
           </div>
