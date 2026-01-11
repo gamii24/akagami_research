@@ -489,7 +489,7 @@ function showPdfModal() {
           </button>
         </div>
         
-        <form onsubmit="savePdf(event)" class="px-6 py-4 space-y-4">
+        <form onsubmit="savePdf(event)" class="px-6 py-4 space-y-4" id="pdf-form">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">タイトル *</label>
             <input 
@@ -510,19 +510,68 @@ function showPdfModal() {
             >${escapeHtml(pdf.description || '')}</textarea>
           </div>
           
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Google Drive URL *</label>
+          <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p class="text-sm font-bold text-blue-800 mb-2">
+              <i class="fas fa-info-circle mr-1"></i>PDFの登録方法を選択
+            </p>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input 
+                  type="radio" 
+                  name="upload-type" 
+                  value="url" 
+                  id="upload-type-url"
+                  ${!isEdit || pdf.google_drive_url ? 'checked' : ''}
+                  onchange="toggleUploadType()"
+                  class="mr-2"
+                />
+                <span class="text-sm text-gray-700">Google Drive URLを使用</span>
+              </label>
+              <label class="flex items-center">
+                <input 
+                  type="radio" 
+                  name="upload-type" 
+                  value="file" 
+                  id="upload-type-file"
+                  ${isEdit && pdf.pdf_file_data ? 'checked' : ''}
+                  onchange="toggleUploadType()"
+                  class="mr-2"
+                />
+                <span class="text-sm text-gray-700">PDFファイルを直接アップロード（最大500KB）</span>
+              </label>
+            </div>
+          </div>
+          
+          <div id="url-upload-section" ${!isEdit || pdf.google_drive_url ? '' : 'style="display:none"'}>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Google Drive URL ${isEdit ? '' : '*'}</label>
             <input 
               type="url" 
               id="pdf-url"
               value="${escapeHtml(pdf.google_drive_url || '')}"
               placeholder="https://drive.google.com/file/d/..."
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
             <p class="mt-1 text-xs text-gray-500">
               <i class="fas fa-info-circle mr-1"></i>Google Driveで「リンクを知っている全員」に共有設定してください
             </p>
+          </div>
+          
+          <div id="file-upload-section" ${isEdit && pdf.pdf_file_data ? '' : 'style="display:none"'}>
+            <label class="block text-sm font-medium text-gray-700 mb-2">PDFファイル ${isEdit ? '' : '*'}</label>
+            <input 
+              type="file" 
+              id="pdf-file"
+              accept=".pdf"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p class="mt-1 text-xs text-gray-500">
+              <i class="fas fa-exclamation-triangle mr-1"></i>最大ファイルサイズ: 500KB
+            </p>
+            ${isEdit && pdf.file_name ? `
+              <p class="mt-2 text-xs text-green-600">
+                <i class="fas fa-check-circle mr-1"></i>現在のファイル: ${escapeHtml(pdf.file_name)}
+              </p>
+            ` : ''}
           </div>
           
           <div class="grid grid-cols-2 gap-4">
@@ -608,12 +657,32 @@ function showPdfModal() {
   document.getElementById('modal-container').innerHTML = modalHtml
 }
 
+// Toggle between URL and file upload
+function toggleUploadType() {
+  const uploadType = document.querySelector('input[name="upload-type"]:checked').value
+  const urlSection = document.getElementById('url-upload-section')
+  const fileSection = document.getElementById('file-upload-section')
+  const urlInput = document.getElementById('pdf-url')
+  const fileInput = document.getElementById('pdf-file')
+  
+  if (uploadType === 'url') {
+    urlSection.style.display = 'block'
+    fileSection.style.display = 'none'
+    urlInput.required = true
+    fileInput.required = false
+  } else {
+    urlSection.style.display = 'none'
+    fileSection.style.display = 'block'
+    urlInput.required = false
+    fileInput.required = !adminState.editingPdf // Required for new PDFs only
+  }
+}
+
 async function savePdf(event) {
   event.preventDefault()
   
   const title = document.getElementById('pdf-title').value
   const description = document.getElementById('pdf-description').value
-  const google_drive_url = document.getElementById('pdf-url').value
   const category_id = document.getElementById('pdf-category').value || null
   const page_count = document.getElementById('pdf-pages').value || null
   const file_size = document.getElementById('pdf-size').value || null
@@ -621,28 +690,79 @@ async function savePdf(event) {
   const tagCheckboxes = document.querySelectorAll('input[name="pdf-tags"]:checked')
   const tag_ids = Array.from(tagCheckboxes).map(cb => parseInt(cb.value))
   
-  const data = {
-    title,
-    description,
-    google_drive_url,
-    category_id,
-    page_count: page_count ? parseInt(page_count) : null,
-    file_size,
-    tag_ids
-  }
+  const uploadType = document.querySelector('input[name="upload-type"]:checked').value
   
   try {
-    if (adminState.editingPdf) {
-      await axios.put(`/api/pdfs/${adminState.editingPdf.id}`, data)
+    if (uploadType === 'file') {
+      // File upload mode
+      const fileInput = document.getElementById('pdf-file')
+      const file = fileInput.files[0]
+      
+      if (!file && !adminState.editingPdf) {
+        alert('PDFファイルを選択してください')
+        return
+      }
+      
+      // If editing and no new file selected, use existing data
+      if (adminState.editingPdf && !file) {
+        // Update metadata only
+        const data = {
+          title,
+          description,
+          category_id,
+          page_count: page_count ? parseInt(page_count) : null,
+          file_size,
+          tag_ids
+        }
+        
+        await axios.put(`/api/pdfs/${adminState.editingPdf.id}`, data)
+      } else {
+        // Upload new file
+        if (file.size > 500 * 1024) {
+          alert('ファイルサイズが大きすぎます（最大500KB）')
+          return
+        }
+        
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('title', title)
+        formData.append('description', description)
+        formData.append('category_id', category_id || '')
+        formData.append('tag_ids', JSON.stringify(tag_ids))
+        
+        if (adminState.editingPdf) {
+          // For edit, we need to delete old and create new (D1 limitation)
+          await axios.delete(`/api/pdfs/${adminState.editingPdf.id}`)
+        }
+        
+        await axios.post('/api/pdfs/upload', formData)
+      }
     } else {
-      await axios.post('/api/pdfs', data)
+      // URL mode
+      const google_drive_url = document.getElementById('pdf-url').value
+      
+      const data = {
+        title,
+        description,
+        google_drive_url,
+        category_id,
+        page_count: page_count ? parseInt(page_count) : null,
+        file_size,
+        tag_ids
+      }
+      
+      if (adminState.editingPdf) {
+        await axios.put(`/api/pdfs/${adminState.editingPdf.id}`, data)
+      } else {
+        await axios.post('/api/pdfs', data)
+      }
     }
     
     closeModal()
     await loadAdminData()
     renderAdminPage()
   } catch (error) {
-    alert('保存に失敗しました: ' + error.message)
+    alert('保存に失敗しました: ' + (error.response?.data?.error || error.message))
   }
 }
 

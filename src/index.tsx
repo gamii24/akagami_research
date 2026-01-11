@@ -149,6 +149,8 @@ app.get('/api/pdfs', async (c) => {
       p.title, 
       p.description, 
       p.google_drive_url,
+      p.pdf_file_data,
+      p.file_name,
       p.category_id,
       p.thumbnail_url,
       p.file_size,
@@ -342,6 +344,102 @@ app.delete('/api/pdfs/:id', async (c) => {
   ).bind(id).run()
   
   return c.json({ success: true })
+})
+
+// Upload PDF file
+app.post('/api/pdfs/upload', async (c) => {
+  try {
+    const formData = await c.req.formData()
+    const file = formData.get('file') as File
+    const title = formData.get('title') as string
+    const description = formData.get('description') as string || ''
+    const category_id = formData.get('category_id') as string || null
+    const tag_ids_str = formData.get('tag_ids') as string || '[]'
+    const tag_ids = JSON.parse(tag_ids_str)
+    
+    if (!file) {
+      return c.json({ error: 'No file provided' }, 400)
+    }
+    
+    // Check file size (limit to 500KB for D1)
+    if (file.size > 500 * 1024) {
+      return c.json({ error: 'ファイルサイズが大きすぎます（最大500KB）' }, 400)
+    }
+    
+    // Read file as base64
+    const arrayBuffer = await file.arrayBuffer()
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+    
+    // Insert PDF with file data
+    const result = await c.env.DB.prepare(`
+      INSERT INTO pdfs (
+        title, 
+        description, 
+        category_id,
+        file_name,
+        file_size,
+        pdf_file_data
+      ) VALUES (?, ?, ?, ?, ?, ?)
+    `).bind(
+      title,
+      description,
+      category_id,
+      file.name,
+      `${(file.size / 1024).toFixed(2)} KB`,
+      base64
+    ).run()
+    
+    const pdf_id = result.meta.last_row_id
+    
+    // Add tags
+    if (tag_ids && tag_ids.length > 0) {
+      for (const tag_id of tag_ids) {
+        await c.env.DB.prepare(
+          'INSERT INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
+        ).bind(pdf_id, tag_id).run()
+      }
+    }
+    
+    return c.json({ 
+      id: pdf_id, 
+      title,
+      file_name: file.name
+    })
+  } catch (error) {
+    console.error('Upload error:', error)
+    return c.json({ error: 'アップロードに失敗しました' }, 500)
+  }
+})
+
+// Download PDF file
+app.get('/api/pdfs/:id/download', async (c) => {
+  const id = c.req.param('id')
+  
+  const pdf = await c.env.DB.prepare(`
+    SELECT pdf_file_data, file_name, title
+    FROM pdfs
+    WHERE id = ?
+  `).bind(id).first() as any
+  
+  if (!pdf || !pdf.pdf_file_data) {
+    return c.json({ error: 'PDF not found' }, 404)
+  }
+  
+  // Decode base64 to binary
+  const binaryString = atob(pdf.pdf_file_data)
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  
+  const fileName = pdf.file_name || `${pdf.title}.pdf`
+  
+  return new Response(bytes, {
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${encodeURIComponent(fileName)}"`,
+    },
+  })
 })
 
 // ============================================

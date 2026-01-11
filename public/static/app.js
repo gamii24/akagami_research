@@ -166,11 +166,24 @@ function renderPDFList() {
   }
   
   html += state.pdfs.map((pdf, index) => {
+    // Determine download URL
+    let downloadUrl = ''
+    let isUploadedFile = false
+    
+    if (pdf.pdf_file_data) {
+      // PDF was uploaded directly
+      downloadUrl = `/api/pdfs/${pdf.id}/download`
+      isUploadedFile = true
+    } else if (pdf.google_drive_url) {
+      // PDF is on Google Drive
+      downloadUrl = pdf.google_drive_url
+      isUploadedFile = false
+    }
+    
     return `
-    <a 
-      href="${escapeHtml(pdf.google_drive_url)}" 
-      target="_blank"
-      class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 block cursor-pointer"
+    <div 
+      onclick="showDownloadConfirmation('${escapeHtml(pdf.title)}', '${downloadUrl}', ${isUploadedFile})"
+      class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
     >
       <div class="p-4">
         <h3 class="text-sm font-bold text-gray-800 mb-2 leading-snug break-words">
@@ -191,11 +204,74 @@ function renderPDFList() {
           <span class="flex items-center">${formatDate(pdf.created_at)}</span>
         </div>
       </div>
-    </a>
+    </div>
   `
   }).join('')
   
   container.innerHTML = html
+}
+
+// Show download confirmation dialog
+function showDownloadConfirmation(title, url, isUploadedFile) {
+  // Create modal HTML
+  const modalHtml = `
+    <div id="download-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onclick="closeDownloadModal(event)">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all" onclick="event.stopPropagation()">
+        <div class="text-center">
+          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-primary bg-opacity-10 mb-4">
+            <i class="fas fa-download text-3xl text-primary"></i>
+          </div>
+          
+          <h3 class="text-xl font-bold text-gray-900 mb-2">
+            PDFをダウンロードしますか？
+          </h3>
+          
+          <p class="text-sm text-gray-600 mb-6 break-words">
+            ${title}
+          </p>
+          
+          <div class="flex gap-3">
+            <button 
+              onclick="closeDownloadModal()"
+              class="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+            >
+              キャンセル
+            </button>
+            <button 
+              onclick="confirmDownload('${url}', ${isUploadedFile})"
+              class="flex-1 px-4 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors font-semibold shadow-lg"
+            >
+              <i class="fas fa-check mr-2"></i>ダウンロード
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+  
+  // Add modal to page
+  document.body.insertAdjacentHTML('beforeend', modalHtml)
+}
+
+// Close download modal
+function closeDownloadModal(event) {
+  if (event && event.target.id !== 'download-modal') return
+  const modal = document.getElementById('download-modal')
+  if (modal) {
+    modal.remove()
+  }
+}
+
+// Confirm and start download
+function confirmDownload(url, isUploadedFile) {
+  if (isUploadedFile) {
+    // For uploaded files, trigger download
+    window.location.href = url
+  } else {
+    // For external URLs (Google Drive), open in new tab
+    window.open(url, '_blank')
+  }
+  closeDownloadModal()
 }
 
 // Filter functions
