@@ -14,7 +14,8 @@ let state = {
   showOnlyFavorites: false, // Filter to show only favorites
   showDownloadHistory: false, // Filter to show only downloaded PDFs
   multiSelectMode: false, // Multi-select mode
-  selectedPdfs: new Set() // Selected PDFs in multi-select mode
+  selectedPdfs: new Set(), // Selected PDFs in multi-select mode
+  showAllMobile: false // Show all cards on mobile (default: false, show 15)
 }
 
 // Load downloaded PDFs from localStorage
@@ -983,7 +984,19 @@ function renderPDFList() {
     `
   }
   
-  html += state.pdfs.map((pdf, index) => {
+  // Determine how many PDFs to show on mobile
+  const isMobile = window.innerWidth < 1024 // lg breakpoint
+  const isTopPage = !state.selectedCategory && state.selectedTags.length === 0 && !state.searchQuery && !state.showOnlyFavorites && !state.showDownloadHistory
+  let pdfsToShow = state.pdfs
+  let hasMore = false
+  
+  // On mobile top page, limit to 15 cards unless "show all" is clicked
+  if (isMobile && isTopPage && !state.showAllMobile && state.pdfs.length > 15) {
+    pdfsToShow = state.pdfs.slice(0, 15)
+    hasMore = true
+  }
+  
+  html += pdfsToShow.map((pdf, index) => {
     // Only use Google Drive URL
     const downloadUrl = pdf.google_drive_url || ''
     const downloaded = isDownloaded(pdf.id)
@@ -1050,6 +1063,56 @@ function renderPDFList() {
     </div>
   `
   }).join('')
+  
+  // Mobile: Show "More" button if there are more cards
+  if (isMobile && hasMore) {
+    html += `
+      <div class="col-span-full mt-6 text-center">
+        <button 
+          onclick="showAllMobileCards()"
+          class="px-8 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg"
+        >
+          <i class="fas fa-chevron-down mr-2"></i>
+          もっと見る（残り${state.pdfs.length - 15}件）
+        </button>
+      </div>
+    `
+  }
+  
+  // Mobile: Show Download History button and Tags after cards
+  if (isMobile && isTopPage) {
+    html += `
+      <!-- Mobile: Download History Button -->
+      <div class="col-span-full mt-8 lg:hidden">
+        <button 
+          onclick="toggleDownloadHistory()"
+          class="w-full px-4 py-4 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl transition-colors font-bold shadow-lg border-2 border-pink-200 flex items-center justify-center gap-3"
+        >
+          <i class="fas fa-history text-xl"></i>
+          <span>ダウンロード履歴</span>
+        </button>
+      </div>
+      
+      <!-- Mobile: Tags Section -->
+      <div class="col-span-full mt-6 lg:hidden">
+        <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-200">
+          <h2 class="text-lg font-bold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-tags mr-2 text-primary"></i>タグ一覧
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            ${state.tags.map(tag => `
+              <button 
+                onclick="toggleTag(${tag.id})" 
+                class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-2 rounded-full text-sm font-medium"
+              >
+                <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `
+  }
   
   container.innerHTML = html
 }
@@ -1267,6 +1330,7 @@ async function bulkDownloadCategory() {
 function filterByCategory(categoryId) {
   state.selectedCategory = categoryId
   state.showDownloadHistory = false // Clear download history mode
+  state.showAllMobile = false // Reset mobile "show all" state
   updateURL()
   renderCategoryFilter()
   loadPDFs()
@@ -1283,6 +1347,7 @@ function toggleTag(tagId) {
     state.selectedTags.push(tagId)
   }
   state.showDownloadHistory = false // Clear download history mode
+  state.showAllMobile = false // Reset mobile "show all" state
   updateURL()
   renderTagFilter()
   loadPDFs()
@@ -1297,6 +1362,7 @@ function clearAllFilters() {
   state.selectedTags = []
   state.searchQuery = ''
   state.showDownloadHistory = false
+  state.showAllMobile = false // Reset mobile "show all" state
   
   // Update URL
   updateURL()
@@ -1331,6 +1397,7 @@ function searchPDFs() {
   if (input) {
     state.searchQuery = input.value
     state.showDownloadHistory = false // Clear download history mode
+    state.showAllMobile = false // Reset mobile "show all" state
     updateURL()
     loadPDFs()
   }
@@ -1373,6 +1440,7 @@ function searchPDFsMobile() {
   if (input) {
     state.searchQuery = input.value
     state.showDownloadHistory = false // Clear download history mode
+    state.showAllMobile = false // Reset mobile "show all" state
     updateURL()
     loadPDFs()
   }
@@ -1391,12 +1459,14 @@ function toggleMobileMenu() {
 // Toggle favorite filter
 function toggleFavoriteFilter() {
   state.showOnlyFavorites = !state.showOnlyFavorites
+  state.showAllMobile = false // Reset mobile "show all" state
   loadPDFs()
 }
 
 // Toggle download history filter
 function toggleDownloadHistory() {
   state.showDownloadHistory = !state.showDownloadHistory
+  state.showAllMobile = false // Reset mobile "show all" state
   
   // When showing download history, clear other filters
   if (state.showDownloadHistory) {
@@ -1422,6 +1492,12 @@ function toggleDownloadHistory() {
   
   loadPDFs()
   closeMobileMenu()
+}
+
+// Show all cards on mobile
+function showAllMobileCards() {
+  state.showAllMobile = true
+  renderPDFList()
 }
 
 // Utility functions
