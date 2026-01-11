@@ -84,6 +84,9 @@
   background: white;
   border: 2px solid transparent;
   transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .pdf-card:hover {
@@ -92,7 +95,35 @@
   transform: translateY(-4px);
 }
 
-/* Custom Scrollbar */
+.pdf-card > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pdf-card a {
+  margin-top: auto;
+}
+
+/* Responsive Grid */
+@media (max-width: 768px) {
+  .category-btn, .tag-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .pdf-card h3 {
+    font-size: 1rem;
+  }
+  
+  .pdf-card .badge {
+    font-size: 0.7rem;
+  }
+}
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

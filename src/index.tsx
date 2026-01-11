@@ -361,8 +361,8 @@ app.get('/', (c) => {
 
           {/* PDF List */}
           <div class="lg:col-span-3">
-            <div id="pdf-list" class="space-y-6">
-              <div class="text-center py-12 text-dark">
+            <div id="pdf-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="col-span-full text-center py-12 text-dark">
                 <i class="fas fa-spinner fa-spin text-5xl mb-4 text-primary"></i>
                 <p class="text-lg">読み込み中...</p>
               </div>

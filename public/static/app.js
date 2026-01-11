@@ -120,7 +120,7 @@ function renderPDFList() {
   
   if (state.pdfs.length === 0) {
     container.innerHTML = `
-      <div class="text-center py-16 text-dark">
+      <div class="col-span-full text-center py-16 text-dark">
         <i class="fas fa-inbox text-7xl mb-4 text-accent opacity-50"></i>
         <p class="text-xl font-medium">資料が見つかりませんでした</p>
       </div>
@@ -129,56 +129,63 @@ function renderPDFList() {
   }
   
   const html = state.pdfs.map(pdf => `
-    <div class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 border-2">
-      <div class="flex items-start gap-4">
-        <div class="flex-shrink-0">
-          <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-md">
-            <i class="fas fa-file-pdf text-3xl text-white"></i>
+    <div class="pdf-card bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2">
+      <div class="p-6">
+        {/* Header with icon */}
+        <div class="flex items-start gap-4 mb-4">
+          <div class="flex-shrink-0">
+            <div class="w-14 h-14 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-md">
+              <i class="fas fa-file-pdf text-2xl text-white"></i>
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-bold text-darker mb-2 leading-tight">
+              ${escapeHtml(pdf.title)}
+            </h3>
           </div>
         </div>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-xl font-bold text-darker mb-2 hover:text-primary transition-colors">
-            ${escapeHtml(pdf.title)}
-          </h3>
-          
-          ${pdf.description ? `
-            <p class="text-dark mb-4 line-clamp-2 leading-relaxed">
-              ${escapeHtml(pdf.description)}
-            </p>
+        
+        {/* Description */}
+        ${pdf.description ? `
+          <p class="text-dark/80 mb-4 text-sm leading-relaxed">
+            ${escapeHtml(pdf.description)}
+          </p>
+        ` : ''}
+        
+        {/* Tags */}
+        <div class="flex flex-wrap gap-2 mb-4">
+          ${pdf.category_name ? `
+            <span class="badge badge-category text-xs shadow-sm">
+              <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
+            </span>
           ` : ''}
           
-          <div class="flex flex-wrap gap-2 mb-4">
-            ${pdf.category_name ? `
-              <span class="badge badge-category shadow-sm">
-                <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
-              </span>
-            ` : ''}
-            
-            ${pdf.tags ? pdf.tags.map(tag => `
-              <span class="badge badge-tag">
-                <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
-              </span>
-            `).join('') : ''}
-          </div>
-          
-          <div class="flex items-center gap-4 text-sm text-dark/70 mb-4">
-            ${pdf.file_size ? `
-              <span class="flex items-center"><i class="fas fa-file mr-1.5"></i>${escapeHtml(pdf.file_size)}</span>
-            ` : ''}
-            ${pdf.page_count ? `
-              <span class="flex items-center"><i class="fas fa-book mr-1.5"></i>${pdf.page_count}ページ</span>
-            ` : ''}
-            <span class="flex items-center"><i class="fas fa-clock mr-1.5"></i>${formatDate(pdf.created_at)}</span>
-          </div>
-          
-          <a 
-            href="${escapeHtml(pdf.google_drive_url)}" 
-            target="_blank"
-            class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg font-medium"
-          >
-            <i class="fas fa-external-link-alt mr-2"></i>Google Driveで開く
-          </a>
+          ${pdf.tags ? pdf.tags.map(tag => `
+            <span class="badge badge-tag text-xs">
+              <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
+            </span>
+          `).join('') : ''}
         </div>
+        
+        {/* Meta info */}
+        <div class="flex items-center gap-3 text-xs text-dark/60 mb-4 flex-wrap">
+          ${pdf.file_size ? `
+            <span class="flex items-center"><i class="fas fa-file mr-1"></i>${escapeHtml(pdf.file_size)}</span>
+          ` : ''}
+          ${pdf.page_count ? `
+            <span class="flex items-center"><i class="fas fa-book mr-1"></i>${pdf.page_count}p</span>
+          ` : ''}
+          <span class="flex items-center"><i class="fas fa-clock mr-1"></i>${formatDate(pdf.created_at)}</span>
+        </div>
+        
+        {/* Download button */}
+        <a 
+          href="${escapeHtml(pdf.google_drive_url)}" 
+          target="_blank"
+          class="block w-full text-center px-6 py-3.5 bg-gradient-to-r from-primary to-secondary text-white rounded-xl hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg font-semibold text-sm"
+        >
+          <i class="fas fa-download mr-2"></i>Download
+        </a>
       </div>
     </div>
   `).join('')
