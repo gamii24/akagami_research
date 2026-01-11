@@ -170,7 +170,7 @@ function renderPDFList() {
     let downloadUrl = ''
     let isUploadedFile = false
     
-    if (pdf.pdf_file_data) {
+    if (pdf.has_file) {
       // PDF was uploaded directly
       downloadUrl = `/api/pdfs/${pdf.id}/download`
       isUploadedFile = true

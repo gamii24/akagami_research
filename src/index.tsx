@@ -149,7 +149,7 @@ app.get('/api/pdfs', async (c) => {
       p.title, 
       p.description, 
       p.google_drive_url,
-      p.pdf_file_data,
+      CASE WHEN p.pdf_file_data IS NOT NULL THEN 1 ELSE 0 END as has_file,
       p.file_name,
       p.category_id,
       p.thumbnail_url,
