@@ -17,7 +17,8 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 ## 🌐 公開URL
 
-- **本番環境**: https://7829e958.akagami-research.pages.dev
+- **本番環境（公開URL）**: https://akagami-research.pages.dev
+- **最新デプロイ**: https://7829e958.akagami-research.pages.dev
 - **開発環境**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（パスワード: `admin123`)
