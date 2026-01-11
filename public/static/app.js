@@ -130,41 +130,42 @@ function renderPDFList() {
   
   const html = state.pdfs.map(pdf => `
     <div class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2">
-      <div class="p-4">
-        <div class="flex items-start gap-3 mb-3">
-          <div class="flex-shrink-0">
-            <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center shadow-md">
-              <i class="${getCategoryIcon(pdf.category_name)} text-xl text-white"></i>
+      <div class="p-4 flex items-center gap-4">
+        <div class="flex-shrink-0">
+          <div class="w-8 h-8 sm:w-12 sm:h-12 bg-primary rounded-lg flex items-center justify-center shadow-md">
+            <i class="${getCategoryIcon(pdf.category_name)} text-sm sm:text-xl text-white"></i>
+          </div>
+        </div>
+        
+        <div class="flex-1 min-w-0">
+          <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
+            ${escapeHtml(pdf.title)}
+          </h3>
+          
+          ${pdf.tags && pdf.tags.length > 0 ? `
+            <div class="flex flex-wrap gap-1 mb-2">
+              ${pdf.tags.map(tag => `
+                <span class="badge badge-tag text-xs px-2 py-1">
+                  <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
+                </span>
+              `).join('')}
             </div>
-          </div>
-          <div class="flex-1 min-w-0">
-            <h3 class="text-sm font-bold text-gray-800 leading-snug break-words">
-              ${escapeHtml(pdf.title)}
-            </h3>
+          ` : ''}
+          
+          <div class="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
+            <span class="flex items-center"><i class="fas fa-clock mr-1"></i>${formatDate(pdf.created_at)}</span>
           </div>
         </div>
         
-        ${pdf.tags && pdf.tags.length > 0 ? `
-          <div class="flex flex-wrap gap-1 mb-3">
-            ${pdf.tags.map(tag => `
-              <span class="badge badge-tag text-xs px-2 py-1">
-                <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
-              </span>
-            `).join('')}
-          </div>
-        ` : ''}
-        
-        <div class="flex items-center gap-2 text-xs text-gray-500 mb-3 flex-wrap">
-          <span class="flex items-center"><i class="fas fa-clock mr-1"></i>${formatDate(pdf.created_at)}</span>
+        <div class="flex-shrink-0">
+          <a 
+            href="${escapeHtml(pdf.google_drive_url)}" 
+            target="_blank"
+            class="block px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg"
+          >
+            <i class="fas fa-download"></i>
+          </a>
         </div>
-        
-        <a 
-          href="${escapeHtml(pdf.google_drive_url)}" 
-          target="_blank"
-          class="block w-full text-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg"
-        >
-          <i class="fas fa-download"></i>
-        </a>
       </div>
     </div>
   `).join('')
