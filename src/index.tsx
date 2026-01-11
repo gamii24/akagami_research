@@ -677,6 +677,18 @@ app.get('/', (c) => {
 
               {/* Tag Filter */}
               <div id="tag-filter"></div>
+              
+              {/* Download History Button */}
+              <div class="mt-6 pt-6 border-t-2 border-gray-200">
+                <button 
+                  onclick="toggleDownloadHistory()"
+                  class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-semibold shadow-sm border-2 border-pink-200 flex items-center justify-center gap-2"
+                  id="download-history-btn"
+                >
+                  <i class="fas fa-history"></i>
+                  <span>ダウンロード履歴</span>
+                </button>
+              </div>
             </div>
           </aside>
         </div>

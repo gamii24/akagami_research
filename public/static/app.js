@@ -12,6 +12,7 @@ let state = {
   sortBy: 'newest', // Sort option: 'newest', 'oldest', 'popular'
   favoritePdfs: new Set(), // Favorite PDFs
   showOnlyFavorites: false, // Filter to show only favorites
+  showDownloadHistory: false, // Filter to show only downloaded PDFs
   multiSelectMode: false, // Multi-select mode
   selectedPdfs: new Set() // Selected PDFs in multi-select mode
 }
@@ -536,6 +537,11 @@ function applyFiltersFromAllPdfs() {
     state.pdfs = state.pdfs.filter(pdf => state.favoritePdfs.has(pdf.id))
   }
   
+  // Apply download history filter
+  if (state.showDownloadHistory) {
+    state.pdfs = state.pdfs.filter(pdf => state.downloadedPdfs.has(pdf.id))
+  }
+  
   // Apply sorting
   sortPDFs()
 }
@@ -663,6 +669,18 @@ function renderCategoryFilter() {
     </div>
   `
   container.innerHTML = html
+  
+  // Update download history button style
+  const downloadHistoryBtn = document.getElementById('download-history-btn')
+  if (downloadHistoryBtn) {
+    if (state.showDownloadHistory) {
+      downloadHistoryBtn.classList.remove('bg-pink-50', 'hover:bg-pink-100', 'text-pink-700', 'border-pink-200')
+      downloadHistoryBtn.classList.add('bg-pink-200', 'hover:bg-pink-300', 'text-pink-800', 'border-pink-400')
+    } else {
+      downloadHistoryBtn.classList.remove('bg-pink-200', 'hover:bg-pink-300', 'text-pink-800', 'border-pink-400')
+      downloadHistoryBtn.classList.add('bg-pink-50', 'hover:bg-pink-100', 'text-pink-700', 'border-pink-200')
+    }
+  }
 }
 
 function renderCategoryFilterWithCounts(counts) {
@@ -823,16 +841,54 @@ function renderPDFList() {
   if (!container) return
   
   if (state.pdfs.length === 0) {
-    container.innerHTML = `
-      <div class="col-span-full text-center py-16 text-gray-600">
-        <i class="fas fa-inbox text-7xl mb-4 text-gray-300"></i>
-        <p class="text-xl font-medium">資料が見つかりませんでした</p>
-      </div>
-    `
+    if (state.showDownloadHistory) {
+      container.innerHTML = `
+        <div class="col-span-full">
+          <div class="bg-gradient-to-r from-pink-50 to-pink-100 border-2 border-pink-300 rounded-xl p-6 shadow-lg mb-6">
+            <h2 class="text-2xl font-bold text-pink-800 flex items-center gap-3">
+              <i class="fas fa-history"></i>
+              <span>ダウンロード履歴</span>
+            </h2>
+            <p class="text-pink-700 mt-2 text-sm">
+              過去にダウンロードした資料が表示されています（${state.downloadedPdfs.size}件）
+            </p>
+          </div>
+          <div class="text-center py-16">
+            <i class="fas fa-download text-7xl mb-4 text-pink-300"></i>
+            <p class="text-xl font-medium text-pink-700">まだダウンロード履歴がありません</p>
+            <p class="text-sm text-gray-600 mt-2">資料をダウンロードすると、ここに履歴が表示されます</p>
+          </div>
+        </div>
+      `
+    } else {
+      container.innerHTML = `
+        <div class="col-span-full text-center py-16 text-gray-600">
+          <i class="fas fa-inbox text-7xl mb-4 text-gray-300"></i>
+          <p class="text-xl font-medium">資料が見つかりませんでした</p>
+        </div>
+      `
+    }
     return
   }
   
   let html = ''
+  
+  // Show download history title
+  if (state.showDownloadHistory) {
+    html += `
+      <div class="col-span-full mb-6">
+        <div class="bg-gradient-to-r from-pink-50 to-pink-100 border-2 border-pink-300 rounded-xl p-6 shadow-lg">
+          <h2 class="text-2xl font-bold text-pink-800 flex items-center gap-3">
+            <i class="fas fa-history"></i>
+            <span>ダウンロード履歴</span>
+          </h2>
+          <p class="text-pink-700 mt-2 text-sm">
+            過去にダウンロードした資料が表示されています（${state.downloadedPdfs.size}件）
+          </p>
+        </div>
+      </div>
+    `
+  }
   
   // Show search result count
   const filterText = []
@@ -1210,6 +1266,7 @@ async function bulkDownloadCategory() {
 
 function filterByCategory(categoryId) {
   state.selectedCategory = categoryId
+  state.showDownloadHistory = false // Clear download history mode
   updateURL()
   renderCategoryFilter()
   loadPDFs()
@@ -1225,6 +1282,7 @@ function toggleTag(tagId) {
   } else {
     state.selectedTags.push(tagId)
   }
+  state.showDownloadHistory = false // Clear download history mode
   updateURL()
   renderTagFilter()
   loadPDFs()
@@ -1238,6 +1296,7 @@ function clearAllFilters() {
   state.selectedCategory = null
   state.selectedTags = []
   state.searchQuery = ''
+  state.showDownloadHistory = false
   
   // Update URL
   updateURL()
@@ -1271,6 +1330,7 @@ function searchPDFs() {
   const input = document.getElementById('search-input')
   if (input) {
     state.searchQuery = input.value
+    state.showDownloadHistory = false // Clear download history mode
     updateURL()
     loadPDFs()
   }
@@ -1312,6 +1372,7 @@ function searchPDFsMobile() {
   const input = document.getElementById('mobile-search-input')
   if (input) {
     state.searchQuery = input.value
+    state.showDownloadHistory = false // Clear download history mode
     updateURL()
     loadPDFs()
   }
@@ -1331,6 +1392,36 @@ function toggleMobileMenu() {
 function toggleFavoriteFilter() {
   state.showOnlyFavorites = !state.showOnlyFavorites
   loadPDFs()
+}
+
+// Toggle download history filter
+function toggleDownloadHistory() {
+  state.showDownloadHistory = !state.showDownloadHistory
+  
+  // When showing download history, clear other filters
+  if (state.showDownloadHistory) {
+    state.selectedCategory = null
+    state.selectedTags = []
+    state.searchQuery = ''
+    state.showOnlyFavorites = false
+    
+    // Clear search inputs
+    const searchInput = document.getElementById('search-input')
+    if (searchInput) searchInput.value = ''
+    
+    const mobileSearchInput = document.getElementById('mobile-search-input')
+    if (mobileSearchInput) mobileSearchInput.value = ''
+    
+    // Update URL
+    updateURL()
+    
+    // Re-render everything
+    renderCategoryFilter()
+    renderTagFilter()
+  }
+  
+  loadPDFs()
+  closeMobileMenu()
 }
 
 // Utility functions
