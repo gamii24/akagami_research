@@ -1,47 +1,52 @@
 # Akagami Research
 
-PDF資料をGoogleドライブのリンクで管理できる、大人っぽくおしゃれなデザインの資料管理システムです。
+PDF資料をGoogleドライブのリンクで管理できる、シンプルで美しいデザインの資料管理システムです。
 
 ## 🎯 プロジェクト概要
 
 - **サイト名**: Akagami Research
 - **目的**: SNSマーケティング・生成AI関連のPDF資料を整理して管理
-- **デザイン**: 落ち着いたカラーパレットで大人の雰囲気
+- **デザイン**: 白と赤（#e75556）の2色デザイン
 - **技術スタック**: Hono + TypeScript + Cloudflare D1 + TailwindCSS
 
 ## 🎨 カラーパレット
 
-- **Primary**: #BB666A - メインカラー
-- **Secondary**: #e75556 - アクセントカラー
-- **Accent**: #916769 - サブカラー
-- **Dark**: #665a5a - テキスト用ダーク
-- **Darker**: #3c2d2e - ヘッダー背景
-- **Light**: #f4eee0 - 背景色
+- **Primary**: #e75556 - メインの赤色
+- **White**: #ffffff - 背景色
+- **Beige**: #f4eee0 - アクセント用ベージュ
 
 ## 🌐 公開URL
 
 - **開発環境**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（パスワード: `admin123`）
+- **本番環境**: デプロイ後に追加予定
 
 ## ✨ 完成済み機能
 
 ### 公開ページ（`/`）
-- ✅ おしゃれなグラデーションデザイン
+- ✅ シンプルで美しい2色デザイン
 - ✅ カテゴリでフィルタリング（11カテゴリ）
 - ✅ タグでフィルタリング（複数選択可）
-- ✅ キーワード検索
-- ✅ GoogleドライブへのリンクでPDFを開く
-- ✅ レスポンシブデザイン
-- ✅ ホバーアニメーション
+- ✅ キーワード検索（モバイル：ページ上部、デスクトップ：サイドバー）
+- ✅ カード全体クリックでGoogleドライブへ遷移
+- ✅ カテゴリ一括ダウンロードボタン（URLカスタマイズ可能）
+- ✅ タイトル完全表示（複数行対応）
+- ✅ レスポンシブデザイン（PC: 3列、スマホ: 2列）
+- ✅ ハンバーガーメニュー（モバイル）
+- ✅ サイト名クリックでトップページへ戻る
 
 ### 管理画面（`/admin`）
 - ✅ エレガントなログイン画面
 - ✅ PDF登録・編集・削除
-- ✅ カテゴリ管理（追加・削除）
+- ✅ 一括アップロード機能（コピペ対応）
+  - ExcelやGoogleスプレッドシートから直接貼り付け
+  - タブ区切りで一度に大量登録
+  - プレビュー機能付き
+- ✅ カテゴリ管理（追加・編集・削除）
+  - カテゴリごとのダウンロードURL設定
 - ✅ タグ管理（追加・削除）
 - ✅ 複数タグの一括選択
-- ✅ メタデータ入力
 
 ## 📂 カテゴリ一覧
 
@@ -60,77 +65,88 @@ PDF資料をGoogleドライブのリンクで管理できる、大人っぽく�
 - 画像&動画生成 - 画像・動画生成関連の資料
 - その他 - その他の資料
 
-## 📊 データ構造
+## 🚀 本番デプロイ（Cloudflare Pages）
 
-### データベース（Cloudflare D1）
+### ステップ1: Cloudflare APIキーの設定
 
-**categoriesテーブル**
-- 11種類のカテゴリ（SNS、マーケティング、AI関連）
+1. 左サイドバーの「Deploy」タブを開く
+2. Cloudflare APIトークンを作成してコピー
+3. APIキーを入力して保存
 
-**tagsテーブル**
-- デフォルト: 重要、参照頻度高、最新、アーカイブ、要確認
-
-**pdfsテーブル**
-- PDF情報（タイトル、説明、GoogleドライブURL、カテゴリID、サムネイル、ファイルサイズ、ページ数）
-
-**pdf_tagsテーブル**
-- PDF-タグの多対多リレーション
-
-## 🚀 ローカル開発
-
-### セットアップ
+### ステップ2: データベースとバケットの作成
 
 ```bash
-# 依存関係のインストール
-npm install
+# D1データベース作成
+npx wrangler d1 create akagami-research-production
 
-# データベースリセット（マイグレーション + シード）
-npm run db:reset
+# 出力されたdatabase_idをメモしてwrangler.jsonに設定
+```
 
+### ステップ3: wrangler.jsonc更新
+
+```jsonc
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "akagami-research",
+  "compatibility_date": "2026-01-11",
+  "pages_build_output_dir": "./dist",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "akagami-research-production",
+      "database_id": "YOUR_DATABASE_ID_HERE"
+    }
+  ]
+}
+```
+
+### ステップ4: マイグレーション適用
+
+```bash
+# 本番データベースにマイグレーション適用
+npx wrangler d1 migrations apply akagami-research-production
+```
+
+### ステップ5: デプロイ
+
+```bash
 # ビルド
 npm run build
 
-# PM2で起動
-pm2 start ecosystem.config.cjs
+# プロジェクト作成（初回のみ）
+npx wrangler pages project create akagami-research --production-branch main
 
-# テスト
-curl http://localhost:3000
+# デプロイ
+npx wrangler pages deploy dist --project-name akagami-research
 ```
 
-### API エンドポイント
+### デプロイ後のURL
 
-**カテゴリ**
-- `GET /api/categories` - 全カテゴリ取得
-- `POST /api/categories` - カテゴリ追加
-- `DELETE /api/categories/:id` - カテゴリ削除
-
-**タグ**
-- `GET /api/tags` - 全タグ取得
-- `POST /api/tags` - タグ追加
-- `DELETE /api/tags/:id` - タグ削除
-
-**PDF**
-- `GET /api/pdfs` - PDF一覧取得（フィルタ対応）
-  - クエリパラメータ: `category`, `tag`, `search`
-- `GET /api/pdfs/:id` - 単一PDF取得
-- `POST /api/pdfs` - PDF追加
-- `PUT /api/pdfs/:id` - PDF更新
-- `DELETE /api/pdfs/:id` - PDF削除
+デプロイ成功後、以下のようなURLが表示されます：
+- `https://akagami-research.pages.dev`
 
 ## 📝 使い方
 
-### PDFを登録する
+### 一括アップロード（推奨）
 
 1. `/admin`にアクセス（パスワード: `admin123`）
-2. 「PDF追加」ボタンをクリック
-3. 必要な情報を入力：
-   - タイトル（必須）
-   - 説明
-   - GoogleドライブURL（必須）
-   - カテゴリ選択（YouTube、Instagram、マーケティング等）
-   - タグ選択（複数可）
-   - ページ数、ファイルサイズ
-4. 「追加」ボタンで保存
+2. 「一括アップロード」ボタンをクリック
+3. カテゴリを選択
+4. ExcelやGoogleスプレッドシートで以下の2列を準備：
+   - A列：タイトル（例：`Instagram運用ガイド.pdf`）
+   - B列：GoogleドライブURL
+5. 2列を選択してコピー（Ctrl+C / Cmd+C）
+6. テキストエリアに貼り付け（Ctrl+V / Cmd+V）
+7. 「プレビュー」で確認（オプション）
+8. 「一括登録」ボタンで保存
+
+### カテゴリ一括ダウンロードURLの設定
+
+1. 管理画面の「カテゴリ管理」をクリック
+2. 各カテゴリの「編集」ボタンをクリック
+3. 「一括ダウンロードURL」に GoogleドライブフォルダのURLを入力
+4. 保存すると、そのカテゴリページで「カテゴリ内のファイルを全ダウンロード」ボタンが表示される
 
 ### Googleドライブの共有設定
 
@@ -140,99 +156,47 @@ PDFを公開ページで開けるようにするには：
 2. 「共有」→「リンクを知っている全員」に変更
 3. URLをコピーして管理画面に貼り付け
 
-### PDFを閲覧する
-
-1. `/`（公開ページ）にアクセス
-2. サイドバーのカテゴリでフィルタリング
-3. タグボタンで絞り込み（複数選択可）
-4. 検索ボックスでキーワード検索
-5. 「Google Driveで開く」ボタンでPDFを閲覧
-
-## 🎨 デザインの特徴
-
-### カラースキーム
-- 落ち着いた赤系（#BB666A、#e75556）をメインに
-- ダーク系（#3c2d2e、#665a5a）で高級感
-- ベージュ（#f4eee0）で温かみのある背景
-
-### UIエレメント
-- グラデーションボタンで高級感
-- ホバー時のアニメーション
-- シャドウとボーダーで立体感
-- カスタムスクロールバー
-- レスポンシブデザイン
-
 ## 📁 プロジェクト構造
 
 ```
 webapp/
 ├── src/
 │   ├── index.tsx          # メインアプリケーション（Hono）
-│   └── renderer.tsx       # HTMLレンダラー（カスタムカラー設定）
+│   └── renderer.tsx       # HTMLレンダラー
 ├── public/
 │   └── static/
 │       ├── app.js         # 公開ページのJavaScript
 │       ├── admin.js       # 管理画面のJavaScript
-│       └── style.css      # カスタムCSS（Akagami Researchスタイル）
+│       └── style.css      # カスタムCSS
 ├── migrations/
-│   └── 0001_initial_schema.sql  # データベーススキーマ
+│   ├── 0001_initial_schema.sql      # データベーススキーマ
+│   └── 0002_add_category_download_url.sql  # ダウンロードURL追加
 ├── seed.sql               # 初期データ（11カテゴリ）
-├── ecosystem.config.cjs   # PM2設定
+├── ecosystem.config.cjs   # PM2設定（開発用）
 ├── wrangler.jsonc         # Cloudflare設定
 └── package.json           # 依存関係とスクリプト
 ```
 
-## 🔧 カスタマイズ
-
-### カラーの変更
-
-`src/renderer.tsx`のTailwind設定を編集：
-
-```tsx
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        primary: '#BB666A',    // メインカラー
-        secondary: '#e75556',  // アクセント
-        accent: '#916769',     // サブカラー
-        dark: '#665a5a',       // ダーク
-        darker: '#3c2d2e',     // 最ダーク
-        light: '#f4eee0',      // 背景
-      }
-    }
-  }
-}
-```
-
-### 管理画面のパスワード変更
-
-`public/static/admin.js`の55行目あたり：
-
-```javascript
-if (password === 'admin123') {  // ← ここを変更
-  sessionStorage.setItem('admin_authenticated', 'true')
-  ...
-}
-```
-
-## 🚀 本番デプロイ（Cloudflare Pages）
-
-### 前提条件
-- Cloudflare APIキーの設定が必要
-- 「ホステッドデプロイ」からCloudflare APIキーを設定
-
-### デプロイ手順
+## 🔧 ローカル開発
 
 ```bash
-# 1. プロジェクト作成
-npx wrangler pages project create webapp --production-branch main
+# セットアップ
+npm install
 
-# 2. ビルド
+# データベースマイグレーション（ローカル）
+npm run db:migrate:local
+
+# シードデータ投入
+npm run db:seed
+
+# ビルド
 npm run build
 
-# 3. デプロイ
-npx wrangler pages deploy dist --project-name webapp
+# PM2で起動
+pm2 start ecosystem.config.cjs
+
+# テスト
+curl http://localhost:3000
 ```
 
 ## 📄 ライセンス
@@ -248,5 +212,6 @@ Akagami Researchへようこそ！
 - 11種類のカテゴリで整理
 - タグで詳細な分類
 - 美しいUIで快適な閲覧体験
+- 一括アップロードで簡単登録
 
 何か質問や改善提案があれば、お気軽にお知らせください！
