@@ -583,6 +583,23 @@ function escapeHtml(text) {
   return div.innerHTML
 }
 
+function getCategoryIcon(categoryName) {
+  const iconMap = {
+    'YouTube': 'fab fa-youtube',
+    'Threads': 'fab fa-threads',
+    'Podcast': 'fas fa-podcast',
+    'LINE公式': 'fab fa-line',
+    'Instagram': 'fab fa-instagram',
+    'TikTok': 'fab fa-tiktok',
+    'X': 'fab fa-x-twitter',
+    'マーケティング': 'fas fa-chart-line',
+    'その他': 'fas fa-folder',
+    '生成AI': 'fas fa-robot',
+    '画像&動画生成': 'fas fa-image'
+  }
+  return iconMap[categoryName] || 'fas fa-file-pdf'
+}
+
 // Initialize on page load
 if (window.location.pathname === '/admin') {
   if (document.readyState === 'loading') {

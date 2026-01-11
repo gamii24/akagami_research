@@ -134,7 +134,7 @@ function renderPDFList() {
         <div class="flex items-start gap-4 mb-4">
           <div class="flex-shrink-0">
             <div class="w-14 h-14 bg-primary rounded-xl flex items-center justify-center shadow-md">
-              <i class="fas fa-file-pdf text-2xl text-white"></i>
+              <i class="${getCategoryIcon(pdf.category_name)} text-2xl text-white"></i>
             </div>
           </div>
           <div class="flex-1 min-w-0">
@@ -247,6 +247,23 @@ function formatDate(dateString) {
     month: 'long',
     day: 'numeric'
   })
+}
+
+function getCategoryIcon(categoryName) {
+  const iconMap = {
+    'YouTube': 'fab fa-youtube',
+    'Threads': 'fab fa-threads',
+    'Podcast': 'fas fa-podcast',
+    'LINE公式': 'fab fa-line',
+    'Instagram': 'fab fa-instagram',
+    'TikTok': 'fab fa-tiktok',
+    'X': 'fab fa-x-twitter',
+    'マーケティング': 'fas fa-chart-line',
+    'その他': 'fas fa-folder',
+    '生成AI': 'fas fa-robot',
+    '画像&動画生成': 'fas fa-image'
+  }
+  return iconMap[categoryName] || 'fas fa-file-pdf'
 }
 
 // Initialize on page load
