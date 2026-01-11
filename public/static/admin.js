@@ -132,9 +132,6 @@ function renderAdminPage() {
           <button onclick="showAddPdfModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-xl hover:from-secondary hover:to-primary transition-all duration-300 shadow-lg font-semibold">
             <i class="fas fa-plus mr-2"></i>PDF追加
           </button>
-          <button onclick="showBulkFileUploadModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-300 shadow-lg font-semibold">
-            <i class="fas fa-cloud-upload-alt mr-2"></i>複数ファイル一括アップロード
-          </button>
           <button onclick="showBulkUploadModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg font-semibold">
             <i class="fas fa-upload mr-2"></i>テキスト一括アップロード
           </button>
@@ -209,213 +206,6 @@ function renderAdminPdfList() {
       </div>
     </div>
   `).join('')
-}
-
-// Bulk file upload modal (multiple PDFs at once)
-function showBulkFileUploadModal() {
-  const modalHtml = `
-    <div class="fixed inset-0 modal-overlay flex items-center justify-center z-50" onclick="closeModal(event)">
-      <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-        <div class="px-6 py-4 border-b flex items-center justify-between bg-gradient-to-r from-purple-500 to-purple-600">
-          <h2 class="text-xl font-bold text-white">
-            <i class="fas fa-cloud-upload-alt mr-2"></i>複数ファイル一括アップロード
-          </h2>
-          <button onclick="closeModal()" class="text-white hover:text-gray-200">
-            <i class="fas fa-times text-2xl"></i>
-          </button>
-        </div>
-        
-        <form onsubmit="uploadBulkFiles(event)" class="px-6 py-4 space-y-4">
-          <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h3 class="text-sm font-bold text-blue-800 mb-2">
-              <i class="fas fa-magic mr-1"></i>自動カテゴリ振り分け機能
-            </h3>
-            <p class="text-xs text-blue-700 mb-2">
-              ファイル名から自動的にカテゴリを判定します：
-            </p>
-            <ul class="text-xs text-blue-700 space-y-1 ml-4">
-              <li>• ファイル名が自動的にタイトルになります（.pdf拡張子は削除）</li>
-              <li>• ファイル名に含まれるキーワードからカテゴリを自動判定</li>
-              <li>• 判定できない場合は「その他」カテゴリに格納されます</li>
-            </ul>
-            <p class="text-xs text-blue-700 mt-2">
-              <strong>例:</strong> "Instagram運用ガイド.pdf" → カテゴリ: Instagram
-            </p>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              <i class="fas fa-file-pdf mr-1 text-purple-500"></i>
-              PDFファイルを選択（複数選択可・最大各2MB）
-            </label>
-            <input 
-              type="file" 
-              id="bulk-files-input"
-              accept=".pdf"
-              multiple
-              required
-              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <p class="mt-2 text-xs text-gray-500">
-              <i class="fas fa-info-circle mr-1"></i>
-              複数のPDFファイルを一度に選択できます。各ファイルは最大2MBまで。
-            </p>
-          </div>
-          
-          <div id="bulk-files-preview" class="hidden">
-            <h3 class="text-sm font-bold text-gray-700 mb-2">
-              <i class="fas fa-eye mr-1"></i>選択されたファイル（<span id="bulk-files-count">0</span>件）
-            </h3>
-            <div id="bulk-files-list" class="max-h-64 overflow-y-auto space-y-2 p-3 bg-gray-50 rounded-lg border border-gray-200"></div>
-          </div>
-          
-          <div id="bulk-upload-progress" class="hidden">
-            <div class="w-full bg-gray-200 rounded-full h-4">
-              <div id="bulk-upload-progress-bar" class="bg-purple-500 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
-            </div>
-            <p class="text-sm text-gray-600 mt-2 text-center">
-              <span id="bulk-upload-status">アップロード中...</span>
-            </p>
-          </div>
-          
-          <div class="flex gap-4 pt-4 border-t">
-            <button 
-              type="button"
-              onclick="previewBulkFiles()"
-              class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold shadow-lg"
-            >
-              <i class="fas fa-eye mr-2"></i>プレビュー
-            </button>
-            <button 
-              type="submit"
-              id="bulk-upload-submit-btn"
-              class="flex-1 px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all font-semibold shadow-lg"
-            >
-              <i class="fas fa-upload mr-2"></i>一括アップロード開始
-            </button>
-            <button 
-              type="button"
-              onclick="closeModal()"
-              class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-semibold"
-            >
-              キャンセル
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  `
-  
-  document.getElementById('modal-container').innerHTML = modalHtml
-  
-  // Add file input change listener
-  document.getElementById('bulk-files-input').addEventListener('change', previewBulkFiles)
-}
-
-function previewBulkFiles() {
-  const fileInput = document.getElementById('bulk-files-input')
-  const files = Array.from(fileInput.files)
-  
-  if (files.length === 0) {
-    return
-  }
-  
-  const previewArea = document.getElementById('bulk-files-preview')
-  const filesList = document.getElementById('bulk-files-list')
-  const filesCount = document.getElementById('bulk-files-count')
-  
-  filesCount.textContent = files.length
-  
-  filesList.innerHTML = files.map((file, index) => {
-    const sizeMB = (file.size / 1024 / 1024).toFixed(2)
-    const isOverSize = file.size > 2 * 1024 * 1024
-    const title = file.name.replace(/\.pdf$/i, '')
-    
-    return `
-      <div class="p-3 bg-white rounded border ${isOverSize ? 'border-red-300' : 'border-gray-200'}">
-        <div class="flex items-start justify-between">
-          <div class="flex-1">
-            <div class="font-bold text-gray-700 text-sm">${index + 1}. ${escapeHtml(title)}</div>
-            <div class="text-xs text-gray-500 mt-1">
-              ファイル名: ${escapeHtml(file.name)} (${sizeMB} MB)
-            </div>
-            ${isOverSize ? '<div class="text-xs text-red-600 mt-1"><i class="fas fa-exclamation-triangle mr-1"></i>サイズ超過（2MB以上）</div>' : ''}
-          </div>
-        </div>
-      </div>
-    `
-  }).join('')
-  
-  previewArea.classList.remove('hidden')
-}
-
-async function uploadBulkFiles(event) {
-  event.preventDefault()
-  
-  const fileInput = document.getElementById('bulk-files-input')
-  const files = Array.from(fileInput.files)
-  
-  if (files.length === 0) {
-    alert('ファイルを選択してください')
-    return
-  }
-  
-  // Check for oversize files
-  const oversizeFiles = files.filter(f => f.size > 2 * 1024 * 1024)
-  if (oversizeFiles.length > 0) {
-    alert(`以下のファイルはサイズが大きすぎます（最大2MB）：\n${oversizeFiles.map(f => f.name).join('\n')}`)
-    return
-  }
-  
-  const submitBtn = document.getElementById('bulk-upload-submit-btn')
-  const progressArea = document.getElementById('bulk-upload-progress')
-  const progressBar = document.getElementById('bulk-upload-progress-bar')
-  const statusText = document.getElementById('bulk-upload-status')
-  
-  submitBtn.disabled = true
-  progressArea.classList.remove('hidden')
-  
-  try {
-    const formData = new FormData()
-    files.forEach(file => {
-      formData.append('files', file)
-    })
-    
-    statusText.textContent = `${files.length}件のファイルをアップロード中...`
-    progressBar.style.width = '50%'
-    
-    const response = await axios.post('/api/pdfs/bulk-upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    
-    progressBar.style.width = '100%'
-    
-    const data = response.data
-    
-    let message = `アップロード完了！\n\n成功: ${data.uploaded}件 / 全体: ${data.total}件`
-    
-    if (data.errors && data.errors.length > 0) {
-      message += `\n\nエラー:\n${data.errors.join('\n')}`
-    }
-    
-    if (data.results && data.results.length > 0) {
-      message += `\n\n登録されたPDF:\n${data.results.map(r => `- ${r.title} → カテゴリ: ${r.category}`).join('\n')}`
-    }
-    
-    alert(message)
-    
-    closeModal()
-    await loadAdminData()
-    renderAdminPage()
-  } catch (error) {
-    alert('一括アップロードに失敗しました: ' + (error.response?.data?.error || error.message))
-  } finally {
-    submitBtn.disabled = false
-    progressArea.classList.add('hidden')
-    progressBar.style.width = '0%'
-  }
 }
 
 // PDF operations
@@ -720,68 +510,19 @@ function showPdfModal() {
             >${escapeHtml(pdf.description || '')}</textarea>
           </div>
           
-          <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p class="text-sm font-bold text-blue-800 mb-2">
-              <i class="fas fa-info-circle mr-1"></i>PDFの登録方法を選択
-            </p>
-            <div class="space-y-2">
-              <label class="flex items-center">
-                <input 
-                  type="radio" 
-                  name="upload-type" 
-                  value="url" 
-                  id="upload-type-url"
-                  ${!isEdit || pdf.google_drive_url ? 'checked' : ''}
-                  onchange="toggleUploadType()"
-                  class="mr-2"
-                />
-                <span class="text-sm text-gray-700">Google Drive URLを使用</span>
-              </label>
-              <label class="flex items-center">
-                <input 
-                  type="radio" 
-                  name="upload-type" 
-                  value="file" 
-                  id="upload-type-file"
-                  ${isEdit && pdf.pdf_file_data ? 'checked' : ''}
-                  onchange="toggleUploadType()"
-                  class="mr-2"
-                />
-                <span class="text-sm text-gray-700">PDFファイルを直接アップロード（最大2MB）</span>
-              </label>
-            </div>
-          </div>
-          
-          <div id="url-upload-section" ${!isEdit || pdf.google_drive_url ? '' : 'style="display:none"'}>
+          <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Google Drive URL ${isEdit ? '' : '*'}</label>
             <input 
               type="url" 
               id="pdf-url"
               value="${escapeHtml(pdf.google_drive_url || '')}"
               placeholder="https://drive.google.com/file/d/..."
+              ${!isEdit ? 'required' : ''}
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <p class="mt-1 text-xs text-gray-500">
               <i class="fas fa-info-circle mr-1"></i>Google Driveで「リンクを知っている全員」に共有設定してください
             </p>
-          </div>
-          
-          <div id="file-upload-section" ${isEdit && pdf.pdf_file_data ? '' : 'style="display:none"'}>
-            <label class="block text-sm font-medium text-gray-700 mb-2">PDFファイル ${isEdit ? '' : '*'}</label>
-            <input 
-              type="file" 
-              id="pdf-file"
-              accept=".pdf"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <p class="mt-1 text-xs text-gray-500">
-              <i class="fas fa-exclamation-triangle mr-1"></i>最大ファイルサイズ: 2MB
-            </p>
-            ${isEdit && pdf.file_name ? `
-              <p class="mt-2 text-xs text-green-600">
-                <i class="fas fa-check-circle mr-1"></i>現在のファイル: ${escapeHtml(pdf.file_name)}
-              </p>
-            ` : ''}
           </div>
           
           <div class="grid grid-cols-2 gap-4">
@@ -867,32 +608,12 @@ function showPdfModal() {
   document.getElementById('modal-container').innerHTML = modalHtml
 }
 
-// Toggle between URL and file upload
-function toggleUploadType() {
-  const uploadType = document.querySelector('input[name="upload-type"]:checked').value
-  const urlSection = document.getElementById('url-upload-section')
-  const fileSection = document.getElementById('file-upload-section')
-  const urlInput = document.getElementById('pdf-url')
-  const fileInput = document.getElementById('pdf-file')
-  
-  if (uploadType === 'url') {
-    urlSection.style.display = 'block'
-    fileSection.style.display = 'none'
-    urlInput.required = true
-    fileInput.required = false
-  } else {
-    urlSection.style.display = 'none'
-    fileSection.style.display = 'block'
-    urlInput.required = false
-    fileInput.required = !adminState.editingPdf // Required for new PDFs only
-  }
-}
-
 async function savePdf(event) {
   event.preventDefault()
   
   const title = document.getElementById('pdf-title').value
   const description = document.getElementById('pdf-description').value
+  const google_drive_url = document.getElementById('pdf-url').value
   const category_id = document.getElementById('pdf-category').value || null
   const page_count = document.getElementById('pdf-pages').value || null
   const file_size = document.getElementById('pdf-size').value || null
@@ -900,72 +621,21 @@ async function savePdf(event) {
   const tagCheckboxes = document.querySelectorAll('input[name="pdf-tags"]:checked')
   const tag_ids = Array.from(tagCheckboxes).map(cb => parseInt(cb.value))
   
-  const uploadType = document.querySelector('input[name="upload-type"]:checked').value
+  const data = {
+    title,
+    description,
+    google_drive_url,
+    category_id,
+    page_count: page_count ? parseInt(page_count) : null,
+    file_size,
+    tag_ids
+  }
   
   try {
-    if (uploadType === 'file') {
-      // File upload mode
-      const fileInput = document.getElementById('pdf-file')
-      const file = fileInput.files[0]
-      
-      if (!file && !adminState.editingPdf) {
-        alert('PDFファイルを選択してください')
-        return
-      }
-      
-      // If editing and no new file selected, use existing data
-      if (adminState.editingPdf && !file) {
-        // Update metadata only
-        const data = {
-          title,
-          description,
-          category_id,
-          page_count: page_count ? parseInt(page_count) : null,
-          file_size,
-          tag_ids
-        }
-        
-        await axios.put(`/api/pdfs/${adminState.editingPdf.id}`, data)
-      } else {
-        // Upload new file
-        if (file.size > 2 * 1024 * 1024) {
-          alert('ファイルサイズが大きすぎます（最大2MB）')
-          return
-        }
-        
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('title', title)
-        formData.append('description', description)
-        formData.append('category_id', category_id || '')
-        formData.append('tag_ids', JSON.stringify(tag_ids))
-        
-        if (adminState.editingPdf) {
-          // For edit, we need to delete old and create new (D1 limitation)
-          await axios.delete(`/api/pdfs/${adminState.editingPdf.id}`)
-        }
-        
-        await axios.post('/api/pdfs/upload', formData)
-      }
+    if (adminState.editingPdf) {
+      await axios.put(`/api/pdfs/${adminState.editingPdf.id}`, data)
     } else {
-      // URL mode
-      const google_drive_url = document.getElementById('pdf-url').value
-      
-      const data = {
-        title,
-        description,
-        google_drive_url,
-        category_id,
-        page_count: page_count ? parseInt(page_count) : null,
-        file_size,
-        tag_ids
-      }
-      
-      if (adminState.editingPdf) {
-        await axios.put(`/api/pdfs/${adminState.editingPdf.id}`, data)
-      } else {
-        await axios.post('/api/pdfs', data)
-      }
+      await axios.post('/api/pdfs', data)
     }
     
     closeModal()
