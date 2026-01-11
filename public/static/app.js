@@ -644,21 +644,9 @@ function renderCategoryFilter() {
         }).join('')}
       </div>
     </div>
-  `
-  container.innerHTML = html
-}
-
-function renderCategoryFilterWithCounts(counts) {
-  // This function is no longer needed
-  renderCategoryFilter()
-}
-
-function renderTagFilter() {
-  const container = document.getElementById('tag-filter')
-  if (!container) return
-  
-  const html = `
-    <div class="mb-6">
+    
+    <!-- Tags Section (at bottom) -->
+    <div class="mb-6 pt-4 border-t-2 border-gray-200">
       <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
         <i class="fas fa-tags mr-2 text-primary"></i>タグ
       </h2>
@@ -675,6 +663,16 @@ function renderTagFilter() {
     </div>
   `
   container.innerHTML = html
+}
+
+function renderCategoryFilterWithCounts(counts) {
+  // This function is no longer needed
+  renderCategoryFilter()
+}
+
+function renderTagFilter() {
+  // Tags are now rendered in renderCategoryFilter
+  // This function is kept for compatibility but does nothing
 }
 
 // Multi-select mode functions
@@ -961,16 +959,6 @@ function renderPDFList() {
           </h3>
           ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300 flex-shrink-0">NEW</span>' : ''}
         </div>
-        
-        ${pdf.tags && pdf.tags.length > 0 ? `
-          <div class="flex flex-wrap gap-1 mb-2">
-            ${pdf.tags.map(tag => `
-              <span class="badge badge-tag text-xs px-2 py-1">
-                ${escapeHtml(tag.name)}
-              </span>
-            `).join('')}
-          </div>
-        ` : ''}
         
         <div class="flex items-center justify-between text-xs text-gray-500 mt-3">
           <div class="flex items-center gap-2 flex-wrap">

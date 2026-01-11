@@ -231,6 +231,50 @@ app.get('/api/pdfs/:id', async (c) => {
   return c.json({ ...pdf, tags })
 })
 
+// Auto-generate tags from title
+function extractKeywordsFromTitle(title: string): string[] {
+  // Common keywords to extract
+  const keywords = [
+    // SNS関連
+    'YouTube', 'Instagram', 'TikTok', 'X', 'Twitter', 'Threads', 'LINE', 'Podcast',
+    // マーケティング関連
+    'マーケティング', 'SNS', 'ライブコマース', '広告', 'プロモーション', 'ブランディング',
+    'インフルエンサー', 'アフィリエイト', 'SEO', 'コンテンツ',
+    // ビジネス関連
+    '個人事業主', 'フリーランス', '起業', 'スタートアップ', 'EC', '通販', 'オンライン',
+    // AI関連
+    'AI', '生成AI', 'ChatGPT', 'GPT', '画像生成', '動画生成', '自動化',
+    // その他
+    '初心者', '入門', '活用', '運用', '戦略', '分析', 'ツール', 'ガイド', '事例'
+  ]
+  
+  const foundKeywords: string[] = []
+  const lowerTitle = title.toLowerCase()
+  
+  for (const keyword of keywords) {
+    const lowerKeyword = keyword.toLowerCase()
+    if (lowerTitle.includes(lowerKeyword)) {
+      foundKeywords.push(keyword)
+    }
+  }
+  
+  return foundKeywords
+}
+
+// Helper function to create or get tag
+async function createOrGetTag(db: D1Database, tagName: string): Promise<number> {
+  // Check if tag exists
+  const existing = await db.prepare('SELECT id FROM tags WHERE name = ?').bind(tagName).first()
+  
+  if (existing) {
+    return existing.id as number
+  }
+  
+  // Create new tag
+  const result = await db.prepare('INSERT INTO tags (name) VALUES (?)').bind(tagName).run()
+  return result.meta.last_row_id as number
+}
+
 // Create PDF
 app.post('/api/pdfs', async (c) => {
   const { 
@@ -254,11 +298,23 @@ app.post('/api/pdfs', async (c) => {
   
   const pdf_id = result.meta.last_row_id
   
+  // Auto-generate tags from title
+  const autoKeywords = extractKeywordsFromTitle(title)
+  const autoTagIds: number[] = []
+  
+  for (const keyword of autoKeywords) {
+    const tagId = await createOrGetTag(c.env.DB, keyword)
+    autoTagIds.push(tagId)
+  }
+  
+  // Combine manual tags and auto tags
+  const allTagIds = new Set([...(tag_ids || []), ...autoTagIds])
+  
   // Add tags
-  if (tag_ids && tag_ids.length > 0) {
-    for (const tag_id of tag_ids) {
+  if (allTagIds.size > 0) {
+    for (const tag_id of allTagIds) {
       await c.env.DB.prepare(
-        'INSERT INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
+        'INSERT OR IGNORE INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
       ).bind(pdf_id, tag_id).run()
     }
   }
@@ -266,7 +322,8 @@ app.post('/api/pdfs', async (c) => {
   return c.json({ 
     id: pdf_id, 
     title, 
-    google_drive_url 
+    google_drive_url,
+    auto_tags: autoKeywords
   })
 })
 
