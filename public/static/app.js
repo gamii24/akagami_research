@@ -9,7 +9,7 @@ let state = {
   downloadedPdfs: new Set(),
   allPdfs: [], // Store all PDFs for counting
   categoryCounts: {}, // Store category counts
-  sortBy: 'newest', // Sort option: 'newest', 'oldest', 'title-asc', 'title-desc'
+  sortBy: 'newest', // Sort option: 'newest', 'oldest', 'popular'
   favoritePdfs: new Set(), // Favorite PDFs
   showOnlyFavorites: false // Filter to show only favorites
 }
@@ -38,7 +38,7 @@ function loadDownloadedPdfs() {
   // Load sort preference
   try {
     const sortBy = localStorage.getItem('sort_by')
-    if (sortBy && ['newest', 'oldest'].includes(sortBy)) {
+    if (sortBy && ['newest', 'oldest', 'popular'].includes(sortBy)) {
       state.sortBy = sortBy
     }
   } catch (error) {
@@ -530,6 +530,9 @@ function sortPDFs() {
     case 'oldest':
       state.pdfs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
       break
+    case 'popular':
+      state.pdfs.sort((a, b) => (b.download_count || 0) - (a.download_count || 0))
+      break
     default:
       // Default to newest
       state.pdfs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -713,6 +716,12 @@ function renderPDFList() {
           class="sort-btn ${state.sortBy === 'oldest' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
         >
           <i class="fas fa-history mr-1"></i>古い順
+        </button>
+        <button 
+          onclick="changeSortBy('popular')" 
+          class="sort-btn ${state.sortBy === 'popular' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+        >
+          <i class="fas fa-fire mr-1"></i>人気順
         </button>
         <button 
           onclick="toggleFavoriteFilter()" 
