@@ -366,9 +366,16 @@ app.post('/api/pdfs/upload', async (c) => {
       return c.json({ error: 'ファイルサイズが大きすぎます（最大2MB）' }, 400)
     }
     
-    // Read file as base64
+    // Read file as base64 (handle large files with chunking)
     const arrayBuffer = await file.arrayBuffer()
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+    const bytes = new Uint8Array(arrayBuffer)
+    let binary = ''
+    const chunkSize = 8192
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      const chunk = bytes.slice(i, i + chunkSize)
+      binary += String.fromCharCode.apply(null, Array.from(chunk))
+    }
+    const base64 = btoa(binary)
     
     // Insert PDF with file data
     const result = await c.env.DB.prepare(`
@@ -507,9 +514,16 @@ app.post('/api/pdfs/bulk-upload', async (c) => {
           category_id = categoryMap.get('画像&動画生成')
         }
         
-        // Read file as base64
+        // Read file as base64 (handle large files with chunking)
         const arrayBuffer = await file.arrayBuffer()
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
+        const bytes = new Uint8Array(arrayBuffer)
+        let binary = ''
+        const chunkSize = 8192
+        for (let i = 0; i < bytes.length; i += chunkSize) {
+          const chunk = bytes.slice(i, i + chunkSize)
+          binary += String.fromCharCode.apply(null, Array.from(chunk))
+        }
+        const base64 = btoa(binary)
         
         // Insert PDF
         const result = await c.env.DB.prepare(`
