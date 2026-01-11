@@ -21,7 +21,10 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - **最新デプロイ**: https://7829e958.akagami-research.pages.dev
 - **開発環境**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
-- **管理画面**: `/admin` - PDF登録・編集・削除（パスワード: `admin123`)
+- **管理画面**: `/admin` - PDF登録・編集・削除
+  - **デフォルトパスワード**: `admin123` （本番環境では必ず変更してください）
+  - **セッション**: JWTトークンでログイン状態を30日間保持
+  - **自動ログイン**: 一度ログインすると、再度パスワード入力不要
 
 ## ✨ 完成済み機能
 
@@ -44,8 +47,13 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - ✅ シェア機能（Web Share API対応）
 
 ### 管理画面（`/admin`）
+- ✅ JWTベースの認証システム
+  - ✅ ログイン機能（パスワード認証）
+  - ✅ 30日間のセッション永続化（自動ログイン）
+  - ✅ クッキーベースのトークン保存
+  - ✅ ログアウト機能
 - ✅ エレガントなログイン画面
-- ✅ PDF登録・編集・削除
+- ✅ PDF登録・編集・削除（認証必須）
 - ✅ 一括アップロード機能（コピペ対応）
   - ExcelやGoogleスプレッドシートから直接貼り付け
   - タブ区切りで一度に大量登録
@@ -115,7 +123,21 @@ npx wrangler d1 create akagami-research-production
 npx wrangler d1 migrations apply akagami-research-production
 ```
 
-### ステップ5: デプロイ
+### ステップ5: 環境変数の設定
+
+**本番環境では、セキュリティのため環境変数を設定してください:**
+
+```bash
+# JWT Secret（ランダムな強固な文字列に変更）
+npx wrangler pages secret put JWT_SECRET --project-name akagami-research
+# 入力例: your-super-secret-jwt-key-CHANGE-THIS-TO-RANDOM-STRING
+
+# 管理画面パスワード（デフォルトから変更）
+npx wrangler pages secret put ADMIN_PASSWORD --project-name akagami-research
+# 入力例: your-secure-admin-password
+```
+
+### ステップ6: デプロイ
 
 ```bash
 # ビルド
@@ -137,8 +159,11 @@ npx wrangler pages deploy dist --project-name akagami-research
 
 ### 一括アップロード（推奨）
 
-1. `/admin`にアクセス（パスワード: `admin123`）
-2. 「一括アップロード」ボタンをクリック
+1. `/admin`にアクセス
+2. 初回アクセス時はログインが必要：
+   - **パスワード**: `admin123`（本番環境では変更してください）
+   - 一度ログインすると30日間自動ログイン
+3. 「一括アップロード」ボタンをクリック
 3. カテゴリを選択
 4. ExcelやGoogleスプレッドシートで以下の2列を準備：
    - A列：タイトル（例：`Instagram運用ガイド.pdf`）
@@ -169,6 +194,7 @@ PDFを公開ページで開けるようにするには：
 webapp/
 ├── src/
 │   ├── index.tsx          # メインアプリケーション（Hono）
+│   ├── auth.ts            # JWT認証ヘルパー関数
 │   └── renderer.tsx       # HTMLレンダラー
 ├── public/
 │   └── static/
@@ -179,6 +205,7 @@ webapp/
 │   ├── 0001_initial_schema.sql      # データベーススキーマ
 │   └── 0002_add_category_download_url.sql  # ダウンロードURL追加
 ├── seed.sql               # 初期データ（11カテゴリ）
+├── .dev.vars              # ローカル環境変数（JWT_SECRET, ADMIN_PASSWORD）
 ├── ecosystem.config.cjs   # PM2設定（開発用）
 ├── wrangler.jsonc         # Cloudflare設定
 └── package.json           # 依存関係とスクリプト
@@ -189,6 +216,11 @@ webapp/
 ```bash
 # セットアップ
 npm install
+
+# 環境変数ファイルの確認
+# .dev.vars ファイルにJWT_SECRETとADMIN_PASSWORDが設定されています
+# デフォルト: JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+#            ADMIN_PASSWORD=admin123
 
 # データベースマイグレーション（ローカル）
 npm run db:migrate:local
@@ -204,7 +236,30 @@ pm2 start ecosystem.config.cjs
 
 # テスト
 curl http://localhost:3000
+
+# 管理画面にアクセス
+# http://localhost:3000/admin
+# パスワード: admin123（.dev.varsで変更可能）
 ```
+
+## 🔐 セキュリティ設定
+
+### 本番環境での環境変数設定
+
+`.dev.vars`ファイルは開発環境専用です。本番環境では以下のコマンドで設定してください：
+
+```bash
+# JWT Secret（ランダムな強固な文字列）
+npx wrangler pages secret put JWT_SECRET --project-name akagami-research
+
+# 管理画面パスワード（デフォルトから必ず変更）
+npx wrangler pages secret put ADMIN_PASSWORD --project-name akagami-research
+```
+
+### セッション情報
+- **トークン有効期限**: 30日間
+- **保存場所**: HTTPクッキー（HttpOnly、SameSite=Lax）
+- **ログアウト**: 管理画面右上のログアウトボタン
 
 ## 📄 ライセンス
 
@@ -220,5 +275,7 @@ Akagami Researchへようこそ！
 - タグで詳細な分類
 - 美しいUIで快適な閲覧体験
 - 一括アップロードで簡単登録
+- JWTベースのセキュアな認証システム
+- 30日間の自動ログイン
 
 何か質問や改善提案があれば、お気軽にお知らせください！

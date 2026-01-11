@@ -13,4 +13,9 @@
       "database_id": "c5d4dce7-e94e-489a-880f-36e6056f74c6"
     }
   ]
+  // Note: Environment variables (JWT_SECRET, ADMIN_PASSWORD) are configured in:
+  // - Local development: .dev.vars file
+  // - Production: Cloudflare Pages dashboard or `wrangler pages secret put` command
+  // Example: npx wrangler pages secret put JWT_SECRET --project-name akagami-research
+  //          npx wrangler pages secret put ADMIN_PASSWORD --project-name akagami-research
 }

@@ -15,14 +15,19 @@ function enableAdminDarkMode() {
 }
 
 // Check authentication
-function checkAuth() {
-  const isAuth = sessionStorage.getItem('admin_authenticated')
-  if (!isAuth) {
-    showLoginForm()
-    return false
+async function checkAuth() {
+  try {
+    const response = await axios.get('/api/auth/check')
+    if (response.data.authenticated) {
+      adminState.authenticated = true
+      return true
+    }
+  } catch (error) {
+    console.error('Auth check failed:', error)
   }
-  adminState.authenticated = true
-  return true
+  
+  showLoginForm()
+  return false
 }
 
 // Login form
@@ -66,24 +71,37 @@ function showLoginForm() {
   `
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
   event.preventDefault()
   const password = document.getElementById('admin-password').value
+  const submitBtn = event.target.querySelector('button[type="submit"]')
   
-  // Simple password check (in production, use proper authentication)
-  if (password === 'TaylorAlisonSwift') {
-    sessionStorage.setItem('admin_authenticated', 'true')
-    adminState.authenticated = true
-    initAdminApp()
-  } else {
+  // Disable button and show loading
+  submitBtn.disabled = true
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>ログイン中...'
+  
+  try {
+    const response = await axios.post('/api/auth/login', { password })
+    
+    if (response.data.success) {
+      adminState.authenticated = true
+      await initAdminApp()
+    }
+  } catch (error) {
+    console.error('Login error:', error)
     alert('パスワードが正しくありません')
+    
+    // Re-enable button
+    submitBtn.disabled = false
+    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>ログイン'
   }
 }
 
 // Initialize admin app
 async function initAdminApp() {
   enableAdminDarkMode() // Enable dark mode
-  if (!checkAuth()) return
+  const isAuth = await checkAuth()
+  if (!isAuth) return
   
   await loadAdminData()
   renderAdminPage()
@@ -978,8 +996,14 @@ function closeModal(event) {
   document.getElementById('modal-container').innerHTML = ''
 }
 
-function logout() {
-  sessionStorage.removeItem('admin_authenticated')
+async function logout() {
+  try {
+    await axios.post('/api/auth/logout')
+  } catch (error) {
+    console.error('Logout error:', error)
+  }
+  
+  adminState.authenticated = false
   location.reload()
 }
 

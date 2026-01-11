@@ -1,9 +1,18 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { renderer } from './renderer'
+import { 
+  generateToken, 
+  setAuthCookie, 
+  clearAuthCookie, 
+  isAuthenticated,
+  getAuthToken 
+} from './auth'
 
 type Bindings = {
   DB: D1Database;
+  JWT_SECRET: string;
+  ADMIN_PASSWORD: string;
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -14,10 +23,59 @@ app.use(renderer)
 app.use('/api/*', cors())
 
 // ============================================
+// Authentication APIs
+// ============================================
+
+// Login API
+app.post('/api/auth/login', async (c) => {
+  const { password } = await c.req.json()
+  const correctPassword = c.env.ADMIN_PASSWORD || 'admin123'
+  
+  if (password !== correctPassword) {
+    return c.json({ error: 'Invalid password' }, 401)
+  }
+  
+  // Generate JWT token
+  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const token = await generateToken(secret)
+  
+  // Set cookie
+  setAuthCookie(c, token)
+  
+  return c.json({ success: true, message: 'Login successful' })
+})
+
+// Logout API
+app.post('/api/auth/logout', async (c) => {
+  clearAuthCookie(c)
+  return c.json({ success: true, message: 'Logout successful' })
+})
+
+// Check authentication status
+app.get('/api/auth/check', async (c) => {
+  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const authenticated = await isAuthenticated(c, secret)
+  
+  return c.json({ authenticated })
+})
+
+// Auth middleware for admin APIs
+async function requireAuth(c: any, next: any) {
+  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const authenticated = await isAuthenticated(c, secret)
+  
+  if (!authenticated) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  
+  await next()
+}
+
+// ============================================
 // API Routes - Categories
 // ============================================
 
-// Get all categories
+// Get all categories (public)
 app.get('/api/categories', async (c) => {
   const { results } = await c.env.DB.prepare(
     'SELECT * FROM categories ORDER BY sort_order ASC, name ASC'
@@ -25,8 +83,8 @@ app.get('/api/categories', async (c) => {
   return c.json(results)
 })
 
-// Create category
-app.post('/api/categories', async (c) => {
+// Create category (protected)
+app.post('/api/categories', requireAuth, async (c) => {
   const { name, description } = await c.req.json()
   
   // Get the maximum sort_order and add 10
@@ -48,8 +106,8 @@ app.post('/api/categories', async (c) => {
   })
 })
 
-// Update category
-app.put('/api/categories/:id', async (c) => {
+// Update category (protected)
+app.put('/api/categories/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
   const { name, description, download_url, sort_order } = await c.req.json()
   
@@ -60,8 +118,8 @@ app.put('/api/categories/:id', async (c) => {
   return c.json({ success: true })
 })
 
-// Update category sort orders (for reordering)
-app.post('/api/categories/reorder', async (c) => {
+// Update category sort orders (for reordering) (protected)
+app.post('/api/categories/reorder', requireAuth, async (c) => {
   const { categoryOrders } = await c.req.json() // [{id: 1, sort_order: 10}, {id: 2, sort_order: 20}, ...]
   
   // Update each category's sort_order
@@ -74,8 +132,8 @@ app.post('/api/categories/reorder', async (c) => {
   return c.json({ success: true })
 })
 
-// Delete category
-app.delete('/api/categories/:id', async (c) => {
+// Delete category (protected)
+app.delete('/api/categories/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
   await c.env.DB.prepare(
     'DELETE FROM categories WHERE id = ?'
@@ -110,8 +168,8 @@ app.get('/api/tags', async (c) => {
   return c.json(results)
 })
 
-// Create tag
-app.post('/api/tags', async (c) => {
+// Create tag (protected)
+app.post('/api/tags', requireAuth, async (c) => {
   const { name } = await c.req.json()
   const result = await c.env.DB.prepare(
     'INSERT INTO tags (name) VALUES (?)'
@@ -123,8 +181,8 @@ app.post('/api/tags', async (c) => {
   })
 })
 
-// Delete tag
-app.delete('/api/tags/:id', async (c) => {
+// Delete tag (protected)
+app.delete('/api/tags/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
   await c.env.DB.prepare(
     'DELETE FROM tags WHERE id = ?'
@@ -275,8 +333,8 @@ async function createOrGetTag(db: D1Database, tagName: string): Promise<number> 
   return result.meta.last_row_id as number
 }
 
-// Create PDF
-app.post('/api/pdfs', async (c) => {
+// Create PDF (protected)
+app.post('/api/pdfs', requireAuth, async (c) => {
   const { 
     title, 
     google_drive_url, 
@@ -327,8 +385,8 @@ app.post('/api/pdfs', async (c) => {
   })
 })
 
-// Update PDF
-app.put('/api/pdfs/:id', async (c) => {
+// Update PDF (protected)
+app.put('/api/pdfs/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
   const { 
     title, 
@@ -367,8 +425,8 @@ app.put('/api/pdfs/:id', async (c) => {
   return c.json({ success: true })
 })
 
-// Delete PDF
-app.delete('/api/pdfs/:id', async (c) => {
+// Delete PDF (protected)
+app.delete('/api/pdfs/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
   await c.env.DB.prepare(
     'DELETE FROM pdfs WHERE id = ?'
@@ -399,8 +457,8 @@ app.post('/api/categories/:id/download', async (c) => {
   return c.json({ success: true })
 })
 
-// Regenerate tags for all existing PDFs
-app.post('/api/pdfs/regenerate-tags', async (c) => {
+// Regenerate tags for all existing PDFs (protected)
+app.post('/api/pdfs/regenerate-tags', requireAuth, async (c) => {
   try {
     // Get all PDFs
     const { results: pdfs } = await c.env.DB.prepare('SELECT id, title FROM pdfs').all()
