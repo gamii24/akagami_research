@@ -166,28 +166,11 @@ function renderPDFList() {
   }
   
   html += state.pdfs.map((pdf, index) => {
-    // Calculate background color for mobile (alternating pattern)
-    // For 2-column grid: row number determines the pattern
-    // Row 0 (index 0,1): left=white, right=beige
-    // Row 1 (index 2,3): left=beige, right=white
-    // Row 2 (index 4,5): left=white, right=beige
-    const row = Math.floor(index / 2)
-    const isLeftColumn = index % 2 === 0
-    let mobileColorClass
-    
-    if (row % 2 === 0) {
-      // Even rows: left=white, right=beige
-      mobileColorClass = isLeftColumn ? 'bg-white' : 'bg-beige'
-    } else {
-      // Odd rows: left=beige, right=white
-      mobileColorClass = isLeftColumn ? 'bg-beige' : 'bg-white'
-    }
-    
     return `
     <a 
       href="${escapeHtml(pdf.google_drive_url)}" 
       target="_blank"
-      class="pdf-card ${mobileColorClass} lg:bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 block cursor-pointer"
+      class="pdf-card bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 block cursor-pointer"
     >
       <div class="p-4">
         <h3 class="text-sm font-bold text-gray-800 mb-2 leading-snug break-words">
