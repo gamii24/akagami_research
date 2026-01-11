@@ -289,11 +289,31 @@ function renderPDFList() {
     const downloaded = isDownloaded(pdf.id)
     const bgColor = downloaded ? 'bg-[#f4eee0]' : 'bg-white'
     
+    // Generate thumbnail URL
+    // Priority: 1. Custom thumbnail_url, 2. DiceBear hand-drawn style
+    let thumbnailUrl = pdf.thumbnail_url
+    if (!thumbnailUrl) {
+      // Use DiceBear API with 'notionists' style (hand-drawn, artistic)
+      // Seed based on PDF title for consistent generation
+      const seed = encodeURIComponent(pdf.title)
+      thumbnailUrl = `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=f4eee0,ffd5dc,d0e7ff`
+    }
+    
     return `
     <div 
       onclick="${downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`}"
       class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
     >
+      <!-- Thumbnail Image -->
+      <div class="w-full h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
+        <img 
+          src="${thumbnailUrl}" 
+          alt="${escapeHtml(pdf.title)}"
+          class="w-full h-full object-cover"
+          onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(pdf.title)}&backgroundColor=e75556';"
+        />
+      </div>
+      
       <div class="p-4">
         <h3 class="text-sm font-bold text-gray-800 mb-2 leading-snug break-words">
           ${escapeHtml(pdf.title)}
@@ -311,6 +331,7 @@ function renderPDFList() {
         
         <div class="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
           <span class="flex items-center">${formatDate(pdf.created_at)}</span>
+          ${downloaded ? '<span class="flex items-center text-primary font-semibold"><i class="fas fa-check-circle mr-1"></i>ダウンロード済み</span>' : ''}
         </div>
       </div>
     </div>
