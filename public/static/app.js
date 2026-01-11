@@ -11,7 +11,9 @@ let state = {
   categoryCounts: {}, // Store category counts
   sortBy: 'newest', // Sort option: 'newest', 'oldest', 'popular'
   favoritePdfs: new Set(), // Favorite PDFs
-  showOnlyFavorites: false // Filter to show only favorites
+  showOnlyFavorites: false, // Filter to show only favorites
+  multiSelectMode: false, // Multi-select mode
+  selectedPdfs: new Set() // Selected PDFs in multi-select mode
 }
 
 // Load downloaded PDFs from localStorage
@@ -675,6 +677,125 @@ function renderTagFilter() {
   container.innerHTML = html
 }
 
+// Multi-select mode functions
+function enterMultiSelectMode(pdfId) {
+  state.multiSelectMode = true
+  state.selectedPdfs.add(pdfId)
+  renderPDFList()
+  showMultiSelectToolbar()
+}
+
+function exitMultiSelectMode() {
+  state.multiSelectMode = false
+  state.selectedPdfs.clear()
+  renderPDFList()
+  hideMultiSelectToolbar()
+}
+
+function togglePdfSelection(event, pdfId) {
+  event.stopPropagation()
+  
+  if (!state.multiSelectMode) {
+    enterMultiSelectMode(pdfId)
+    return
+  }
+  
+  if (state.selectedPdfs.has(pdfId)) {
+    state.selectedPdfs.delete(pdfId)
+  } else {
+    state.selectedPdfs.add(pdfId)
+  }
+  
+  // If no PDFs selected, exit multi-select mode
+  if (state.selectedPdfs.size === 0) {
+    exitMultiSelectMode()
+    return
+  }
+  
+  renderPDFList()
+  updateMultiSelectToolbar()
+}
+
+function openSelectedPdfs() {
+  const selectedPdfData = state.allPdfs.filter(pdf => state.selectedPdfs.has(pdf.id))
+  
+  if (selectedPdfData.length === 0) {
+    alert('PDFが選択されていません')
+    return
+  }
+  
+  // Confirm if many PDFs
+  if (selectedPdfData.length > 5) {
+    if (!confirm(`${selectedPdfData.length}個のPDFを開きますか？ブラウザがポップアップをブロックする可能性があります。`)) {
+      return
+    }
+  }
+  
+  // Open each URL with delay
+  selectedPdfData.forEach((pdf, index) => {
+    if (pdf.google_drive_url) {
+      setTimeout(() => {
+        window.open(pdf.google_drive_url, '_blank')
+        // Mark as downloaded
+        markAsDownloaded(pdf.id)
+      }, index * 300) // 300ms delay between each
+    }
+  })
+  
+  // Exit multi-select mode
+  exitMultiSelectMode()
+  
+  // Re-render to update download status
+  renderPDFList()
+}
+
+function showMultiSelectToolbar() {
+  const toolbar = document.createElement('div')
+  toolbar.id = 'multi-select-toolbar'
+  toolbar.className = 'fixed bottom-0 left-0 right-0 bg-white border-t-2 border-primary shadow-2xl z-50 animate-slide-up'
+  toolbar.innerHTML = `
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-lg font-bold text-primary">
+          <i class="fas fa-check-circle mr-2"></i>
+          <span id="selected-count">${state.selectedPdfs.size}</span>件選択中
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button 
+          onclick="openSelectedPdfs()"
+          class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-all font-semibold shadow-lg flex items-center gap-2"
+        >
+          <i class="fas fa-external-link-alt"></i>
+          <span>まとめて開く</span>
+        </button>
+        <button 
+          onclick="exitMultiSelectMode()"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-semibold"
+        >
+          <i class="fas fa-times mr-1"></i>
+          キャンセル
+        </button>
+      </div>
+    </div>
+  `
+  document.body.appendChild(toolbar)
+}
+
+function hideMultiSelectToolbar() {
+  const toolbar = document.getElementById('multi-select-toolbar')
+  if (toolbar) {
+    toolbar.remove()
+  }
+}
+
+function updateMultiSelectToolbar() {
+  const countElement = document.getElementById('selected-count')
+  if (countElement) {
+    countElement.textContent = state.selectedPdfs.size
+  }
+}
+
 // Show skeleton screen
 function showSkeletonScreen() {
   const container = document.getElementById('pdf-list')
@@ -808,17 +929,31 @@ function renderPDFList() {
     const downloadUrl = pdf.google_drive_url || ''
     const downloaded = isDownloaded(pdf.id)
     const favorite = isFavorite(pdf.id)
-    const bgColor = downloaded ? 'bg-[#f4eee0]' : 'bg-white'
+    const isSelected = state.selectedPdfs.has(pdf.id)
+    const bgColor = isSelected ? 'bg-blue-50 border-blue-500' : (downloaded ? 'bg-[#f4eee0]' : 'bg-white')
     
     // Check if uploaded within 7 days
     const isNew = isWithin7Days(pdf.created_at)
     
+    // Card click handler
+    const cardClick = state.multiSelectMode 
+      ? `togglePdfSelection(event, ${pdf.id})`
+      : (downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`)
+    
     return `
     <div 
-      onclick="${downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`}"
+      onclick="${cardClick}"
+      ontouchstart="handleTouchStart(event, ${pdf.id})"
+      ontouchend="handleTouchEnd(event)"
       class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
       style="position: relative;"
+      data-pdf-id="${pdf.id}"
     >
+      ${isSelected ? `
+        <div class="absolute top-2 left-2 z-10 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg">
+          <i class="fas fa-check text-lg"></i>
+        </div>
+      ` : ''}
       <div class="p-4">
         <div class="flex items-start justify-between gap-2 mb-2">
           <h3 class="text-sm font-bold text-gray-800 leading-snug break-words flex-1">
@@ -1248,6 +1383,33 @@ function isWithin7Days(dateString) {
   const diffTime = Math.abs(now - date)
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   return diffDays <= 7
+}
+
+// Long press detection for multi-select
+let longPressTimer = null
+let longPressTriggered = false
+
+function handleTouchStart(event, pdfId) {
+  longPressTriggered = false
+  longPressTimer = setTimeout(() => {
+    longPressTriggered = true
+    // Haptic feedback if available
+    if (navigator.vibrate) {
+      navigator.vibrate(50)
+    }
+    event.preventDefault()
+    enterMultiSelectMode(pdfId)
+  }, 500) // 500ms for long press
+}
+
+function handleTouchEnd(event) {
+  if (longPressTimer) {
+    clearTimeout(longPressTimer)
+  }
+  if (longPressTriggered) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
 }
 
 // Initialize on page load
