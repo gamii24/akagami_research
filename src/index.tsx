@@ -20,7 +20,7 @@ app.use('/api/*', cors())
 // Get all categories
 app.get('/api/categories', async (c) => {
   const { results } = await c.env.DB.prepare(
-    'SELECT * FROM categories ORDER BY name'
+    'SELECT * FROM categories ORDER BY sort_order ASC, name ASC'
   ).all()
   return c.json(results)
 })
@@ -28,25 +28,48 @@ app.get('/api/categories', async (c) => {
 // Create category
 app.post('/api/categories', async (c) => {
   const { name, description } = await c.req.json()
+  
+  // Get the maximum sort_order and add 10
+  const { results } = await c.env.DB.prepare(
+    'SELECT MAX(sort_order) as max_order FROM categories'
+  ).all()
+  const maxOrder = results[0]?.max_order || 0
+  const newOrder = maxOrder + 10
+  
   const result = await c.env.DB.prepare(
-    'INSERT INTO categories (name, description) VALUES (?, ?)'
-  ).bind(name, description).run()
+    'INSERT INTO categories (name, description, sort_order) VALUES (?, ?, ?)'
+  ).bind(name, description, newOrder).run()
   
   return c.json({ 
     id: result.meta.last_row_id, 
     name, 
-    description 
+    description,
+    sort_order: newOrder
   })
 })
 
 // Update category
 app.put('/api/categories/:id', async (c) => {
   const id = c.req.param('id')
-  const { name, description, download_url } = await c.req.json()
+  const { name, description, download_url, sort_order } = await c.req.json()
   
   await c.env.DB.prepare(
-    'UPDATE categories SET name = ?, description = ?, download_url = ? WHERE id = ?'
-  ).bind(name || '', description || '', download_url || null, id).run()
+    'UPDATE categories SET name = ?, description = ?, download_url = ?, sort_order = ? WHERE id = ?'
+  ).bind(name || '', description || '', download_url || null, sort_order !== undefined ? sort_order : null, id).run()
+  
+  return c.json({ success: true })
+})
+
+// Update category sort orders (for reordering)
+app.post('/api/categories/reorder', async (c) => {
+  const { categoryOrders } = await c.req.json() // [{id: 1, sort_order: 10}, {id: 2, sort_order: 20}, ...]
+  
+  // Update each category's sort_order
+  for (const item of categoryOrders) {
+    await c.env.DB.prepare(
+      'UPDATE categories SET sort_order = ? WHERE id = ?'
+    ).bind(item.sort_order, item.id).run()
+  }
   
   return c.json({ success: true })
 })

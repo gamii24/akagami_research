@@ -689,11 +689,36 @@ function showManageCategoriesModal() {
             </button>
           </form>
           
+          <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p class="text-sm text-blue-800">
+              <i class="fas fa-info-circle mr-1"></i>
+              <strong>並び替え：</strong>↑↓ボタンでカテゴリの表示順を変更できます
+            </p>
+          </div>
+          
           <div class="space-y-3" id="categories-list">
-            ${adminState.categories.map(cat => `
-              <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            ${adminState.categories.map((cat, index) => `
+              <div class="p-4 bg-gray-50 rounded-lg border border-gray-200" data-category-id="${cat.id}">
                 <div class="flex items-center justify-between mb-3">
-                  <span class="font-bold text-lg">${escapeHtml(cat.name)}</span>
+                  <div class="flex items-center gap-3">
+                    <div class="flex flex-col gap-1">
+                      <button 
+                        onclick="moveCategoryUp(${index})"
+                        ${index === 0 ? 'disabled' : ''}
+                        class="px-2 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <i class="fas fa-arrow-up"></i>
+                      </button>
+                      <button 
+                        onclick="moveCategoryDown(${index})"
+                        ${index === adminState.categories.length - 1 ? 'disabled' : ''}
+                        class="px-2 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <i class="fas fa-arrow-down"></i>
+                      </button>
+                    </div>
+                    <span class="font-bold text-lg">${escapeHtml(cat.name)}</span>
+                  </div>
                   <div class="flex gap-2">
                     <button 
                       onclick="editCategory(${cat.id})"
@@ -851,6 +876,47 @@ async function deleteCategory(id) {
     showManageCategoriesModal()
   } catch (error) {
     alert('カテゴリの削除に失敗しました')
+  }
+}
+
+// Move category up in order
+async function moveCategoryUp(index) {
+  if (index === 0) return
+  
+  const categories = [...adminState.categories]
+  const temp = categories[index]
+  categories[index] = categories[index - 1]
+  categories[index - 1] = temp
+  
+  await saveCategoryOrder(categories)
+}
+
+// Move category down in order
+async function moveCategoryDown(index) {
+  if (index === adminState.categories.length - 1) return
+  
+  const categories = [...adminState.categories]
+  const temp = categories[index]
+  categories[index] = categories[index + 1]
+  categories[index + 1] = temp
+  
+  await saveCategoryOrder(categories)
+}
+
+// Save new category order to database
+async function saveCategoryOrder(categories) {
+  try {
+    // Assign new sort_order values (10, 20, 30, ...)
+    const categoryOrders = categories.map((cat, index) => ({
+      id: cat.id,
+      sort_order: (index + 1) * 10
+    }))
+    
+    await axios.post('/api/categories/reorder', { categoryOrders })
+    await loadAdminData()
+    showManageCategoriesModal()
+  } catch (error) {
+    alert('カテゴリの並び替えに失敗しました')
   }
 }
 
