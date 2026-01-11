@@ -361,9 +361,9 @@ app.post('/api/pdfs/upload', async (c) => {
       return c.json({ error: 'No file provided' }, 400)
     }
     
-    // Check file size (limit to 500KB for D1)
-    if (file.size > 500 * 1024) {
-      return c.json({ error: 'ファイルサイズが大きすぎます（最大500KB）' }, 400)
+    // Check file size (limit to 2MB for D1)
+    if (file.size > 2 * 1024 * 1024) {
+      return c.json({ error: 'ファイルサイズが大きすぎます（最大2MB）' }, 400)
     }
     
     // Read file as base64
@@ -466,8 +466,8 @@ app.post('/api/pdfs/bulk-upload', async (c) => {
     for (const file of files) {
       try {
         // Check file size
-        if (file.size > 500 * 1024) {
-          errors.push(`${file.name}: ファイルサイズが大きすぎます（最大500KB）`)
+        if (file.size > 2 * 1024 * 1024) {
+          errors.push(`${file.name}: ファイルサイズが大きすぎます（最大2MB）`)
           continue
         }
         
