@@ -219,65 +219,72 @@ function showBulkUploadModal() {
       <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
         <div class="px-6 py-4 border-b flex items-center justify-between bg-gradient-to-r from-green-500 to-green-600">
           <h2 class="text-xl font-bold text-white">
-            <i class="fas fa-upload mr-2"></i>一括アップロード（最大10件）
+            <i class="fas fa-upload mr-2"></i>一括アップロード（コピペ対応）
           </h2>
           <button onclick="closeModal()" class="text-white hover:text-gray-200">
             <i class="fas fa-times text-2xl"></i>
           </button>
         </div>
         
-        <form onsubmit="saveBulkPdfs(event)" class="px-6 py-4 space-y-4">
+        <form onsubmit="saveBulkPdfsFromText(event)" class="px-6 py-4 space-y-4">
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">共通カテゴリ（オプション）</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">共通カテゴリ（必須）</label>
             <select 
               id="bulk-category"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
             >
-              <option value="">なし</option>
+              <option value="">カテゴリを選択してください</option>
               ${adminState.categories.map(cat => `
                 <option value="${cat.id}">${escapeHtml(cat.name)}</option>
               `).join('')}
             </select>
           </div>
           
-          <div id="bulk-items" class="space-y-4">
-            ${Array.from({length: 10}, (_, i) => `
-              <div class="border-2 border-gray-200 rounded-lg p-4 bg-gray-50">
-                <h3 class="font-bold text-gray-700 mb-3">${i + 1}件目</h3>
-                <div class="grid grid-cols-1 gap-3">
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">タイトル</label>
-                    <input 
-                      type="text" 
-                      id="bulk-title-${i}"
-                      placeholder="PDFのタイトル"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Google Drive URL</label>
-                    <input 
-                      type="url" 
-                      id="bulk-url-${i}"
-                      placeholder="https://drive.google.com/file/d/..."
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">説明（オプション）</label>
-                    <input 
-                      type="text" 
-                      id="bulk-desc-${i}"
-                      placeholder="PDFの説明"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-            `).join('')}
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-paste mr-1 text-green-500"></i>
+              PDFリスト（タイトルとURLをタブ区切りで貼り付け）
+            </label>
+            <textarea 
+              id="bulk-text-input"
+              rows="12"
+              placeholder="タイトル.pdf	https://drive.google.com/file/d/...
+別のタイトル.pdf	https://drive.google.com/file/d/...
+またタイトル.pdf	https://drive.google.com/file/d/...
+
+※ タイトルとURLの間は「タブ」で区切ってください
+※ 1行に1件ずつ入力してください"
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 font-mono text-sm"
+              required
+            ></textarea>
+            <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p class="text-xs text-blue-800">
+                <i class="fas fa-info-circle mr-1"></i>
+                <strong>使い方:</strong><br>
+                1. ExcelやGoogleスプレッドシートで「タイトル」と「URL」の2列を選択<br>
+                2. コピー（Ctrl+C / Cmd+C）<br>
+                3. 上のテキストエリアに貼り付け（Ctrl+V / Cmd+V）<br>
+                4. カテゴリを選択して「一括登録」ボタンをクリック
+              </p>
+            </div>
+          </div>
+          
+          <div id="preview-area" class="hidden">
+            <h3 class="text-sm font-bold text-gray-700 mb-2">
+              <i class="fas fa-eye mr-1"></i>プレビュー（<span id="preview-count">0</span>件）
+            </h3>
+            <div id="preview-list" class="max-h-48 overflow-y-auto space-y-2 p-3 bg-gray-50 rounded-lg border border-gray-200"></div>
           </div>
           
           <div class="flex gap-4 pt-4 border-t">
+            <button 
+              type="button"
+              onclick="previewBulkPdfs()"
+              class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold shadow-lg"
+            >
+              <i class="fas fa-eye mr-2"></i>プレビュー
+            </button>
             <button 
               type="submit"
               class="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all font-semibold shadow-lg"
@@ -325,6 +332,119 @@ async function saveBulkPdfs(event) {
   
   if (pdfs.length === 0) {
     alert('少なくとも1件のPDF（タイトルとURL）を入力してください')
+    return
+  }
+  
+  try {
+    // Upload all PDFs
+    const promises = pdfs.map(pdf => axios.post('/api/pdfs', pdf))
+    await Promise.all(promises)
+    
+    alert(`${pdfs.length}件のPDFを登録しました！`)
+    closeModal()
+    await loadAdminData()
+    renderAdminPage()
+  } catch (error) {
+    alert('一括登録に失敗しました: ' + error.message)
+  }
+}
+
+function previewBulkPdfs() {
+  const textInput = document.getElementById('bulk-text-input').value.trim()
+  
+  if (!textInput) {
+    alert('PDFリストを入力してください')
+    return
+  }
+  
+  const lines = textInput.split('\n').filter(line => line.trim())
+  const pdfs = []
+  
+  for (const line of lines) {
+    // Split by tab or multiple spaces
+    const parts = line.split(/\t+|\s{2,}/)
+    
+    if (parts.length >= 2) {
+      let title = parts[0].trim()
+      const url = parts[1].trim()
+      
+      // Remove .pdf extension if present
+      if (title.endsWith('.pdf')) {
+        title = title.slice(0, -4)
+      }
+      
+      if (title && url) {
+        pdfs.push({ title, url })
+      }
+    }
+  }
+  
+  const previewArea = document.getElementById('preview-area')
+  const previewList = document.getElementById('preview-list')
+  const previewCount = document.getElementById('preview-count')
+  
+  if (pdfs.length === 0) {
+    alert('有効なPDFが見つかりませんでした。\n\nタイトルとURLの間をタブで区切ってください。')
+    return
+  }
+  
+  previewCount.textContent = pdfs.length
+  previewList.innerHTML = pdfs.map((pdf, i) => `
+    <div class="p-2 bg-white rounded border border-gray-200 text-xs">
+      <div class="font-bold text-gray-700">${i + 1}. ${escapeHtml(pdf.title)}</div>
+      <div class="text-gray-500 truncate">${escapeHtml(pdf.url)}</div>
+    </div>
+  `).join('')
+  
+  previewArea.classList.remove('hidden')
+}
+
+async function saveBulkPdfsFromText(event) {
+  event.preventDefault()
+  
+  const categoryId = document.getElementById('bulk-category').value
+  const textInput = document.getElementById('bulk-text-input').value.trim()
+  
+  if (!categoryId) {
+    alert('カテゴリを選択してください')
+    return
+  }
+  
+  if (!textInput) {
+    alert('PDFリストを入力してください')
+    return
+  }
+  
+  const lines = textInput.split('\n').filter(line => line.trim())
+  const pdfs = []
+  
+  for (const line of lines) {
+    // Split by tab or multiple spaces
+    const parts = line.split(/\t+|\s{2,}/)
+    
+    if (parts.length >= 2) {
+      let title = parts[0].trim()
+      const url = parts[1].trim()
+      
+      // Remove .pdf extension if present
+      if (title.endsWith('.pdf')) {
+        title = title.slice(0, -4)
+      }
+      
+      if (title && url) {
+        pdfs.push({
+          title,
+          description: '',
+          google_drive_url: url,
+          category_id: categoryId,
+          tag_ids: []
+        })
+      }
+    }
+  }
+  
+  if (pdfs.length === 0) {
+    alert('有効なPDFが見つかりませんでした。\n\nタイトルとURLの間をタブで区切ってください。')
     return
   }
   
