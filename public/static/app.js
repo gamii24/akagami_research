@@ -167,7 +167,21 @@ function renderPDFList() {
   
   html += state.pdfs.map((pdf, index) => {
     // Calculate background color for mobile (alternating pattern)
-    const mobileColorClass = index % 2 === 0 ? 'bg-white' : 'bg-beige'
+    // For 2-column grid: row number determines the pattern
+    // Row 0 (index 0,1): left=white, right=beige
+    // Row 1 (index 2,3): left=beige, right=white
+    // Row 2 (index 4,5): left=white, right=beige
+    const row = Math.floor(index / 2)
+    const isLeftColumn = index % 2 === 0
+    let mobileColorClass
+    
+    if (row % 2 === 0) {
+      // Even rows: left=white, right=beige
+      mobileColorClass = isLeftColumn ? 'bg-white' : 'bg-beige'
+    } else {
+      // Odd rows: left=beige, right=white
+      mobileColorClass = isLeftColumn ? 'bg-beige' : 'bg-white'
+    }
     
     return `
     <a 
