@@ -601,6 +601,13 @@ function renderCategoryFilter() {
   
   const totalCount = Object.values(state.categoryCounts).reduce((sum, count) => sum + count, 0)
   
+  // Sort categories by count (descending)
+  const sortedCategories = [...state.categories].sort((a, b) => {
+    const countA = state.categoryCounts[a.id] || 0
+    const countB = state.categoryCounts[b.id] || 0
+    return countB - countA
+  })
+  
   const html = `
     <div class="mb-8">
       <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
@@ -616,7 +623,7 @@ function renderCategoryFilter() {
           </span>
           ${totalCount > 0 ? `<span class="badge bg-primary text-white px-2 py-1 rounded-full text-xs font-bold">${totalCount}</span>` : ''}
         </button>
-        ${state.categories.map(cat => {
+        ${sortedCategories.map(cat => {
           const count = state.categoryCounts[cat.id] || 0
           return `
             <button 
