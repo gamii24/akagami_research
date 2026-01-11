@@ -9,7 +9,9 @@ let state = {
   downloadedPdfs: new Set(),
   allPdfs: [], // Store all PDFs for counting
   categoryCounts: {}, // Store category counts
-  sortBy: 'newest' // Sort option: 'newest', 'oldest', 'title-asc', 'title-desc'
+  sortBy: 'newest', // Sort option: 'newest', 'oldest', 'title-asc', 'title-desc'
+  favoritePdfs: new Set(), // Favorite PDFs
+  showOnlyFavorites: false // Filter to show only favorites
 }
 
 // Load downloaded PDFs from localStorage
@@ -21,6 +23,16 @@ function loadDownloadedPdfs() {
     }
   } catch (error) {
     console.error('Failed to load downloaded PDFs:', error)
+  }
+  
+  // Load favorite PDFs
+  try {
+    const favorites = localStorage.getItem('favorite_pdfs')
+    if (favorites) {
+      state.favoritePdfs = new Set(JSON.parse(favorites))
+    }
+  } catch (error) {
+    console.error('Failed to load favorite PDFs:', error)
   }
   
   // Load sort preference
@@ -47,6 +59,37 @@ function markAsDownloaded(pdfId) {
 // Check if PDF is downloaded
 function isDownloaded(pdfId) {
   return state.downloadedPdfs.has(pdfId)
+}
+
+// Check if PDF is favorite
+function isFavorite(pdfId) {
+  return state.favoritePdfs.has(pdfId)
+}
+
+// Toggle favorite status
+function toggleFavorite(event, pdfId) {
+  event.stopPropagation() // Prevent triggering the card click
+  
+  if (state.favoritePdfs.has(pdfId)) {
+    state.favoritePdfs.delete(pdfId)
+  } else {
+    state.favoritePdfs.add(pdfId)
+  }
+  
+  // Save to localStorage
+  try {
+    localStorage.setItem('favorite_pdfs', JSON.stringify([...state.favoritePdfs]))
+  } catch (error) {
+    console.error('Failed to save favorite PDFs:', error)
+  }
+  
+  // Re-render
+  renderPDFList()
+  
+  // If showing only favorites, reload the list
+  if (state.showOnlyFavorites) {
+    loadPDFs()
+  }
 }
 
 // Initialize app
@@ -118,6 +161,11 @@ async function loadPDFs() {
     
     const response = await axios.get(`/api/pdfs?${params.toString()}`)
     state.pdfs = response.data
+    
+    // Filter by favorites if enabled
+    if (state.showOnlyFavorites) {
+      state.pdfs = state.pdfs.filter(pdf => state.favoritePdfs.has(pdf.id))
+    }
     
     // Apply sorting
     sortPDFs()
@@ -296,7 +344,7 @@ function renderPDFList() {
       </div>
       
       <!-- Sort Options -->
-      <div class="flex items-center gap-2 px-2">
+      <div class="flex items-center gap-2 px-2 flex-wrap">
         <i class="fas fa-sort text-gray-600"></i>
         <span class="text-sm text-gray-700 font-semibold">並び替え:</span>
         <div class="flex flex-wrap gap-2">
@@ -325,6 +373,17 @@ function renderPDFList() {
             <i class="fas fa-sort-alpha-up mr-1"></i>タイトル順（ん→あ）
           </button>
         </div>
+      </div>
+      
+      <!-- Favorite Filter -->
+      <div class="flex items-center gap-2 px-2">
+        <button 
+          onclick="toggleFavoriteFilter()" 
+          class="favorite-filter-btn ${state.showOnlyFavorites ? 'active' : ''} px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
+        >
+          <i class="fas fa-heart"></i>
+          <span>お気に入りのみ表示 ${state.showOnlyFavorites ? `(${state.favoritePdfs.size}件)` : ''}</span>
+        </button>
       </div>
       
       ${filterText.length > 0 ? `
@@ -374,14 +433,24 @@ function renderPDFList() {
     // Only use Google Drive URL
     const downloadUrl = pdf.google_drive_url || ''
     const downloaded = isDownloaded(pdf.id)
+    const favorite = isFavorite(pdf.id)
     const bgColor = downloaded ? 'bg-[#f4eee0]' : 'bg-white'
     
     return `
     <div 
       onclick="${downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`}"
-      class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
+      class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer relative"
     >
-      <div class="p-4">
+      <!-- Favorite Button -->
+      <button 
+        onclick="toggleFavorite(event, ${pdf.id})"
+        class="favorite-btn absolute top-2 right-2 z-10 w-10 h-10 rounded-full ${favorite ? 'bg-primary text-white' : 'bg-white text-gray-400'} shadow-lg hover:scale-110 transition-all flex items-center justify-center"
+        title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
+      >
+        <i class="fas fa-heart text-lg"></i>
+      </button>
+      
+      <div class="p-4 pt-12">
         <h3 class="text-sm font-bold text-gray-800 mb-2 leading-snug break-words">
           ${escapeHtml(pdf.title)}
         </h3>
@@ -616,6 +685,12 @@ function toggleMobileMenu() {
     sidebar.classList.toggle('show-mobile')
     overlay.classList.toggle('show')
   }
+}
+
+// Toggle favorite filter
+function toggleFavoriteFilter() {
+  state.showOnlyFavorites = !state.showOnlyFavorites
+  loadPDFs()
 }
 
 // Utility functions
