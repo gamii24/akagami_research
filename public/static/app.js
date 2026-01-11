@@ -232,6 +232,9 @@ function filterByCategory(categoryId) {
   state.selectedCategory = categoryId
   renderCategoryFilter()
   loadPDFs()
+  
+  // Close mobile menu after selection
+  closeMobileMenu()
 }
 
 function toggleTag(tagId) {
@@ -243,6 +246,18 @@ function toggleTag(tagId) {
   }
   renderTagFilter()
   loadPDFs()
+  
+  // Close mobile menu after selection
+  closeMobileMenu()
+}
+
+function closeMobileMenu() {
+  const sidebar = document.getElementById('sidebar')
+  const overlay = document.getElementById('sidebar-overlay')
+  if (sidebar && overlay) {
+    sidebar.classList.remove('show-mobile')
+    overlay.classList.remove('show')
+  }
 }
 
 function searchPDFs() {
