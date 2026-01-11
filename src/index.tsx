@@ -168,6 +168,43 @@ app.get('/api/tags', async (c) => {
   return c.json(results)
 })
 
+// Get excluded tags (protected)
+app.get('/api/excluded-tags', requireAuth, async (c) => {
+  const { results } = await c.env.DB.prepare(
+    'SELECT * FROM excluded_tags ORDER BY tag_name'
+  ).all()
+  return c.json(results)
+})
+
+// Add excluded tag (protected)
+app.post('/api/excluded-tags', requireAuth, async (c) => {
+  const { tag_name } = await c.req.json()
+  
+  try {
+    await c.env.DB.prepare(
+      'INSERT INTO excluded_tags (tag_name) VALUES (?)'
+    ).bind(tag_name).run()
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    // If tag already exists in excluded list
+    if (error.message.includes('UNIQUE')) {
+      return c.json({ success: true, message: 'Already excluded' })
+    }
+    return c.json({ error: error.message }, 500)
+  }
+})
+
+// Remove excluded tag (protected)
+app.delete('/api/excluded-tags/:id', requireAuth, async (c) => {
+  const id = c.req.param('id')
+  await c.env.DB.prepare(
+    'DELETE FROM excluded_tags WHERE id = ?'
+  ).bind(id).run()
+  
+  return c.json({ success: true })
+})
+
 // Create tag (protected)
 app.post('/api/tags', requireAuth, async (c) => {
   const { name } = await c.req.json()
@@ -184,6 +221,24 @@ app.post('/api/tags', requireAuth, async (c) => {
 // Delete tag (protected)
 app.delete('/api/tags/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
+  
+  // Get tag name before deletion
+  const tag = await c.env.DB.prepare(
+    'SELECT name FROM tags WHERE id = ?'
+  ).bind(id).first()
+  
+  if (tag) {
+    // Add to excluded tags list
+    try {
+      await c.env.DB.prepare(
+        'INSERT OR IGNORE INTO excluded_tags (tag_name) VALUES (?)'
+      ).bind(tag.name).run()
+    } catch (error) {
+      console.error('Failed to add to excluded tags:', error)
+    }
+  }
+  
+  // Delete the tag
   await c.env.DB.prepare(
     'DELETE FROM tags WHERE id = ?'
   ).bind(id).run()
@@ -319,8 +374,17 @@ function extractKeywordsFromTitle(title: string): string[] {
   return foundKeywords
 }
 
-// Helper function to create or get tag
-async function createOrGetTag(db: D1Database, tagName: string): Promise<number> {
+// Helper function to create or get tag (with exclusion check)
+async function createOrGetTag(db: D1Database, tagName: string): Promise<number | null> {
+  // Check if tag is in excluded list
+  const excluded = await db.prepare(
+    'SELECT id FROM excluded_tags WHERE tag_name = ?'
+  ).bind(tagName).first()
+  
+  if (excluded) {
+    return null // Skip this tag
+  }
+  
   // Check if tag exists
   const existing = await db.prepare('SELECT id FROM tags WHERE name = ?').bind(tagName).first()
   
@@ -362,7 +426,9 @@ app.post('/api/pdfs', requireAuth, async (c) => {
   
   for (const keyword of autoKeywords) {
     const tagId = await createOrGetTag(c.env.DB, keyword)
-    autoTagIds.push(tagId)
+    if (tagId !== null) {
+      autoTagIds.push(tagId)
+    }
   }
   
   // Combine manual tags and auto tags
@@ -475,12 +541,14 @@ app.post('/api/pdfs/regenerate-tags', requireAuth, async (c) => {
         for (const keyword of keywords) {
           const tagId = await createOrGetTag(c.env.DB, keyword)
           
-          // Add tag to PDF (ignore if already exists)
-          await c.env.DB.prepare(
-            'INSERT OR IGNORE INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
-          ).bind(pdf.id, tagId).run()
-          
-          tagsCreated++
+          if (tagId !== null) {
+            // Add tag to PDF (ignore if already exists)
+            await c.env.DB.prepare(
+              'INSERT OR IGNORE INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
+            ).bind(pdf.id, tagId).run()
+            
+            tagsCreated++
+          }
         }
         processedCount++
       }

@@ -3,6 +3,7 @@ let adminState = {
   pdfs: [],
   categories: [],
   tags: [],
+  excludedTags: [],
   editingPdf: null,
   showModal: false,
   authenticated: false
@@ -109,15 +110,17 @@ async function initAdminApp() {
 
 async function loadAdminData() {
   try {
-    const [pdfsRes, catsRes, tagsRes] = await Promise.all([
+    const [pdfsRes, catsRes, tagsRes, excludedRes] = await Promise.all([
       axios.get('/api/pdfs'),
       axios.get('/api/categories'),
-      axios.get('/api/tags')
+      axios.get('/api/tags'),
+      axios.get('/api/excluded-tags')
     ])
     
     adminState.pdfs = pdfsRes.data
     adminState.categories = catsRes.data
     adminState.tags = tagsRes.data
+    adminState.excludedTags = excludedRes.data
   } catch (error) {
     console.error('Failed to load admin data:', error)
   }
@@ -166,6 +169,9 @@ function renderAdminPage() {
           </button>
           <button onclick="showManageTagsModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-dark to-accent text-white rounded-xl hover:from-accent hover:to-dark transition-all duration-300 shadow-lg font-semibold">
             <i class="fas fa-tags mr-2"></i>タグ管理
+          </button>
+          <button onclick="showExcludedTagsModal()" class="admin-btn px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl hover:from-gray-700 hover:to-gray-800 transition-all duration-300 shadow-lg font-semibold">
+            <i class="fas fa-ban mr-2"></i>除外タグ管理
           </button>
         </div>
 
@@ -979,7 +985,7 @@ async function addTag(event) {
 }
 
 async function deleteTag(id) {
-  if (!confirm('このタグを削除してもよろしいですか？')) return
+  if (!confirm('このタグを削除してもよろしいですか？\n（削除したタグは自動的に除外リストに追加されます）')) return
   
   try {
     await axios.delete(`/api/tags/${id}`)
@@ -987,6 +993,97 @@ async function deleteTag(id) {
     showManageTagsModal()
   } catch (error) {
     alert('タグの削除に失敗しました')
+  }
+}
+
+// Excluded tags management
+function showExcludedTagsModal() {
+  const modalHtml = `
+    <div class="fixed inset-0 modal-overlay flex items-center justify-center z-50" onclick="closeModal(event)">
+      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+          <h2 class="text-xl font-bold text-gray-800">
+            <i class="fas fa-ban mr-2"></i>除外タグ管理
+          </h2>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+        </div>
+        
+        <div class="px-6 py-4">
+          <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p class="text-sm text-gray-700">
+              <i class="fas fa-info-circle mr-2 text-yellow-600"></i>
+              除外タグに追加された単語は、PDFタイトルから自動生成されなくなります。<br>
+              タグ管理で削除したタグも自動的にここに追加されます。
+            </p>
+          </div>
+          
+          <form onsubmit="addExcludedTag(event)" class="mb-6 flex gap-2">
+            <input 
+              type="text" 
+              id="new-excluded-tag-name"
+              placeholder="除外するタグ名"
+              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+              required
+            />
+            <button 
+              type="submit"
+              class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              <i class="fas fa-plus mr-2"></i>除外リストに追加
+            </button>
+          </form>
+          
+          <div class="space-y-2" id="excluded-tags-list">
+            ${adminState.excludedTags.length === 0 ? `
+              <p class="text-gray-500 text-center py-8">除外タグがありません</p>
+            ` : ''}
+            ${adminState.excludedTags.map(tag => `
+              <div class="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
+                <span class="text-sm font-medium text-gray-700">
+                  <i class="fas fa-ban mr-2 text-gray-500"></i>${escapeHtml(tag.tag_name)}
+                </span>
+                <button 
+                  onclick="removeExcludedTag(${tag.id})"
+                  class="text-red-500 hover:text-red-700 transition-colors"
+                  title="除外リストから削除"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+  
+  document.getElementById('modal-container').innerHTML = modalHtml
+}
+
+async function addExcludedTag(event) {
+  event.preventDefault()
+  const tagName = document.getElementById('new-excluded-tag-name').value
+  
+  try {
+    await axios.post('/api/excluded-tags', { tag_name: tagName })
+    await loadAdminData()
+    showExcludedTagsModal()
+  } catch (error) {
+    alert('除外タグの追加に失敗しました')
+  }
+}
+
+async function removeExcludedTag(id) {
+  if (!confirm('この除外タグを削除してもよろしいですか？\n（今後このタグが自動生成されるようになります）')) return
+  
+  try {
+    await axios.delete(`/api/excluded-tags/${id}`)
+    await loadAdminData()
+    showExcludedTagsModal()
+  } catch (error) {
+    alert('除外タグの削除に失敗しました')
   }
 }
 
