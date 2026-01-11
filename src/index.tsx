@@ -363,7 +363,7 @@ app.get('/', (c) => {
               <h1 class="text-3xl font-bold text-white tracking-wide">
                 Akagami Research
               </h1>
-              <p class="text-white text-sm mt-1 opacity-90">資料管理システム</p>
+              <p class="text-white text-sm mt-1 opacity-90">赤髪の資料保管庫</p>
             </a>
             {/* Mobile Menu Button */}
             <button 

@@ -38,7 +38,7 @@ function loadDownloadedPdfs() {
   // Load sort preference
   try {
     const sortBy = localStorage.getItem('sort_by')
-    if (sortBy && ['newest', 'oldest', 'title-asc', 'title-desc'].includes(sortBy)) {
+    if (sortBy && ['newest', 'oldest'].includes(sortBy)) {
       state.sortBy = sortBy
     }
   } catch (error) {
@@ -97,16 +97,15 @@ async function initApp() {
   loadDownloadedPdfs()
   await loadCategories()
   await loadTags()
-  await loadAllPdfsForCounting() // Load all PDFs for counting
-  await loadPDFs()
+  await loadAllPdfsOnce() // Load all PDFs once for counting and display
   renderCategoryFilter()
   renderTagFilter()
   renderPDFList()
   setupEventListeners()
 }
 
-// Load all PDFs for counting (no filters)
-async function loadAllPdfsForCounting() {
+// Load all PDFs once (optimized for performance)
+async function loadAllPdfsOnce() {
   try {
     const response = await axios.get('/api/pdfs')
     state.allPdfs = response.data
@@ -122,9 +121,47 @@ async function loadAllPdfsForCounting() {
         state.categoryCounts[pdf.category_id]++
       }
     })
+    
+    // Set initial PDFs for display
+    applyFiltersFromAllPdfs()
   } catch (error) {
-    console.error('Failed to load all PDFs for counting:', error)
+    console.error('Failed to load all PDFs:', error)
   }
+}
+
+// Apply filters from cached allPdfs (faster than API call)
+function applyFiltersFromAllPdfs() {
+  // Start with all PDFs
+  state.pdfs = [...state.allPdfs]
+  
+  // Apply category filter
+  if (state.selectedCategory) {
+    state.pdfs = state.pdfs.filter(pdf => pdf.category_id === state.selectedCategory)
+  }
+  
+  // Apply tag filter
+  if (state.selectedTags.length > 0) {
+    state.pdfs = state.pdfs.filter(pdf => {
+      return pdf.tags && pdf.tags.some(tag => state.selectedTags.includes(tag.id))
+    })
+  }
+  
+  // Apply search filter
+  if (state.searchQuery) {
+    const query = state.searchQuery.toLowerCase()
+    state.pdfs = state.pdfs.filter(pdf => {
+      return (pdf.title && pdf.title.toLowerCase().includes(query)) ||
+             (pdf.description && pdf.description.toLowerCase().includes(query))
+    })
+  }
+  
+  // Apply favorite filter
+  if (state.showOnlyFavorites) {
+    state.pdfs = state.pdfs.filter(pdf => state.favoritePdfs.has(pdf.id))
+  }
+  
+  // Apply sorting
+  sortPDFs()
 }
 
 // Load data from API
@@ -147,33 +184,9 @@ async function loadTags() {
 }
 
 async function loadPDFs() {
-  try {
-    const params = new URLSearchParams()
-    if (state.selectedCategory) {
-      params.append('category', state.selectedCategory)
-    }
-    if (state.selectedTags.length > 0) {
-      state.selectedTags.forEach(tagId => params.append('tag', tagId))
-    }
-    if (state.searchQuery) {
-      params.append('search', state.searchQuery)
-    }
-    
-    const response = await axios.get(`/api/pdfs?${params.toString()}`)
-    state.pdfs = response.data
-    
-    // Filter by favorites if enabled
-    if (state.showOnlyFavorites) {
-      state.pdfs = state.pdfs.filter(pdf => state.favoritePdfs.has(pdf.id))
-    }
-    
-    // Apply sorting
-    sortPDFs()
-    
-    renderPDFList()
-  } catch (error) {
-    console.error('Failed to load PDFs:', error)
-  }
+  // Use cached data instead of API call
+  applyFiltersFromAllPdfs()
+  renderPDFList()
 }
 
 // Sort PDFs based on current sort option
@@ -184,12 +197,6 @@ function sortPDFs() {
       break
     case 'oldest':
       state.pdfs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-      break
-    case 'title-asc':
-      state.pdfs.sort((a, b) => a.title.localeCompare(b.title, 'ja'))
-      break
-    case 'title-desc':
-      state.pdfs.sort((a, b) => b.title.localeCompare(a.title, 'ja'))
       break
     default:
       // Default to newest
@@ -345,32 +352,20 @@ function renderPDFList() {
       
       <!-- Sort Options -->
       <div class="flex items-center gap-2 px-2 flex-wrap">
-        <i class="fas fa-sort text-gray-600"></i>
-        <span class="text-sm text-gray-700 font-semibold">並び替え:</span>
-        <div class="flex flex-wrap gap-2">
+        <i class="fas fa-sort text-gray-600 hidden sm:inline"></i>
+        <span class="text-sm text-gray-700 font-semibold hidden sm:inline">並び替え:</span>
+        <div class="flex flex-wrap gap-2 w-full sm:w-auto">
           <button 
             onclick="changeSortBy('newest')" 
-            class="sort-btn ${state.sortBy === 'newest' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+            class="sort-btn ${state.sortBy === 'newest' ? 'active' : ''} flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all"
           >
-            <i class="fas fa-clock mr-1"></i>新着順
+            <i class="fas fa-clock mr-1"></i><span class="hidden sm:inline">新着順</span><span class="sm:hidden">新着</span>
           </button>
           <button 
             onclick="changeSortBy('oldest')" 
-            class="sort-btn ${state.sortBy === 'oldest' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+            class="sort-btn ${state.sortBy === 'oldest' ? 'active' : ''} flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all"
           >
-            <i class="fas fa-history mr-1"></i>古い順
-          </button>
-          <button 
-            onclick="changeSortBy('title-asc')" 
-            class="sort-btn ${state.sortBy === 'title-asc' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-          >
-            <i class="fas fa-sort-alpha-down mr-1"></i>タイトル順（あ→ん）
-          </button>
-          <button 
-            onclick="changeSortBy('title-desc')" 
-            class="sort-btn ${state.sortBy === 'title-desc' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-          >
-            <i class="fas fa-sort-alpha-up mr-1"></i>タイトル順（ん→あ）
+            <i class="fas fa-history mr-1"></i><span class="hidden sm:inline">古い順</span><span class="sm:hidden">古い</span>
           </button>
         </div>
       </div>
