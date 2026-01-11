@@ -263,6 +263,29 @@ function setupEventListeners() {
   if (searchBtn) {
     searchBtn.addEventListener('click', searchPDFs)
   }
+  
+  // Mobile search
+  const mobileSearchInput = document.getElementById('mobile-search-input')
+  if (mobileSearchInput) {
+    mobileSearchInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        searchPDFsMobile()
+      }
+    })
+  }
+  
+  const mobileSearchBtn = document.getElementById('mobile-search-btn')
+  if (mobileSearchBtn) {
+    mobileSearchBtn.addEventListener('click', searchPDFsMobile)
+  }
+}
+
+function searchPDFsMobile() {
+  const input = document.getElementById('mobile-search-input')
+  if (input) {
+    state.searchQuery = input.value
+    loadPDFs()
+  }
 }
 
 // Mobile menu toggle

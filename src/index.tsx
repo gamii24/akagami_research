@@ -357,6 +357,26 @@ app.get('/', (c) => {
         onclick="toggleMobileMenu()"
       ></div>
 
+      {/* Mobile Search Bar - Show only on mobile */}
+      <div class="lg:hidden bg-white border-b-2 border-gray-100 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+          <div class="relative">
+            <input 
+              type="text" 
+              id="mobile-search-input"
+              placeholder="キーワードで検索..."
+              class="w-full pl-4 pr-12 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm"
+            />
+            <button 
+              id="mobile-search-btn"
+              class="absolute right-1 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-primary text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center shadow-md"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -384,21 +404,21 @@ app.get('/', (c) => {
                 <i class="fas fa-times text-2xl"></i>
               </button>
               
-              {/* Search */}
-              <div class="mb-8">
+              {/* Search - Desktop Only */}
+              <div class="mb-8 hidden lg:block">
                 <h2 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
                   <i class="fas fa-search mr-2 text-primary"></i>検索
                 </h2>
-                <div class="flex gap-2">
+                <div class="relative">
                   <input 
                     type="text" 
                     id="search-input"
                     placeholder="キーワードで検索..."
-                    class="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    class="w-full pl-4 pr-12 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm"
                   />
                   <button 
                     id="search-btn"
-                    class="px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md"
+                    class="absolute right-1 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-primary text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center shadow-md"
                   >
                     <i class="fas fa-search"></i>
                   </button>
