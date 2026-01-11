@@ -131,7 +131,6 @@ function renderPDFList() {
   const html = state.pdfs.map(pdf => `
     <div class="pdf-card bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2">
       <div class="p-6">
-        {/* Header with icon */}
         <div class="flex items-start gap-4 mb-4">
           <div class="flex-shrink-0">
             <div class="w-14 h-14 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-md">
@@ -145,14 +144,12 @@ function renderPDFList() {
           </div>
         </div>
         
-        {/* Description */}
         ${pdf.description ? `
           <p class="text-dark/80 mb-4 text-sm leading-relaxed">
             ${escapeHtml(pdf.description)}
           </p>
         ` : ''}
         
-        {/* Tags */}
         <div class="flex flex-wrap gap-2 mb-4">
           ${pdf.category_name ? `
             <span class="badge badge-category text-xs shadow-sm">
@@ -167,7 +164,6 @@ function renderPDFList() {
           `).join('') : ''}
         </div>
         
-        {/* Meta info */}
         <div class="flex items-center gap-3 text-xs text-dark/60 mb-4 flex-wrap">
           ${pdf.file_size ? `
             <span class="flex items-center"><i class="fas fa-file mr-1"></i>${escapeHtml(pdf.file_size)}</span>
@@ -178,7 +174,6 @@ function renderPDFList() {
           <span class="flex items-center"><i class="fas fa-clock mr-1"></i>${formatDate(pdf.created_at)}</span>
         </div>
         
-        {/* Download button */}
         <a 
           href="${escapeHtml(pdf.google_drive_url)}" 
           target="_blank"
