@@ -25,38 +25,38 @@ function showLoginForm() {
   if (!app) return
   
   app.innerHTML = `
-    <div class="min-h-screen flex items-center justify-center bg-light">
-      <div class="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border-2 border-primary/20">
+    <div class="min-h-screen flex items-center justify-center bg-gray-50">
+      <div class="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border-2 border-primary">
         <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-full mb-4 shadow-lg">
+          <div class="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-full mb-4 shadow-lg">
             <i class="fas fa-flask text-3xl text-white"></i>
           </div>
-          <h2 class="text-3xl font-bold text-darker">
+          <h2 class="text-3xl font-bold text-gray-800">
             Akagami Research
           </h2>
-          <p class="text-dark mt-2">管理者ログイン</p>
+          <p class="text-gray-600 mt-2">管理者ログイン</p>
         </div>
         <form onsubmit="handleLogin(event)" class="space-y-6">
           <div>
-            <label class="block text-sm font-semibold text-darker mb-2">パスワード</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">パスワード</label>
             <input 
               type="password" 
               id="admin-password"
-              class="w-full px-4 py-3 border-2 border-dark/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-light transition-all"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
               placeholder="パスワードを入力"
               required
             />
           </div>
           <button 
             type="submit"
-            class="w-full px-4 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg font-semibold"
+            class="w-full px-4 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg font-semibold"
           >
             <i class="fas fa-sign-in-alt mr-2"></i>ログイン
           </button>
         </form>
-        <p class="mt-6 text-sm text-dark text-center">
+        <p class="mt-6 text-sm text-gray-600 text-center">
           <i class="fas fa-info-circle mr-1"></i>
-          デフォルトパスワード: <code class="bg-light px-3 py-1 rounded border border-primary/30 font-mono">admin123</code>
+          デフォルトパスワード: <code class="bg-gray-100 px-3 py-1 rounded border border-gray-300 font-mono">admin123</code>
         </p>
       </div>
     </div>

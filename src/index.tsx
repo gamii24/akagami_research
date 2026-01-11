@@ -302,21 +302,21 @@ app.delete('/api/pdfs/:id', async (c) => {
 // Home page (public view)
 app.get('/', (c) => {
   return c.render(
-    <div class="min-h-screen bg-light">
+    <div class="min-h-screen bg-white">
       {/* Header */}
-      <header class="bg-darker shadow-lg border-b-4 border-primary">
+      <header class="bg-primary shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
             <div>
               <h1 class="text-3xl font-bold text-white tracking-wide">
-                <i class="fas fa-flask text-secondary mr-3"></i>
+                <i class="fas fa-flask mr-3"></i>
                 Akagami Research
               </h1>
-              <p class="text-light text-sm mt-1 opacity-80">資料管理システム</p>
+              <p class="text-white text-sm mt-1 opacity-90">資料管理システム</p>
             </div>
             <a 
               href="/admin" 
-              class="inline-flex items-center px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all duration-300 shadow-md hover:shadow-lg font-medium"
+              class="inline-flex items-center px-5 py-2.5 bg-white text-primary rounded-lg hover:bg-gray-50 transition-all duration-300 shadow-md hover:shadow-lg font-medium border-2 border-white"
             >
               <i class="fas fa-cog mr-2"></i>管理画面
             </a>
@@ -329,7 +329,7 @@ app.get('/', (c) => {
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar - Filters */}
           <aside class="lg:col-span-1">
-            <div class="bg-white rounded-xl shadow-lg p-6 sticky top-8 border border-primary/10">
+            <div class="bg-white rounded-xl shadow-lg p-6 sticky top-8 border-2 border-primary">
               {/* Search */}
               <div class="mb-8">
                 <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
@@ -340,11 +340,11 @@ app.get('/', (c) => {
                     type="text" 
                     id="search-input"
                     placeholder="キーワードで検索..."
-                    class="flex-1 px-4 py-2.5 border border-dark/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-light"
+                    class="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                   <button 
                     id="search-btn"
-                    class="px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition-all duration-300 shadow-md"
+                    class="px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-md"
                   >
                     <i class="fas fa-search"></i>
                   </button>

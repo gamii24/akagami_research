@@ -120,8 +120,8 @@ function renderPDFList() {
   
   if (state.pdfs.length === 0) {
     container.innerHTML = `
-      <div class="col-span-full text-center py-16 text-dark">
-        <i class="fas fa-inbox text-7xl mb-4 text-accent opacity-50"></i>
+      <div class="col-span-full text-center py-16 text-gray-600">
+        <i class="fas fa-inbox text-7xl mb-4 text-gray-300"></i>
         <p class="text-xl font-medium">資料が見つかりませんでした</p>
       </div>
     `
@@ -133,19 +133,19 @@ function renderPDFList() {
       <div class="p-6">
         <div class="flex items-start gap-4 mb-4">
           <div class="flex-shrink-0">
-            <div class="w-14 h-14 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-md">
+            <div class="w-14 h-14 bg-primary rounded-xl flex items-center justify-center shadow-md">
               <i class="fas fa-file-pdf text-2xl text-white"></i>
             </div>
           </div>
           <div class="flex-1 min-w-0">
-            <h3 class="text-lg font-bold text-darker mb-2 leading-tight">
+            <h3 class="text-lg font-bold text-gray-800 mb-2 leading-tight">
               ${escapeHtml(pdf.title)}
             </h3>
           </div>
         </div>
         
         ${pdf.description ? `
-          <p class="text-dark/80 mb-4 text-sm leading-relaxed">
+          <p class="text-gray-600 mb-4 text-sm leading-relaxed">
             ${escapeHtml(pdf.description)}
           </p>
         ` : ''}
@@ -164,7 +164,7 @@ function renderPDFList() {
           `).join('') : ''}
         </div>
         
-        <div class="flex items-center gap-3 text-xs text-dark/60 mb-4 flex-wrap">
+        <div class="flex items-center gap-3 text-xs text-gray-500 mb-4 flex-wrap">
           ${pdf.file_size ? `
             <span class="flex items-center"><i class="fas fa-file mr-1"></i>${escapeHtml(pdf.file_size)}</span>
           ` : ''}
@@ -177,7 +177,7 @@ function renderPDFList() {
         <a 
           href="${escapeHtml(pdf.google_drive_url)}" 
           target="_blank"
-          class="block w-full text-center px-6 py-3.5 bg-gradient-to-r from-primary to-secondary text-white rounded-xl hover:from-secondary hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg font-semibold text-sm"
+          class="block w-full text-center px-6 py-3.5 bg-primary text-white rounded-xl hover:bg-red-600 transition-all duration-300 shadow-md hover:shadow-lg font-semibold text-sm"
         >
           <i class="fas fa-download mr-2"></i>Download
         </a>

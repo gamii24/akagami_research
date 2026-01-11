@@ -14,12 +14,12 @@ export const renderer = jsxRenderer(({ children }) => {
               theme: {
                 extend: {
                   colors: {
-                    primary: '#BB666A',
+                    primary: '#e75556',
                     secondary: '#e75556',
-                    accent: '#916769',
-                    dark: '#665a5a',
-                    darker: '#3c2d2e',
-                    light: '#f4eee0',
+                    accent: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                    light: '#ffffff',
                   }
                 }
               }
@@ -29,7 +29,7 @@ export const renderer = jsxRenderer(({ children }) => {
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
       </head>
-      <body class="bg-light">
+      <body class="bg-white">
         {children}
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/app.js"></script>
