@@ -419,6 +419,9 @@ async function initApp() {
   // Phase 2: Load PDFs in background (can be slower)
   await loadAllPdfsOnce()
   
+  // Re-render category filter with counts
+  renderCategoryFilter()
+  
   // Render PDF list
   renderPDFList()
   
