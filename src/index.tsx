@@ -761,10 +761,10 @@ app.get('/admin', (c) => {
         <link href="/static/style.css" rel="stylesheet" />
         <link href="/static/admin-dark.css" rel="stylesheet" />
       </head>
-      <body class="bg-white">
+      <body class="admin-dark bg-darker">
         <div id="admin-app">
-          <div class="text-center py-12 text-gray-500">
-            <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+          <div class="text-center py-12 text-gray-300">
+            <i class="fas fa-spinner fa-spin text-4xl mb-4 text-primary"></i>
             <p>読み込み中...</p>
           </div>
         </div>
