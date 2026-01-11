@@ -159,6 +159,54 @@ function renderPDFList() {
   
   let html = ''
   
+  // Show search result count
+  const filterText = []
+  if (state.selectedCategory) {
+    const cat = state.categories.find(c => c.id === state.selectedCategory)
+    if (cat) filterText.push(`カテゴリ: ${cat.name}`)
+  }
+  if (state.selectedTags.length > 0) {
+    const tagNames = state.selectedTags.map(tagId => {
+      const tag = state.tags.find(t => t.id === tagId)
+      return tag ? tag.name : ''
+    }).filter(n => n)
+    if (tagNames.length > 0) {
+      filterText.push(`タグ: ${tagNames.join(', ')}`)
+    }
+  }
+  if (state.searchQuery) {
+    filterText.push(`検索: "${state.searchQuery}"`)
+  }
+  
+  const filterDescription = filterText.length > 0 ? ` (${filterText.join(' / ')})` : ''
+  
+  html += `
+    <div class="col-span-full mb-4">
+      <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 to-white px-4 py-3 rounded-lg border-2 border-gray-200">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-file-pdf text-primary text-lg"></i>
+          <span class="text-gray-700 font-semibold">検索結果:</span>
+          <span class="text-primary text-xl font-bold">${state.pdfs.length}</span>
+          <span class="text-gray-700 font-semibold">件</span>
+        </div>
+        ${filterText.length > 0 ? `
+          <button 
+            onclick="clearAllFilters()" 
+            class="text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-1"
+          >
+            <i class="fas fa-times-circle"></i>
+            <span>フィルタをクリア</span>
+          </button>
+        ` : ''}
+      </div>
+      ${filterText.length > 0 ? `
+        <div class="mt-2 text-sm text-gray-600 px-2">
+          ${filterDescription}
+        </div>
+      ` : ''}
+    </div>
+  `
+  
   // Show bulk download button if category is selected
   if (state.selectedCategory) {
     const selectedCat = state.categories.find(cat => cat.id === state.selectedCategory)
@@ -349,6 +397,28 @@ function toggleTag(tagId) {
   loadPDFs()
   
   // Close mobile menu after selection
+  closeMobileMenu()
+}
+
+// Clear all filters
+function clearAllFilters() {
+  state.selectedCategory = null
+  state.selectedTags = []
+  state.searchQuery = ''
+  
+  // Clear search inputs
+  const searchInput = document.getElementById('search-input')
+  if (searchInput) searchInput.value = ''
+  
+  const mobileSearchInput = document.getElementById('mobile-search-input')
+  if (mobileSearchInput) mobileSearchInput.value = ''
+  
+  // Re-render everything
+  renderCategoryFilter()
+  renderTagFilter()
+  loadPDFs()
+  
+  // Close mobile menu
   closeMobileMenu()
 }
 
