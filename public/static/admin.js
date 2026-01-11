@@ -54,10 +54,6 @@ function showLoginForm() {
             <i class="fas fa-sign-in-alt mr-2"></i>ログイン
           </button>
         </form>
-        <p class="mt-6 text-sm text-gray-600 text-center">
-          <i class="fas fa-info-circle mr-1"></i>
-          デフォルトパスワード: <code class="bg-gray-100 px-3 py-1 rounded border border-gray-300 font-mono">admin123</code>
-        </p>
       </div>
     </div>
   `
@@ -68,7 +64,7 @@ function handleLogin(event) {
   const password = document.getElementById('admin-password').value
   
   // Simple password check (in production, use proper authentication)
-  if (password === 'admin123') {
+  if (password === 'TaylorAlisonSwift') {
     sessionStorage.setItem('admin_authenticated', 'true')
     adminState.authenticated = true
     initAdminApp()
