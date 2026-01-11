@@ -15,7 +15,8 @@ let state = {
   showDownloadHistory: false, // Filter to show only downloaded PDFs
   multiSelectMode: false, // Multi-select mode
   selectedPdfs: new Set(), // Selected PDFs in multi-select mode
-  showAllMobile: false // Show all cards on mobile (default: false, show 15)
+  showAllMobile: false, // Show all cards on mobile (default: false, show 15)
+  viewMode: 'grid' // View mode: 'grid' or 'list'
 }
 
 // Load downloaded PDFs from localStorage
@@ -47,6 +48,16 @@ function loadDownloadedPdfs() {
     }
   } catch (error) {
     console.error('Failed to load sort preference:', error)
+  }
+  
+  // Load view mode preference
+  try {
+    const viewMode = localStorage.getItem('view_mode')
+    if (viewMode && ['grid', 'list'].includes(viewMode)) {
+      state.viewMode = viewMode
+    }
+  } catch (error) {
+    console.error('Failed to load view mode:', error)
   }
 }
 
@@ -606,6 +617,21 @@ function changeSortBy(sortOption) {
   renderPDFList()
 }
 
+// Change view mode
+function changeViewMode(mode) {
+  state.viewMode = mode
+  
+  // Save to localStorage
+  try {
+    localStorage.setItem('view_mode', mode)
+  } catch (error) {
+    console.error('Failed to save view mode:', error)
+  }
+  
+  // Re-render
+  renderPDFList()
+}
+
 // Render functions
 function renderCategoryFilter() {
   const container = document.getElementById('category-filter')
@@ -961,6 +987,25 @@ function renderPDFList() {
           <i class="fas fa-heart"></i>
           ${state.showOnlyFavorites ? `<span class="text-xs">(${state.favoritePdfs.size})</span>` : ''}
         </button>
+        
+        <!-- Separator -->
+        <div class="w-px h-6 bg-gray-300 flex-shrink-0"></div>
+        
+        <!-- View Mode Toggle -->
+        <button 
+          onclick="changeViewMode('grid')" 
+          class="view-mode-btn ${state.viewMode === 'grid' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+          title="グリッド表示"
+        >
+          <i class="fas fa-th"></i>
+        </button>
+        <button 
+          onclick="changeViewMode('list')" 
+          class="view-mode-btn ${state.viewMode === 'list' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+          title="リスト表示"
+        >
+          <i class="fas fa-list"></i>
+        </button>
       </div>
     </div>
   `
@@ -1012,6 +1057,61 @@ function renderPDFList() {
       ? `togglePdfSelection(event, ${pdf.id})`
       : (downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`)
     
+    // List view
+    if (state.viewMode === 'list') {
+      return `
+      <div 
+        onclick="${cardClick}"
+        ontouchstart="handleTouchStart(event, ${pdf.id})"
+        ontouchend="handleTouchEnd(event)"
+        class="col-span-full pdf-card-list ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
+        style="position: relative;"
+        data-pdf-id="${pdf.id}"
+      >
+        ${isSelected ? `
+          <div class="absolute top-4 left-4 z-10 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg">
+            <i class="fas fa-check text-lg"></i>
+          </div>
+        ` : ''}
+        <div class="p-4 flex items-center gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h3 class="text-base font-bold text-gray-800 leading-snug break-words">
+                ${escapeHtml(pdf.title)}
+              </h3>
+              ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300">NEW</span>' : ''}
+            </div>
+            
+            <div class="flex items-center gap-4 text-xs text-gray-500">
+              <span><i class="fas fa-calendar mr-1"></i>${formatDate(pdf.created_at)}</span>
+              <span><i class="fas fa-download mr-1"></i>総DL数: ${pdf.download_count || 0}件</span>
+              ${pdf.category_name ? `<span><i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}</span>` : ''}
+              ${downloaded ? '<span class="text-primary font-semibold"><i class="fas fa-check-circle mr-1"></i>ダウンロード済み</span>' : ''}
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button 
+              onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
+              class="share-btn-small"
+              title="シェア"
+            >
+              <i class="fas fa-paper-plane"></i>
+            </button>
+            <button 
+              onclick="toggleFavorite(event, ${pdf.id})"
+              class="favorite-btn-small ${favorite ? 'active' : ''}"
+              title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
+            >
+              <i class="fas fa-heart"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `
+    }
+    
+    // Grid view (default)
     return `
     <div 
       onclick="${cardClick}"
