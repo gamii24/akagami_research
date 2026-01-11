@@ -6,7 +6,9 @@ let state = {
   selectedCategory: null,
   selectedTags: [],
   searchQuery: '',
-  downloadedPdfs: new Set()
+  downloadedPdfs: new Set(),
+  allPdfs: [], // Store all PDFs for counting
+  categoryCounts: {} // Store category counts
 }
 
 // Load downloaded PDFs from localStorage
@@ -41,11 +43,34 @@ async function initApp() {
   loadDownloadedPdfs()
   await loadCategories()
   await loadTags()
+  await loadAllPdfsForCounting() // Load all PDFs for counting
   await loadPDFs()
   renderCategoryFilter()
   renderTagFilter()
   renderPDFList()
   setupEventListeners()
+}
+
+// Load all PDFs for counting (no filters)
+async function loadAllPdfsForCounting() {
+  try {
+    const response = await axios.get('/api/pdfs')
+    state.allPdfs = response.data
+    
+    // Calculate category counts
+    state.categoryCounts = {}
+    state.categories.forEach(cat => {
+      state.categoryCounts[cat.id] = 0
+    })
+    
+    state.allPdfs.forEach(pdf => {
+      if (pdf.category_id && state.categoryCounts[pdf.category_id] !== undefined) {
+        state.categoryCounts[pdf.category_id]++
+      }
+    })
+  } catch (error) {
+    console.error('Failed to load all PDFs for counting:', error)
+  }
 }
 
 // Load data from API
@@ -93,6 +118,8 @@ function renderCategoryFilter() {
   const container = document.getElementById('category-filter')
   if (!container) return
   
+  const totalCount = Object.values(state.categoryCounts).reduce((sum, count) => sum + count, 0)
+  
   const html = `
     <div class="mb-8">
       <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
@@ -101,22 +128,36 @@ function renderCategoryFilter() {
       <div class="space-y-2">
         <button 
           onclick="filterByCategory(null)" 
-          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg"
+          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg flex items-center justify-between"
         >
-          <i class="fas fa-th-large mr-2"></i>すべて
+          <span>
+            <i class="fas fa-th-large mr-2"></i>すべて
+          </span>
+          ${totalCount > 0 ? `<span class="badge bg-primary text-white px-2 py-1 rounded-full text-xs font-bold">${totalCount}</span>` : ''}
         </button>
-        ${state.categories.map(cat => `
-          <button 
-            onclick="filterByCategory(${cat.id})" 
-            class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg"
-          >
-            <i class="fas fa-folder mr-2"></i>${escapeHtml(cat.name)}
-          </button>
-        `).join('')}
+        ${state.categories.map(cat => {
+          const count = state.categoryCounts[cat.id] || 0
+          return `
+            <button 
+              onclick="filterByCategory(${cat.id})" 
+              class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg flex items-center justify-between"
+            >
+              <span>
+                <i class="fas fa-folder mr-2"></i>${escapeHtml(cat.name)}
+              </span>
+              ${count > 0 ? `<span class="badge bg-gray-500 text-white px-2 py-1 rounded-full text-xs font-bold">${count}</span>` : ''}
+            </button>
+          `
+        }).join('')}
       </div>
     </div>
   `
   container.innerHTML = html
+}
+
+function renderCategoryFilterWithCounts(counts) {
+  // This function is no longer needed
+  renderCategoryFilter()
 }
 
 function renderTagFilter() {
