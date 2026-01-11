@@ -9,9 +9,19 @@
   --dark: #333333;
 }
 
-/* Background colors */
+/* Background colors - Important for overriding Tailwind */
 .bg-beige {
-  background-color: #f4eee0;
+  background-color: #f4eee0 !important;
+}
+
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+@media (min-width: 1024px) {
+  .lg\:bg-white {
+    background-color: #ffffff !important;
+  }
 }
 
 /* Category Buttons */
