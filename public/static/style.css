@@ -68,6 +68,28 @@
   box-shadow: 0 4px 12px rgba(231, 85, 86, 0.3);
 }
 
+/* Sort Buttons */
+.sort-btn {
+  background-color: white;
+  color: var(--dark);
+  border: 2px solid #e0e0e0;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.sort-btn:hover {
+  background-color: var(--gray-light);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.sort-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(231, 85, 86, 0.3);
+}
+
 /* PDF Card Styles */
 .pdf-card {
   background: white;

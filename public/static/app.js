@@ -8,7 +8,8 @@ let state = {
   searchQuery: '',
   downloadedPdfs: new Set(),
   allPdfs: [], // Store all PDFs for counting
-  categoryCounts: {} // Store category counts
+  categoryCounts: {}, // Store category counts
+  sortBy: 'newest' // Sort option: 'newest', 'oldest', 'title-asc', 'title-desc'
 }
 
 // Load downloaded PDFs from localStorage
@@ -20,6 +21,16 @@ function loadDownloadedPdfs() {
     }
   } catch (error) {
     console.error('Failed to load downloaded PDFs:', error)
+  }
+  
+  // Load sort preference
+  try {
+    const sortBy = localStorage.getItem('sort_by')
+    if (sortBy && ['newest', 'oldest', 'title-asc', 'title-desc'].includes(sortBy)) {
+      state.sortBy = sortBy
+    }
+  } catch (error) {
+    console.error('Failed to load sort preference:', error)
   }
 }
 
@@ -107,10 +118,51 @@ async function loadPDFs() {
     
     const response = await axios.get(`/api/pdfs?${params.toString()}`)
     state.pdfs = response.data
+    
+    // Apply sorting
+    sortPDFs()
+    
     renderPDFList()
   } catch (error) {
     console.error('Failed to load PDFs:', error)
   }
+}
+
+// Sort PDFs based on current sort option
+function sortPDFs() {
+  switch (state.sortBy) {
+    case 'newest':
+      state.pdfs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      break
+    case 'oldest':
+      state.pdfs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      break
+    case 'title-asc':
+      state.pdfs.sort((a, b) => a.title.localeCompare(b.title, 'ja'))
+      break
+    case 'title-desc':
+      state.pdfs.sort((a, b) => b.title.localeCompare(a.title, 'ja'))
+      break
+    default:
+      // Default to newest
+      state.pdfs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+  }
+}
+
+// Change sort order
+function changeSortBy(sortOption) {
+  state.sortBy = sortOption
+  
+  // Save to localStorage
+  try {
+    localStorage.setItem('sort_by', sortOption)
+  } catch (error) {
+    console.error('Failed to save sort option:', error)
+  }
+  
+  // Re-sort and re-render
+  sortPDFs()
+  renderPDFList()
 }
 
 // Render functions
@@ -222,26 +274,61 @@ function renderPDFList() {
   const filterDescription = filterText.length > 0 ? ` (${filterText.join(' / ')})` : ''
   
   html += `
-    <div class="col-span-full mb-4">
-      <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 to-white px-4 py-3 rounded-lg border-2 border-gray-200">
+    <div class="col-span-full mb-4 space-y-3">
+      <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 to-white px-4 py-3 rounded-lg border-2 border-gray-200 flex-wrap gap-2">
         <div class="flex items-center gap-2">
           <i class="fas fa-file-pdf text-primary text-lg"></i>
           <span class="text-gray-700 font-semibold">検索結果:</span>
           <span class="text-primary text-xl font-bold">${state.pdfs.length}</span>
           <span class="text-gray-700 font-semibold">件</span>
         </div>
-        ${filterText.length > 0 ? `
-          <button 
-            onclick="clearAllFilters()" 
-            class="text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-1"
-          >
-            <i class="fas fa-times-circle"></i>
-            <span>フィルタをクリア</span>
-          </button>
-        ` : ''}
+        <div class="flex items-center gap-2">
+          ${filterText.length > 0 ? `
+            <button 
+              onclick="clearAllFilters()" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <i class="fas fa-times-circle"></i>
+              <span class="hidden sm:inline">フィルタをクリア</span>
+            </button>
+          ` : ''}
+        </div>
       </div>
+      
+      <!-- Sort Options -->
+      <div class="flex items-center gap-2 px-2">
+        <i class="fas fa-sort text-gray-600"></i>
+        <span class="text-sm text-gray-700 font-semibold">並び替え:</span>
+        <div class="flex flex-wrap gap-2">
+          <button 
+            onclick="changeSortBy('newest')" 
+            class="sort-btn ${state.sortBy === 'newest' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+          >
+            <i class="fas fa-clock mr-1"></i>新着順
+          </button>
+          <button 
+            onclick="changeSortBy('oldest')" 
+            class="sort-btn ${state.sortBy === 'oldest' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+          >
+            <i class="fas fa-history mr-1"></i>古い順
+          </button>
+          <button 
+            onclick="changeSortBy('title-asc')" 
+            class="sort-btn ${state.sortBy === 'title-asc' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+          >
+            <i class="fas fa-sort-alpha-down mr-1"></i>タイトル順（あ→ん）
+          </button>
+          <button 
+            onclick="changeSortBy('title-desc')" 
+            class="sort-btn ${state.sortBy === 'title-desc' ? 'active' : ''} px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+          >
+            <i class="fas fa-sort-alpha-up mr-1"></i>タイトル順（ん→あ）
+          </button>
+        </div>
+      </div>
+      
       ${filterText.length > 0 ? `
-        <div class="mt-2 text-sm text-gray-600 px-2">
+        <div class="text-sm text-gray-600 px-2">
           ${filterDescription}
         </div>
       ` : ''}
@@ -289,31 +376,11 @@ function renderPDFList() {
     const downloaded = isDownloaded(pdf.id)
     const bgColor = downloaded ? 'bg-[#f4eee0]' : 'bg-white'
     
-    // Generate thumbnail URL
-    // Priority: 1. Custom thumbnail_url, 2. DiceBear hand-drawn style
-    let thumbnailUrl = pdf.thumbnail_url
-    if (!thumbnailUrl) {
-      // Use DiceBear API with 'notionists' style (hand-drawn, artistic)
-      // Seed based on PDF title for consistent generation
-      const seed = encodeURIComponent(pdf.title)
-      thumbnailUrl = `https://api.dicebear.com/7.x/notionists/svg?seed=${seed}&backgroundColor=f4eee0,ffd5dc,d0e7ff`
-    }
-    
     return `
     <div 
       onclick="${downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`}"
       class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
     >
-      <!-- Thumbnail Image -->
-      <div class="w-full h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
-        <img 
-          src="${thumbnailUrl}" 
-          alt="${escapeHtml(pdf.title)}"
-          class="w-full h-full object-cover"
-          onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(pdf.title)}&backgroundColor=e75556';"
-        />
-      </div>
-      
       <div class="p-4">
         <h3 class="text-sm font-bold text-gray-800 mb-2 leading-snug break-words">
           ${escapeHtml(pdf.title)}
