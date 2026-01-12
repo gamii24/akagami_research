@@ -2,6 +2,8 @@ import build from '@hono/vite-build/cloudflare-pages'
 import devServer from '@hono/vite-dev-server'
 import adapter from '@hono/vite-dev-server/cloudflare'
 import { defineConfig } from 'vite'
+import { writeFileSync } from 'fs'
+import { join } from 'path'
 
 export default defineConfig(({ mode }) => ({
   plugins: [
@@ -18,9 +20,7 @@ export default defineConfig(({ mode }) => ({
     {
       name: 'generate-routes',
       closeBundle() {
-        const fs = require('fs')
-        const path = require('path')
-        const routesPath = path.join(__dirname, 'dist', '_routes.json')
+        const routesPath = join(process.cwd(), 'dist', '_routes.json')
         const routes = {
           version: 1,
           include: ['/*'],
@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => ({
             '/og-image-square.png'
           ]
         }
-        fs.writeFileSync(routesPath, JSON.stringify(routes, null, 2))
+        writeFileSync(routesPath, JSON.stringify(routes, null, 2))
       }
     }
   ]
