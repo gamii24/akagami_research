@@ -6,7 +6,33 @@ export const renderer = jsxRenderer(({ children }) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Akagami Research</title>
+        
+        {/* Basic Meta Tags */}
+        <title>Akagami Research - SNSマーケティング・生成AI資料保管庫</title>
+        <meta name="description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。" />
+        <meta name="keywords" content="SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長" />
+        <meta name="author" content="Akagami" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://akagami.net/" />
+        <meta property="og:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
+        <meta property="og:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！カテゴリ別・タグ別に簡単検索できます。" />
+        <meta property="og:image" content="https://akagami.net/og-image.png" />
+        <meta property="og:site_name" content="Akagami Research" />
+        <meta property="og:locale" content="ja_JP" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://akagami.net/" />
+        <meta name="twitter:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
+        <meta name="twitter:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！" />
+        <meta name="twitter:image" content="https://akagami.net/og-image.png" />
+        <meta name="twitter:creator" content="@akagami0124" />
+        
+        {/* Favicon */}
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
