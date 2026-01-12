@@ -19,6 +19,8 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta property="og:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
         <meta property="og:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！カテゴリ別・タグ別に簡単検索できます。" />
         <meta property="og:image" content="https://akagami.net/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="Akagami Research" />
         <meta property="og:locale" content="ja_JP" />
         
