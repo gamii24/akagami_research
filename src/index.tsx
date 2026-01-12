@@ -721,9 +721,50 @@ app.get('/', (c) => {
       </div>
 
       {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-6 mt-8">
+      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* SNS Links */}
+          <div class="flex justify-center items-center gap-6 mb-4">
+            <a 
+              href="https://note.com/akagami_sns" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-gray-600 hover:text-primary transition-colors"
+              title="note"
+            >
+              <i class="fas fa-sticky-note text-2xl"></i>
+            </a>
+            <a 
+              href="https://www.threads.com/@akagami0124" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-gray-600 hover:text-primary transition-colors"
+              title="Threads"
+            >
+              <i class="fab fa-threads text-2xl"></i>
+            </a>
+            <a 
+              href="https://www.youtube.com/@akagami_sns" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-gray-600 hover:text-primary transition-colors"
+              title="YouTube"
+            >
+              <i class="fab fa-youtube text-2xl"></i>
+            </a>
+            <a 
+              href="https://www.instagram.com/akagami_sns/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-gray-600 hover:text-primary transition-colors"
+              title="Instagram"
+            >
+              <i class="fab fa-instagram text-2xl"></i>
+            </a>
+          </div>
+          
           <p class="text-sm text-gray-500 text-center">&copy; 2026 Akagami Research. All rights reserved.</p>
+          
           {/* Admin link - Desktop only, subtle */}
           <div class="hidden lg:block fixed bottom-4 right-4">
             <a 
