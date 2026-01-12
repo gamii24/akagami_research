@@ -21,6 +21,7 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta property="og:image" content="https://akagami.net/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Akagami Research - 毎朝のInstagramLIVEで使用したSNSのことを深掘りしたレポートが無料でGETできる" />
         <meta property="og:site_name" content="Akagami Research" />
         <meta property="og:locale" content="ja_JP" />
         
@@ -30,7 +31,11 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta name="twitter:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
         <meta name="twitter:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！" />
         <meta name="twitter:image" content="https://akagami.net/og-image.png" />
+        <meta name="twitter:image:alt" content="Akagami Research - SNS資料保管庫" />
         <meta name="twitter:creator" content="@akagami0124" />
+        
+        {/* Alternative square image for some platforms */}
+        <link rel="image_src" href="https://akagami.net/og-image-square.png" />
         
         {/* Favicon */}
         <link rel="icon" type="image/png" href="/favicon.png" />
