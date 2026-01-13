@@ -183,6 +183,75 @@ function loadRandomQuote() {
   `
 }
 
+// Get upcoming events in Japan
+function getUpcomingEvents() {
+  const now = new Date()
+  const currentYear = now.getFullYear()
+  const currentMonth = now.getMonth() + 1 // 1-12
+  const currentDay = now.getDate()
+  
+  // Define all annual events
+  const allEvents = [
+    { name: '正月', date: `${currentYear}-01-01`, icon: '🎍', color: 'bg-red-50', description: '新年のお祝い' },
+    { name: '成人の日', date: `${currentYear}-01-13`, icon: '👘', color: 'bg-pink-50', description: '新成人を祝う日' },
+    { name: '節分', date: `${currentYear}-02-03`, icon: '👹', color: 'bg-yellow-50', description: '豆まきで鬼退治' },
+    { name: 'バレンタインデー', date: `${currentYear}-02-14`, icon: '💝', color: 'bg-pink-50', description: 'チョコレートを贈る日' },
+    { name: 'ひな祭り', date: `${currentYear}-03-03`, icon: '🎎', color: 'bg-pink-50', description: '女の子の健やかな成長を願う' },
+    { name: 'ホワイトデー', date: `${currentYear}-03-14`, icon: '🍬', color: 'bg-blue-50', description: 'お返しを贈る日' },
+    { name: '卒業式シーズン', date: `${currentYear}-03-20`, icon: '🎓', color: 'bg-purple-50', description: '卒業式のシーズン' },
+    { name: 'お花見', date: `${currentYear}-04-01`, icon: '🌸', color: 'bg-pink-50', description: '桜を楽しむ季節' },
+    { name: '入学式シーズン', date: `${currentYear}-04-05`, icon: '🎒', color: 'bg-blue-50', description: '新学期の始まり' },
+    { name: 'ゴールデンウィーク', date: `${currentYear}-04-29`, icon: '🎏', color: 'bg-green-50', description: '大型連休' },
+    { name: 'こどもの日', date: `${currentYear}-05-05`, icon: '🎏', color: 'bg-blue-50', description: '子供の成長を祝う' },
+    { name: '母の日', date: `${currentYear}-05-11`, icon: '💐', color: 'bg-pink-50', description: '母親に感謝する日' },
+    { name: '父の日', date: `${currentYear}-06-15`, icon: '👔', color: 'bg-blue-50', description: '父親に感謝する日' },
+    { name: '七夕', date: `${currentYear}-07-07`, icon: '🎋', color: 'bg-purple-50', description: '願いごとをする日' },
+    { name: '海の日', date: `${currentYear}-07-21`, icon: '🌊', color: 'bg-blue-50', description: '海に親しむ日' },
+    { name: '夏休みシーズン', date: `${currentYear}-07-25`, icon: '☀️', color: 'bg-yellow-50', description: '夏休みの始まり' },
+    { name: '花火大会シーズン', date: `${currentYear}-08-01`, icon: '🎆', color: 'bg-purple-50', description: '全国で花火大会' },
+    { name: 'お盆', date: `${currentYear}-08-13`, icon: '🏮', color: 'bg-orange-50', description: '先祖を供養する' },
+    { name: '敬老の日', date: `${currentYear}-09-15`, icon: '👴', color: 'bg-orange-50', description: '高齢者を敬う日' },
+    { name: '秋分の日', date: `${currentYear}-09-23`, icon: '🍁', color: 'bg-orange-50', description: '秋のお彼岸' },
+    { name: 'ハロウィン', date: `${currentYear}-10-31`, icon: '🎃', color: 'bg-orange-50', description: '仮装を楽しむ日' },
+    { name: '文化の日', date: `${currentYear}-11-03`, icon: '🎨', color: 'bg-purple-50', description: '文化を大切にする日' },
+    { name: '七五三', date: `${currentYear}-11-15`, icon: '👘', color: 'bg-red-50', description: '子供の成長を祝う' },
+    { name: '勤労感謝の日', date: `${currentYear}-11-23`, icon: '💼', color: 'bg-blue-50', description: '働く人に感謝する日' },
+    { name: 'クリスマス', date: `${currentYear}-12-25`, icon: '🎄', color: 'bg-green-50', description: 'クリスマスを祝う' },
+    { name: '大晦日', date: `${currentYear}-12-31`, icon: '🔔', color: 'bg-purple-50', description: '一年の締めくくり' },
+    
+    // Sports events
+    { name: '箱根駅伝', date: `${currentYear}-01-02`, icon: '🏃', color: 'bg-blue-50', description: '正月の風物詩' },
+    { name: '春の選抜高校野球', date: `${currentYear}-03-18`, icon: '⚾', color: 'bg-green-50', description: '甲子園で高校野球' },
+    { name: '夏の甲子園', date: `${currentYear}-08-06`, icon: '⚾', color: 'bg-orange-50', description: '高校野球の聖地' },
+    
+    // Next year events (for end of year)
+    { name: '正月', date: `${currentYear + 1}-01-01`, icon: '🎍', color: 'bg-red-50', description: '新年のお祝い' },
+    { name: '箱根駅伝', date: `${currentYear + 1}-01-02`, icon: '🏃', color: 'bg-blue-50', description: '正月の風物詩' },
+    { name: '成人の日', date: `${currentYear + 1}-01-13`, icon: '👘', color: 'bg-pink-50', description: '新成人を祝う日' }
+  ]
+  
+  // Filter future events and sort by date
+  const upcomingEvents = allEvents
+    .map(event => ({
+      ...event,
+      dateObj: new Date(event.date)
+    }))
+    .filter(event => event.dateObj >= now)
+    .sort((a, b) => a.dateObj - b.dateObj)
+    .slice(0, 3) // Get top 3
+  
+  return upcomingEvents.map(event => {
+    const daysUntil = Math.ceil((event.dateObj - now) / (1000 * 60 * 60 * 24))
+    const dateStr = `${event.dateObj.getMonth() + 1}月${event.dateObj.getDate()}日`
+    
+    return {
+      ...event,
+      daysUntil,
+      dateStr
+    }
+  })
+}
+
 // Helper function to safely format dates
 function formatDate(dateString) {
   if (!dateString) return '日付不明'
@@ -343,6 +412,31 @@ function renderMyPage(downloads, favorites) {
           まだお気に入りがありません
         </p>
       `}
+    </div>
+
+    <!-- Upcoming Events Section -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-calendar-alt text-primary mr-3"></i>
+        直近のイベント
+      </h3>
+      <div class="space-y-3">
+        ${getUpcomingEvents().map(event => `
+          <div class="flex items-center justify-between p-4 ${event.color} rounded-lg border border-gray-200">
+            <div class="flex items-center gap-3">
+              <div class="text-3xl">${event.icon}</div>
+              <div>
+                <h4 class="font-semibold text-sm text-gray-800">${event.name}</h4>
+                <p class="text-xs text-gray-600">${event.description}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-semibold text-gray-800">${event.dateStr}</p>
+              <p class="text-xs text-gray-500">あと${event.daysUntil}日</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
     </div>
 
     <!-- Download History Section -->
