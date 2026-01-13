@@ -507,15 +507,14 @@ function escapeHtml(text) {
 
 // Check for magic link token on page load
 document.addEventListener('DOMContentLoaded', async () => {
-  // Only check for magic link token, don't auto-check auth status
   const urlParams = new URLSearchParams(window.location.search)
   const token = urlParams.get('token')
   
   if (token) {
     await verifyMagicLink(token)
   } else {
-    // Just update UI to show login button, no API call
-    updateAuthUI()
+    // Check authentication status on page load
+    await checkAuthStatus()
   }
 })
 
