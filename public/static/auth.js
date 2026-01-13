@@ -164,11 +164,14 @@ function updateAuthUI() {
     userAccountSection.innerHTML = `
       <button 
         onclick="showLoginModal()"
-        class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-semibold shadow-sm flex items-center justify-center gap-2 mb-4"
+        class="w-full px-4 py-3 bg-olive hover:bg-olive-dark text-white rounded-lg transition-colors font-semibold shadow-sm flex items-center justify-center gap-2 mb-4"
+        style="background-color: #6B8E23; hover:background-color: #556B2F;"
+        onmouseover="this.style.backgroundColor='#556B2F'" 
+        onmouseout="this.style.backgroundColor='#6B8E23'"
         aria-label="ログイン"
       >
         <i class="fas fa-sign-in-alt"></i>
-        <span>ログイン / 会員登録</span>
+        <span>Login</span>
       </button>
     `
   }
