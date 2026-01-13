@@ -2179,7 +2179,6 @@ app.get('/mypage', (c) => {
         }} />
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
       </head>
       <body class="bg-gray-50 min-h-screen">
         {/* Header */}
