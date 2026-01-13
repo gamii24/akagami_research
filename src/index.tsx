@@ -23,7 +23,8 @@ import {
   sendEmail,
   getWelcomeEmailHtml,
   getMagicLinkEmailHtml,
-  getNewPdfNotificationEmailHtml
+  getNewPdfNotificationEmailHtml,
+  getAdminNewUserNotificationHtml
 } from './email'
 
 type Bindings = {
@@ -184,12 +185,29 @@ app.post('/api/user/register', async (c) => {
     
     const userId = result.meta.last_row_id as number
     
-    // Send welcome email
+    // Send welcome email to user
     await sendEmail({
       to: email,
       subject: 'Akagami Research へようこそ！',
       html: getWelcomeEmailHtml(name),
       text: `こんにちは、${name}さん。Akagami Research の会員登録が完了しました！`
+    })
+    
+    // Send admin notification
+    const registrationDate = new Date().toLocaleString('ja-JP', { 
+      timeZone: 'Asia/Tokyo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
+    await sendEmail({
+      to: 'akagami.syatyo@gmail.com',
+      subject: `[Akagami Research] 新規会員登録: ${name}`,
+      html: getAdminNewUserNotificationHtml(name, email, userId, registrationDate),
+      text: `新規会員が登録されました。\n\n会員番号: ${userId}\n名前: ${name}\nメールアドレス: ${email}\n登録日時: ${registrationDate}`
     })
     
     // Generate session token
@@ -1131,6 +1149,27 @@ app.get('/api/analytics/overview', requireAuth, async (c) => {
       totalTags: totalTags?.count || 0,
       recentPdfs: recentPdfs?.count || 0
     })
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500)
+  }
+})
+
+// Get all registered users (admin only)
+app.get('/api/analytics/users', requireAuth, async (c) => {
+  try {
+    const { results: users } = await c.env.DB.prepare(`
+      SELECT 
+        id,
+        email,
+        name,
+        login_method,
+        created_at,
+        last_login
+      FROM users
+      ORDER BY created_at DESC
+    `).all()
+    
+    return c.json(users)
   } catch (error: any) {
     return c.json({ error: error.message }, 500)
   }

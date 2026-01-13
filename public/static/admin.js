@@ -167,6 +167,9 @@ function renderAdminPage() {
           <button onclick="showAnalyticsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #3b82f6; color: white;" aria-label="アクセス解析">
             <i class="fas fa-chart-line mr-1" aria-hidden="true"></i>アクセス解析
           </button>
+          <button onclick="showUsersModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #10b981; color: white;" aria-label="登録者一覧">
+            <i class="fas fa-users mr-1" aria-hidden="true"></i>登録者一覧
+          </button>
           <button onclick="showManageCategoriesModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;" aria-label="カテゴリ管理">
             <i class="fas fa-layer-group mr-1" aria-hidden="true"></i>カテゴリ管理
           </button>
@@ -1308,4 +1311,125 @@ if (window.location.pathname === '/admin') {
   } else {
     initAdminApp()
   }
+}
+
+// Users Modal
+let usersCache = []
+
+async function showUsersModal() {
+  try {
+    const response = await fetch('/api/analytics/users', {
+      credentials: 'include'
+    })
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch users')
+    }
+    
+    usersCache = await response.json()
+    
+    const modalHtml = `
+      <div class="modal-overlay" onclick="closeModal(event)" id="users-modal">
+        <div class="modal-content" style="max-width: 1000px; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
+          <div style="position: sticky; top: 0; background: #1f2937; z-index: 10; padding: 20px; border-bottom: 1px solid #374151;">
+            <div class="flex justify-between items-center mb-2">
+              <h2 class="text-white text-2xl font-bold">
+                <i class="fas fa-users mr-2"></i>登録者一覧
+              </h2>
+              <button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <p class="text-gray-400 text-sm">総登録者数: ${usersCache.length}名</p>
+          </div>
+          
+          <div style="padding: 20px;">
+            <!-- Users Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full" style="border-collapse: collapse;">
+                <thead>
+                  <tr style="border-bottom: 2px solid #374151;">
+                    <th class="text-left text-white font-bold py-3 px-4" style="background: #1f2937;">会員番号</th>
+                    <th class="text-left text-white font-bold py-3 px-4" style="background: #1f2937;">名前</th>
+                    <th class="text-left text-white font-bold py-3 px-4" style="background: #1f2937;">メールアドレス</th>
+                    <th class="text-left text-white font-bold py-3 px-4" style="background: #1f2937;">登録日</th>
+                    <th class="text-left text-white font-bold py-3 px-4" style="background: #1f2937;">最終ログイン</th>
+                    <th class="text-left text-white font-bold py-3 px-4" style="background: #1f2937;">認証方法</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${usersCache.map((user, index) => `
+                    <tr style="border-bottom: 1px solid #374151; ${index % 2 === 0 ? 'background: #111827;' : 'background: #1f2937;'}">
+                      <td class="text-white py-3 px-4">${user.id}</td>
+                      <td class="text-white py-3 px-4 font-medium">${escapeHtml(user.name)}</td>
+                      <td class="text-gray-300 py-3 px-4 font-mono text-sm">${escapeHtml(user.email)}</td>
+                      <td class="text-gray-400 py-3 px-4 text-sm">
+                        ${new Date(user.created_at).toLocaleDateString('ja-JP', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </td>
+                      <td class="text-gray-400 py-3 px-4 text-sm">
+                        ${user.last_login ? new Date(user.last_login).toLocaleDateString('ja-JP', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        }) : '未ログイン'}
+                      </td>
+                      <td class="py-3 px-4">
+                        <span class="px-2 py-1 rounded text-xs font-medium" style="${user.login_method === 'password' ? 'background: #3b82f6; color: white;' : 'background: #10b981; color: white;'}">
+                          ${user.login_method === 'password' ? 'パスワード' : 'マジックリンク'}
+                        </span>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Export Button -->
+            <div class="mt-6 flex justify-center">
+              <button onclick="exportUsersToCSV()" class="px-6 py-3 rounded-lg font-semibold transition-all duration-300" style="background: #10b981; color: white;">
+                <i class="fas fa-download mr-2"></i>CSVでエクスポート
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml)
+  } catch (error) {
+    console.error('Failed to load users:', error)
+    alert('登録者データの読み込みに失敗しました')
+  }
+}
+
+// Export users to CSV
+function exportUsersToCSV() {
+  const headers = ['会員番号', '名前', 'メールアドレス', '登録日', '最終ログイン', '認証方法']
+  const rows = usersCache.map(user => [
+    user.id,
+    user.name,
+    user.email,
+    new Date(user.created_at).toLocaleString('ja-JP'),
+    user.last_login ? new Date(user.last_login).toLocaleString('ja-JP') : '未ログイン',
+    user.login_method === 'password' ? 'パスワード' : 'マジックリンク'
+  ])
+  
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+  ].join('\n')
+  
+  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = `akagami_users_${new Date().toISOString().split('T')[0]}.csv`
+  link.click()
 }

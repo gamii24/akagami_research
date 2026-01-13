@@ -281,3 +281,115 @@ export function getNewPdfNotificationEmailHtml(userName: string, pdfTitle: strin
     </html>
   `
 }
+
+// Admin notification for new user registration
+export function getAdminNewUserNotificationHtml(userName: string, userEmail: string, userId: number, registrationDate: string): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+        .header {
+          background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+          color: white;
+          padding: 30px;
+          text-align: center;
+          border-radius: 10px 10px 0 0;
+        }
+        .content {
+          background: #ffffff;
+          padding: 30px;
+          border: 1px solid #e0e0e0;
+          border-top: none;
+          border-radius: 0 0 10px 10px;
+        }
+        .user-card {
+          background: #f5f5f5;
+          padding: 20px;
+          border-radius: 10px;
+          margin: 20px 0;
+          border-left: 4px solid #4caf50;
+        }
+        .info-row {
+          display: flex;
+          margin: 10px 0;
+          padding: 8px 0;
+          border-bottom: 1px solid #e0e0e0;
+        }
+        .info-label {
+          font-weight: bold;
+          min-width: 120px;
+          color: #666;
+        }
+        .info-value {
+          color: #333;
+        }
+        .button {
+          display: inline-block;
+          background: #4caf50;
+          color: white;
+          padding: 12px 30px;
+          text-decoration: none;
+          border-radius: 5px;
+          margin: 20px 0;
+        }
+        .footer {
+          text-align: center;
+          color: #999;
+          font-size: 12px;
+          margin-top: 30px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1 style="margin: 0;">🎉 新規会員登録通知</h1>
+      </div>
+      <div class="content">
+        <p>Akagami Research に新しい会員が登録されました！</p>
+        
+        <div class="user-card">
+          <h2 style="margin: 0 0 15px 0; color: #4caf50;">会員情報</h2>
+          <div class="info-row">
+            <div class="info-label">会員番号:</div>
+            <div class="info-value">${userId}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">名前:</div>
+            <div class="info-value">${userName}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">メールアドレス:</div>
+            <div class="info-value">${userEmail}</div>
+          </div>
+          <div class="info-row" style="border-bottom: none;">
+            <div class="info-label">登録日時:</div>
+            <div class="info-value">${registrationDate}</div>
+          </div>
+        </div>
+        
+        <div style="text-align: center;">
+          <a href="https://akagami.net/admin" class="button">管理画面を開く</a>
+        </div>
+        
+        <p style="margin-top: 30px; color: #666; font-size: 14px;">
+          この通知は新規会員登録時に自動送信されています。
+        </p>
+      </div>
+      <div class="footer">
+        <p>© 2026 Akagami Research. All rights reserved.</p>
+      </div>
+    </body>
+    </html>
+  `
+}
