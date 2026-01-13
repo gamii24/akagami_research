@@ -2,7 +2,7 @@
 
 PDF資料をGoogleドライブのリンクで管理できる、シンプルで美しいデザインの資料管理システムです。
 
-**🎉 新機能: Google Analytics アクセス解析統合済み！**
+**🎉 新機能: 会員制度実装！ログイン・履歴同期・メール通知機能を追加**
 
 ## 🎯 プロジェクト概要
 
@@ -10,6 +10,73 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - **目的**: SNSマーケティング・生成AI関連のPDF資料を整理して管理
 - **デザイン**: 白と赤（#e75556）の2色デザイン
 - **技術スタック**: Hono + TypeScript + Cloudflare D1 + TailwindCSS + Google Analytics
+
+## 🔐 会員制度（NEW！）
+
+### 実装済み機能
+
+#### 1. 認証システム
+- ✅ **パスワード認証**: メールアドレス + パスワードでログイン
+- ✅ **マジックリンク認証**: パスワードレスでメールリンクからログイン
+- ✅ **JWT セッション管理**: 安全なトークンベース認証
+- ✅ **会員登録**: 名前・メールアドレス・パスワードで簡単登録
+- ✅ **自動ログイン**: 一度ログインすると次回から自動ログイン
+
+#### 2. データ同期
+- ✅ **ダウンロード履歴の同期**: デバイス間で履歴を共有
+- ✅ **お気に入りの同期**: お気に入りPDFをクラウド保存
+- ✅ **LocalStorageからの自動移行**: 既存のデータを自動的にサーバーへ同期
+
+#### 3. 通知設定
+- ✅ **カテゴリ別通知設定**: 興味のあるカテゴリを選択
+- ✅ **新着資料のメール通知**: PDF追加時に自動メール送信
+- ✅ **通知頻度の選択**: 即時/日次/週次から選択可能
+
+#### 4. メール送信機能
+- ✅ **ウェルカムメール**: 会員登録時に自動送信
+- ✅ **マジックリンクメール**: パスワードレスログイン用
+- ✅ **新着通知メール**: カテゴリ別の新着資料通知
+- ✅ **Cloudflare Email Workers 対応**: 無料メール送信
+
+#### 5. API エンドポイント
+- `/api/user/register` - 会員登録
+- `/api/user/login` - ログイン
+- `/api/user/send-magic-link` - マジックリンク送信
+- `/api/user/verify-magic-link` - マジックリンク検証
+- `/api/user/logout` - ログアウト
+- `/api/user/me` - ユーザー情報取得
+- `/api/user/downloads` - ダウンロード履歴管理
+- `/api/user/favorites` - お気に入り管理
+- `/api/user/notifications` - 通知設定管理
+
+#### 6. データベース設計（Cloudflare D1）
+- **users**: ユーザー情報（メール、名前、認証方法）
+- **magic_link_tokens**: マジックリンクトークン（有効期限付き）
+- **user_downloads**: ダウンロード履歴
+- **user_favorites**: お気に入りリスト
+- **user_notification_settings**: 通知設定（カテゴリ別・頻度別）
+- **email_notifications**: メール送信履歴
+
+### マイグレーション適用
+
+```bash
+# ローカル開発環境
+npx wrangler d1 migrations apply akagami-research-production --local
+
+# 本番環境
+npx wrangler d1 migrations apply akagami-research-production --remote
+```
+
+### セキュリティ
+- ✅ **パスワードハッシュ化**: bcryptで安全にハッシュ化
+- ✅ **JWT認証**: HttpOnlyクッキーでセキュアなセッション管理
+- ✅ **マジックリンク有効期限**: 15分間のみ有効
+- ✅ **CSRF対策**: SameSite=Laxクッキー設定
+
+### 今後の実装予定
+- 📝 マイページUI（現在はプレースホルダー）
+- 📝 通知設定ページUI（現在はプレースホルダー）
+- 📧 Cloudflare Email Workersのセットアップ完了
 
 ## 📊 Google Analytics 統合
 
@@ -362,7 +429,7 @@ SNSシェアの最適化：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://5f57047a.akagami-research.pages.dev
+- **最新デプロイ**: https://03f684d4.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
