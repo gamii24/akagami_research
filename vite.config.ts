@@ -41,7 +41,9 @@ export default defineConfig(({ mode }) => ({
             '/og-image-square-dark.webp',
             '/robots.txt',
             '/humans.txt',
-            '/.well-known/*'
+            '/.well-known/*',
+            '/docs.html',
+            '/*.md'
           ]
         }
         writeFileSync(routesPath, JSON.stringify(routes, null, 2))
