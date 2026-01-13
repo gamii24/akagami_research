@@ -257,6 +257,7 @@ async function handlePasswordLogin(event) {
   const email = document.getElementById('login-email').value
   const password = document.getElementById('login-password').value
   const errorDiv = document.getElementById('login-error')
+  const submitBtn = event.target.querySelector('button[type="submit"]')
   
   if (!email || !password) {
     errorDiv.textContent = 'メールアドレスとパスワードを入力してください'
@@ -265,6 +266,11 @@ async function handlePasswordLogin(event) {
   }
   
   errorDiv.classList.add('hidden')
+  
+  // Show loading state
+  const originalBtnContent = submitBtn.innerHTML
+  submitBtn.disabled = true
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>ログイン中...'
   
   try {
     const response = await fetch('/api/user/login', {
@@ -278,17 +284,25 @@ async function handlePasswordLogin(event) {
     
     if (response.ok && data.success) {
       // Login successful
-      closeAuthModal()
+      submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>ログイン成功！'
+      
       await checkAuthStatus()
       
-      // Show success message
-      alert('ログインしました')
+      setTimeout(() => {
+        closeAuthModal()
+        // Show success message
+        alert('ログインしました')
+      }, 500)
     } else {
+      submitBtn.disabled = false
+      submitBtn.innerHTML = originalBtnContent
       errorDiv.textContent = data.error || 'ログインに失敗しました'
       errorDiv.classList.remove('hidden')
     }
   } catch (error) {
     console.error('Login error:', error)
+    submitBtn.disabled = false
+    submitBtn.innerHTML = originalBtnContent
     errorDiv.textContent = 'ログインに失敗しました。もう一度お試しください。'
     errorDiv.classList.remove('hidden')
   }
@@ -303,6 +317,7 @@ async function handleRegister(event) {
   const password = document.getElementById('register-password').value
   const passwordConfirm = document.getElementById('register-password-confirm').value
   const errorDiv = document.getElementById('register-error')
+  const submitBtn = event.target.querySelector('button[type="submit"]')
   
   if (!name || !email || !password || !passwordConfirm) {
     errorDiv.textContent = 'すべての項目を入力してください'
@@ -324,6 +339,11 @@ async function handleRegister(event) {
   
   errorDiv.classList.add('hidden')
   
+  // Show loading state
+  const originalBtnContent = submitBtn.innerHTML
+  submitBtn.disabled = true
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>登録中...'
+  
   try {
     const response = await fetch('/api/user/register', {
       method: 'POST',
@@ -336,17 +356,25 @@ async function handleRegister(event) {
     
     if (response.ok && data.success) {
       // Registration successful
-      closeAuthModal()
+      submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>登録完了！'
+      
       await checkAuthStatus()
       
-      // Show success message
-      alert('会員登録が完了しました')
+      setTimeout(() => {
+        closeAuthModal()
+        // Show success message
+        alert('会員登録が完了しました')
+      }, 500)
     } else {
+      submitBtn.disabled = false
+      submitBtn.innerHTML = originalBtnContent
       errorDiv.textContent = data.error || '会員登録に失敗しました'
       errorDiv.classList.remove('hidden')
     }
   } catch (error) {
     console.error('Registration error:', error)
+    submitBtn.disabled = false
+    submitBtn.innerHTML = originalBtnContent
     errorDiv.textContent = '会員登録に失敗しました。もう一度お試しください。'
     errorDiv.classList.remove('hidden')
   }
@@ -359,6 +387,7 @@ async function handleMagicLinkRequest(event) {
   const email = document.getElementById('magic-link-email').value
   const errorDiv = document.getElementById('magic-link-error')
   const successDiv = document.getElementById('magic-link-success')
+  const submitBtn = event.target.querySelector('button[type="submit"]')
   
   if (!email) {
     errorDiv.textContent = 'メールアドレスを入力してください'
@@ -370,6 +399,11 @@ async function handleMagicLinkRequest(event) {
   errorDiv.classList.add('hidden')
   successDiv.classList.add('hidden')
   
+  // Show loading state
+  const originalBtnContent = submitBtn.innerHTML
+  submitBtn.disabled = true
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>送信中...'
+  
   try {
     const response = await fetch('/api/user/send-magic-link', {
       method: 'POST',
@@ -380,17 +414,28 @@ async function handleMagicLinkRequest(event) {
     const data = await response.json()
     
     if (response.ok && data.success) {
+      submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>送信完了！'
       successDiv.textContent = 'ログインリンクをメールで送信しました。メールをご確認ください。'
       successDiv.classList.remove('hidden')
       
       // Clear email input
       document.getElementById('magic-link-email').value = ''
+      
+      // Reset button after 3 seconds
+      setTimeout(() => {
+        submitBtn.disabled = false
+        submitBtn.innerHTML = originalBtnContent
+      }, 3000)
     } else {
+      submitBtn.disabled = false
+      submitBtn.innerHTML = originalBtnContent
       errorDiv.textContent = data.error || 'ログインリンクの送信に失敗しました'
       errorDiv.classList.remove('hidden')
     }
   } catch (error) {
     console.error('Magic link error:', error)
+    submitBtn.disabled = false
+    submitBtn.innerHTML = originalBtnContent
     errorDiv.textContent = 'ログインリンクの送信に失敗しました。もう一度お試しください。'
     errorDiv.classList.remove('hidden')
   }
