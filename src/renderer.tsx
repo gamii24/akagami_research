@@ -233,6 +233,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         }} />
         {children}
         <script src="/static/app.js" defer></script>
+        <script src="/static/auth.js" defer></script>
       </body>
     </html>
   )

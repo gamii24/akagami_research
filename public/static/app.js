@@ -17,7 +17,10 @@ let state = {
   selectedPdfs: new Set(), // Selected PDFs in multi-select mode
   showAllMobile: false, // Show all cards on mobile (default: false, show 15)
   viewMode: 'grid', // View mode: 'grid' or 'list'
-  darkMode: false // Dark mode
+  darkMode: false, // Dark mode
+  // User authentication
+  user: null, // Current logged in user
+  isAuthenticated: false // Authentication status
 }
 
 // Google Analytics Event Tracking
@@ -98,6 +101,18 @@ function markAsDownloaded(pdfId) {
     localStorage.setItem('downloaded_pdfs', JSON.stringify([...state.downloadedPdfs]))
   } catch (error) {
     console.error('Failed to save downloaded PDF:', error)
+  }
+  
+  // Sync to server if authenticated
+  if (state.isAuthenticated) {
+    fetch('/api/user/downloads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ pdfId })
+    }).catch(error => {
+      console.error('Failed to sync download to server:', error)
+    })
   }
 }
 
@@ -335,6 +350,29 @@ function toggleFavorite(event, pdfId) {
     localStorage.setItem('favorite_pdfs', JSON.stringify([...state.favoritePdfs]))
   } catch (error) {
     console.error('Failed to save favorite PDFs:', error)
+  }
+  
+  // Sync to server if authenticated
+  if (state.isAuthenticated) {
+    if (isAdding) {
+      // Add to favorites
+      fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ pdfId })
+      }).catch(error => {
+        console.error('Failed to sync favorite to server:', error)
+      })
+    } else {
+      // Remove from favorites
+      fetch(`/api/user/favorites/${pdfId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      }).catch(error => {
+        console.error('Failed to remove favorite from server:', error)
+      })
+    }
   }
   
   // Update just this card's favorite button

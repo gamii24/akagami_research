@@ -9,6 +9,22 @@ import {
   isAuthenticated,
   getAuthToken 
 } from './auth'
+import {
+  hashPassword,
+  verifyPassword,
+  generateMagicLinkToken,
+  generateUserToken,
+  getCurrentUser,
+  setUserSessionCookie,
+  clearUserSessionCookie,
+  requireUserAuth
+} from './user-auth'
+import {
+  sendEmail,
+  getWelcomeEmailHtml,
+  getMagicLinkEmailHtml,
+  getNewPdfNotificationEmailHtml
+} from './email'
 
 type Bindings = {
   DB: D1Database;
@@ -127,6 +143,579 @@ async function requireAuth(c: any, next: any) {
   
   await next()
 }
+
+// ============================================
+// API Routes - User Authentication (public)
+// ============================================
+
+// User registration with password
+app.post('/api/user/register', async (c) => {
+  try {
+    const { email, name, password, usePasswordless } = await c.req.json()
+    
+    if (!email || !name) {
+      return c.json({ error: 'Email and name are required' }, 400)
+    }
+    
+    // Check if user already exists
+    const existingUser = await c.env.DB.prepare(
+      'SELECT id FROM users WHERE email = ?'
+    ).bind(email).first()
+    
+    if (existingUser) {
+      return c.json({ error: 'User already exists with this email' }, 400)
+    }
+    
+    // Create user
+    let passwordHash = null
+    let loginMethod = 'magic_link'
+    
+    if (!usePasswordless && password) {
+      if (password.length < 6) {
+        return c.json({ error: 'Password must be at least 6 characters' }, 400)
+      }
+      passwordHash = await hashPassword(password)
+      loginMethod = 'password'
+    }
+    
+    const result = await c.env.DB.prepare(
+      'INSERT INTO users (email, name, password_hash, login_method) VALUES (?, ?, ?, ?)'
+    ).bind(email, name, passwordHash, loginMethod).run()
+    
+    const userId = result.meta.last_row_id as number
+    
+    // Send welcome email
+    await sendEmail({
+      to: email,
+      subject: 'Akagami Research へようこそ！',
+      html: getWelcomeEmailHtml(name),
+      text: `こんにちは、${name}さん。Akagami Research の会員登録が完了しました！`
+    })
+    
+    // Generate session token
+    const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+    const token = await generateUserToken(userId, secret)
+    setUserSessionCookie(c, token)
+    
+    return c.json({ 
+      success: true, 
+      user: { id: userId, email, name, loginMethod }
+    })
+  } catch (error: any) {
+    console.error('Registration error:', error)
+    return c.json({ error: 'Registration failed' }, 500)
+  }
+})
+
+// User login with password
+app.post('/api/user/login', async (c) => {
+  try {
+    const { email, password } = await c.req.json()
+    
+    if (!email || !password) {
+      return c.json({ error: 'Email and password are required' }, 400)
+    }
+    
+    // Get user
+    const user = await c.env.DB.prepare(
+      'SELECT id, email, name, password_hash, login_method FROM users WHERE email = ?'
+    ).bind(email).first()
+    
+    if (!user) {
+      return c.json({ error: 'Invalid email or password' }, 401)
+    }
+    
+    // Check if user uses password authentication
+    if (!user.password_hash) {
+      return c.json({ error: 'This account uses magic link authentication. Please use "Send Magic Link" option.' }, 400)
+    }
+    
+    // Verify password
+    const isValid = await verifyPassword(password, user.password_hash as string)
+    if (!isValid) {
+      return c.json({ error: 'Invalid email or password' }, 401)
+    }
+    
+    // Update last login
+    await c.env.DB.prepare(
+      'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?'
+    ).bind(user.id).run()
+    
+    // Generate session token
+    const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+    const token = await generateUserToken(user.id as number, secret)
+    setUserSessionCookie(c, token)
+    
+    return c.json({ 
+      success: true, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name,
+        loginMethod: user.login_method
+      }
+    })
+  } catch (error: any) {
+    console.error('Login error:', error)
+    return c.json({ error: 'Login failed' }, 500)
+  }
+})
+
+// Send magic link for passwordless authentication
+app.post('/api/user/send-magic-link', async (c) => {
+  try {
+    const { email } = await c.req.json()
+    
+    if (!email) {
+      return c.json({ error: 'Email is required' }, 400)
+    }
+    
+    // Get user
+    const user = await c.env.DB.prepare(
+      'SELECT id, email, name, login_method FROM users WHERE email = ?'
+    ).bind(email).first()
+    
+    if (!user) {
+      // Don't reveal if user exists or not for security
+      return c.json({ success: true, message: 'If an account exists with this email, a magic link has been sent.' })
+    }
+    
+    // Generate magic link token
+    const token = generateMagicLinkToken()
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+    
+    // Save token
+    await c.env.DB.prepare(
+      'INSERT INTO magic_link_tokens (user_id, token, expires_at) VALUES (?, ?, ?)'
+    ).bind(user.id, token, expiresAt.toISOString()).run()
+    
+    // Send magic link email
+    const magicLink = `https://akagami.net/auth/magic-link?token=${token}`
+    await sendEmail({
+      to: email,
+      subject: 'Akagami Research ログインリンク',
+      html: getMagicLinkEmailHtml(user.name as string, magicLink),
+      text: `こんにちは、${user.name}さん。ログインリンク: ${magicLink} （15分間有効）`
+    })
+    
+    return c.json({ success: true, message: 'Magic link has been sent to your email.' })
+  } catch (error: any) {
+    console.error('Magic link error:', error)
+    return c.json({ error: 'Failed to send magic link' }, 500)
+  }
+})
+
+// Verify magic link token and login
+app.get('/api/user/verify-magic-link', async (c) => {
+  try {
+    const token = c.req.query('token')
+    
+    if (!token) {
+      return c.json({ error: 'Token is required' }, 400)
+    }
+    
+    // Get token info
+    const tokenInfo = await c.env.DB.prepare(
+      'SELECT id, user_id, expires_at, used FROM magic_link_tokens WHERE token = ?'
+    ).bind(token).first()
+    
+    if (!tokenInfo) {
+      return c.json({ error: 'Invalid or expired token' }, 401)
+    }
+    
+    // Check if already used
+    if (tokenInfo.used) {
+      return c.json({ error: 'Token has already been used' }, 401)
+    }
+    
+    // Check if expired
+    const expiresAt = new Date(tokenInfo.expires_at as string)
+    if (expiresAt < new Date()) {
+      return c.json({ error: 'Token has expired' }, 401)
+    }
+    
+    // Mark token as used
+    await c.env.DB.prepare(
+      'UPDATE magic_link_tokens SET used = TRUE WHERE id = ?'
+    ).bind(tokenInfo.id).run()
+    
+    // Get user
+    const user = await c.env.DB.prepare(
+      'SELECT id, email, name, login_method FROM users WHERE id = ?'
+    ).bind(tokenInfo.user_id).first()
+    
+    if (!user) {
+      return c.json({ error: 'User not found' }, 404)
+    }
+    
+    // Update last login
+    await c.env.DB.prepare(
+      'UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?'
+    ).bind(user.id).run()
+    
+    // Generate session token
+    const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+    const sessionToken = await generateUserToken(user.id as number, secret)
+    setUserSessionCookie(c, sessionToken)
+    
+    return c.json({ 
+      success: true, 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        name: user.name,
+        loginMethod: user.login_method
+      }
+    })
+  } catch (error: any) {
+    console.error('Magic link verification error:', error)
+    return c.json({ error: 'Verification failed' }, 500)
+  }
+})
+
+// User logout
+app.post('/api/user/logout', async (c) => {
+  clearUserSessionCookie(c)
+  return c.json({ success: true })
+})
+
+// Get current user info
+app.get('/api/user/me', async (c) => {
+  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const currentUser = await getCurrentUser(c, secret)
+  
+  if (!currentUser) {
+    return c.json({ authenticated: false })
+  }
+  
+  // Get user details
+  const user = await c.env.DB.prepare(
+    'SELECT id, email, name, login_method, created_at, last_login FROM users WHERE id = ?'
+  ).bind(currentUser.userId).first()
+  
+  if (!user) {
+    clearUserSessionCookie(c)
+    return c.json({ authenticated: false })
+  }
+  
+  return c.json({ 
+    authenticated: true, 
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      loginMethod: user.login_method,
+      createdAt: user.created_at,
+      lastLogin: user.last_login
+    }
+  })
+})
+
+// ============================================
+// API Routes - User Data Sync (protected)
+// ============================================
+
+// User auth middleware
+async function requireUserAuth(c: any, next: any) {
+  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const currentUser = await getCurrentUser(c, secret)
+  
+  if (!currentUser) {
+    return c.json({ error: 'Unauthorized. Please login.' }, 401)
+  }
+  
+  c.set('userId', currentUser.userId)
+  await next()
+}
+
+// Get user's download history
+app.get('/api/user/downloads', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    
+    const { results } = await c.env.DB.prepare(`
+      SELECT 
+        ud.id,
+        ud.pdf_id,
+        ud.downloaded_at,
+        p.title,
+        p.google_drive_url,
+        c.name as category_name
+      FROM user_downloads ud
+      LEFT JOIN pdfs p ON ud.pdf_id = p.id
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE ud.user_id = ?
+      ORDER BY ud.downloaded_at DESC
+    `).bind(userId).all()
+    
+    return c.json(results)
+  } catch (error: any) {
+    console.error('Get downloads error:', error)
+    return c.json({ error: 'Failed to get downloads' }, 500)
+  }
+})
+
+// Sync download (add to history)
+app.post('/api/user/downloads', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { pdfId } = await c.req.json()
+    
+    if (!pdfId) {
+      return c.json({ error: 'PDF ID is required' }, 400)
+    }
+    
+    // Check if already downloaded
+    const existing = await c.env.DB.prepare(
+      'SELECT id FROM user_downloads WHERE user_id = ? AND pdf_id = ?'
+    ).bind(userId, pdfId).first()
+    
+    if (existing) {
+      return c.json({ success: true, message: 'Already in download history' })
+    }
+    
+    // Add to download history
+    await c.env.DB.prepare(
+      'INSERT INTO user_downloads (user_id, pdf_id) VALUES (?, ?)'
+    ).bind(userId, pdfId).run()
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('Sync download error:', error)
+    return c.json({ error: 'Failed to sync download' }, 500)
+  }
+})
+
+// Bulk sync downloads (for migrating from localStorage)
+app.post('/api/user/downloads/bulk', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { pdfIds } = await c.req.json()
+    
+    if (!Array.isArray(pdfIds) || pdfIds.length === 0) {
+      return c.json({ error: 'PDF IDs array is required' }, 400)
+    }
+    
+    let syncedCount = 0
+    
+    for (const pdfId of pdfIds) {
+      // Check if already exists
+      const existing = await c.env.DB.prepare(
+        'SELECT id FROM user_downloads WHERE user_id = ? AND pdf_id = ?'
+      ).bind(userId, pdfId).first()
+      
+      if (!existing) {
+        await c.env.DB.prepare(
+          'INSERT INTO user_downloads (user_id, pdf_id) VALUES (?, ?)'
+        ).bind(userId, pdfId).run()
+        syncedCount++
+      }
+    }
+    
+    return c.json({ success: true, syncedCount })
+  } catch (error: any) {
+    console.error('Bulk sync downloads error:', error)
+    return c.json({ error: 'Failed to bulk sync downloads' }, 500)
+  }
+})
+
+// Get user's favorites
+app.get('/api/user/favorites', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    
+    const { results } = await c.env.DB.prepare(`
+      SELECT 
+        uf.id,
+        uf.pdf_id,
+        uf.created_at,
+        p.title,
+        p.google_drive_url,
+        c.name as category_name
+      FROM user_favorites uf
+      LEFT JOIN pdfs p ON uf.pdf_id = p.id
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE uf.user_id = ?
+      ORDER BY uf.created_at DESC
+    `).bind(userId).all()
+    
+    return c.json(results)
+  } catch (error: any) {
+    console.error('Get favorites error:', error)
+    return c.json({ error: 'Failed to get favorites' }, 500)
+  }
+})
+
+// Add to favorites
+app.post('/api/user/favorites', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { pdfId } = await c.req.json()
+    
+    if (!pdfId) {
+      return c.json({ error: 'PDF ID is required' }, 400)
+    }
+    
+    // Add to favorites (UNIQUE constraint will prevent duplicates)
+    try {
+      await c.env.DB.prepare(
+        'INSERT INTO user_favorites (user_id, pdf_id) VALUES (?, ?)'
+      ).bind(userId, pdfId).run()
+      
+      return c.json({ success: true })
+    } catch (error: any) {
+      if (error.message.includes('UNIQUE')) {
+        return c.json({ success: true, message: 'Already in favorites' })
+      }
+      throw error
+    }
+  } catch (error: any) {
+    console.error('Add favorite error:', error)
+    return c.json({ error: 'Failed to add favorite' }, 500)
+  }
+})
+
+// Remove from favorites
+app.delete('/api/user/favorites/:pdfId', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const pdfId = c.req.param('pdfId')
+    
+    await c.env.DB.prepare(
+      'DELETE FROM user_favorites WHERE user_id = ? AND pdf_id = ?'
+    ).bind(userId, pdfId).run()
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('Remove favorite error:', error)
+    return c.json({ error: 'Failed to remove favorite' }, 500)
+  }
+})
+
+// Bulk sync favorites (for migrating from localStorage)
+app.post('/api/user/favorites/bulk', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { pdfIds } = await c.req.json()
+    
+    if (!Array.isArray(pdfIds) || pdfIds.length === 0) {
+      return c.json({ error: 'PDF IDs array is required' }, 400)
+    }
+    
+    let syncedCount = 0
+    
+    for (const pdfId of pdfIds) {
+      try {
+        await c.env.DB.prepare(
+          'INSERT OR IGNORE INTO user_favorites (user_id, pdf_id) VALUES (?, ?)'
+        ).bind(userId, pdfId).run()
+        syncedCount++
+      } catch (error) {
+        // Skip if already exists
+        console.warn('Failed to sync favorite:', pdfId, error)
+      }
+    }
+    
+    return c.json({ success: true, syncedCount })
+  } catch (error: any) {
+    console.error('Bulk sync favorites error:', error)
+    return c.json({ error: 'Failed to bulk sync favorites' }, 500)
+  }
+})
+
+// ============================================
+// API Routes - Notification Settings (protected)
+// ============================================
+
+// Get user's notification settings
+app.get('/api/user/notifications', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    
+    const { results } = await c.env.DB.prepare(`
+      SELECT 
+        uns.id,
+        uns.category_id,
+        uns.notification_enabled,
+        uns.frequency,
+        c.name as category_name
+      FROM user_notification_settings uns
+      LEFT JOIN categories c ON uns.category_id = c.id
+      WHERE uns.user_id = ?
+      ORDER BY c.sort_order ASC, c.name ASC
+    `).bind(userId).all()
+    
+    return c.json(results)
+  } catch (error: any) {
+    console.error('Get notifications error:', error)
+    return c.json({ error: 'Failed to get notification settings' }, 500)
+  }
+})
+
+// Update notification setting for a category
+app.post('/api/user/notifications', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { categoryId, notificationEnabled, frequency } = await c.req.json()
+    
+    if (categoryId === undefined) {
+      return c.json({ error: 'Category ID is required' }, 400)
+    }
+    
+    // Upsert notification setting
+    await c.env.DB.prepare(`
+      INSERT INTO user_notification_settings (user_id, category_id, notification_enabled, frequency)
+      VALUES (?, ?, ?, ?)
+      ON CONFLICT(user_id, category_id) DO UPDATE SET
+        notification_enabled = excluded.notification_enabled,
+        frequency = excluded.frequency,
+        updated_at = CURRENT_TIMESTAMP
+    `).bind(
+      userId, 
+      categoryId, 
+      notificationEnabled !== false, 
+      frequency || 'immediate'
+    ).run()
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('Update notification error:', error)
+    return c.json({ error: 'Failed to update notification setting' }, 500)
+  }
+})
+
+// Bulk update notification settings
+app.post('/api/user/notifications/bulk', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { settings } = await c.req.json()
+    
+    if (!Array.isArray(settings)) {
+      return c.json({ error: 'Settings array is required' }, 400)
+    }
+    
+    for (const setting of settings) {
+      await c.env.DB.prepare(`
+        INSERT INTO user_notification_settings (user_id, category_id, notification_enabled, frequency)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(user_id, category_id) DO UPDATE SET
+          notification_enabled = excluded.notification_enabled,
+          frequency = excluded.frequency,
+          updated_at = CURRENT_TIMESTAMP
+      `).bind(
+        userId,
+        setting.categoryId,
+        setting.notificationEnabled !== false,
+        setting.frequency || 'immediate'
+      ).run()
+    }
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('Bulk update notifications error:', error)
+    return c.json({ error: 'Failed to bulk update notification settings' }, 500)
+  }
+})
 
 // ============================================
 // API Routes - Analytics (protected)
@@ -590,6 +1179,48 @@ app.post('/api/pdfs', requireAuth, async (c) => {
     }
   }
   
+  // Send notification emails to subscribed users
+  try {
+    const { results: subscribers } = await c.env.DB.prepare(`
+      SELECT DISTINCT u.id, u.email, u.name, uns.frequency
+      FROM users u
+      JOIN user_notification_settings uns ON u.id = uns.user_id
+      JOIN categories c ON uns.category_id = c.id
+      WHERE uns.category_id = ? 
+        AND uns.notification_enabled = 1
+        AND uns.frequency = 'immediate'
+    `).bind(category_id).all()
+    
+    // Get category name for email
+    const category = await c.env.DB.prepare(
+      'SELECT name FROM categories WHERE id = ?'
+    ).bind(category_id).first()
+    
+    const categoryName = category?.name || 'Unknown'
+    
+    // Send notification email to each subscriber
+    for (const subscriber of subscribers) {
+      await sendNewPDFNotification(
+        subscriber.email,
+        subscriber.name,
+        {
+          title,
+          url: google_drive_url,
+          categoryName
+        }
+      )
+      
+      // Log email notification
+      await c.env.DB.prepare(`
+        INSERT INTO email_notifications (user_id, pdf_id, notification_type, status)
+        VALUES (?, ?, 'new_pdf', 'sent')
+      `).bind(subscriber.id, pdf_id).run()
+    }
+  } catch (emailError: any) {
+    console.error('Failed to send notification emails:', emailError)
+    // Don't fail the PDF creation if email sending fails
+  }
+  
   return c.json({ 
     id: pdf_id, 
     title, 
@@ -830,15 +1461,28 @@ app.get('/', (c) => {
               </h1>
               <p class="text-white text-sm mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
             </a>
-            {/* Mobile Menu Button */}
-            <button 
-              onclick="toggleMobileMenu()"
-              class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              aria-label="メニューを開く"
-              aria-expanded="false"
-            >
-              <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
-            </button>
+            <div class="flex items-center gap-4">
+              {/* Auth Button */}
+              <div id="auth-button">
+                <button 
+                  class="hidden md:flex items-center gap-2 bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold"
+                  onclick="showLoginModal()"
+                  aria-label="ログイン"
+                >
+                  <i class="fas fa-sign-in-alt"></i>
+                  <span>ログイン</span>
+                </button>
+              </div>
+              {/* Mobile Menu Button */}
+              <button 
+                onclick="toggleMobileMenu()"
+                class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+                aria-label="メニューを開く"
+                aria-expanded="false"
+              >
+                <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -1039,6 +1683,201 @@ app.get('/', (c) => {
           </div>
         </div>
       </footer>
+
+      {/* Authentication Modal */}
+      <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          <div class="p-6">
+            {/* Modal Header */}
+            <div class="flex items-center justify-between mb-6">
+              <h2 id="auth-modal-title" class="text-2xl font-bold text-gray-800">ログイン</h2>
+              <button 
+                onclick="closeAuthModal()"
+                class="text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label="閉じる"
+              >
+                <i class="fas fa-times text-2xl"></i>
+              </button>
+            </div>
+
+            {/* Password Login Form */}
+            <form id="password-login-form" onsubmit="handlePasswordLogin(event)">
+              <div class="space-y-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                  <input 
+                    type="email" 
+                    id="login-email"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">パスワード</label>
+                  <input 
+                    type="password" 
+                    id="login-password"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Error Message */}
+              <div id="login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+              {/* Submit Button */}
+              <button 
+                type="submit"
+                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+              >
+                <i class="fas fa-sign-in-alt mr-2"></i>ログイン
+              </button>
+
+              {/* Magic Link Option */}
+              <button 
+                type="button"
+                onclick="switchToMagicLink()"
+                class="w-full text-primary hover:underline text-sm mb-4"
+              >
+                パスワードを使わずにログイン（マジックリンク）
+              </button>
+            </form>
+
+            {/* Magic Link Form */}
+            <form id="magic-link-form" class="hidden" onsubmit="handleMagicLinkRequest(event)">
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                <input 
+                  type="email" 
+                  id="magic-link-email"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                  placeholder="your@email.com"
+                  required
+                />
+                <p class="text-xs text-gray-500 mt-2">ログインリンクをメールでお送りします</p>
+              </div>
+
+              {/* Error Message */}
+              <div id="magic-link-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+              {/* Success Message */}
+              <div id="magic-link-success" class="hidden mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm"></div>
+
+              {/* Submit Button */}
+              <button 
+                type="submit"
+                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+              >
+                <i class="fas fa-envelope mr-2"></i>ログインリンクを送信
+              </button>
+
+              {/* Back to Password Login */}
+              <button 
+                type="button"
+                onclick="switchToPasswordLogin()"
+                class="w-full text-primary hover:underline text-sm mb-4"
+              >
+                パスワードでログイン
+              </button>
+            </form>
+
+            {/* Register Form */}
+            <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+              <div class="space-y-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">お名前</label>
+                  <input 
+                    type="text" 
+                    id="register-name"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="山田太郎"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                  <input 
+                    type="email" 
+                    id="register-email"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">パスワード（8文字以上）</label>
+                  <input 
+                    type="password" 
+                    id="register-password"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="••••••••"
+                    minlength="8"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">パスワード（確認）</label>
+                  <input 
+                    type="password" 
+                    id="register-password-confirm"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="••••••••"
+                    minlength="8"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Error Message */}
+              <div id="register-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+              {/* Submit Button */}
+              <button 
+                type="submit"
+                class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+              >
+                <i class="fas fa-user-plus mr-2"></i>会員登録
+              </button>
+            </form>
+
+            {/* Switch Mode */}
+            <div id="switch-auth-mode" class="text-center text-sm text-gray-600">
+              アカウントをお持ちでない方は <button type="button" onclick="switchToRegister()" class="text-primary hover:underline">こちら</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* User Menu Dropdown */}
+      <div id="user-menu" class="hidden">
+        <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+          <button 
+            onclick="showMyPage()"
+            class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-2"
+          >
+            <i class="fas fa-user"></i>
+            マイページ
+          </button>
+          <button 
+            onclick="showNotificationSettings()"
+            class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-2"
+          >
+            <i class="fas fa-bell"></i>
+            通知設定
+          </button>
+          <hr class="my-2 border-gray-200" />
+          <button 
+            onclick="handleLogout()"
+            class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
+          >
+            <i class="fas fa-sign-out-alt"></i>
+            ログアウト
+          </button>
+        </div>
+      </div>
     </div>,
     {
       title: meta.title,
@@ -1048,6 +1887,16 @@ app.get('/', (c) => {
       categoryId: categoryId
     }
   )
+})
+
+// My Page - Simple placeholder (TODO: implement full features)
+app.get('/mypage', (c) => {
+  return c.text('My Page - Coming Soon')
+})
+
+// Notification Settings - Simple placeholder (TODO: implement full features)
+app.get('/notifications', (c) => {
+  return c.text('Notification Settings - Coming Soon')
 })
 
 // Sitemap.xml endpoint
