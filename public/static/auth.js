@@ -116,7 +116,13 @@ function updateAuthUI() {
     userAccountSection.innerHTML = `
       <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
         <div class="flex items-center gap-2 mb-3">
-          <i class="fas fa-user-circle text-2xl text-blue-600"></i>
+          ${state.user.profilePhotoUrl ? `
+            <img src="${escapeHtml(state.user.profilePhotoUrl)}" 
+              alt="Profile" 
+              class="w-10 h-10 rounded-full object-cover border-2 border-blue-400">
+          ` : `
+            <i class="fas fa-user-circle text-2xl text-blue-600"></i>
+          `}
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold text-gray-800 truncate">${escapeHtml(state.user.name)}</p>
             <p class="text-xs text-gray-600 truncate">${escapeHtml(state.user.email)}</p>
@@ -127,7 +133,13 @@ function updateAuthUI() {
             onclick="showMyPage()"
             class="w-full px-3 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-sm flex items-center gap-2 border border-gray-200"
           >
-            <i class="fas fa-user"></i>
+            ${state.user.profilePhotoUrl ? `
+              <img src="${escapeHtml(state.user.profilePhotoUrl)}" 
+                alt="Profile" 
+                class="w-5 h-5 rounded-full object-cover">
+            ` : `
+              <i class="fas fa-user"></i>
+            `}
             <span>マイページ</span>
           </button>
           <button 
