@@ -1,6 +1,11 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
 
-export const renderer = jsxRenderer(({ children }) => {
+export const renderer = jsxRenderer(({ children, title, description, keywords }) => {
+  // Default meta values
+  const pageTitle = title || "Akagami Research - SNSマーケティング・生成AI資料保管庫"
+  const pageDescription = description || "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。"
+  const pageKeywords = keywords || "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長"
+  
   return (
     <html lang="ja">
       <head>
@@ -16,9 +21,9 @@ export const renderer = jsxRenderer(({ children }) => {
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         
         {/* Basic Meta Tags */}
-        <title>Akagami Research - SNSマーケティング・生成AI資料保管庫</title>
-        <meta name="description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。" />
-        <meta name="keywords" content="SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長" />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="keywords" content={pageKeywords} />
         <meta name="author" content="Akagami" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="Japanese" />
@@ -28,8 +33,8 @@ export const renderer = jsxRenderer(({ children }) => {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://akagami.net/" />
-        <meta property="og:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
-        <meta property="og:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！カテゴリ別・タグ別に簡単検索できます。" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content="https://akagami.net/og-image.webp" />
         <meta property="og:image:type" content="image/webp" />
         <meta property="og:image:width" content="1200" />
@@ -41,8 +46,8 @@ export const renderer = jsxRenderer(({ children }) => {
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://akagami.net/" />
-        <meta name="twitter:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
-        <meta name="twitter:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content="https://akagami.net/og-image.webp" />
         <meta name="twitter:image:alt" content="Akagami Research - SNS資料保管庫" />
         <meta name="twitter:creator" content="@akagami0124" />

@@ -719,8 +719,95 @@ app.post('/api/pdfs/regenerate-tags', requireAuth, async (c) => {
 // Frontend Routes
 // ============================================
 
+// Category-specific meta information
+const categoryMeta: Record<number, { title: string; description: string; keywords: string }> = {
+  1: {
+    title: "YouTube資料 - Akagami Research",
+    description: "YouTubeマーケティング・運用・戦略に関する資料を無料で公開。チャンネル運営、動画制作、収益化、SEO対策など、YouTube攻略のノウハウが満載。",
+    keywords: "YouTube,YouTubeマーケティング,動画制作,チャンネル運営,収益化,YouTube SEO"
+  },
+  2: {
+    title: "Threads資料 - Akagami Research",
+    description: "Threadsマーケティング・運用戦略に関する資料を無料で公開。Meta社の新SNS「Threads」の効果的な活用方法、フォロワー獲得術を解説。",
+    keywords: "Threads,Threadsマーケティング,Meta,SNS運用,フォロワー獲得"
+  },
+  3: {
+    title: "Podcast資料 - Akagami Research",
+    description: "ポッドキャストマーケティング・配信戦略に関する資料を無料で公開。音声メディアの活用方法、収益化、リスナー獲得のノウハウを提供。",
+    keywords: "Podcast,ポッドキャスト,音声配信,音声マーケティング,リスナー獲得"
+  },
+  4: {
+    title: "LINE公式資料 - Akagami Research",
+    description: "LINE公式アカウントのマーケティング・運用戦略に関する資料を無料で公開。友だち獲得、メッセージ配信、自動応答の活用方法を解説。",
+    keywords: "LINE公式,LINE公式アカウント,LINEマーケティング,友だち獲得,メッセージ配信"
+  },
+  5: {
+    title: "Instagram資料 - Akagami Research",
+    description: "Instagramマーケティング・運用戦略に関する資料を無料で公開。投稿戦略、リール活用、フォロワー増加、ストーリーズ運用など実践的なノウハウが満載。",
+    keywords: "Instagram,インスタグラム,Instagramマーケティング,リール,ストーリーズ,フォロワー増加"
+  },
+  6: {
+    title: "TikTok資料 - Akagami Research",
+    description: "TikTokマーケティング・運用戦略に関する資料を無料で公開。バズる動画の作り方、アルゴリズム攻略、フォロワー獲得の実践的なノウハウを提供。",
+    keywords: "TikTok,TikTokマーケティング,ショート動画,バズる方法,TikTokアルゴリズム"
+  },
+  7: {
+    title: "X (旧Twitter) 資料 - Akagami Research",
+    description: "X (旧Twitter) のマーケティング・運用戦略に関する資料を無料で公開。投稿戦略、エンゲージメント向上、フォロワー獲得の実践的なノウハウを解説。",
+    keywords: "X,Twitter,Xマーケティング,Twitterマーケティング,SNS運用,フォロワー獲得"
+  },
+  8: {
+    title: "マーケティング資料 - Akagami Research",
+    description: "デジタルマーケティング・SNSマーケティングに関する資料を無料で公開。戦略立案、分析手法、広告運用、コンテンツマーケティングの実践ノウハウを提供。",
+    keywords: "マーケティング,デジタルマーケティング,SNSマーケティング,広告運用,コンテンツマーケティング"
+  },
+  9: {
+    title: "その他資料 - Akagami Research",
+    description: "SNSマーケティング全般に関する資料を無料で公開。トレンド情報、ツール紹介、分析手法など、幅広いマーケティング情報を提供。",
+    keywords: "SNSマーケティング,マーケティングツール,トレンド,分析手法"
+  },
+  10: {
+    title: "生成AI資料 - Akagami Research",
+    description: "生成AI・ChatGPT活用に関する資料を無料で公開。AIツールの使い方、プロンプトエンジニアリング、業務効率化の実践方法を解説。",
+    keywords: "生成AI,ChatGPT,AI活用,プロンプトエンジニアリング,業務効率化,AIツール"
+  },
+  11: {
+    title: "画像&動画生成資料 - Akagami Research",
+    description: "AI画像生成・動画生成ツールの活用方法に関する資料を無料で公開。Midjourney、Stable Diffusion、動画生成AIの実践的な使い方を解説。",
+    keywords: "AI画像生成,AI動画生成,Midjourney,Stable Diffusion,生成AI"
+  },
+  19: {
+    title: "note資料 - Akagami Research",
+    description: "noteマーケティング・記事作成に関する資料を無料で公開。記事の書き方、フォロワー獲得、収益化、SEO対策など実践的なノウハウを提供。",
+    keywords: "note,noteマーケティング,記事作成,ライティング,収益化"
+  },
+  20: {
+    title: "ブログ資料 - Akagami Research",
+    description: "ブログマーケティング・SEO対策に関する資料を無料で公開。記事の書き方、アクセスアップ、収益化の実践的なノウハウを解説。",
+    keywords: "ブログ,ブログマーケティング,SEO対策,アクセスアップ,収益化"
+  },
+  22: {
+    title: "AEO対策資料 - Akagami Research",
+    description: "AEO（Answer Engine Optimization）対策に関する資料を無料で公開。AI検索エンジン最適化、ChatGPT・Perplexity対策の実践方法を解説。",
+    keywords: "AEO,Answer Engine Optimization,AI検索,ChatGPT,Perplexity,検索最適化"
+  }
+}
+
 // Home page (public view)
 app.get('/', (c) => {
+  // Get category from query parameter
+  const categoryId = c.req.query('category') ? parseInt(c.req.query('category') as string) : null
+  
+  // Get meta information based on category
+  const meta = categoryId && categoryMeta[categoryId] 
+    ? categoryMeta[categoryId]
+    : {
+        title: "Akagami Research - SNSマーケティング・生成AI資料保管庫",
+        description: "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。",
+        keywords: "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長"
+      }
+  
+  // Pass meta information to renderer
   return c.render(
     <div class="min-h-screen bg-white flex flex-col">
       {/* Header */}
@@ -942,7 +1029,12 @@ app.get('/', (c) => {
           </div>
         </div>
       </footer>
-    </div>
+    </div>,
+    {
+      title: meta.title,
+      description: meta.description,
+      keywords: meta.keywords
+    }
   )
 })
 
