@@ -103,7 +103,7 @@ function renderMyPage(downloads, favorites) {
         興味のあるSNSカテゴリを選択してください。チェックを入れたカテゴリの新着資料を毎週月曜日にメールでお知らせします。
       </p>
       
-      <div id="notification-categories" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div id="notification-categories" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
         ${renderNotificationCategories()}
       </div>
       
@@ -280,9 +280,9 @@ function renderNotificationCategories() {
           ${setting.notificationEnabled ? 'checked' : ''}
           class="peer hidden">
         <label for="notify-${category.id}" 
-          class="block p-4 bg-gray-50 rounded-lg border-2 border-gray-200 cursor-pointer transition-all hover:border-primary hover:bg-gray-100 peer-checked:bg-primary peer-checked:border-primary peer-checked:text-white text-center">
-          <i class="fas fa-check absolute top-2 right-2 text-white opacity-0 peer-checked:opacity-100 transition-opacity"></i>
-          <span class="font-medium text-sm">${escapeHtml(category.name)}</span>
+          class="block px-2 py-2.5 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-all hover:border-primary hover:bg-gray-100 peer-checked:bg-primary peer-checked:border-primary peer-checked:text-white text-center">
+          <i class="fas fa-check absolute top-1 right-1 text-white opacity-0 peer-checked:opacity-100 transition-opacity text-xs"></i>
+          <span class="font-medium text-xs">${escapeHtml(category.name)}</span>
         </label>
       </div>
     `
