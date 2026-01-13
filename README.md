@@ -196,6 +196,37 @@ SEO効果を最大化するため、以下の手順を推奨：
 3. インデックス状況を定期的に確認
 4. 検索パフォーマンスをモニタリング
 
+### 開発者向け隠しファイル（NEW!）
+
+#### humans.txt
+サイト制作者情報を記載したファイル（開発者向けイースターエッグ）：
+- **URL**: https://akagami.net/humans.txt
+- **内容**: 開発者情報、使用技術、謝辞、サイト情報
+- **対象**: 開発者、技術者、ソースコードを見る人
+
+#### security.txt（RFC 9116準拠）
+セキュリティ研究者向けの連絡先情報：
+- **URL**: https://akagami.net/.well-known/security.txt
+- **内容**: セキュリティ問題の報告先、有効期限、推奨言語
+- **対象**: セキュリティ研究者、倫理的ハッカー
+- **標準**: RFC 9116（セキュリティ情報の標準化）
+
+#### PWA manifest.json（強化版）
+Progressive Web App対応を強化：
+- **categories**: business, education, productivity
+- **screenshots**: OG画像を使用（wide/narrow対応）
+- **orientation**: any（すべての向きに対応）
+- **scope**: サイト全体をPWA範囲に
+- **効果**: ホーム画面に追加、オフライン対応、アプリライク体験
+
+#### 強化されたOGPメタタグ
+SNSシェアの最適化：
+- **og:image:secure_url**: HTTPS画像URL明示
+- **og:locale:alternate**: 英語版の代替ロケール
+- **twitter:site**: Twitterアカウント情報
+- **twitter:domain**: ドメイン情報
+- **効果**: SNSでのシェアがより魅力的に表示
+
 ## ⚡ パフォーマンス最適化
 
 ### 画像最適化
@@ -331,11 +362,11 @@ SEO効果を最大化するため、以下の手順を推奨：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://47f74f34.akagami-research.pages.dev
+- **最新デプロイ**: https://5f57047a.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
-- **404エラーページ**: https://47f74f34.akagami-research.pages.dev/test-404
+- **404エラーページ**: https://5f57047a.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
