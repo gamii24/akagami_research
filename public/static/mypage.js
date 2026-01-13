@@ -6,6 +6,120 @@ let userData = null
 let categories = []
 let notificationSettings = []
 
+// SNS Legends Quotes Database
+const snsQuotes = [
+  {
+    author: 'マーク・ザッカーバーグ',
+    role: 'Meta (Facebook) 創業者・CEO',
+    quote: 'アイデアは重要ではない。実行こそがすべてだ。',
+    icon: 'fab fa-facebook'
+  },
+  {
+    author: 'マーク・ザッカーバーグ',
+    role: 'Meta (Facebook) 創業者・CEO',
+    quote: '完璧を待つより、まず完成させることが重要だ。',
+    icon: 'fab fa-facebook'
+  },
+  {
+    author: 'イーロン・マスク',
+    role: 'X (Twitter) オーナー・テスラCEO',
+    quote: '失敗はオプションだ。失敗しないなら、十分に革新的ではない。',
+    icon: 'fab fa-x-twitter'
+  },
+  {
+    author: 'イーロン・マスク',
+    role: 'X (Twitter) オーナー・テスラCEO',
+    quote: 'ブランドは製品やサービスへの信頼の積み重ねだ。',
+    icon: 'fab fa-x-twitter'
+  },
+  {
+    author: 'ジャック・ドーシー',
+    role: 'Twitter (X) 共同創業者',
+    quote: '最も強力な人々は、情報を共有する人々だ。',
+    icon: 'fab fa-twitter'
+  },
+  {
+    author: 'ケビン・シストロム',
+    role: 'Instagram 共同創業者',
+    quote: 'シンプルさが究極の洗練である。',
+    icon: 'fab fa-instagram'
+  },
+  {
+    author: 'ケビン・シストロム',
+    role: 'Instagram 共同創業者',
+    quote: '完璧主義は、スタートアップを殺す最速の方法だ。',
+    icon: 'fab fa-instagram'
+  },
+  {
+    author: 'スーザン・ウォシッキー',
+    role: '元YouTube CEO',
+    quote: 'クリエイターがいなければ、YouTubeは何もない。',
+    icon: 'fab fa-youtube'
+  },
+  {
+    author: 'リード・ホフマン',
+    role: 'LinkedIn 共同創業者',
+    quote: '恥ずかしくない製品なら、リリースが遅すぎる。',
+    icon: 'fab fa-linkedin'
+  },
+  {
+    author: 'ブライアン・チェスキー',
+    role: 'Airbnb 共同創業者・CEO',
+    quote: 'スケールしないことをしろ。',
+    icon: 'fas fa-home'
+  },
+  {
+    author: 'ジャン・クム',
+    role: 'WhatsApp 共同創業者',
+    quote: '広告はないほうがいい。プライバシーを尊重しろ。',
+    icon: 'fab fa-whatsapp'
+  },
+  {
+    author: 'エヴァン・スピーゲル',
+    role: 'Snapchat 創業者・CEO',
+    quote: '人々は、永続的なものよりも一時的なものに正直になる。',
+    icon: 'fab fa-snapchat'
+  },
+  {
+    author: 'チャン・イーミン',
+    role: 'ByteDance (TikTok) 創業者',
+    quote: 'グローバルに考え、ローカルに実行せよ。',
+    icon: 'fab fa-tiktok'
+  },
+  {
+    author: 'スティーブ・ジョブズ',
+    role: 'Apple 共同創業者',
+    quote: '顧客が望むものを提供するな。彼らが必要とするものを提供しろ。',
+    icon: 'fab fa-apple'
+  }
+]
+
+// Get random quote
+function getRandomQuote() {
+  return snsQuotes[Math.floor(Math.random() * snsQuotes.length)]
+}
+
+// Load and display random quote
+function loadRandomQuote() {
+  const quote = getRandomQuote()
+  const quoteContent = document.getElementById('quote-content')
+  
+  if (!quoteContent) return
+  
+  quoteContent.innerHTML = `
+    <div class="mb-4">
+      <i class="${quote.icon} text-4xl text-primary mb-3"></i>
+    </div>
+    <blockquote class="text-lg font-medium text-gray-800 italic mb-4 leading-relaxed">
+      "${quote.quote}"
+    </blockquote>
+    <div class="text-sm text-gray-600">
+      <p class="font-semibold">${escapeHtml(quote.author)}</p>
+      <p class="text-xs">${escapeHtml(quote.role)}</p>
+    </div>
+  `
+}
+
 // Helper function to safely format dates
 function formatDate(dateString) {
   if (!dateString) return '日付不明'
@@ -53,6 +167,9 @@ async function loadMyPage() {
     
     // Render my page
     renderMyPage(downloads, favorites)
+    
+    // Load random quote after page render
+    loadRandomQuote()
   } catch (error) {
     console.error('Failed to load my page:', error)
     document.getElementById('mypage-content').innerHTML = `
@@ -112,12 +229,27 @@ function renderMyPage(downloads, favorites) {
       </div>
     </div>
 
+    <!-- Inspirational Quote Section -->
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl shadow-lg p-6 mb-6 border-2 border-blue-200">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-quote-left text-primary mr-3"></i>
+        今日の名言
+      </h3>
+      <div id="quote-content" class="text-center py-4">
+        <!-- Quote will be inserted here -->
+      </div>
+      <button onclick="loadRandomQuote()" 
+        class="w-full mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors text-sm">
+        <i class="fas fa-sync-alt mr-2"></i>別の名言を見る
+      </button>
+    </div>
+
     <!-- Favorites Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
         <i class="fas fa-heart text-primary mr-3"></i>
         お気に入り
-        <span class="ml-3 text-lg font-normal text-gray-600">(${favorites.length}件)</span>
+        <span class="ml-3 text-sm font-normal text-gray-600">(${favorites.length}件)</span>
       </h3>
       
       ${favorites.length > 0 ? `
@@ -125,7 +257,7 @@ function renderMyPage(downloads, favorites) {
           ${favorites.slice(0, 10).map(f => `
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
               <div class="flex-1">
-                <h4 class="font-medium text-gray-800 mb-1">${escapeHtml(f.title)}</h4>
+                <h4 class="font-normal text-sm text-gray-800 mb-1">${escapeHtml(f.title)}</h4>
                 <div class="flex items-center gap-4 text-sm text-gray-600">
                   <span><i class="fas fa-folder mr-1"></i>${escapeHtml(f.category_name || f.categoryName || 'カテゴリ不明')}</span>
                   <span><i class="fas fa-clock mr-1"></i>${formatDate(f.created_at || f.createdAt)}</span>
@@ -153,10 +285,10 @@ function renderMyPage(downloads, favorites) {
 
     <!-- Download History Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
         <i class="fas fa-download text-primary mr-3"></i>
         ダウンロード履歴
-        <span class="ml-3 text-lg font-normal text-gray-600">(${downloads.length}件)</span>
+        <span class="ml-3 text-sm font-normal text-gray-600">(${downloads.length}件)</span>
       </h3>
       
       ${downloads.length > 0 ? `
@@ -164,7 +296,7 @@ function renderMyPage(downloads, favorites) {
           ${downloads.slice(0, 10).map(d => `
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
               <div class="flex-1">
-                <h4 class="font-medium text-gray-800 mb-1">${escapeHtml(d.title)}</h4>
+                <h4 class="font-normal text-sm text-gray-800 mb-1">${escapeHtml(d.title)}</h4>
                 <div class="flex items-center gap-4 text-sm text-gray-600">
                   <span><i class="fas fa-folder mr-1"></i>${escapeHtml(d.category_name || d.categoryName || 'カテゴリ不明')}</span>
                   <span><i class="fas fa-clock mr-1"></i>${formatDate(d.downloaded_at || d.downloadedAt)}</span>
@@ -192,7 +324,7 @@ function renderMyPage(downloads, favorites) {
 
     <!-- Notification Settings Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
         <i class="fas fa-bell text-primary mr-3"></i>
         メール通知設定
       </h3>
@@ -212,7 +344,7 @@ function renderMyPage(downloads, favorites) {
 
     <!-- SNS Information Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
         <i class="fas fa-share-alt text-primary mr-3"></i>
         SNS情報
       </h3>
@@ -270,7 +402,7 @@ function renderMyPage(downloads, favorites) {
 
     <!-- Account Actions -->
     <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-200">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
         <i class="fas fa-cog text-primary mr-3"></i>
         アカウント管理
       </h3>
