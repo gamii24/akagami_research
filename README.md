@@ -24,12 +24,12 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - ✅ **ハンバーガーメニュー統合**: ログイン/プロフィールUIをサイドバーの一番上に配置（2026/01/13 更新）
 
 #### 2. マイページ（完全実装！）
-- ✅ **プロフィール表示**: ユーザー情報と統計情報を表示
+- ✅ **プロフィール表示**: ユーザー情報を表示
+- ✅ **プロフィール写真**: 写真のアップロードと表示（最大5MB、base64形式で保存）
 - ✅ **SNS情報登録**: YouTube、Instagram、TikTok、X (Twitter) のアカウント情報を登録
 - ✅ **通知設定**: カテゴリ別に新着資料のメール通知を設定
 - ✅ **ダウンロード履歴**: 過去にダウンロードしたPDFの一覧表示
 - ✅ **お気に入り一覧**: お気に入り登録したPDFの一覧表示
-- ✅ **統計情報**: ダウンロード数、お気に入り数、通知設定数、利用日数を表示
 
 #### 3. レビュー・評価システム（NEW！）
 - ✅ **5つ星評価**: PDFに1〜5つ星の評価を投稿
@@ -69,19 +69,19 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - `/api/user/send-magic-link` - マジックリンク送信
 - `/api/user/verify-magic-link` - マジックリンク検証
 - `/api/user/logout` - ログアウト
-- `/api/user/me` - ユーザー情報取得（SNS情報含む）
+- `/api/user/me` - ユーザー情報取得（SNS情報、プロフィール写真含む）
 - `/api/user/profile` - ユーザー情報更新（SNS情報含む）
+- `/api/user/profile-photo` - プロフィール写真アップロード
 - `/api/user/downloads` - ダウンロード履歴管理
 - `/api/user/favorites` - お気に入り管理
 - `/api/user/notifications` - 通知設定管理
-- `/api/user/stats` - ユーザー統計情報取得（グラフ用データ）
 - `/api/pdfs/:id/reviews` - レビューCRUD（取得・作成・更新・削除）
 - `/api/pdfs/:id/my-review` - 自分のレビュー取得
 - `/api/reviews/:id/helpful` - レビューを「役に立った」と投票
 
 #### 8. データベース設計（Cloudflare D1）
-- **users**: ユーザー情報（メール、名前、認証方法、SNS情報）
-  - 追加フィールド: `youtube_url`, `instagram_handle`, `tiktok_handle`, `twitter_handle`
+- **users**: ユーザー情報（メール、名前、認証方法、SNS情報、プロフィール写真）
+  - 追加フィールド: `youtube_url`, `instagram_handle`, `tiktok_handle`, `twitter_handle`, `profile_photo_url`
 - **pdfs**: PDF情報（タイトル、URL、カテゴリ、**評価情報**）
   - 追加フィールド: `average_rating`, `review_count`
 - **pdf_reviews**: PDFレビュー（評価、コメント）
@@ -89,7 +89,7 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - **magic_link_tokens**: マジックリンクトークン（有効期限付き）
 - **user_downloads**: ダウンロード履歴
 - **user_favorites**: お気に入りリスト
-- **user_notification_settings**: 通知設定（カテゴリ別・頻度別）
+- **user_notification_settings**: 通知設定（カテゴリ別・週次配信）
 - **email_notifications**: メール送信履歴
 
 ### マイグレーション適用
@@ -477,7 +477,7 @@ SNSシェアの最適化：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://03479260.akagami-research.pages.dev
+- **最新デプロイ**: https://41918b79.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
