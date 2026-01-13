@@ -2213,16 +2213,16 @@ app.get('/mypage', (c) => {
       <body class="bg-gray-50 min-h-screen">
         {/* Header */}
         <header class="bg-primary shadow-lg">
-          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+          <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
               <a href="/" class="hover:opacity-80 transition-opacity">
-                <h1 class="text-3xl font-bold text-white tracking-wide">
+                <h1 class="text-lg font-bold text-white tracking-wide">
                   Akagami Research
                 </h1>
-                <p class="text-white text-sm mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
+                <p class="text-white text-xs mt-0.5 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
               </a>
-              <a href="/" class="text-white hover:text-gray-200">
-                <i class="fas fa-arrow-left mr-2"></i>トップに戻る
+              <a href="/" class="text-white hover:text-gray-200 flex items-center" aria-label="トップに戻る">
+                <i class="fas fa-home text-xl"></i>
               </a>
             </div>
           </div>
