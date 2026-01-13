@@ -72,6 +72,41 @@ SEO効果を最大化するため、以下の手順を推奨：
 3. インデックス状況を定期的に確認
 4. 検索パフォーマンスをモニタリング
 
+## ⚡ パフォーマンス最適化
+
+### 画像最適化
+- **WebP形式への変換**
+  - OG画像を最適化（PNG → WebP）
+  - og-image.png: 426KB → 28KB（93%削減）
+  - og-image-square.png: 665KB → 57KB（91%削減）
+  - 合計約1MBのファイルサイズ削減
+
+### フォント最適化
+- **システムフォントスタック使用**
+  - 外部フォントのダウンロード不要
+  - ネイティブOS フォント使用（-apple-system, BlinkMacSystemFont, Segoe UI など）
+  - 高速なフォントレンダリング
+- **FontAwesome の preload 設定**
+  - アイコンフォントの遅延読み込み
+- **外部CDNへの preconnect 設定**
+  - cdn.tailwindcss.com
+  - cdn.jsdelivr.net
+  - www.googletagmanager.com
+
+### スクリプト最適化
+- **JavaScript の defer 属性**
+  - app.js（公開ページ）
+  - admin.js（管理画面）
+  - axios ライブラリ
+  - ページレンダリングをブロックしない非同期読み込み
+
+### パフォーマンス指標の改善
+- ✅ **ページ読み込み速度向上**：画像圧縮により約1MB削減
+- ✅ **First Contentful Paint (FCP) 改善**：システムフォント使用
+- ✅ **Time to Interactive (TTI) 改善**：スクリプトの defer 読み込み
+- ✅ **Cumulative Layout Shift (CLS) 最適化**：preconnect によるリソース取得の高速化
+- ✅ **Lighthouse スコア向上**：総合的なパフォーマンス最適化
+
 ## 🎨 カラーパレット
 
 - **Primary**: #e75556 - メインの赤色
@@ -81,7 +116,7 @@ SEO効果を最大化するため、以下の手順を推奨：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://91bdf3da.akagami-research.pages.dev
+- **最新デプロイ**: https://cc8ca249.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
