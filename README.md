@@ -23,42 +23,53 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - ✅ **自動ログイン**: 一度ログインすると次回から自動ログイン
 - ✅ **ハンバーガーメニュー統合**: ログイン/プロフィールUIをサイドバーに配置
 
-#### 2. UX改善
+#### 2. マイページ（完全実装！）
+- ✅ **プロフィール表示**: ユーザー情報と統計情報を表示
+- ✅ **SNS情報登録**: YouTube、Instagram、TikTok、X (Twitter) のアカウント情報を登録
+- ✅ **通知設定**: カテゴリ別に新着資料のメール通知を設定
+- ✅ **ダウンロード履歴**: 過去にダウンロードしたPDFの一覧表示
+- ✅ **お気に入り一覧**: お気に入り登録したPDFの一覧表示
+- ✅ **統計情報**: ダウンロード数、お気に入り数、通知設定数、利用日数を表示
+
+#### 3. UX改善
 - ✅ **ローディング表示**: ボタンクリック時にスピナーアニメーション表示
 - ✅ **処理中ボタン無効化**: 二重クリック防止
 - ✅ **成功時フィードバック**: チェックマークで成功を視覚的に表示
 - ✅ **遅延認証チェック**: ページロード時のAPI呼び出しを削減してパフォーマンス改善
 - ✅ **手動認証チェック**: メニューを開いた時のみ認証状態を確認
 
-#### 2. データ同期
+#### 4. データ同期
 - ✅ **ダウンロード履歴の同期**: デバイス間で履歴を共有
 - ✅ **お気に入りの同期**: お気に入りPDFをクラウド保存
 - ✅ **LocalStorageからの自動移行**: 既存のデータを自動的にサーバーへ同期
 
-#### 3. 通知設定
+#### 5. 通知設定
 - ✅ **カテゴリ別通知設定**: 興味のあるカテゴリを選択
 - ✅ **新着資料のメール通知**: PDF追加時に自動メール送信
 - ✅ **通知頻度の選択**: 即時/日次/週次から選択可能
+- ✅ **通知設定UI**: マイページから簡単に設定変更
 
-#### 4. メール送信機能
+#### 6. メール送信機能
 - ✅ **ウェルカムメール**: 会員登録時に自動送信
 - ✅ **マジックリンクメール**: パスワードレスログイン用
 - ✅ **新着通知メール**: カテゴリ別の新着資料通知
 - ✅ **Cloudflare Email Workers 対応**: 無料メール送信
 
-#### 5. API エンドポイント
+#### 7. API エンドポイント
 - `/api/user/register` - 会員登録
 - `/api/user/login` - ログイン
 - `/api/user/send-magic-link` - マジックリンク送信
 - `/api/user/verify-magic-link` - マジックリンク検証
 - `/api/user/logout` - ログアウト
-- `/api/user/me` - ユーザー情報取得
+- `/api/user/me` - ユーザー情報取得（SNS情報含む）
+- `/api/user/profile` - ユーザー情報更新（SNS情報含む）
 - `/api/user/downloads` - ダウンロード履歴管理
 - `/api/user/favorites` - お気に入り管理
 - `/api/user/notifications` - 通知設定管理
 
-#### 6. データベース設計（Cloudflare D1）
-- **users**: ユーザー情報（メール、名前、認証方法）
+#### 8. データベース設計（Cloudflare D1）
+- **users**: ユーザー情報（メール、名前、認証方法、SNS情報）
+  - 追加フィールド: `youtube_url`, `instagram_handle`, `tiktok_handle`, `twitter_handle`
 - **magic_link_tokens**: マジックリンクトークン（有効期限付き）
 - **user_downloads**: ダウンロード履歴
 - **user_favorites**: お気に入りリスト
@@ -81,10 +92,23 @@ npx wrangler d1 migrations apply akagami-research-production --remote
 - ✅ **マジックリンク有効期限**: 15分間のみ有効
 - ✅ **CSRF対策**: SameSite=Laxクッキー設定
 
+### マイページの使い方
+
+1. **SNS情報を登録する**
+   - YouTube チャンネルURL、Instagram、TikTok、X (Twitter) アカウントを入力
+   - 「SNS情報を保存」ボタンをクリック
+   
+2. **メール通知を設定する**
+   - 興味のあるSNSカテゴリのチェックボックスをオンにする
+   - 通知頻度を選択（即時/日次/週次）
+   - 「通知設定を保存」ボタンをクリック
+   
+3. **履歴とお気に入りを確認する**
+   - ダウンロード履歴とお気に入りが自動的に表示されます
+   - 各PDFの「開く」ボタンでGoogleドライブで開けます
+
 ### 今後の実装予定
-- 📝 マイページUI（現在はプレースホルダー）
-- 📝 通知設定ページUI（現在はプレースホルダー）
-- 📧 Cloudflare Email Workersのセットアップ完了
+- 📧 Cloudflare Email Workersのセットアップ完了（ユーザー側の設定が必要）
 
 ## 📊 Google Analytics 統合
 
@@ -437,12 +461,13 @@ SNSシェアの最適化：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://6cfefcb7.akagami-research.pages.dev
+- **最新デプロイ**: https://48f25a5c.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
 - **404エラーページ**: https://5f57047a.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
+- **マイページ**: `/mypage` - SNS情報登録・通知設定・履歴表示（**ログイン必須**）
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
   - **セッション**: JWTトークンでログイン状態を30日間保持
