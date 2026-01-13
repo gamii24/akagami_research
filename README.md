@@ -102,6 +102,34 @@ SNSシェア時にダークモード用の画像を自動選択：
 
 ## 🔍 SEO対策
 
+### カテゴリ別メタタグの個別化（NEW!）
+各カテゴリページごとに最適化されたメタタグを自動生成：
+- **動的なtitle**: カテゴリ名に応じたページタイトル
+- **カスタムdescription**: 各カテゴリ専用の説明文
+- **最適化されたkeywords**: カテゴリに関連するキーワード
+- **OGP対応**: SNSシェア時もカテゴリ別の情報を表示
+
+**対応カテゴリ（14種類）**:
+1. YouTube - YouTubeマーケティング・運用・戦略
+2. Threads - Threadsマーケティング・運用戦略
+3. Podcast - ポッドキャストマーケティング・配信戦略
+4. LINE公式 - LINE公式アカウント運用
+5. Instagram - Instagramマーケティング・リール・ストーリーズ
+6. TikTok - TikTokマーケティング・バズる動画作成
+7. X (旧Twitter) - X/Twitterマーケティング
+8. マーケティング - デジタル/SNSマーケティング全般
+9. その他 - SNSマーケティング全般
+10. 生成AI - ChatGPT・AI活用
+11. 画像&動画生成 - AI画像/動画生成ツール
+12. note - noteマーケティング・記事作成
+13. ブログ - ブログマーケティング・SEO
+14. AEO対策 - AI検索エンジン最適化
+
+**使用例**:
+- ホームページ: `https://akagami.net/` → 全体的な説明
+- Instagramカテゴリ: `https://akagami.net/?category=5` → Instagram専用の説明
+- TikTokカテゴリ: `https://akagami.net/?category=6` → TikTok専用の説明
+
 ### robots.txt
 検索エンジンのクローリングを適切に制御：
 - **全ページ許可**: 公開ページは全て検索対象
@@ -269,11 +297,11 @@ SEO効果を最大化するため、以下の手順を推奨：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://eb25a68e.akagami-research.pages.dev
+- **最新デプロイ**: https://9bac8985.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
-- **404エラーページ**: https://eb25a68e.akagami-research.pages.dev/test-404
+- **404エラーページ**: https://9bac8985.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
