@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { secureHeaders } from 'hono/secure-headers'
 import { renderer } from './renderer'
 import { 
   generateToken, 
@@ -16,6 +17,62 @@ type Bindings = {
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
+
+// ============================================
+// Security Headers Middleware
+// ============================================
+app.use('*', secureHeaders({
+  contentSecurityPolicy: {
+    defaultSrc: ["'self'"],
+    scriptSrc: [
+      "'self'",
+      "'unsafe-inline'", // Required for Tailwind CDN and inline scripts
+      "https://cdn.tailwindcss.com",
+      "https://cdn.jsdelivr.net",
+      "https://www.googletagmanager.com",
+      "https://www.google-analytics.com"
+    ],
+    styleSrc: [
+      "'self'",
+      "'unsafe-inline'", // Required for Tailwind and inline styles
+      "https://cdn.tailwindcss.com",
+      "https://cdn.jsdelivr.net"
+    ],
+    imgSrc: [
+      "'self'",
+      "data:",
+      "https:",
+      "http:" // For external images if needed
+    ],
+    fontSrc: [
+      "'self'",
+      "https://cdn.jsdelivr.net",
+      "data:"
+    ],
+    connectSrc: [
+      "'self'",
+      "https://www.google-analytics.com",
+      "https://www.googletagmanager.com"
+    ],
+    frameSrc: ["'none'"],
+    objectSrc: ["'none'"],
+    baseUri: ["'self'"],
+    formAction: ["'self'"],
+    frameAncestors: ["'none'"], // Same as X-Frame-Options: DENY
+    upgradeInsecureRequests: []
+  },
+  xFrameOptions: 'DENY',
+  xContentTypeOptions: 'nosniff',
+  referrerPolicy: 'strict-origin-when-cross-origin',
+  strictTransportSecurity: 'max-age=31536000; includeSubDomains; preload',
+  xXssProtection: '1; mode=block',
+  permissionsPolicy: {
+    camera: [],
+    microphone: [],
+    geolocation: [],
+    payment: []
+  }
+}))
 
 app.use(renderer)
 
