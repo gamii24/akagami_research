@@ -31,3 +31,17 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# Unnecessary documentation files (should not be deployed)
+GITHUB_PUSH_GUIDE.md
+HOW_TO_READ_DOCS.md
+INTERNAL_DOCUMENTATION.md
+PUSH_COMMANDS.sh
+QUICK_REFERENCE.md
+SEO_CHECKLIST.md
+STRUCTURED_DATA_TEST.md
+public/INTERNAL_DOCUMENTATION.md
+public/QUICK_REFERENCE.md
+public/README.md
+public/SEO_CHECKLIST.md
+public/STRUCTURED_DATA_TEST.md
