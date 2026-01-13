@@ -31,6 +31,7 @@ type Bindings = {
   DB: D1Database;
   JWT_SECRET: string;
   ADMIN_PASSWORD: string;
+  RESEND_API_KEY?: string;
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -191,7 +192,7 @@ app.post('/api/user/register', async (c) => {
       subject: 'Akagami Research へようこそ！',
       html: getWelcomeEmailHtml(name),
       text: `こんにちは、${name}さん。Akagami Research の会員登録が完了しました！`
-    })
+    }, c.env)
     
     // Send admin notification
     const registrationDate = new Date().toLocaleString('ja-JP', { 
@@ -208,7 +209,7 @@ app.post('/api/user/register', async (c) => {
       subject: `[Akagami Research] 新規会員登録: ${name}`,
       html: getAdminNewUserNotificationHtml(name, email, userId, registrationDate),
       text: `新規会員が登録されました。\n\n会員番号: ${userId}\n名前: ${name}\nメールアドレス: ${email}\n登録日時: ${registrationDate}`
-    })
+    }, c.env)
     
     // Generate session token
     const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
@@ -314,7 +315,7 @@ app.post('/api/user/send-magic-link', async (c) => {
       subject: 'Akagami Research ログインリンク',
       html: getMagicLinkEmailHtml(user.name as string, magicLink),
       text: `こんにちは、${user.name}さん。ログインリンク: ${magicLink} （15分間有効）`
-    })
+    }, c.env)
     
     return c.json({ success: true, message: 'Magic link has been sent to your email.' })
   } catch (error: any) {
@@ -1568,15 +1569,17 @@ app.post('/api/pdfs', requireAuth, async (c) => {
     
     // Send notification email to each subscriber
     for (const subscriber of subscribers) {
-      await sendNewPDFNotification(
-        subscriber.email,
-        subscriber.name,
-        {
+      await sendEmail({
+        to: subscriber.email,
+        subject: `[Akagami Research] ${categoryName}カテゴリに新しい資料が追加されました`,
+        html: getNewPdfNotificationEmailHtml(
+          subscriber.name,
           title,
-          url: google_drive_url,
-          categoryName
-        }
-      )
+          categoryName,
+          google_drive_url
+        ),
+        text: `こんにちは、${subscriber.name}さん。\n\n${categoryName}カテゴリに新しい資料「${title}」が追加されました。\n\n今すぐチェック: ${google_drive_url}`
+      }, c.env)
       
       // Log email notification
       await c.env.DB.prepare(`

@@ -1,4 +1,4 @@
-// Email helper functions for Cloudflare Email Workers
+// Email helper functions using Resend API
 
 export interface EmailOptions {
   to: string
@@ -7,25 +7,59 @@ export interface EmailOptions {
   text?: string
 }
 
-// Send email using fetch to a mail service
-// For Cloudflare Email Workers, you'll need to set up email routing
-export async function sendEmail(options: EmailOptions): Promise<boolean> {
+export interface EmailEnvironment {
+  RESEND_API_KEY?: string
+}
+
+// Send email using Resend API
+// Resend is a modern email API service with a generous free tier
+export async function sendEmail(options: EmailOptions, env?: EmailEnvironment): Promise<boolean> {
   try {
-    // For now, we'll use a simple email template
-    // In production, you should configure Cloudflare Email Routing or use a service like Resend
+    const apiKey = env?.RESEND_API_KEY
     
-    // Log email for development
-    console.log('📧 Email would be sent:', {
-      to: options.to,
-      subject: options.subject,
-      preview: options.text?.substring(0, 100) || options.html.substring(0, 100)
+    // If no API key is configured, log to console (development mode)
+    if (!apiKey) {
+      console.log('⚠️  RESEND_API_KEY not configured. Email not sent.')
+      console.log('📧 Email would be sent:', {
+        to: options.to,
+        subject: options.subject,
+        preview: options.text?.substring(0, 100) || options.html.substring(0, 100)
+      })
+      return true // Return true to not break the flow
+    }
+    
+    // Send email via Resend API
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: 'Akagami Research <noreply@akagami.net>',
+        to: options.to,
+        subject: options.subject,
+        html: options.html,
+        text: options.text
+      })
     })
     
-    // TODO: Implement actual email sending with Cloudflare Email Workers
-    // For now, return true to indicate success
+    if (!response.ok) {
+      const errorData = await response.text()
+      console.error('❌ Resend API error:', response.status, errorData)
+      return false
+    }
+    
+    const result = await response.json()
+    console.log('✅ Email sent successfully via Resend:', {
+      id: result.id,
+      to: options.to,
+      subject: options.subject
+    })
+    
     return true
   } catch (error) {
-    console.error('Failed to send email:', error)
+    console.error('❌ Failed to send email:', error)
     return false
   }
 }
