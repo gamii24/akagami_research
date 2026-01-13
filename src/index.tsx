@@ -1685,7 +1685,7 @@ app.get('/', (c) => {
       </footer>
 
       {/* Authentication Modal */}
-      <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+      <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
           <div class="p-6">
             {/* Modal Header */}

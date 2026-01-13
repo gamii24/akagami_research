@@ -173,9 +173,8 @@ function showLoginModal() {
   const authForm = document.getElementById('auth-form')
   const switchModeBtn = document.getElementById('switch-auth-mode')
   
-  if (modal && modalTitle && authForm && switchModeBtn) {
+  if (modal && modalTitle && switchModeBtn) {
     modalTitle.textContent = 'ログイン'
-    authForm.dataset.mode = 'login'
     switchModeBtn.innerHTML = 'アカウントをお持ちでない方は <button type="button" onclick="switchToRegister()" class="text-red-600 hover:underline">こちら</button>'
     
     // Show password login by default
@@ -184,6 +183,7 @@ function showLoginModal() {
     document.getElementById('register-form').classList.add('hidden')
     
     modal.classList.remove('hidden')
+    modal.classList.add('flex')
   }
 }
 
@@ -194,9 +194,8 @@ function showRegisterModal() {
   const authForm = document.getElementById('auth-form')
   const switchModeBtn = document.getElementById('switch-auth-mode')
   
-  if (modal && modalTitle && authForm && switchModeBtn) {
+  if (modal && modalTitle && switchModeBtn) {
     modalTitle.textContent = '会員登録'
-    authForm.dataset.mode = 'register'
     switchModeBtn.innerHTML = 'すでにアカウントをお持ちの方は <button type="button" onclick="switchToLogin()" class="text-red-600 hover:underline">こちら</button>'
     
     // Show register form
@@ -205,6 +204,7 @@ function showRegisterModal() {
     document.getElementById('register-form').classList.remove('hidden')
     
     modal.classList.remove('hidden')
+    modal.classList.add('flex')
   }
 }
 
@@ -237,6 +237,7 @@ function closeAuthModal() {
   const modal = document.getElementById('auth-modal')
   if (modal) {
     modal.classList.add('hidden')
+    modal.classList.remove('flex')
     
     // Clear forms
     document.getElementById('login-email').value = ''
