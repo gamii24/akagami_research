@@ -507,6 +507,24 @@ function escapeHtml(text) {
 
 // Check for magic link token on page load
 document.addEventListener('DOMContentLoaded', async () => {
+  // Wait for state to be defined (from app.js)
+  const waitForState = () => {
+    return new Promise((resolve) => {
+      if (typeof state !== 'undefined') {
+        resolve()
+      } else {
+        const interval = setInterval(() => {
+          if (typeof state !== 'undefined') {
+            clearInterval(interval)
+            resolve()
+          }
+        }, 50)
+      }
+    })
+  }
+  
+  await waitForState()
+  
   const urlParams = new URLSearchParams(window.location.search)
   const token = urlParams.get('token')
   
