@@ -845,6 +845,178 @@ app.get('/api/user/stats', requireUserAuth, async (c) => {
 })
 
 // ============================================
+// API Routes - Reviews (protected)
+// ============================================
+
+// Get reviews for a PDF
+app.get('/api/pdfs/:id/reviews', async (c) => {
+  try {
+    const pdfId = parseInt(c.req.param('id'))
+    
+    const { results: reviews } = await c.env.DB.prepare(`
+      SELECT 
+        r.id,
+        r.rating,
+        r.comment,
+        r.created_at,
+        r.updated_at,
+        u.name as user_name,
+        u.id as user_id,
+        (SELECT COUNT(*) FROM review_helpful WHERE review_id = r.id) as helpful_count
+      FROM pdf_reviews r
+      JOIN users u ON r.user_id = u.id
+      WHERE r.pdf_id = ?
+      ORDER BY r.created_at DESC
+    `).bind(pdfId).all()
+    
+    return c.json(reviews)
+  } catch (error: any) {
+    console.error('Get reviews error:', error)
+    return c.json({ error: 'Failed to get reviews' }, 500)
+  }
+})
+
+// Create or update a review
+app.post('/api/pdfs/:id/reviews', requireUserAuth, async (c) => {
+  try {
+    const pdfId = parseInt(c.req.param('id'))
+    const userId = c.get('userId')
+    const { rating, comment } = await c.req.json()
+    
+    // Validate rating
+    if (!rating || rating < 1 || rating > 5) {
+      return c.json({ error: 'Rating must be between 1 and 5' }, 400)
+    }
+    
+    // Check if review already exists
+    const existing = await c.env.DB.prepare(`
+      SELECT id FROM pdf_reviews WHERE pdf_id = ? AND user_id = ?
+    `).bind(pdfId, userId).first()
+    
+    if (existing) {
+      // Update existing review
+      await c.env.DB.prepare(`
+        UPDATE pdf_reviews 
+        SET rating = ?, comment = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE pdf_id = ? AND user_id = ?
+      `).bind(rating, comment || null, pdfId, userId).run()
+    } else {
+      // Create new review
+      await c.env.DB.prepare(`
+        INSERT INTO pdf_reviews (pdf_id, user_id, rating, comment)
+        VALUES (?, ?, ?, ?)
+      `).bind(pdfId, userId, rating, comment || null).run()
+    }
+    
+    // Update PDF average rating and review count
+    await updatePdfRating(c.env.DB, pdfId)
+    
+    return c.json({ success: true, message: existing ? 'Review updated' : 'Review created' })
+  } catch (error: any) {
+    console.error('Create/update review error:', error)
+    return c.json({ error: 'Failed to save review' }, 500)
+  }
+})
+
+// Delete a review
+app.delete('/api/pdfs/:id/reviews', requireUserAuth, async (c) => {
+  try {
+    const pdfId = parseInt(c.req.param('id'))
+    const userId = c.get('userId')
+    
+    const result = await c.env.DB.prepare(`
+      DELETE FROM pdf_reviews WHERE pdf_id = ? AND user_id = ?
+    `).bind(pdfId, userId).run()
+    
+    if (result.meta.changes === 0) {
+      return c.json({ error: 'Review not found' }, 404)
+    }
+    
+    // Update PDF average rating and review count
+    await updatePdfRating(c.env.DB, pdfId)
+    
+    return c.json({ success: true, message: 'Review deleted' })
+  } catch (error: any) {
+    console.error('Delete review error:', error)
+    return c.json({ error: 'Failed to delete review' }, 500)
+  }
+})
+
+// Mark review as helpful
+app.post('/api/reviews/:id/helpful', requireUserAuth, async (c) => {
+  try {
+    const reviewId = parseInt(c.req.param('id'))
+    const userId = c.get('userId')
+    
+    // Check if already marked as helpful
+    const existing = await c.env.DB.prepare(`
+      SELECT 1 FROM review_helpful WHERE review_id = ? AND user_id = ?
+    `).bind(reviewId, userId).first()
+    
+    if (existing) {
+      // Remove helpful vote
+      await c.env.DB.prepare(`
+        DELETE FROM review_helpful WHERE review_id = ? AND user_id = ?
+      `).bind(reviewId, userId).run()
+      return c.json({ success: true, action: 'removed' })
+    } else {
+      // Add helpful vote
+      await c.env.DB.prepare(`
+        INSERT INTO review_helpful (review_id, user_id) VALUES (?, ?)
+      `).bind(reviewId, userId).run()
+      return c.json({ success: true, action: 'added' })
+    }
+  } catch (error: any) {
+    console.error('Mark helpful error:', error)
+    return c.json({ error: 'Failed to mark as helpful' }, 500)
+  }
+})
+
+// Get user's review for a PDF
+app.get('/api/pdfs/:id/my-review', requireUserAuth, async (c) => {
+  try {
+    const pdfId = parseInt(c.req.param('id'))
+    const userId = c.get('userId')
+    
+    const review = await c.env.DB.prepare(`
+      SELECT id, rating, comment, created_at, updated_at
+      FROM pdf_reviews
+      WHERE pdf_id = ? AND user_id = ?
+    `).bind(pdfId, userId).first()
+    
+    if (!review) {
+      return c.json({ hasReview: false })
+    }
+    
+    return c.json({ hasReview: true, review })
+  } catch (error: any) {
+    console.error('Get my review error:', error)
+    return c.json({ error: 'Failed to get review' }, 500)
+  }
+})
+
+// Helper function to update PDF rating
+async function updatePdfRating(db: any, pdfId: number) {
+  const stats = await db.prepare(`
+    SELECT 
+      AVG(rating) as avg_rating,
+      COUNT(*) as review_count
+    FROM pdf_reviews
+    WHERE pdf_id = ?
+  `).bind(pdfId).first()
+  
+  await db.prepare(`
+    UPDATE pdfs 
+    SET average_rating = ?, review_count = ?
+    WHERE id = ?
+  `).bind(
+    stats.avg_rating || 0,
+    stats.review_count || 0,
+    pdfId
+  ).run()
+}
+
+// ============================================
 // API Routes - Analytics (protected)
 // ============================================
 

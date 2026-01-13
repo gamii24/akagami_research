@@ -1248,6 +1248,16 @@ function renderPDFList() {
           ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300 flex-shrink-0">NEW</span>' : ''}
         </div>
         
+        ${pdf.average_rating > 0 ? `
+          <div class="flex items-center gap-2 mb-2">
+            <div class="flex items-center">
+              ${renderStars(pdf.average_rating)}
+            </div>
+            <span class="text-xs text-gray-600">${pdf.average_rating.toFixed(1)}</span>
+            <span class="text-xs text-gray-500">(${pdf.review_count}件)</span>
+          </div>
+        ` : ''}
+        
         <div class="flex items-center justify-between text-xs text-gray-500 mt-3">
           <div class="flex items-center gap-2 flex-wrap">
             <span>${formatDate(pdf.created_at)}</span>
@@ -1255,6 +1265,15 @@ function renderPDFList() {
             ${downloaded ? '<span class="text-primary font-semibold"><i class="fas fa-check-circle mr-1"></i>ダウンロード済み</span>' : ''}
           </div>
           <div class="flex items-center gap-2">
+            <button 
+              onclick="openReviewModal(event, ${pdf.id})"
+              class="text-gray-500 hover:text-yellow-500 transition-colors"
+              title="レビューを投稿"
+              style="flex-shrink: 0;"
+              aria-label="レビューを投稿"
+            >
+              <i class="fas fa-star" aria-hidden="true"></i>
+            </button>
             <button 
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
               class="share-btn-small"
@@ -1936,5 +1955,236 @@ function updateDarkModeButtons() {
       sidebarIcon.className = 'fas fa-moon'
       sidebarText.textContent = 'ダークモード'
     }
+  }
+}
+
+// ============================================
+// Review Functions
+// ============================================
+
+// Render stars for rating display
+function renderStars(rating) {
+  const fullStars = Math.floor(rating)
+  const hasHalfStar = rating % 1 >= 0.5
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0)
+  
+  let html = ''
+  
+  // Full stars
+  for (let i = 0; i < fullStars; i++) {
+    html += '<i class="fas fa-star text-yellow-400" style="font-size: 0.75rem;"></i>'
+  }
+  
+  // Half star
+  if (hasHalfStar) {
+    html += '<i class="fas fa-star-half-alt text-yellow-400" style="font-size: 0.75rem;"></i>'
+  }
+  
+  // Empty stars
+  for (let i = 0; i < emptyStars; i++) {
+    html += '<i class="far fa-star text-yellow-400" style="font-size: 0.75rem;"></i>'
+  }
+  
+  return html
+}
+
+// Open review modal
+async function openReviewModal(event, pdfId) {
+  event.stopPropagation()
+  
+  // Check if user is logged in
+  if (!state.isAuthenticated) {
+    alert('レビューを投稿するにはログインが必要です')
+    return
+  }
+  
+  // Get PDF details
+  const pdf = state.allPdfs.find(p => p.id === pdfId)
+  if (!pdf) return
+  
+  // Get existing review if any
+  let existingReview = null
+  try {
+    const res = await fetch(\`/api/pdfs/\${pdfId}/my-review\`, { credentials: 'include' })
+    const data = await res.json()
+    if (data.hasReview) {
+      existingReview = data.review
+    }
+  } catch (error) {
+    console.error('Failed to load existing review:', error)
+  }
+  
+  // Create modal
+  const modal = document.createElement('div')
+  modal.id = 'review-modal'
+  modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'
+  modal.innerHTML = \`
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-2xl font-bold text-gray-800">レビューを投稿</h3>
+          <button onclick="closeReviewModal()" class="text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+        </div>
+        
+        <div class="mb-4">
+          <p class="text-sm text-gray-600 font-medium">\${escapeHtml(pdf.title)}</p>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">評価（必須）</label>
+          <div class="flex items-center gap-2">
+            \${[1, 2, 3, 4, 5].map(star => \`
+              <button 
+                onclick="setRating(\${star})" 
+                class="rating-star text-3xl \${existingReview && existingReview.rating >= star ? 'text-yellow-400' : 'text-gray-300'} hover:text-yellow-400 transition-colors"
+                data-rating="\${star}"
+              >
+                <i class="fas fa-star"></i>
+              </button>
+            \`).join('')}
+          </div>
+          <input type="hidden" id="review-rating" value="\${existingReview ? existingReview.rating : 0}">
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            コメント（任意、最大500文字）
+          </label>
+          <textarea 
+            id="review-comment" 
+            rows="4"
+            maxlength="500"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+            placeholder="この資料についてのあなたの感想や評価を共有してください..."
+          >\${existingReview ? escapeHtml(existingReview.comment || '') : ''}</textarea>
+          <p class="text-xs text-gray-500 mt-1">
+            <span id="comment-count">0</span> / 500文字
+          </p>
+        </div>
+        
+        <div class="flex gap-3">
+          <button 
+            onclick="submitReview(\${pdfId})"
+            class="flex-1 px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
+          >
+            <i class="fas fa-paper-plane mr-2"></i>
+            \${existingReview ? '更新する' : '投稿する'}
+          </button>
+          \${existingReview ? \`
+            <button 
+              onclick="deleteReview(\${pdfId})"
+              class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+            >
+              <i class="fas fa-trash mr-2"></i>削除
+            </button>
+          \` : ''}
+        </div>
+      </div>
+    </div>
+  \`
+  
+  document.body.appendChild(modal)
+  
+  // Update character count
+  const textarea = document.getElementById('review-comment')
+  const countSpan = document.getElementById('comment-count')
+  if (textarea && countSpan) {
+    countSpan.textContent = textarea.value.length
+    textarea.addEventListener('input', () => {
+      countSpan.textContent = textarea.value.length
+    })
+  }
+  
+  // Close modal on background click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeReviewModal()
+    }
+  })
+}
+
+// Close review modal
+function closeReviewModal() {
+  const modal = document.getElementById('review-modal')
+  if (modal) {
+    modal.remove()
+  }
+}
+
+// Set rating
+function setRating(rating) {
+  document.getElementById('review-rating').value = rating
+  
+  // Update star colors
+  document.querySelectorAll('.rating-star').forEach((star, index) => {
+    if (index < rating) {
+      star.classList.remove('text-gray-300')
+      star.classList.add('text-yellow-400')
+    } else {
+      star.classList.remove('text-yellow-400')
+      star.classList.add('text-gray-300')
+    }
+  })
+}
+
+// Submit review
+async function submitReview(pdfId) {
+  const rating = parseInt(document.getElementById('review-rating').value)
+  const comment = document.getElementById('review-comment').value.trim()
+  
+  if (!rating || rating < 1 || rating > 5) {
+    alert('評価を選択してください（1〜5つ星）')
+    return
+  }
+  
+  try {
+    const res = await fetch(\`/api/pdfs/\${pdfId}/reviews\`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ rating, comment })
+    })
+    
+    if (!res.ok) {
+      throw new Error('Failed to submit review')
+    }
+    
+    alert('レビューを投稿しました！')
+    closeReviewModal()
+    
+    // Reload PDFs to show updated rating
+    await loadAllPdfs()
+  } catch (error) {
+    console.error('Failed to submit review:', error)
+    alert('レビューの投稿に失敗しました')
+  }
+}
+
+// Delete review
+async function deleteReview(pdfId) {
+  if (!confirm('レビューを削除しますか？')) {
+    return
+  }
+  
+  try {
+    const res = await fetch(\`/api/pdfs/\${pdfId}/reviews\`, {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+    
+    if (!res.ok) {
+      throw new Error('Failed to delete review')
+    }
+    
+    alert('レビューを削除しました')
+    closeReviewModal()
+    
+    // Reload PDFs to show updated rating
+    await loadAllPdfs()
+  } catch (error) {
+    console.error('Failed to delete review:', error)
+    alert('レビューの削除に失敗しました')
   }
 }
