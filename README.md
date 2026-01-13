@@ -30,6 +30,11 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - ✅ **ダウンロード履歴**: 過去にダウンロードしたPDFの一覧表示
 - ✅ **お気に入り一覧**: お気に入り登録したPDFの一覧表示
 - ✅ **統計情報**: ダウンロード数、お気に入り数、通知設定数、利用日数を表示
+- ✅ **アクティビティ分析グラフ（NEW！）**: Chart.jsを使った4つのインタラクティブグラフ
+  - 📊 **月別ダウンロード数**: 過去6ヶ月の推移を折れ線グラフで表示
+  - 🍩 **カテゴリ別分布**: ダウンロード数をドーナツチャートで可視化
+  - 📈 **最近30日間の活動**: 日別ダウンロード数を棒グラフで表示
+  - 🕐 **曜日別アクティビティ**: 週間パターンをレーダーチャートで分析
 
 #### 3. UX改善
 - ✅ **ローディング表示**: ボタンクリック時にスピナーアニメーション表示
@@ -66,6 +71,7 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - `/api/user/downloads` - ダウンロード履歴管理
 - `/api/user/favorites` - お気に入り管理
 - `/api/user/notifications` - 通知設定管理
+- `/api/user/stats` - ユーザー統計情報取得（グラフ用データ）
 
 #### 8. データベース設計（Cloudflare D1）
 - **users**: ユーザー情報（メール、名前、認証方法、SNS情報）
@@ -461,13 +467,13 @@ SNSシェアの最適化：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://58c9f49e.akagami-research.pages.dev
+- **最新デプロイ**: https://92a9aff6.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
 - **404エラーページ**: https://5f57047a.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
-- **マイページ**: `/mypage` - SNS情報登録・通知設定・履歴表示（**ログイン必須**）
+- **マイページ**: `/mypage` - SNS情報登録・通知設定・履歴表示・アクティビティグラフ（**ログイン必須**）
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
   - **セッション**: JWTトークンでログイン状態を30日間保持
