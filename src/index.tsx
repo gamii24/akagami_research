@@ -1833,6 +1833,11 @@ app.get('/', (c) => {
                 <i class="fas fa-times text-2xl" aria-hidden="true"></i>
               </button>
               
+              {/* User Account Section - Move to top */}
+              <div id="user-account-section" class="mb-6">
+                {/* This will be populated by auth.js */}
+              </div>
+
               {/* Search - Desktop Only */}
               <div class="mb-8 hidden lg:block">
                 <h2 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
@@ -1874,11 +1879,6 @@ app.get('/', (c) => {
                   <i class="fas fa-history" aria-hidden="true"></i>
                   <span>ダウンロード履歴</span>
                 </button>
-              </div>
-
-              {/* User Account Section */}
-              <div id="user-account-section" class="mt-4">
-                {/* This will be populated by auth.js */}
               </div>
 
               {/* Dark Mode Toggle */}

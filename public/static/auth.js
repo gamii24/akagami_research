@@ -114,7 +114,7 @@ function updateAuthUI() {
   if (state.isAuthenticated && state.user) {
     // Show user info and menu
     userAccountSection.innerHTML = `
-      <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+      <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
         <div class="flex items-center gap-2 mb-3">
           <i class="fas fa-user-circle text-2xl text-blue-600"></i>
           <div class="flex-1 min-w-0">
@@ -152,7 +152,7 @@ function updateAuthUI() {
     userAccountSection.innerHTML = `
       <button 
         onclick="showLoginModal()"
-        class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-semibold shadow-sm flex items-center justify-center gap-2"
+        class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-semibold shadow-sm flex items-center justify-center gap-2 mb-4"
         aria-label="ログイン"
       >
         <i class="fas fa-sign-in-alt"></i>
