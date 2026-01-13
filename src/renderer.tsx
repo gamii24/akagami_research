@@ -12,6 +12,10 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta name="description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。" />
         <meta name="keywords" content="SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長" />
         <meta name="author" content="Akagami" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="Japanese" />
+        <meta name="revisit-after" content="7 days" />
+        <link rel="canonical" href="https://akagami.net/" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -55,6 +59,36 @@ export const renderer = jsxRenderer(({ children }) => {
             gtag('js', new Date());
             gtag('config', 'G-JPMZ82RMGG');
           `
+        }} />
+        
+        {/* Structured Data (JSON-LD) for SEO */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Akagami Research",
+            "description": "SNSマーケティング・生成AI資料保管庫",
+            "url": "https://akagami.net/",
+            "author": {
+              "@type": "Person",
+              "name": "Akagami",
+              "url": "https://www.instagram.com/akagami_sns/"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Akagami Research",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://akagami.net/favicon-512.png"
+              }
+            },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://akagami.net/?search={search_term_string}",
+              "query-input": "required name=search_term_string"
+            },
+            "inLanguage": "ja-JP"
+          })
         }} />
         
         <script src="https://cdn.tailwindcss.com"></script>

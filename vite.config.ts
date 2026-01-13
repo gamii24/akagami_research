@@ -32,7 +32,8 @@ export default defineConfig(({ mode }) => ({
             '/apple-touch-icon.png',
             '/manifest.json',
             '/og-image.png',
-            '/og-image-square.png'
+            '/og-image-square.png',
+            '/robots.txt'
           ]
         }
         writeFileSync(routesPath, JSON.stringify(routes, null, 2))

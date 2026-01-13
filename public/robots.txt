@@ -1,0 +1,17 @@
+# robots.txt for Akagami Research
+# https://akagami.net/
+
+User-agent: *
+Allow: /
+
+# Block admin pages from search engines
+Disallow: /admin
+
+# Allow search engines to crawl all static assets
+Allow: /static/
+
+# Sitemap location
+Sitemap: https://akagami.net/sitemap.xml
+
+# Crawl-delay for polite crawling (optional)
+Crawl-delay: 1

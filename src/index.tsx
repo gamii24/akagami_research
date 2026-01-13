@@ -875,6 +875,65 @@ app.get('/', (c) => {
   )
 })
 
+// Sitemap.xml endpoint
+app.get('/sitemap.xml', async (c) => {
+  try {
+    const baseUrl = 'https://akagami.net'
+    
+    // Get all categories
+    const { results: categories } = await c.env.DB.prepare(
+      'SELECT id, name FROM categories ORDER BY sort_order ASC'
+    ).all()
+    
+    // Get all PDFs
+    const { results: pdfs } = await c.env.DB.prepare(
+      'SELECT id, title, created_at FROM pdfs ORDER BY created_at DESC'
+    ).all()
+    
+    // Generate sitemap XML
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    // Homepage
+    xml += '  <url>\n'
+    xml += `    <loc>${baseUrl}/</loc>\n`
+    xml += '    <changefreq>daily</changefreq>\n'
+    xml += '    <priority>1.0</priority>\n'
+    xml += '  </url>\n'
+    
+    // Category pages
+    for (const category of categories as any[]) {
+      xml += '  <url>\n'
+      xml += `    <loc>${baseUrl}/?category=${category.id}</loc>\n`
+      xml += `    <changefreq>weekly</changefreq>\n`
+      xml += `    <priority>0.8</priority>\n`
+      xml += '  </url>\n'
+    }
+    
+    // PDF pages (as query parameters, since PDFs open in Google Drive)
+    // We'll include them in sitemap for search engines to know about the content
+    for (const pdf of pdfs as any[]) {
+      const lastmod = pdf.created_at ? new Date(pdf.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+      xml += '  <url>\n'
+      xml += `    <loc>${baseUrl}/?pdf=${pdf.id}</loc>\n`
+      xml += `    <lastmod>${lastmod}</lastmod>\n`
+      xml += `    <changefreq>monthly</changefreq>\n`
+      xml += `    <priority>0.6</priority>\n`
+      xml += '  </url>\n'
+    }
+    
+    xml += '</urlset>'
+    
+    return c.body(xml, 200, {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+    })
+  } catch (error: any) {
+    console.error('Failed to generate sitemap:', error)
+    return c.text('Failed to generate sitemap', 500)
+  }
+})
+
 // Admin page
 app.get('/admin', (c) => {
   return c.html(
