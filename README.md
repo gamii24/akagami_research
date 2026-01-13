@@ -73,6 +73,33 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - WCAG 2.1 ガイドラインに準拠
 - より広い範囲のユーザーがサイトを利用可能
 
+## 🌙 ダークモード対応
+
+### ダークモード機能
+- ✅ **ライト/ダークモード切り替え**: ボタンでワンクリック切り替え
+- ✅ **LocalStorage 永続化**: ユーザーの設定を保存
+- ✅ **prefers-color-scheme 対応**: OSのダークモード設定を自動検知
+- ✅ **カラースキーム最適化**: ダークモード専用のカラーパレット
+
+### OGP画像のダークモード対応
+SNSシェア時にダークモード用の画像を自動選択：
+- **ライトモード**: og-image.webp（明るい背景）
+- **ダークモード**: og-image-dark.webp（暗い背景）
+- **正方形版**: og-image-square.webp / og-image-square-dark.webp
+- **自動切り替え**: `prefers-color-scheme` メディアクエリで対応
+
+### theme-color メタタグ
+- **ライトモード**: `#e75556`（プライマリカラー）
+- **ダークモード**: `#1a1a1a`（ダーク背景色）
+- **効果**: モバイルブラウザのアドレスバーの色が自動変更
+
+### ダークモードのコントラスト改善
+- 背景色: `#1a1a1a` → `#2d2d2d`（カード）
+- テキスト色: `#e0e0e0`（高コントラスト）
+- ボーダー色: `#404040`（視認性向上）
+- ボタン hover: `#353535`（微妙な変化）
+- スクロールバー: ダーク対応
+
 ## 🔍 SEO対策
 
 ### robots.txt
@@ -242,11 +269,11 @@ SEO効果を最大化するため、以下の手順を推奨：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://d2f5deac.akagami-research.pages.dev
+- **最新デプロイ**: https://eb25a68e.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
-- **404エラーページ**: https://d2f5deac.akagami-research.pages.dev/test-404
+- **404エラーページ**: https://eb25a68e.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
