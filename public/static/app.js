@@ -706,9 +706,11 @@ function renderCategoryFilter() {
         <button 
           onclick="filterByCategory(null)" 
           class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg flex items-center justify-between"
+          aria-label="すべてのカテゴリを表示"
+          role="button"
         >
           <span>
-            <i class="fas fa-th-large mr-2"></i>すべて
+            <i class="fas fa-th-large mr-2" aria-hidden="true"></i>すべて
           </span>
           ${totalCount > 0 ? `<span class="badge bg-primary text-white px-2 py-1 rounded-full text-xs font-bold">${totalCount}</span>` : ''}
         </button>
@@ -718,9 +720,12 @@ function renderCategoryFilter() {
             <button 
               onclick="filterByCategory(${cat.id})" 
               class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg flex items-center justify-between"
+              aria-label="${escapeHtml(cat.name)}カテゴリでフィルター ${count > 0 ? count + '件' : ''}"
+              aria-pressed="${state.selectedCategory === cat.id}"
+              role="button"
             >
               <span>
-                <i class="fas fa-folder mr-2"></i>${escapeHtml(cat.name)}
+                <i class="fas fa-folder mr-2" aria-hidden="true"></i>${escapeHtml(cat.name)}
               </span>
               ${count > 0 ? `<span class="badge bg-gray-500 text-white px-2 py-1 rounded-full text-xs font-bold">${count}</span>` : ''}
             </button>
@@ -739,8 +744,11 @@ function renderCategoryFilter() {
           <button 
             onclick="toggleTag(${tag.id})" 
             class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-2 rounded-full text-sm font-medium"
+            aria-label="${escapeHtml(tag.name)}タグでフィルター"
+            aria-pressed="${state.selectedTags.includes(tag.id)}"
+            role="button"
           >
-            <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
+            <i class="fas fa-tag mr-1" aria-hidden="true"></i>${escapeHtml(tag.name)}
           </button>
         `).join('')}
       </div>
@@ -1002,8 +1010,9 @@ function renderPDFList() {
             <button 
               onclick="clearAllFilters()" 
               class="text-xs text-gray-500 hover:text-primary transition-colors flex items-center gap-1"
+              aria-label="すべてのフィルタをクリア"
             >
-              <i class="fas fa-times-circle"></i>
+              <i class="fas fa-times-circle" aria-hidden="true"></i>
               <span class="hidden sm:inline">フィルタをクリア</span>
             </button>
           ` : ''}
@@ -1015,25 +1024,33 @@ function renderPDFList() {
         <button 
           onclick="changeSortBy('newest')" 
           class="sort-btn ${state.sortBy === 'newest' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+          aria-label="新着順でソート"
+          aria-pressed="${state.sortBy === 'newest'}"
         >
-          <i class="fas fa-clock mr-1"></i>新着順
+          <i class="fas fa-clock mr-1" aria-hidden="true"></i>新着順
         </button>
         <button 
           onclick="changeSortBy('oldest')" 
           class="sort-btn ${state.sortBy === 'oldest' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+          aria-label="古い順でソート"
+          aria-pressed="${state.sortBy === 'oldest'}"
         >
-          <i class="fas fa-history mr-1"></i>古い順
+          <i class="fas fa-history mr-1" aria-hidden="true"></i>古い順
         </button>
         <button 
           onclick="changeSortBy('popular')" 
           class="sort-btn ${state.sortBy === 'popular' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0"
+          aria-label="人気順でソート"
+          aria-pressed="${state.sortBy === 'popular'}"
         >
-          <i class="fas fa-fire mr-1"></i>人気順
+          <i class="fas fa-fire mr-1" aria-hidden="true"></i>人気順
         </button>
         <button 
           onclick="toggleFavoriteFilter()" 
           class="favorite-filter-btn ${state.showOnlyFavorites ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap flex-shrink-0"
           title="${state.showOnlyFavorites ? `お気に入りのみ表示中 (${state.favoritePdfs.size})` : 'お気に入りのみ表示'}"
+          aria-label="${state.showOnlyFavorites ? `お気に入りフィルタを解除 (${state.favoritePdfs.size}件)` : 'お気に入りのみ表示'}"
+          aria-pressed="${state.showOnlyFavorites}"
         >
           <i class="fas fa-heart"></i>
           <span class="hidden sm:inline">お気に入り</span>
@@ -1048,6 +1065,8 @@ function renderPDFList() {
           onclick="changeViewMode('grid')" 
           class="view-mode-btn ${state.viewMode === 'grid' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 hidden lg:flex"
           title="グリッド表示"
+          aria-label="グリッド表示に切り替え"
+          aria-pressed="${state.viewMode === 'grid'}"
         >
           <i class="fas fa-th"></i>
         </button>
@@ -1055,6 +1074,8 @@ function renderPDFList() {
           onclick="changeViewMode('list')" 
           class="view-mode-btn ${state.viewMode === 'list' ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 hidden lg:flex"
           title="リスト表示"
+          aria-label="リスト表示に切り替え"
+          aria-pressed="${state.viewMode === 'list'}"
         >
           <i class="fas fa-list"></i>
         </button>
@@ -1147,15 +1168,18 @@ function renderPDFList() {
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
               class="share-btn-small"
               title="シェア"
+              aria-label="${escapeHtml(pdf.title)}をシェア"
             >
-              <i class="fas fa-paper-plane"></i>
+              <i class="fas fa-paper-plane" aria-hidden="true"></i>
             </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
+              aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
+              aria-pressed="${favorite}"
             >
-              <i class="fas fa-heart"></i>
+              <i class="fas fa-heart" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -1198,16 +1222,19 @@ function renderPDFList() {
               class="share-btn-small"
               title="シェア"
               style="flex-shrink: 0;"
+              aria-label="${escapeHtml(pdf.title)}をシェア"
             >
-              <i class="fas fa-paper-plane"></i>
+              <i class="fas fa-paper-plane" aria-hidden="true"></i>
             </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               style="flex-shrink: 0;"
+              aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
+              aria-pressed="${favorite}"
             >
-              <i class="fas fa-heart"></i>
+              <i class="fas fa-heart" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -1223,6 +1250,7 @@ function renderPDFList() {
         <button 
           onclick="showAllMobileCards()"
           class="px-8 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg"
+          aria-label="もっと見る 残り${state.pdfs.length - 15}件"
         >
           <i class="fas fa-chevron-down mr-2"></i>
           もっと見る（残り${state.pdfs.length - 15}件）
@@ -1239,6 +1267,7 @@ function renderPDFList() {
         <button 
           onclick="toggleDownloadHistory()"
           class="w-full px-4 py-4 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl transition-colors font-bold shadow-lg border-2 border-pink-200 flex items-center justify-center gap-3"
+          aria-label="ダウンロード履歴を表示"
         >
           <i class="fas fa-history text-xl"></i>
           <span>ダウンロード履歴</span>
@@ -1261,6 +1290,8 @@ function renderPDFList() {
               <button 
                 onclick="toggleTag(${tag.id})" 
                 class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-2 rounded-full text-sm font-medium"
+                aria-label="${escapeHtml(tag.name)}タグでフィルター"
+                aria-pressed="${state.selectedTags.includes(tag.id)}"
               >
                 ${escapeHtml(tag.name)}
               </button>

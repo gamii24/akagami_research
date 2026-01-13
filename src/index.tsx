@@ -727,7 +727,7 @@ app.get('/', (c) => {
       <header class="bg-primary shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
+            <a href="/" class="hover:opacity-80 transition-opacity" aria-label="Akagami Research ホームページ">
               <h1 class="text-3xl font-bold text-white tracking-wide">
                 Akagami Research
               </h1>
@@ -737,8 +737,10 @@ app.get('/', (c) => {
             <button 
               onclick="toggleMobileMenu()"
               class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+              aria-label="メニューを開く"
+              aria-expanded="false"
             >
-              <i class="fas fa-bars text-2xl"></i>
+              <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -749,6 +751,8 @@ app.get('/', (c) => {
         id="sidebar-overlay" 
         class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"
         onclick="toggleMobileMenu()"
+        aria-label="メニューを閉じる"
+        role="button"
       ></div>
 
       {/* Mobile Search Bar - Show only on mobile */}
@@ -760,12 +764,15 @@ app.get('/', (c) => {
               id="mobile-search-input"
               placeholder="キーワードで検索..."
               class="w-full pl-4 pr-12 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm"
+              aria-label="キーワード検索"
+              role="searchbox"
             />
             <button 
               id="mobile-search-btn"
               class="absolute right-1 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-primary text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center shadow-md"
+              aria-label="検索を実行"
             >
-              <i class="fas fa-search"></i>
+              <i class="fas fa-search" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -794,8 +801,9 @@ app.get('/', (c) => {
               <button 
                 onclick="toggleMobileMenu()"
                 class="lg:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                aria-label="メニューを閉じる"
               >
-                <i class="fas fa-times text-2xl"></i>
+                <i class="fas fa-times text-2xl" aria-hidden="true"></i>
               </button>
               
               {/* Search - Desktop Only */}
@@ -809,12 +817,15 @@ app.get('/', (c) => {
                     id="search-input"
                     placeholder="キーワードで検索..."
                     class="w-full pl-4 pr-12 py-3 border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary shadow-sm"
+                    aria-label="キーワード検索"
+                    role="searchbox"
                   />
                   <button 
                     id="search-btn"
                     class="absolute right-1 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-primary text-white rounded-full hover:bg-red-600 transition-colors flex items-center justify-center shadow-md"
+                    aria-label="検索を実行"
                   >
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-search" aria-hidden="true"></i>
                   </button>
                 </div>
               </div>
@@ -831,8 +842,9 @@ app.get('/', (c) => {
                   onclick="toggleDownloadHistory()"
                   class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-semibold shadow-sm border-2 border-pink-200 flex items-center justify-center gap-2"
                   id="download-history-btn"
+                  aria-label="ダウンロード履歴を表示"
                 >
-                  <i class="fas fa-history"></i>
+                  <i class="fas fa-history" aria-hidden="true"></i>
                   <span>ダウンロード履歴</span>
                 </button>
               </div>
@@ -843,6 +855,8 @@ app.get('/', (c) => {
                   onclick="toggleDarkMode()"
                   class="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium shadow-sm border-2 border-gray-300 flex items-center justify-center gap-2"
                   id="dark-mode-toggle-sidebar"
+                  aria-label="ダークモード切り替え"
+                  aria-pressed="false"
                 >
                   <i class="fas fa-moon" id="dark-mode-icon-sidebar"></i>
                   <span id="dark-mode-text-sidebar">ダークモード</span>
@@ -1123,15 +1137,17 @@ app.notFound((c) => {
             <a 
               href="/"
               class="px-8 py-4 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-lg hover:shadow-2xl font-semibold text-lg flex items-center gap-2"
+              aria-label="ホームページへ戻る"
             >
-              <i class="fas fa-home"></i>
+              <i class="fas fa-home" aria-hidden="true"></i>
               <span>ホームに戻る</span>
             </a>
             <button 
               onclick="history.back()"
               class="px-8 py-4 bg-white text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-300 shadow-md hover:shadow-lg font-semibold text-lg border-2 border-gray-300 flex items-center gap-2"
+              aria-label="前のページへ戻る"
             >
-              <i class="fas fa-arrow-left"></i>
+              <i class="fas fa-arrow-left" aria-hidden="true"></i>
               <span>前のページへ</span>
             </button>
           </div>
@@ -1146,29 +1162,33 @@ app.notFound((c) => {
               <a 
                 href="/?category=1"
                 class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+                aria-label="YouTube資料カテゴリへ"
               >
-                <i class="fab fa-youtube"></i>
+                <i class="fab fa-youtube" aria-hidden="true"></i>
                 <span>YouTube資料</span>
               </a>
               <a 
                 href="/?category=5"
                 class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+                aria-label="Instagram資料カテゴリへ"
               >
-                <i class="fab fa-instagram"></i>
+                <i class="fab fa-instagram" aria-hidden="true"></i>
                 <span>Instagram資料</span>
               </a>
               <a 
                 href="/?category=6"
                 class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+                aria-label="TikTok資料カテゴリへ"
               >
-                <i class="fab fa-tiktok"></i>
+                <i class="fab fa-tiktok" aria-hidden="true"></i>
                 <span>TikTok資料</span>
               </a>
               <a 
                 href="/?category=9"
                 class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+                aria-label="生成AI資料カテゴリへ"
               >
-                <i class="fas fa-robot"></i>
+                <i class="fas fa-robot" aria-hidden="true"></i>
                 <span>生成AI資料</span>
               </a>
             </div>

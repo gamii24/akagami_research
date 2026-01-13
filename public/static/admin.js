@@ -144,11 +144,11 @@ function renderAdminPage() {
               <p class="text-xs mt-0.5" style="color: #d1d5db;">管理画面</p>
             </div>
             <div class="flex gap-2">
-              <a href="/" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #e75556; color: white;">
-                <i class="fas fa-home mr-1"></i>公開ページへ
+              <a href="/" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #e75556; color: white;" aria-label="公開ページへ移動">
+                <i class="fas fa-home mr-1" aria-hidden="true"></i>公開ページへ
               </a>
-              <button onclick="logout()" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #dc2626; color: white;">
-                <i class="fas fa-sign-out-alt mr-1"></i>ログアウト
+              <button onclick="logout()" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #dc2626; color: white;" aria-label="ログアウト">
+                <i class="fas fa-sign-out-alt mr-1" aria-hidden="true"></i>ログアウト
               </button>
             </div>
           </div>
@@ -158,23 +158,23 @@ function renderAdminPage() {
       <main class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <!-- Action Buttons -->
         <div class="mb-4 flex flex-wrap gap-2">
-          <button onclick="showAddPdfModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;">
-            <i class="fas fa-plus mr-1"></i>PDF追加
+          <button onclick="showAddPdfModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;" aria-label="PDFを追加">
+            <i class="fas fa-plus mr-1" aria-hidden="true"></i>PDF追加
           </button>
-          <button onclick="showBulkUploadModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #16a34a; color: white;">
-            <i class="fas fa-upload mr-1"></i>テキスト一括アップロード
+          <button onclick="showBulkUploadModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #16a34a; color: white;" aria-label="テキスト一括アップロード">
+            <i class="fas fa-upload mr-1" aria-hidden="true"></i>テキスト一括アップロード
           </button>
-          <button onclick="showAnalyticsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #3b82f6; color: white;">
-            <i class="fas fa-chart-line mr-1"></i>アクセス解析
+          <button onclick="showAnalyticsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #3b82f6; color: white;" aria-label="アクセス解析">
+            <i class="fas fa-chart-line mr-1" aria-hidden="true"></i>アクセス解析
           </button>
-          <button onclick="showManageCategoriesModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;">
-            <i class="fas fa-layer-group mr-1"></i>カテゴリ管理
+          <button onclick="showManageCategoriesModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;" aria-label="カテゴリ管理">
+            <i class="fas fa-layer-group mr-1" aria-hidden="true"></i>カテゴリ管理
           </button>
-          <button onclick="showManageTagsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #6b7280; color: white;">
-            <i class="fas fa-tags mr-1"></i>タグ管理
+          <button onclick="showManageTagsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #6b7280; color: white;" aria-label="タグ管理">
+            <i class="fas fa-tags mr-1" aria-hidden="true"></i>タグ管理
           </button>
-          <button onclick="showExcludedTagsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #4b5563; color: white;">
-            <i class="fas fa-ban mr-1"></i>除外タグ管理
+          <button onclick="showExcludedTagsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #4b5563; color: white;" aria-label="除外タグ管理">
+            <i class="fas fa-ban mr-1" aria-hidden="true"></i>除外タグ管理
           </button>
         </div>
 
@@ -228,11 +228,11 @@ function renderAdminPdfList() {
           </div>
         </div>
         <div class="flex gap-1.5 ml-4">
-          <button onclick="editPdf(${pdf.id})" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #e75556; color: white;">
-            <i class="fas fa-edit"></i>
+          <button onclick="editPdf(${pdf.id})" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #e75556; color: white;" aria-label="${escapeHtml(pdf.title)}を編集">
+            <i class="fas fa-edit" aria-hidden="true"></i>
           </button>
-          <button onclick="deletePdf(${pdf.id})" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #dc2626; color: white;">
-            <i class="fas fa-trash"></i>
+          <button onclick="deletePdf(${pdf.id})" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 shadow-md font-medium" style="background-color: #dc2626; color: white;" aria-label="${escapeHtml(pdf.title)}を削除">
+            <i class="fas fa-trash" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -249,8 +249,8 @@ function showBulkUploadModal() {
           <h2 class="text-xl font-bold text-white">
             <i class="fas fa-upload mr-2"></i>一括アップロード（コピペ対応）
           </h2>
-          <button onclick="closeModal()" class="text-white hover:text-gray-200">
-            <i class="fas fa-times text-2xl"></i>
+          <button onclick="closeModal()" class="text-white hover:text-gray-200" aria-label="モーダルを閉じる">
+            <i class="fas fa-times text-2xl" aria-hidden="true"></i>
           </button>
         </div>
         
@@ -513,8 +513,8 @@ function showPdfModal() {
           <h2 class="text-xl font-bold text-gray-800">
             <i class="fas fa-file-pdf mr-2"></i>${isEdit ? 'PDF編集' : 'PDF追加'}
           </h2>
-          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-times text-2xl"></i>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="モーダルを閉じる">
+            <i class="fas fa-times text-2xl" aria-hidden="true"></i>
           </button>
         </div>
         
@@ -657,8 +657,8 @@ function showManageCategoriesModal() {
           <h2 class="text-xl font-bold text-gray-800">
             <i class="fas fa-folder mr-2"></i>カテゴリ管理
           </h2>
-          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-times text-2xl"></i>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="モーダルを閉じる">
+            <i class="fas fa-times text-2xl" aria-hidden="true"></i>
           </button>
         </div>
         
@@ -755,8 +755,8 @@ function editCategory(id) {
           <h2 class="text-xl font-bold text-gray-800">
             <i class="fas fa-edit mr-2"></i>カテゴリ編集
           </h2>
-          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-times text-2xl"></i>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="モーダルを閉じる">
+            <i class="fas fa-times text-2xl" aria-hidden="true"></i>
           </button>
         </div>
         
@@ -931,8 +931,8 @@ function showManageTagsModal() {
           <h2 class="text-xl font-bold text-gray-800">
             <i class="fas fa-tags mr-2"></i>タグ管理
           </h2>
-          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-times text-2xl"></i>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="モーダルを閉じる">
+            <i class="fas fa-times text-2xl" aria-hidden="true"></i>
           </button>
         </div>
         
@@ -1008,8 +1008,8 @@ function showExcludedTagsModal() {
           <h2 class="text-xl font-bold text-gray-800">
             <i class="fas fa-ban mr-2"></i>除外タグ管理
           </h2>
-          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-times text-2xl"></i>
+          <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="モーダルを閉じる">
+            <i class="fas fa-times text-2xl" aria-hidden="true"></i>
           </button>
         </div>
         
