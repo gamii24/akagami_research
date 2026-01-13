@@ -6,6 +6,18 @@ let userData = null
 let categories = []
 let notificationSettings = []
 
+// Helper function to safely format dates
+function formatDate(dateString) {
+  if (!dateString) return '日付不明'
+  try {
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return '日付不明'
+    return date.toLocaleDateString('ja-JP')
+  } catch (error) {
+    return '日付不明'
+  }
+}
+
 // Load my page data
 async function loadMyPage() {
   try {
@@ -34,6 +46,10 @@ async function loadMyPage() {
     
     const favoritesRes = await fetch('/api/user/favorites', { credentials: 'include' })
     const favorites = await favoritesRes.json()
+    
+    // Debug: Log data structure
+    console.log('Downloads sample:', downloads[0])
+    console.log('Favorites sample:', favorites[0])
     
     // Render my page
     renderMyPage(downloads, favorites)
@@ -87,7 +103,7 @@ function renderMyPage(downloads, favorites) {
           <h3 class="text-xl font-bold text-gray-800 truncate">${escapeHtml(userData.name)} さん</h3>
           <p class="text-sm text-gray-600 truncate"><i class="fas fa-envelope mr-1"></i>${escapeHtml(userData.email)}</p>
           <p class="text-xs text-gray-500 mt-1">
-            <i class="fas fa-calendar mr-1"></i>${new Date(userData.createdAt).toLocaleDateString('ja-JP')} 登録
+            <i class="fas fa-calendar mr-1"></i>${formatDate(userData.createdAt)} 登録
             <span class="ml-3">
               <i class="fas fa-id-card mr-1"></i>会員番号: ${userData.id}
             </span>
@@ -111,8 +127,8 @@ function renderMyPage(downloads, favorites) {
               <div class="flex-1">
                 <h4 class="font-medium text-gray-800 mb-1">${escapeHtml(f.title)}</h4>
                 <div class="flex items-center gap-4 text-sm text-gray-600">
-                  <span><i class="fas fa-folder mr-1"></i>${escapeHtml(f.categoryName)}</span>
-                  <span><i class="fas fa-clock mr-1"></i>${new Date(f.createdAt).toLocaleDateString('ja-JP')}</span>
+                  <span><i class="fas fa-folder mr-1"></i>${escapeHtml(f.category_name || f.categoryName || 'カテゴリ不明')}</span>
+                  <span><i class="fas fa-clock mr-1"></i>${formatDate(f.created_at || f.createdAt)}</span>
                 </div>
               </div>
               <a href="${escapeHtml(f.googleDriveUrl)}" target="_blank" rel="noopener noreferrer"
@@ -150,8 +166,8 @@ function renderMyPage(downloads, favorites) {
               <div class="flex-1">
                 <h4 class="font-medium text-gray-800 mb-1">${escapeHtml(d.title)}</h4>
                 <div class="flex items-center gap-4 text-sm text-gray-600">
-                  <span><i class="fas fa-folder mr-1"></i>${escapeHtml(d.categoryName)}</span>
-                  <span><i class="fas fa-clock mr-1"></i>${new Date(d.downloadedAt).toLocaleDateString('ja-JP')}</span>
+                  <span><i class="fas fa-folder mr-1"></i>${escapeHtml(d.category_name || d.categoryName || 'カテゴリ不明')}</span>
+                  <span><i class="fas fa-clock mr-1"></i>${formatDate(d.downloaded_at || d.downloadedAt)}</span>
                 </div>
               </div>
               <a href="${escapeHtml(d.googleDriveUrl)}" target="_blank" rel="noopener noreferrer"
