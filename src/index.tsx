@@ -1782,13 +1782,13 @@ app.get('/', (c) => {
     <div class="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
             <a href="/" class="hover:opacity-80 transition-opacity" aria-label="Akagami Research ホームページ">
-              <h1 class="text-3xl font-bold text-white tracking-wide">
+              <h1 class="text-xl font-bold text-white tracking-wide">
                 Akagami Research
               </h1>
-              <p class="text-white text-sm mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
+              <p class="text-white text-xs mt-0.5 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
             </a>
             {/* Mobile Menu Button */}
             <button 
