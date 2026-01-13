@@ -59,27 +59,49 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 #### 6. メール送信機能
 - ✅ **ウェルカムメール**: 会員登録時に自動送信
+- ✅ **管理者通知メール**: 新規登録時に管理者（akagami.syatyo@gmail.com）へ自動通知
 - ✅ **マジックリンクメール**: パスワードレスログイン用
 - ✅ **新着通知メール**: カテゴリ別の新着資料通知
-- ✅ **Cloudflare Email Workers 対応**: 無料メール送信
+- ✅ **Cloudflare Email Workers 対応**: 無料メール送信（設定必要）
 
-#### 7. API エンドポイント
-- `/api/user/register` - 会員登録
+#### 7. 管理機能（NEW！）
+- ✅ **登録者一覧**: 管理画面で全会員の情報を表示
+  - 会員番号、名前、メールアドレス、登録日、最終ログイン、認証方法
+- ✅ **CSVエクスポート**: 登録者データをCSV形式でダウンロード
+- ✅ **新規登録通知**: 会員登録時に管理者へメール通知（実装済み・メールサービス設定必要）
+  - 通知先: akagami.syatyo@gmail.com
+  - 内容: 会員番号、名前、メールアドレス、登録日時
+- ✅ **アクセス解析**: Google Analytics統合、人気PDF分析
+
+#### 8. API エンドポイント
+
+**ユーザー認証**
+- `/api/user/register` - 会員登録（管理者へメール通知）
 - `/api/user/login` - ログイン
 - `/api/user/send-magic-link` - マジックリンク送信
 - `/api/user/verify-magic-link` - マジックリンク検証
 - `/api/user/logout` - ログアウト
+
+**ユーザー情報**
 - `/api/user/me` - ユーザー情報取得（SNS情報、プロフィール写真含む）
 - `/api/user/profile` - ユーザー情報更新（SNS情報含む）
 - `/api/user/profile-photo` - プロフィール写真アップロード
 - `/api/user/downloads` - ダウンロード履歴管理
 - `/api/user/favorites` - お気に入り管理
 - `/api/user/notifications` - 通知設定管理
+
+**レビュー**
 - `/api/pdfs/:id/reviews` - レビューCRUD（取得・作成・更新・削除）
 - `/api/pdfs/:id/my-review` - 自分のレビュー取得
 - `/api/reviews/:id/helpful` - レビューを「役に立った」と投票
 
-#### 8. データベース設計（Cloudflare D1）
+**管理者専用**
+- `/api/analytics/users` - 登録者一覧取得（認証必須）
+- `/api/analytics/overview` - 全体統計
+- `/api/analytics/pdfs` - PDF統計
+- `/api/analytics/categories` - カテゴリ統計
+
+#### 9. データベース設計（Cloudflare D1）
 - **users**: ユーザー情報（メール、名前、認証方法、SNS情報、プロフィール写真）
   - 追加フィールド: `youtube_url`, `instagram_handle`, `tiktok_handle`, `twitter_handle`, `profile_photo_url`
 - **pdfs**: PDF情報（タイトル、URL、カテゴリ、**評価情報**）
@@ -124,7 +146,25 @@ npx wrangler d1 migrations apply akagami-research-production --remote
    - 各PDFの「開く」ボタンでGoogleドライブで開けます
 
 ### 今後の実装予定
-- 📧 Cloudflare Email Workersのセットアップ完了（ユーザー側の設定が必要）
+- 📧 メール送信サービスの設定（SendGrid/Resend/Cloudflare Email Workers）
+  - 現在: コード実装済み、ログ出力のみ
+  - 必要: メールサービスのAPI Key設定
+  - 参考: `REGISTRATION_NOTIFICATION_GUIDE.md` を参照
+
+## 📝 登録者管理・通知機能
+
+### 管理画面での登録者一覧
+- **アクセス**: `/admin` → 「登録者一覧」ボタン（緑色）
+- **表示内容**: 会員番号、名前、メールアドレス、登録日時、最終ログイン、認証方法
+- **機能**: CSVエクスポート、総登録者数表示
+
+### 新規登録時のメール通知
+- **通知先**: `akagami.syatyo@gmail.com`
+- **タイミング**: 会員登録時に自動送信
+- **内容**: 会員番号、名前、メールアドレス、登録日時
+- **現状**: コード実装済み（メールサービス設定後に送信開始）
+
+詳細な使い方とメールサービスの設定方法は `REGISTRATION_NOTIFICATION_GUIDE.md` を参照してください。
 
 ## 📊 Google Analytics 統合
 
