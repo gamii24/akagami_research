@@ -392,7 +392,8 @@ app.get('/api/user/me', async (c) => {
   const user = await c.env.DB.prepare(`
     SELECT 
       id, email, name, login_method, created_at, last_login,
-      youtube_url, instagram_handle, tiktok_handle, twitter_handle
+      youtube_url, instagram_handle, tiktok_handle, twitter_handle,
+      profile_photo_url
     FROM users 
     WHERE id = ?
   `).bind(currentUser.userId).first()
@@ -414,7 +415,8 @@ app.get('/api/user/me', async (c) => {
       youtubeUrl: user.youtube_url,
       instagramHandle: user.instagram_handle,
       tiktokHandle: user.tiktok_handle,
-      twitterHandle: user.twitter_handle
+      twitterHandle: user.twitter_handle,
+      profilePhotoUrl: user.profile_photo_url
     }
   })
 })
@@ -665,6 +667,34 @@ app.put('/api/user/profile', requireUserAuth, async (c) => {
   } catch (error: any) {
     console.error('Update profile error:', error)
     return c.json({ error: 'Failed to update profile' }, 500)
+  }
+})
+
+// Update user profile photo
+app.put('/api/user/profile-photo', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { photoUrl } = await c.req.json()
+    
+    if (!photoUrl) {
+      return c.json({ error: 'Photo URL is required' }, 400)
+    }
+    
+    // Basic validation for base64 or URL
+    if (!photoUrl.startsWith('data:image/') && !photoUrl.startsWith('http')) {
+      return c.json({ error: 'Invalid photo URL format' }, 400)
+    }
+    
+    await c.env.DB.prepare(`
+      UPDATE users 
+      SET profile_photo_url = ?
+      WHERE id = ?
+    `).bind(photoUrl, userId).run()
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('Update profile photo error:', error)
+    return c.json({ error: 'Failed to update profile photo' }, 500)
   }
 })
 

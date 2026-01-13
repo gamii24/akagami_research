@@ -67,8 +67,21 @@ function renderMyPage(downloads, favorites) {
     <!-- User Info Card -->
     <div class="bg-gradient-to-r from-primary to-red-600 rounded-xl shadow-xl p-8 text-white mb-6">
       <div class="flex items-center gap-6">
-        <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-4xl font-bold border-4 border-white shadow-lg">
-          ${userData.name.charAt(0).toUpperCase()}
+        <div class="relative group">
+          ${userData.profilePhotoUrl ? `
+            <img src="${escapeHtml(userData.profilePhotoUrl)}" 
+              alt="Profile Photo" 
+              class="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover">
+          ` : `
+            <div class="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-4xl font-bold border-4 border-white shadow-lg">
+              ${userData.name.charAt(0).toUpperCase()}
+            </div>
+          `}
+          <button onclick="document.getElementById('profile-photo-input').click()" 
+            class="absolute bottom-0 right-0 bg-white text-primary rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors">
+            <i class="fas fa-camera"></i>
+          </button>
+          <input type="file" id="profile-photo-input" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
         </div>
         <div class="flex-1">
           <h3 class="text-3xl font-bold mb-1">${escapeHtml(userData.name)} さん</h3>
@@ -83,30 +96,6 @@ function renderMyPage(downloads, favorites) {
           <p class="text-xl font-bold">
             ${userData.loginMethod === 'password' ? '<i class="fas fa-key mr-2"></i>パスワード' : '<i class="fas fa-magic mr-2"></i>マジックリンク'}
           </p>
-        </div>
-      </div>
-      
-      <!-- Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-        <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center backdrop-blur-sm">
-          <i class="fas fa-download text-3xl mb-2"></i>
-          <p class="text-3xl font-bold">${downloads.length}</p>
-          <p class="text-sm opacity-90">ダウンロード</p>
-        </div>
-        <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center backdrop-blur-sm">
-          <i class="fas fa-heart text-3xl mb-2"></i>
-          <p class="text-3xl font-bold">${favorites.length}</p>
-          <p class="text-sm opacity-90">お気に入り</p>
-        </div>
-        <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center backdrop-blur-sm">
-          <i class="fas fa-bell text-3xl mb-2"></i>
-          <p class="text-3xl font-bold">${notificationSettings.filter(n => n.notificationEnabled).length}</p>
-          <p class="text-sm opacity-90">通知設定中</p>
-        </div>
-        <div class="bg-white bg-opacity-20 rounded-lg p-4 text-center backdrop-blur-sm">
-          <i class="fas fa-clock text-3xl mb-2"></i>
-          <p class="text-3xl font-bold">${getAccountAge()}</p>
-          <p class="text-sm opacity-90">利用日数</p>
         </div>
       </div>
     </div>
@@ -305,6 +294,49 @@ function renderNotificationCategories() {
       </div>
     `
   }).join('')
+}
+
+// Upload profile photo
+async function uploadProfilePhoto(event) {
+  const file = event.target.files[0]
+  if (!file) return
+  
+  // Check file size (max 5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    alert('ファイルサイズは5MB以下にしてください')
+    return
+  }
+  
+  // Check file type
+  if (!file.type.startsWith('image/')) {
+    alert('画像ファイルを選択してください')
+    return
+  }
+  
+  try {
+    // Convert to base64
+    const reader = new FileReader()
+    reader.onload = async (e) => {
+      const base64 = e.target.result
+      
+      // Save to server
+      const res = await fetch('/api/user/profile-photo', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ photoUrl: base64 })
+      })
+      
+      if (!res.ok) throw new Error('Failed to upload')
+      
+      // Reload page to show new photo
+      window.location.reload()
+    }
+    reader.readAsDataURL(file)
+  } catch (error) {
+    console.error('Failed to upload profile photo:', error)
+    alert('プロフィール写真のアップロードに失敗しました')
+  }
 }
 
 // Save SNS information
