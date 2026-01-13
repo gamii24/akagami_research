@@ -116,8 +116,8 @@ function renderMyPage(downloads, favorites) {
                 </div>
               </div>
               <a href="${escapeHtml(f.googleDriveUrl)}" target="_blank" rel="noopener noreferrer"
-                class="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors">
-                <i class="fas fa-external-link-alt mr-2"></i>開く
+                class="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors" title="開く">
+                <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
           `).join('')}
@@ -155,8 +155,8 @@ function renderMyPage(downloads, favorites) {
                 </div>
               </div>
               <a href="${escapeHtml(d.googleDriveUrl)}" target="_blank" rel="noopener noreferrer"
-                class="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors">
-                <i class="fas fa-external-link-alt mr-2"></i>開く
+                class="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors" title="開く">
+                <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
           `).join('')}
