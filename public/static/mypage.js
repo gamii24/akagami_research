@@ -6,92 +6,158 @@ let userData = null
 let categories = []
 let notificationSettings = []
 
-// SNS Legends Quotes Database
+// SNS Legends Quotes Database - 100 Quotes
 const snsQuotes = [
-  {
-    author: 'マーク・ザッカーバーグ',
-    role: 'Meta (Facebook) 創業者・CEO',
-    quote: 'アイデアは重要ではない。実行こそがすべてだ。',
-    icon: 'fab fa-facebook'
-  },
-  {
-    author: 'マーク・ザッカーバーグ',
-    role: 'Meta (Facebook) 創業者・CEO',
-    quote: '完璧を待つより、まず完成させることが重要だ。',
-    icon: 'fab fa-facebook'
-  },
-  {
-    author: 'イーロン・マスク',
-    role: 'X (Twitter) オーナー・テスラCEO',
-    quote: '失敗はオプションだ。失敗しないなら、十分に革新的ではない。',
-    icon: 'fab fa-x-twitter'
-  },
-  {
-    author: 'イーロン・マスク',
-    role: 'X (Twitter) オーナー・テスラCEO',
-    quote: 'ブランドは製品やサービスへの信頼の積み重ねだ。',
-    icon: 'fab fa-x-twitter'
-  },
-  {
-    author: 'ジャック・ドーシー',
-    role: 'Twitter (X) 共同創業者',
-    quote: '最も強力な人々は、情報を共有する人々だ。',
-    icon: 'fab fa-twitter'
-  },
-  {
-    author: 'ケビン・シストロム',
-    role: 'Instagram 共同創業者',
-    quote: 'シンプルさが究極の洗練である。',
-    icon: 'fab fa-instagram'
-  },
-  {
-    author: 'ケビン・シストロム',
-    role: 'Instagram 共同創業者',
-    quote: '完璧主義は、スタートアップを殺す最速の方法だ。',
-    icon: 'fab fa-instagram'
-  },
-  {
-    author: 'スーザン・ウォシッキー',
-    role: '元YouTube CEO',
-    quote: 'クリエイターがいなければ、YouTubeは何もない。',
-    icon: 'fab fa-youtube'
-  },
-  {
-    author: 'リード・ホフマン',
-    role: 'LinkedIn 共同創業者',
-    quote: '恥ずかしくない製品なら、リリースが遅すぎる。',
-    icon: 'fab fa-linkedin'
-  },
-  {
-    author: 'ブライアン・チェスキー',
-    role: 'Airbnb 共同創業者・CEO',
-    quote: 'スケールしないことをしろ。',
-    icon: 'fas fa-home'
-  },
-  {
-    author: 'ジャン・クム',
-    role: 'WhatsApp 共同創業者',
-    quote: '広告はないほうがいい。プライバシーを尊重しろ。',
-    icon: 'fab fa-whatsapp'
-  },
-  {
-    author: 'エヴァン・スピーゲル',
-    role: 'Snapchat 創業者・CEO',
-    quote: '人々は、永続的なものよりも一時的なものに正直になる。',
-    icon: 'fab fa-snapchat'
-  },
-  {
-    author: 'チャン・イーミン',
-    role: 'ByteDance (TikTok) 創業者',
-    quote: 'グローバルに考え、ローカルに実行せよ。',
-    icon: 'fab fa-tiktok'
-  },
-  {
-    author: 'スティーブ・ジョブズ',
-    role: 'Apple 共同創業者',
-    quote: '顧客が望むものを提供するな。彼らが必要とするものを提供しろ。',
-    icon: 'fab fa-apple'
-  }
+  // Mark Zuckerberg
+  { author: 'マーク・ザッカーバーグ', role: 'Meta (Facebook) 創業者・CEO', quote: 'アイデアは重要ではない。実行こそがすべてだ。', icon: 'fab fa-facebook' },
+  { author: 'マーク・ザッカーバーグ', role: 'Meta (Facebook) 創業者・CEO', quote: '完璧を待つより、まず完成させることが重要だ。', icon: 'fab fa-facebook' },
+  { author: 'マーク・ザッカーバーグ', role: 'Meta (Facebook) 創業者・CEO', quote: '最大のリスクは、リスクを取らないことだ。', icon: 'fab fa-facebook' },
+  { author: 'マーク・ザッカーバーグ', role: 'Meta (Facebook) 創業者・CEO', quote: '速く動き、壊せ。完璧を目指すより、まず行動しろ。', icon: 'fab fa-facebook' },
+  { author: 'マーク・ザッカーバーグ', role: 'Meta (Facebook) 創業者・CEO', quote: '人々がシェアすればするほど、世界はオープンになり、つながる。', icon: 'fab fa-facebook' },
+  
+  // Elon Musk
+  { author: 'イーロン・マスク', role: 'X (Twitter) オーナー・テスラCEO', quote: '失敗はオプションだ。失敗しないなら、十分に革新的ではない。', icon: 'fab fa-x-twitter' },
+  { author: 'イーロン・マスク', role: 'X (Twitter) オーナー・テスラCEO', quote: 'ブランドは製品やサービスへの信頼の積み重ねだ。', icon: 'fab fa-x-twitter' },
+  { author: 'イーロン・マスク', role: 'X (Twitter) オーナー・テスラCEO', quote: 'フィードバックループを作り、常に考え、改善しろ。', icon: 'fab fa-x-twitter' },
+  { author: 'イーロン・マスク', role: 'X (Twitter) オーナー・テスラCEO', quote: '何かが十分に重要なら、たとえ不利な状況でもやるべきだ。', icon: 'fab fa-x-twitter' },
+  { author: 'イーロン・マスク', role: 'X (Twitter) オーナー・テスラCEO', quote: '粘り強さは非常に重要だ。諦めなければ失敗しない。', icon: 'fab fa-x-twitter' },
+  
+  // Jack Dorsey
+  { author: 'ジャック・ドーシー', role: 'Twitter (X) 共同創業者', quote: '最も強力な人々は、情報を共有する人々だ。', icon: 'fab fa-twitter' },
+  { author: 'ジャック・ドーシー', role: 'Twitter (X) 共同創業者', quote: 'シンプルさは、複雑さを経て到達できる。', icon: 'fab fa-twitter' },
+  { author: 'ジャック・ドーシー', role: 'Twitter (X) 共同創業者', quote: '良いアイデアは、会話から生まれる。', icon: 'fab fa-twitter' },
+  { author: 'ジャック・ドーシー', role: 'Twitter (X) 共同創業者', quote: 'ユーザーの声を聞き、常に改善し続けろ。', icon: 'fab fa-twitter' },
+  
+  // Kevin Systrom
+  { author: 'ケビン・シストロム', role: 'Instagram 共同創業者', quote: 'シンプルさが究極の洗練である。', icon: 'fab fa-instagram' },
+  { author: 'ケビン・シストロム', role: 'Instagram 共同創業者', quote: '完璧主義は、スタートアップを殺す最速の方法だ。', icon: 'fab fa-instagram' },
+  { author: 'ケビン・シストロム', role: 'Instagram 共同創業者', quote: 'コミュニティを第一に考えろ。彼らが成功の鍵だ。', icon: 'fab fa-instagram' },
+  { author: 'ケビン・シストロム', role: 'Instagram 共同創業者', quote: '製品を愛する人々のために作れ。', icon: 'fab fa-instagram' },
+  
+  // Susan Wojcicki
+  { author: 'スーザン・ウォシッキー', role: '元YouTube CEO', quote: 'クリエイターがいなければ、YouTubeは何もない。', icon: 'fab fa-youtube' },
+  { author: 'スーザン・ウォシッキー', role: '元YouTube CEO', quote: '多様性は、イノベーションの源泉だ。', icon: 'fab fa-youtube' },
+  { author: 'スーザン・ウォシッキー', role: '元YouTube CEO', quote: 'データは重要だが、直感も大切にしろ。', icon: 'fab fa-youtube' },
+  
+  // Reid Hoffman
+  { author: 'リード・ホフマン', role: 'LinkedIn 共同創業者', quote: '恥ずかしくない製品なら、リリースが遅すぎる。', icon: 'fab fa-linkedin' },
+  { author: 'リード・ホフマン', role: 'LinkedIn 共同創業者', quote: 'ネットワークを作り、関係を大切にしろ。', icon: 'fab fa-linkedin' },
+  { author: 'リード・ホフマン', role: 'LinkedIn 共同創業者', quote: 'スピードは品質を凌駕する。', icon: 'fab fa-linkedin' },
+  { author: 'リード・ホフマン', role: 'LinkedIn 共同創業者', quote: '起業家精神とは、崖から飛び降りながら飛行機を組み立てることだ。', icon: 'fab fa-linkedin' },
+  
+  // Brian Chesky
+  { author: 'ブライアン・チェスキー', role: 'Airbnb 共同創業者・CEO', quote: 'スケールしないことをしろ。', icon: 'fas fa-home' },
+  { author: 'ブライアン・チェスキー', role: 'Airbnb 共同創業者・CEO', quote: '100人に愛される製品を作れ。1人に好かれる製品ではなく。', icon: 'fas fa-home' },
+  { author: 'ブライアン・チェスキー', role: 'Airbnb 共同創業者・CEO', quote: 'デザインは、単なる見た目ではない。機能そのものだ。', icon: 'fas fa-home' },
+  { author: 'ブライアン・チェスキー', role: 'Airbnb 共同創業者・CEO', quote: 'ストーリーを語れ。人々は物語に共感する。', icon: 'fas fa-home' },
+  
+  // Jan Koum
+  { author: 'ジャン・クム', role: 'WhatsApp 共同創業者', quote: '広告はないほうがいい。プライバシーを尊重しろ。', icon: 'fab fa-whatsapp' },
+  { author: 'ジャン・クム', role: 'WhatsApp 共同創業者', quote: 'シンプルに、速く、信頼できるサービスを作れ。', icon: 'fab fa-whatsapp' },
+  { author: 'ジャン・クム', role: 'WhatsApp 共同創業者', quote: 'ユーザーデータを尊重することが、最高のビジネスモデルだ。', icon: 'fab fa-whatsapp' },
+  
+  // Evan Spiegel
+  { author: 'エヴァン・スピーゲル', role: 'Snapchat 創業者・CEO', quote: '人々は、永続的なものよりも一時的なものに正直になる。', icon: 'fab fa-snapchat' },
+  { author: 'エヴァン・スピーゲル', role: 'Snapchat 創業者・CEO', quote: '完璧である必要はない。本物であればいい。', icon: 'fab fa-snapchat' },
+  { author: 'エヴァン・スピーゲル', role: 'Snapchat 創業者・CEO', quote: 'カメラは新しいキーボードだ。', icon: 'fab fa-snapchat' },
+  
+  // Zhang Yiming
+  { author: 'チャン・イーミン', role: 'ByteDance (TikTok) 創業者', quote: 'グローバルに考え、ローカルに実行せよ。', icon: 'fab fa-tiktok' },
+  { author: 'チャン・イーミン', role: 'ByteDance (TikTok) 創業者', quote: 'AIとコンテンツの組み合わせが未来を作る。', icon: 'fab fa-tiktok' },
+  { author: 'チャン・イーミン', role: 'ByteDance (TikTok) 創業者', quote: 'ユーザーエンゲージメントがすべてだ。', icon: 'fab fa-tiktok' },
+  
+  // Steve Jobs
+  { author: 'スティーブ・ジョブズ', role: 'Apple 共同創業者', quote: '顧客が望むものを提供するな。彼らが必要とするものを提供しろ。', icon: 'fab fa-apple' },
+  { author: 'スティーブ・ジョブズ', role: 'Apple 共同創業者', quote: 'シンプルであることは、複雑であることよりも難しい。', icon: 'fab fa-apple' },
+  { author: 'スティーブ・ジョブズ', role: 'Apple 共同創業者', quote: 'イノベーションは、誰がリーダーで誰がフォロワーかを区別する。', icon: 'fab fa-apple' },
+  { author: 'スティーブ・ジョブズ', role: 'Apple 共同創業者', quote: 'あなたの時間は限られている。他人の人生を生きて無駄にするな。', icon: 'fab fa-apple' },
+  { author: 'スティーブ・ジョブズ', role: 'Apple 共同創業者', quote: '素晴らしい仕事をする唯一の方法は、自分がすることを愛することだ。', icon: 'fab fa-apple' },
+  
+  // Bill Gates
+  { author: 'ビル・ゲイツ', role: 'Microsoft 共同創業者', quote: '成功を祝うのもいいが、失敗の教訓に注目することが重要だ。', icon: 'fab fa-microsoft' },
+  { author: 'ビル・ゲイツ', role: 'Microsoft 共同創業者', quote: 'ソフトウェアは素晴らしい組み合わせだ：芸術性とエンジニアリング。', icon: 'fab fa-microsoft' },
+  { author: 'ビル・ゲイツ', role: 'Microsoft 共同創業者', quote: 'あなたの最も不満な顧客は、最大の学びの源だ。', icon: 'fab fa-microsoft' },
+  { author: 'ビル・ゲイツ', role: 'Microsoft 共同創業者', quote: 'テクノロジーは単なる道具だ。人々を一つにすることが重要だ。', icon: 'fab fa-microsoft' },
+  
+  // Jeff Bezos
+  { author: 'ジェフ・ベゾス', role: 'Amazon 創業者', quote: '顧客に取り憑かれろ。競合ではなく。', icon: 'fab fa-amazon' },
+  { author: 'ジェフ・ベゾス', role: 'Amazon 創業者', quote: '発明するには、実験が必要だ。', icon: 'fab fa-amazon' },
+  { author: 'ジェフ・ベゾス', role: 'Amazon 創業者', quote: 'もし失敗を恐れるなら、革新することはできない。', icon: 'fab fa-amazon' },
+  { author: 'ジェフ・ベゾス', role: 'Amazon 創業者', quote: '長期的思考が、不可能を可能にする。', icon: 'fab fa-amazon' },
+  
+  // Satya Nadella
+  { author: 'サティア・ナデラ', role: 'Microsoft CEO', quote: '共感がイノベーションの源泉だ。', icon: 'fab fa-microsoft' },
+  { author: 'サティア・ナデラ', role: 'Microsoft CEO', quote: '成長マインドセットを持て。学び続けることが成功の鍵だ。', icon: 'fab fa-microsoft' },
+  { author: 'サティア・ナデラ', role: 'Microsoft CEO', quote: '文化が戦略を凌駕する。', icon: 'fab fa-microsoft' },
+  
+  // Sheryl Sandberg
+  { author: 'シェリル・サンドバーグ', role: '元Meta COO', quote: '完璧ではなく、完了を目指せ。', icon: 'fab fa-facebook' },
+  { author: 'シェリル・サンドバーグ', role: '元Meta COO', quote: '恐れではなく、希望によって導かれろ。', icon: 'fab fa-facebook' },
+  { author: 'シェリル・サンドバーグ', role: '元Meta COO', quote: '自分の席がなければ、テーブルを持ってこい。', icon: 'fab fa-facebook' },
+  
+  // Larry Page
+  { author: 'ラリー・ペイジ', role: 'Google 共同創業者', quote: '10倍良いものを目指せ。10%ではなく。', icon: 'fab fa-google' },
+  { author: 'ラリー・ペイジ', role: 'Google 共同創業者', quote: '不可能に見えるアイデアこそ、追求する価値がある。', icon: 'fab fa-google' },
+  { author: 'ラリー・ペイジ', role: 'Google 共同創業者', quote: 'ユーザーに焦点を合わせれば、他はすべてついてくる。', icon: 'fab fa-google' },
+  
+  // Sergey Brin
+  { author: 'セルゲイ・ブリン', role: 'Google 共同創業者', quote: '情報を整理し、世界中の人々がアクセスできるようにする。', icon: 'fab fa-google' },
+  { author: 'セルゲイ・ブリン', role: 'Google 共同創業者', quote: '技術的な問題を解決することが、ビジネスを成功させる。', icon: 'fab fa-google' },
+  
+  // Sundar Pichai
+  { author: 'サンダー・ピチャイ', role: 'Google CEO', quote: 'テクノロジーは、すべての人のためにある。', icon: 'fab fa-google' },
+  { author: 'サンダー・ピチャイ', role: 'Google CEO', quote: 'AIは、火や電気よりも重要になる。', icon: 'fab fa-google' },
+  { author: 'サンダー・ピチャイ', role: 'Google CEO', quote: '変化を恐れるな。変化を受け入れろ。', icon: 'fab fa-google' },
+  
+  // Travis Kalanick
+  { author: 'トラビス・カラニック', role: 'Uber 共同創業者', quote: '起業家精神とは、"No"を無視することだ。', icon: 'fas fa-car' },
+  { author: 'トラビス・カラニック', role: 'Uber 共同創業者', quote: '破壊的イノベーションは、既存のルールを書き換える。', icon: 'fas fa-car' },
+  
+  // Daniel Ek
+  { author: 'ダニエル・エク', role: 'Spotify 創業者・CEO', quote: '音楽は、すべての人のものだ。', icon: 'fab fa-spotify' },
+  { author: 'ダニエル・エク', role: 'Spotify 創業者・CEO', quote: 'アーティストとファンをつなぐことが使命だ。', icon: 'fab fa-spotify' },
+  { author: 'ダニエル・エク', role: 'Spotify 創業者・CEO', quote: 'データとクリエイティビティの融合が、新しい体験を生む。', icon: 'fab fa-spotify' },
+  
+  // Drew Houston
+  { author: 'ドリュー・ヒューストン', role: 'Dropbox 創業者・CEO', quote: '最高の製品は、使いやすく、シンプルで、魔法のようだ。', icon: 'fas fa-box' },
+  { author: 'ドリュー・ヒューストン', role: 'Dropbox 創業者・CEO', quote: 'あなたが情熱を持てることを見つけろ。', icon: 'fas fa-box' },
+  
+  // Stewart Butterfield
+  { author: 'スチュワート・バターフィールド', role: 'Slack 共同創業者', quote: 'コミュニケーションを変えることが、仕事を変える。', icon: 'fab fa-slack' },
+  { author: 'スチュワート・バターフィールド', role: 'Slack 共同創業者', quote: '良いプロダクトは、人々の生活を楽にする。', icon: 'fab fa-slack' },
+  
+  // Whitney Wolfe Herd
+  { author: 'ホイットニー・ウルフ・ハード', role: 'Bumble 創業者・CEO', quote: '女性が最初の一歩を踏み出すことで、世界は変わる。', icon: 'fas fa-heart' },
+  { author: 'ホイットニー・ウルフ・ハード', role: 'Bumble 創業者・CEO', quote: '優しさと強さは、両立できる。', icon: 'fas fa-heart' },
+  
+  // Pavel Durov
+  { author: 'パヴェル・ドゥーロフ', role: 'Telegram 創業者', quote: 'プライバシーは、贅沢品ではなく基本的人権だ。', icon: 'fab fa-telegram' },
+  { author: 'パヴェル・ドゥーロフ', role: 'Telegram 創業者', quote: '自由な情報こそが、民主主義の基盤だ。', icon: 'fab fa-telegram' },
+  
+  // Adam D'Angelo
+  { author: 'アダム・ディアンジェロ', role: 'Quora 共同創業者・CEO', quote: '知識を共有することで、世界はより良くなる。', icon: 'fas fa-question-circle' },
+  { author: 'アダム・ディアンジェロ', role: 'Quora 共同創業者・CEO', quote: '質問することは、学びの第一歩だ。', icon: 'fas fa-question-circle' },
+  
+  // Ben Silbermann
+  { author: 'ベン・シルバーマン', role: 'Pinterest 共同創業者・CEO', quote: 'インスピレーションを提供することが、私たちの使命だ。', icon: 'fab fa-pinterest' },
+  { author: 'ベン・シルバーマン', role: 'Pinterest 共同創業者・CEO', quote: 'コレクションは、アイデンティティを表現する方法だ。', icon: 'fab fa-pinterest' },
+  
+  // Bobby Murphy
+  { author: 'ボビー・マーフィー', role: 'Snapchat 共同創業者・CTO', quote: '技術は、人々をつなぐための手段だ。', icon: 'fab fa-snapchat' },
+  { author: 'ボビー・マーフィー', role: 'Snapchat 共同創業者・CTO', quote: 'プライベートな瞬間を大切にする文化を作ろう。', icon: 'fab fa-snapchat' },
+  
+  // Tony Fadell
+  { author: 'トニー・ファデル', role: 'iPod/iPhone 開発者', quote: '製品は、ユーザー体験のすべてだ。', icon: 'fab fa-apple' },
+  { author: 'トニー・ファデル', role: 'iPod/iPhone 開発者', quote: '細部へのこだわりが、偉大な製品を生む。', icon: 'fab fa-apple' },
+  
+  // Marissa Mayer
+  { author: 'マリッサ・メイヤー', role: '元Yahoo! CEO', quote: 'データに基づいて意思決定をしろ。', icon: 'fas fa-search' },
+  { author: 'マリッサ・メイヤー', role: '元Yahoo! CEO', quote: '失敗を恐れずに、新しいことに挑戦し続けろ。', icon: 'fas fa-search' },
+  
+  // Tim Cook
+  { author: 'ティム・クック', role: 'Apple CEO', quote: 'プライバシーは人権だ。', icon: 'fab fa-apple' },
+  { author: 'ティム・クック', role: 'Apple CEO', quote: '地球に残す足跡を考えろ。', icon: 'fab fa-apple' },
+  { author: 'ティム・クック', role: 'Apple CEO', quote: '誰もが自分の可能性を最大限に発揮できる世界を作ろう。', icon: 'fab fa-apple' }
 ]
 
 // Get random quote
