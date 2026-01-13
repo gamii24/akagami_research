@@ -699,35 +699,35 @@ function renderCategoryFilter() {
   
   const html = `
     <div class="mb-8">
-      <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
+      <h2 class="text-base font-semibold mb-3 text-darker flex items-center">
         <i class="fas fa-layer-group mr-2 text-primary"></i>カテゴリ
       </h2>
-      <div class="space-y-2">
+      <div class="space-y-1">
         <button 
           onclick="filterByCategory(null)" 
-          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg flex items-center justify-between"
+          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-sm"
           aria-label="すべてのカテゴリを表示"
           role="button"
         >
           <span>
-            <i class="fas fa-th-large mr-2" aria-hidden="true"></i>すべて
+            <i class="fas fa-th-large mr-2 text-xs" aria-hidden="true"></i>すべて
           </span>
-          ${totalCount > 0 ? `<span class="badge bg-primary text-white px-2 py-1 rounded-full text-xs font-bold">${totalCount}</span>` : ''}
+          ${totalCount > 0 ? `<span class="badge bg-primary text-white px-1.5 py-0.5 rounded-full text-xs font-medium">${totalCount}</span>` : ''}
         </button>
         ${sortedCategories.map(cat => {
           const count = state.categoryCounts[cat.id] || 0
           return `
             <button 
               onclick="filterByCategory(${cat.id})" 
-              class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-4 py-3 rounded-lg flex items-center justify-between"
+              class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-sm"
               aria-label="${escapeHtml(cat.name)}カテゴリでフィルター ${count > 0 ? count + '件' : ''}"
               aria-pressed="${state.selectedCategory === cat.id}"
               role="button"
             >
               <span>
-                <i class="fas fa-folder mr-2" aria-hidden="true"></i>${escapeHtml(cat.name)}
+                <i class="fas fa-folder mr-2 text-xs" aria-hidden="true"></i>${escapeHtml(cat.name)}
               </span>
-              ${count > 0 ? `<span class="badge bg-gray-500 text-white px-2 py-1 rounded-full text-xs font-bold">${count}</span>` : ''}
+              ${count > 0 ? `<span class="badge bg-gray-500 text-white px-1.5 py-0.5 rounded-full text-xs font-medium">${count}</span>` : ''}
             </button>
           `
         }).join('')}
@@ -735,20 +735,20 @@ function renderCategoryFilter() {
     </div>
     
     <!-- Tags Section (at bottom) -->
-    <div class="mb-6 pt-4 border-t-2 border-gray-200">
-      <h2 class="text-lg font-semibold mb-4 text-darker flex items-center">
+    <div class="mb-6 pt-3 border-t-2 border-gray-200">
+      <h2 class="text-base font-semibold mb-3 text-darker flex items-center">
         <i class="fas fa-tags mr-2 text-primary"></i>タグ
       </h2>
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-1.5">
         ${state.tags.map(tag => `
           <button 
             onclick="toggleTag(${tag.id})" 
-            class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-2 rounded-full text-sm font-medium"
+            class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-2.5 py-1.5 rounded-full text-xs font-medium"
             aria-label="${escapeHtml(tag.name)}タグでフィルター"
             aria-pressed="${state.selectedTags.includes(tag.id)}"
             role="button"
           >
-            <i class="fas fa-tag mr-1" aria-hidden="true"></i>${escapeHtml(tag.name)}
+            <i class="fas fa-tag mr-1 text-xs" aria-hidden="true"></i>${escapeHtml(tag.name)}
           </button>
         `).join('')}
       </div>

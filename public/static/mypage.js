@@ -64,37 +64,30 @@ function renderMyPage(downloads, favorites) {
       <p class="text-gray-600">アカウント情報と設定の管理</p>
     </div>
 
-    <!-- User Info Card -->
-    <div class="bg-gradient-to-r from-primary to-red-600 rounded-xl shadow-xl p-8 text-white mb-6">
-      <div class="flex items-center gap-6">
-        <div class="relative group">
+    <!-- User Info Card - Compact -->
+    <div class="bg-white rounded-lg shadow-md border-2 border-gray-200 p-4 mb-6">
+      <div class="flex items-center gap-4">
+        <div class="relative">
           ${userData.profilePhotoUrl ? `
             <img src="${escapeHtml(userData.profilePhotoUrl)}" 
               alt="Profile Photo" 
-              class="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover">
+              class="w-16 h-16 rounded-full border-2 border-primary object-cover">
           ` : `
-            <div class="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-4xl font-bold border-4 border-white shadow-lg">
+            <div class="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center text-2xl font-bold border-2 border-primary text-primary">
               ${userData.name.charAt(0).toUpperCase()}
             </div>
           `}
           <button onclick="document.getElementById('profile-photo-input').click()" 
-            class="absolute bottom-0 right-0 bg-white text-primary rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors">
+            class="absolute -bottom-1 -right-1 bg-primary text-white rounded-full p-1.5 shadow hover:bg-red-600 transition-colors text-xs">
             <i class="fas fa-camera"></i>
           </button>
           <input type="file" id="profile-photo-input" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
         </div>
-        <div class="flex-1">
-          <h3 class="text-3xl font-bold mb-1">${escapeHtml(userData.name)} さん</h3>
-          <p class="text-lg opacity-90"><i class="fas fa-envelope mr-2"></i>${escapeHtml(userData.email)}</p>
-          <p class="text-sm opacity-80 mt-2">
-            <i class="fas fa-calendar mr-2"></i>
-            登録日: ${new Date(userData.createdAt).toLocaleDateString('ja-JP')}
-          </p>
-        </div>
-        <div class="text-right">
-          <p class="text-sm opacity-80 mb-2">ログイン方法</p>
-          <p class="text-xl font-bold">
-            ${userData.loginMethod === 'password' ? '<i class="fas fa-key mr-2"></i>パスワード' : '<i class="fas fa-magic mr-2"></i>マジックリンク'}
+        <div class="flex-1 min-w-0">
+          <h3 class="text-xl font-bold text-gray-800 truncate">${escapeHtml(userData.name)} さん</h3>
+          <p class="text-sm text-gray-600 truncate"><i class="fas fa-envelope mr-1"></i>${escapeHtml(userData.email)}</p>
+          <p class="text-xs text-gray-500 mt-1">
+            <i class="fas fa-calendar mr-1"></i>${new Date(userData.createdAt).toLocaleDateString('ja-JP')} 登録
           </p>
         </div>
       </div>
