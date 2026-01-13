@@ -762,6 +762,88 @@ app.post('/api/user/notifications/bulk', requireUserAuth, async (c) => {
   }
 })
 
+// Get user statistics for dashboard
+app.get('/api/user/stats', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    
+    // Get download count per month (last 6 months)
+    const { results: monthlyDownloads } = await c.env.DB.prepare(`
+      SELECT 
+        strftime('%Y-%m', downloaded_at) as month,
+        COUNT(*) as count
+      FROM user_downloads
+      WHERE user_id = ?
+        AND downloaded_at >= datetime('now', '-6 months')
+      GROUP BY month
+      ORDER BY month ASC
+    `).bind(userId).all()
+    
+    // Get download count by category
+    const { results: categoryDownloads } = await c.env.DB.prepare(`
+      SELECT 
+        c.name as category,
+        COUNT(ud.id) as count
+      FROM user_downloads ud
+      JOIN pdfs p ON ud.pdf_id = p.id
+      JOIN categories c ON p.category_id = c.id
+      WHERE ud.user_id = ?
+      GROUP BY c.id, c.name
+      ORDER BY count DESC
+      LIMIT 10
+    `).bind(userId).all()
+    
+    // Get favorite count by category
+    const { results: categoryFavorites } = await c.env.DB.prepare(`
+      SELECT 
+        c.name as category,
+        COUNT(uf.pdf_id) as count
+      FROM user_favorites uf
+      JOIN pdfs p ON uf.pdf_id = p.id
+      JOIN categories c ON p.category_id = c.id
+      WHERE uf.user_id = ?
+      GROUP BY c.id, c.name
+      ORDER BY count DESC
+      LIMIT 10
+    `).bind(userId).all()
+    
+    // Get weekly activity (last 7 days)
+    const { results: weeklyActivity } = await c.env.DB.prepare(`
+      SELECT 
+        strftime('%w', downloaded_at) as day_of_week,
+        COUNT(*) as count
+      FROM user_downloads
+      WHERE user_id = ?
+        AND downloaded_at >= datetime('now', '-7 days')
+      GROUP BY day_of_week
+      ORDER BY day_of_week ASC
+    `).bind(userId).all()
+    
+    // Get recent activity trend (downloads per day for last 30 days)
+    const { results: dailyActivity } = await c.env.DB.prepare(`
+      SELECT 
+        date(downloaded_at) as date,
+        COUNT(*) as count
+      FROM user_downloads
+      WHERE user_id = ?
+        AND downloaded_at >= datetime('now', '-30 days')
+      GROUP BY date
+      ORDER BY date ASC
+    `).bind(userId).all()
+    
+    return c.json({
+      monthlyDownloads,
+      categoryDownloads,
+      categoryFavorites,
+      weeklyActivity,
+      dailyActivity
+    })
+  } catch (error: any) {
+    console.error('Get user stats error:', error)
+    return c.json({ error: 'Failed to get user statistics' }, 500)
+  }
+})
+
 // ============================================
 // API Routes - Analytics (protected)
 // ============================================
@@ -1925,6 +2007,7 @@ app.get('/mypage', (c) => {
         }} />
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
       </head>
       <body class="bg-gray-50 min-h-screen">
         {/* Header */}

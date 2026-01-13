@@ -5,6 +5,8 @@
 let userData = null
 let categories = []
 let notificationSettings = []
+let statsData = null
+let charts = {} // Store chart instances
 
 // Load my page data
 async function loadMyPage() {
@@ -35,8 +37,17 @@ async function loadMyPage() {
     const favoritesRes = await fetch('/api/user/favorites', { credentials: 'include' })
     const favorites = await favoritesRes.json()
     
+    // Load statistics
+    const statsRes = await fetch('/api/user/stats', { credentials: 'include' })
+    statsData = await statsRes.json()
+    
     // Render my page
     renderMyPage(downloads, favorites)
+    
+    // Render charts after DOM is ready
+    setTimeout(() => {
+      renderCharts()
+    }, 100)
   } catch (error) {
     console.error('Failed to load my page:', error)
     document.getElementById('mypage-content').innerHTML = `
@@ -107,6 +118,53 @@ function renderMyPage(downloads, favorites) {
           <i class="fas fa-clock text-3xl mb-2"></i>
           <p class="text-3xl font-bold">${getAccountAge()}</p>
           <p class="text-sm opacity-90">利用日数</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics & Charts Section -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-chart-line text-primary mr-3"></i>
+        アクティビティ分析
+      </h3>
+      
+      <!-- Charts Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Monthly Downloads Chart -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+            <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
+            月別ダウンロード数
+          </h4>
+          <canvas id="monthlyChart" style="max-height: 250px;"></canvas>
+        </div>
+        
+        <!-- Category Distribution Chart -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+            <i class="fas fa-folder text-purple-500 mr-2"></i>
+            カテゴリ別ダウンロード
+          </h4>
+          <canvas id="categoryChart" style="max-height: 250px;"></canvas>
+        </div>
+        
+        <!-- Daily Activity Chart -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+            <i class="fas fa-chart-bar text-green-500 mr-2"></i>
+            最近30日間の活動
+          </h4>
+          <canvas id="dailyChart" style="max-height: 250px;"></canvas>
+        </div>
+        
+        <!-- Weekly Activity Chart -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+            <i class="fas fa-clock text-orange-500 mr-2"></i>
+            曜日別アクティビティ
+          </h4>
+          <canvas id="weeklyChart" style="max-height: 250px;"></canvas>
         </div>
       </div>
     </div>
@@ -413,6 +471,181 @@ function getAccountAge() {
   const now = new Date()
   const days = Math.floor((now - created) / (1000 * 60 * 60 * 24))
   return `${days}日`
+}
+
+// Escape HTML
+function escapeHtml(text) {
+  const div = document.createElement('div')
+  div.textContent = text || ''
+  return div.innerHTML
+}
+
+// Render charts
+function renderCharts() {
+  if (!statsData) return
+  
+  // Destroy existing charts
+  Object.values(charts).forEach(chart => {
+    if (chart) chart.destroy()
+  })
+  
+  // Common chart options
+  const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top'
+      }
+    }
+  }
+  
+  // 1. Monthly Downloads Chart (Line Chart)
+  const monthlyCtx = document.getElementById('monthlyChart')
+  if (monthlyCtx && statsData.monthlyDownloads) {
+    const monthLabels = statsData.monthlyDownloads.map(d => {
+      const [year, month] = d.month.split('-')
+      return `${year}年${parseInt(month)}月`
+    })
+    const monthData = statsData.monthlyDownloads.map(d => d.count)
+    
+    charts.monthly = new Chart(monthlyCtx, {
+      type: 'line',
+      data: {
+        labels: monthLabels,
+        datasets: [{
+          label: 'ダウンロード数',
+          data: monthData,
+          borderColor: '#e75556',
+          backgroundColor: 'rgba(231, 85, 86, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        ...commonOptions,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0 }
+          }
+        }
+      }
+    })
+  }
+  
+  // 2. Category Distribution Chart (Doughnut Chart)
+  const categoryCtx = document.getElementById('categoryChart')
+  if (categoryCtx && statsData.categoryDownloads) {
+    const categoryLabels = statsData.categoryDownloads.map(d => d.category)
+    const categoryData = statsData.categoryDownloads.map(d => d.count)
+    
+    const colors = [
+      '#e75556', '#f87171', '#fb923c', '#fbbf24', '#a3e635',
+      '#34d399', '#22d3ee', '#60a5fa', '#a78bfa', '#f472b6'
+    ]
+    
+    charts.category = new Chart(categoryCtx, {
+      type: 'doughnut',
+      data: {
+        labels: categoryLabels,
+        datasets: [{
+          data: categoryData,
+          backgroundColor: colors,
+          borderWidth: 2,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        ...commonOptions,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              boxWidth: 12,
+              padding: 10,
+              font: { size: 11 }
+            }
+          }
+        }
+      }
+    })
+  }
+  
+  // 3. Daily Activity Chart (Bar Chart)
+  const dailyCtx = document.getElementById('dailyChart')
+  if (dailyCtx && statsData.dailyActivity) {
+    const dailyLabels = statsData.dailyActivity.map(d => {
+      const date = new Date(d.date)
+      return `${date.getMonth() + 1}/${date.getDate()}`
+    })
+    const dailyData = statsData.dailyActivity.map(d => d.count)
+    
+    charts.daily = new Chart(dailyCtx, {
+      type: 'bar',
+      data: {
+        labels: dailyLabels,
+        datasets: [{
+          label: 'ダウンロード数',
+          data: dailyData,
+          backgroundColor: '#10b981',
+          borderColor: '#059669',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        ...commonOptions,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0 }
+          }
+        }
+      }
+    })
+  }
+  
+  // 4. Weekly Activity Chart (Radar Chart)
+  const weeklyCtx = document.getElementById('weeklyChart')
+  if (weeklyCtx && statsData.weeklyActivity) {
+    const dayNames = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']
+    
+    // Create array with all days initialized to 0
+    const weeklyData = new Array(7).fill(0)
+    statsData.weeklyActivity.forEach(d => {
+      const dayIndex = parseInt(d.day_of_week)
+      weeklyData[dayIndex] = d.count
+    })
+    
+    charts.weekly = new Chart(weeklyCtx, {
+      type: 'radar',
+      data: {
+        labels: dayNames,
+        datasets: [{
+          label: 'アクティビティ',
+          data: weeklyData,
+          borderColor: '#f97316',
+          backgroundColor: 'rgba(249, 115, 22, 0.2)',
+          borderWidth: 2,
+          pointBackgroundColor: '#f97316',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: '#f97316'
+        }]
+      },
+      options: {
+        ...commonOptions,
+        scales: {
+          r: {
+            beginAtZero: true,
+            ticks: { precision: 0 }
+          }
+        }
+      }
+    })
+  }
 }
 
 // Escape HTML
