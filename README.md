@@ -36,7 +36,16 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
   - 📈 **最近30日間の活動**: 日別ダウンロード数を棒グラフで表示
   - 🕐 **曜日別アクティビティ**: 週間パターンをレーダーチャートで分析
 
-#### 3. UX改善
+#### 3. レビュー・評価システム（NEW！）
+- ✅ **5つ星評価**: PDFに1〜5つ星の評価を投稿
+- ✅ **コメント投稿**: 500文字までのレビューコメント
+- ✅ **平均評価表示**: PDFカードに星マークと平均評価を表示
+- ✅ **レビュー数表示**: 各PDFの評価件数を表示
+- ✅ **レビュー編集・削除**: 自分のレビューを編集・削除可能
+- ✅ **認証必須**: ログインユーザーのみレビュー投稿可能
+- ✅ **ユニーク制約**: 1つのPDFにつき1ユーザー1レビューまで
+
+#### 4. UX改善
 - ✅ **ローディング表示**: ボタンクリック時にスピナーアニメーション表示
 - ✅ **処理中ボタン無効化**: 二重クリック防止
 - ✅ **成功時フィードバック**: チェックマークで成功を視覚的に表示
@@ -72,10 +81,17 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - `/api/user/favorites` - お気に入り管理
 - `/api/user/notifications` - 通知設定管理
 - `/api/user/stats` - ユーザー統計情報取得（グラフ用データ）
+- `/api/pdfs/:id/reviews` - レビューCRUD（取得・作成・更新・削除）
+- `/api/pdfs/:id/my-review` - 自分のレビュー取得
+- `/api/reviews/:id/helpful` - レビューを「役に立った」と投票
 
 #### 8. データベース設計（Cloudflare D1）
 - **users**: ユーザー情報（メール、名前、認証方法、SNS情報）
   - 追加フィールド: `youtube_url`, `instagram_handle`, `tiktok_handle`, `twitter_handle`
+- **pdfs**: PDF情報（タイトル、URL、カテゴリ、**評価情報**）
+  - 追加フィールド: `average_rating`, `review_count`
+- **pdf_reviews**: PDFレビュー（評価、コメント）
+- **review_helpful**: レビューへの「役に立った」投票
 - **magic_link_tokens**: マジックリンクトークン（有効期限付き）
 - **user_downloads**: ダウンロード履歴
 - **user_favorites**: お気に入りリスト
@@ -467,7 +483,7 @@ SNSシェアの最適化：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://92a9aff6.akagami-research.pages.dev
+- **最新デプロイ**: https://03479260.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
