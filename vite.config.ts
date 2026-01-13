@@ -32,7 +32,9 @@ export default defineConfig(({ mode }) => ({
             '/apple-touch-icon.png',
             '/manifest.json',
             '/og-image.png',
+            '/og-image.webp',
             '/og-image-square.png',
+            '/og-image-square.webp',
             '/robots.txt'
           ]
         }

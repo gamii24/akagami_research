@@ -984,8 +984,8 @@ app.get('/admin', (c) => {
             <p>読み込み中...</p>
           </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-        <script src="/static/admin.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
+        <script src="/static/admin.js" defer></script>
       </body>
     </html>
   )

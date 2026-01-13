@@ -7,6 +7,14 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
+        {/* Performance Optimization - Preconnect to external domains */}
+        <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        
         {/* Basic Meta Tags */}
         <title>Akagami Research - SNSマーケティング・生成AI資料保管庫</title>
         <meta name="description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。" />
@@ -22,7 +30,8 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta property="og:url" content="https://akagami.net/" />
         <meta property="og:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
         <meta property="og:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！カテゴリ別・タグ別に簡単検索できます。" />
-        <meta property="og:image" content="https://akagami.net/og-image.png" />
+        <meta property="og:image" content="https://akagami.net/og-image.webp" />
+        <meta property="og:image:type" content="image/webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Akagami Research - 毎朝のInstagramLIVEで使用したSNSのことを深掘りしたレポートが無料でGETできる" />
@@ -34,12 +43,12 @@ export const renderer = jsxRenderer(({ children }) => {
         <meta name="twitter:url" content="https://akagami.net/" />
         <meta name="twitter:title" content="Akagami Research - SNSマーケティング・生成AI資料保管庫" />
         <meta name="twitter:description" content="YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開中！" />
-        <meta name="twitter:image" content="https://akagami.net/og-image.png" />
+        <meta name="twitter:image" content="https://akagami.net/og-image.webp" />
         <meta name="twitter:image:alt" content="Akagami Research - SNS資料保管庫" />
         <meta name="twitter:creator" content="@akagami0124" />
         
         {/* Alternative square image for some platforms */}
-        <link rel="image_src" href="https://akagami.net/og-image-square.png" />
+        <link rel="image_src" href="https://akagami.net/og-image-square.webp" />
         
         {/* Favicon */}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -104,19 +113,42 @@ export const renderer = jsxRenderer(({ children }) => {
                     dark: '#333333',
                     darker: '#1a1a1a',
                     light: '#ffffff',
+                  },
+                  fontFamily: {
+                    sans: [
+                      '-apple-system',
+                      'BlinkMacSystemFont',
+                      '"Segoe UI"',
+                      'Roboto',
+                      '"Helvetica Neue"',
+                      'Arial',
+                      '"Noto Sans"',
+                      'sans-serif',
+                      '"Apple Color Emoji"',
+                      '"Segoe UI Emoji"',
+                      '"Segoe UI Symbol"',
+                      '"Noto Color Emoji"'
+                    ]
                   }
                 }
               }
             }
           `
         }} />
-        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-        <noscript><link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" /></noscript>
+        <link 
+          href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" 
+          rel="preload" 
+          as="style"
+          onload="this.onload=null;this.rel='stylesheet'"
+        />
+        <noscript>
+          <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+        </noscript>
         <link href="/static/style.css" rel="stylesheet" />
       </head>
       <body class="bg-white">
         {children}
-        <script src="/static/app.js"></script>
+        <script src="/static/app.js" defer></script>
       </body>
     </html>
   )
