@@ -436,13 +436,6 @@ function escapeHtml(text) {
   return div.innerHTML
 }
 
-// Escape HTML
-function escapeHtml(text) {
-  const div = document.createElement('div')
-  div.textContent = text || ''
-  return div.innerHTML
-}
-
 // Initialize page on load
 document.addEventListener('DOMContentLoaded', () => {
   loadMyPage()
