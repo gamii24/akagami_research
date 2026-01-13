@@ -35,6 +35,10 @@ export default defineConfig(({ mode }) => ({
             '/og-image.webp',
             '/og-image-square.png',
             '/og-image-square.webp',
+            '/og-image-dark.png',
+            '/og-image-dark.webp',
+            '/og-image-square-dark.png',
+            '/og-image-square-dark.webp',
             '/robots.txt'
           ]
         }

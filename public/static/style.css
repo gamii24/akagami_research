@@ -840,6 +840,26 @@ body.dark-mode {
   color: #e0e0e0;
 }
 
+/* Tailwind Dark Mode Support */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+.dark header {
+  background-color: #2d2d2d;
+}
+
+.dark footer {
+  background-color: #2d2d2d;
+  border-color: #404040;
+  color: #999;
+}
+
 body.dark-mode header {
   background-color: #2d2d2d;
 }
@@ -1007,4 +1027,42 @@ body.dark-mode .badge {
 body.dark-mode .bg-beige,
 body.dark-mode .bg-\[#f4eee0\] {
   background-color: #3a3a3a !important;
+}
+
+/* Dark Mode Scrollbar */
+body.dark-mode ::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Dark Mode Link Colors */
+body.dark-mode a {
+  color: #e0e0e0;
+}
+
+body.dark-mode a:hover {
+  color: var(--primary);
+}
+
+/* Dark Mode Button Focus */
+body.dark-mode button:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Dark Mode Improved Contrast */
+body.dark-mode .text-gray-400 {
+  color: #bbb !important;
+}
+
+body.dark-mode .shadow-lg,
+body.dark-mode .shadow-xl {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
 }

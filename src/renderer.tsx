@@ -50,6 +50,11 @@ export const renderer = jsxRenderer(({ children }) => {
         {/* Alternative square image for some platforms */}
         <link rel="image_src" href="https://akagami.net/og-image-square.webp" />
         
+        {/* Color scheme and theme */}
+        <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" content="#e75556" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+        
         {/* Favicon */}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
@@ -146,7 +151,18 @@ export const renderer = jsxRenderer(({ children }) => {
         </noscript>
         <link href="/static/style.css" rel="stylesheet" />
       </head>
-      <body class="bg-white">
+      <body class="bg-white dark:bg-darker transition-colors duration-300">
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Initialize dark mode from localStorage before page render
+            (function() {
+              const darkMode = localStorage.getItem('dark_mode') === 'true';
+              if (darkMode) {
+                document.documentElement.classList.add('dark');
+              }
+            })();
+          `
+        }} />
         {children}
         <script src="/static/app.js" defer></script>
       </body>
