@@ -107,15 +107,12 @@ function loadRandomQuote() {
   if (!quoteContent) return
   
   quoteContent.innerHTML = `
-    <div class="mb-4">
-      <i class="${quote.icon} text-4xl text-primary mb-3"></i>
-    </div>
-    <blockquote class="text-lg font-medium text-gray-800 italic mb-4 leading-relaxed">
+    <blockquote class="text-base font-medium text-gray-700 mb-3 leading-relaxed">
       "${quote.quote}"
     </blockquote>
-    <div class="text-sm text-gray-600">
+    <div class="text-xs text-gray-500">
       <p class="font-semibold">${escapeHtml(quote.author)}</p>
-      <p class="text-xs">${escapeHtml(quote.role)}</p>
+      <p>${escapeHtml(quote.role)}</p>
     </div>
   `
 }
@@ -230,18 +227,17 @@ function renderMyPage(downloads, favorites) {
     </div>
 
     <!-- Inspirational Quote Section -->
-    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl shadow-lg p-6 mb-6 border-2 border-blue-200">
-      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
-        <i class="fas fa-quote-left text-primary mr-3"></i>
-        今日の名言
-      </h3>
-      <div id="quote-content" class="text-center py-4">
+    <div class="mb-6">
+      <div id="quote-content" class="text-center py-2">
         <!-- Quote will be inserted here -->
       </div>
-      <button onclick="loadRandomQuote()" 
-        class="w-full mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors text-sm">
-        <i class="fas fa-sync-alt mr-2"></i>別の名言を見る
-      </button>
+      <div class="text-center mt-3">
+        <button onclick="loadRandomQuote()" 
+          class="text-gray-400 hover:text-primary transition-colors text-sm"
+          title="別の名言を見る">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Favorites Section -->
