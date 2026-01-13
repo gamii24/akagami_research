@@ -1120,7 +1120,7 @@ function renderPDFList() {
     const downloaded = isDownloaded(pdf.id)
     const favorite = isFavorite(pdf.id)
     const isSelected = state.selectedPdfs.has(pdf.id)
-    const bgColor = isSelected ? 'bg-blue-50 border-blue-500' : (downloaded ? 'bg-[#f4eee0]' : 'bg-white')
+    const bgColor = isSelected ? 'bg-blue-50 border-blue-500' : (downloaded ? 'bg-[#fffdfa]' : 'bg-white')
     
     // Check if uploaded within 7 days
     const isNew = isWithin7Days(pdf.created_at)
