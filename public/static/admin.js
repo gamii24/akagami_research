@@ -164,6 +164,9 @@ function renderAdminPage() {
           <button onclick="showBulkUploadModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #16a34a; color: white;">
             <i class="fas fa-upload mr-1"></i>テキスト一括アップロード
           </button>
+          <button onclick="showAnalyticsModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #3b82f6; color: white;">
+            <i class="fas fa-chart-line mr-1"></i>アクセス解析
+          </button>
           <button onclick="showManageCategoriesModal()" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #e75556; color: white;">
             <i class="fas fa-layer-group mr-1"></i>カテゴリ管理
           </button>
@@ -1127,6 +1130,175 @@ function getCategoryIcon(categoryName) {
     '画像&動画生成': 'fas fa-image'
   }
   return iconMap[categoryName] || 'fas fa-file-pdf'
+}
+
+// ============================================
+// Analytics Modal
+// ============================================
+
+async function showAnalyticsModal() {
+  try {
+    // Fetch analytics data
+    const [overviewRes, topPdfsRes, categoriesRes] = await Promise.all([
+      axios.get('/api/analytics/overview'),
+      axios.get('/api/analytics/pdfs'),
+      axios.get('/api/analytics/categories')
+    ])
+    
+    const overview = overviewRes.data
+    const topPdfs = topPdfsRes.data
+    const categories = categoriesRes.data
+    
+    const modal = document.getElementById('modal-container')
+    modal.innerHTML = `
+      <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4" onclick="closeModal(event)">
+        <div class="rounded-2xl shadow-2xl w-full max-w-6xl p-6 max-h-[90vh] overflow-y-auto" style="background-color: #2d2d2d; border: 2px solid #4b5563;" onclick="event.stopPropagation()">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold flex items-center" style="color: #f3f4f6;">
+              <i class="fas fa-chart-line mr-3" style="color: #3b82f6;"></i>
+              アクセス解析ダッシュボード
+            </h2>
+            <button onclick="closeModal(event)" class="text-3xl hover:opacity-70 transition-opacity" style="color: #9ca3af;">
+              &times;
+            </button>
+          </div>
+          
+          <!-- Google Analytics Notice -->
+          <div class="mb-6 p-4 rounded-lg" style="background-color: #3b82f6; background-image: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+            <div class="flex items-start gap-3">
+              <i class="fas fa-info-circle text-2xl text-white mt-1"></i>
+              <div class="flex-1">
+                <h3 class="text-white font-bold text-lg mb-1">Google Analytics連携済み</h3>
+                <p class="text-blue-100 text-sm mb-2">
+                  測定ID: <span class="font-mono font-semibold">G-JPMZ82RMGG</span>
+                </p>
+                <p class="text-blue-100 text-sm">
+                  リアルタイムアクセス解析は <a href="https://analytics.google.com/analytics/web/#/p13287130556/reports/intelligenthome" target="_blank" class="underline font-semibold hover:text-white">Google Analyticsダッシュボード</a> でご確認ください。
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Overview Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+            <div class="p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm" style="color: #9ca3af;">総PDF数</span>
+                <i class="fas fa-file-pdf" style="color: #ef4444;"></i>
+              </div>
+              <div class="text-3xl font-bold" style="color: #f3f4f6;">${overview.totalPdfs}</div>
+            </div>
+            
+            <div class="p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm" style="color: #9ca3af;">総ダウンロード数</span>
+                <i class="fas fa-download" style="color: #3b82f6;"></i>
+              </div>
+              <div class="text-3xl font-bold" style="color: #f3f4f6;">${overview.totalDownloads}</div>
+            </div>
+            
+            <div class="p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm" style="color: #9ca3af;">カテゴリ数</span>
+                <i class="fas fa-layer-group" style="color: #10b981;"></i>
+              </div>
+              <div class="text-3xl font-bold" style="color: #f3f4f6;">${overview.totalCategories}</div>
+            </div>
+            
+            <div class="p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm" style="color: #9ca3af;">タグ数</span>
+                <i class="fas fa-tags" style="color: #f59e0b;"></i>
+              </div>
+              <div class="text-3xl font-bold" style="color: #f3f4f6;">${overview.totalTags}</div>
+            </div>
+            
+            <div class="p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm" style="color: #9ca3af;">直近7日の新規PDF</span>
+                <i class="fas fa-star" style="color: #fbbf24;"></i>
+              </div>
+              <div class="text-3xl font-bold" style="color: #f3f4f6;">${overview.recentPdfs}</div>
+            </div>
+          </div>
+          
+          <!-- Charts Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Top 10 PDFs -->
+            <div class="p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <h3 class="text-lg font-bold mb-4 flex items-center" style="color: #f3f4f6;">
+                <i class="fas fa-trophy mr-2" style="color: #fbbf24;"></i>
+                人気PDF トップ10
+              </h3>
+              <div class="space-y-2 max-h-96 overflow-y-auto">
+                ${topPdfs.map((pdf, index) => `
+                  <div class="p-3 rounded-lg flex items-center gap-3" style="background-color: #2d2d2d;">
+                    <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold" style="background-color: ${index < 3 ? '#fbbf24' : '#4b5563'}; color: ${index < 3 ? '#1f2937' : '#f3f4f6'};">
+                      ${index + 1}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-medium truncate" style="color: #f3f4f6;">${escapeHtml(pdf.title)}</p>
+                      <p class="text-xs" style="color: #9ca3af;">${escapeHtml(pdf.category_name || 'カテゴリなし')}</p>
+                    </div>
+                    <div class="flex-shrink-0 text-right">
+                      <p class="text-lg font-bold" style="color: #3b82f6;">${pdf.download_count}</p>
+                      <p class="text-xs" style="color: #9ca3af;">DL</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            
+            <!-- Categories Stats -->
+            <div class="p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <h3 class="text-lg font-bold mb-4 flex items-center" style="color: #f3f4f6;">
+                <i class="fas fa-layer-group mr-2" style="color: #10b981;"></i>
+                カテゴリ別統計
+              </h3>
+              <div class="space-y-2 max-h-96 overflow-y-auto">
+                ${categories.map((cat) => `
+                  <div class="p-3 rounded-lg" style="background-color: #2d2d2d;">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm font-medium" style="color: #f3f4f6;">
+                        <i class="${getCategoryIcon(cat.name)} mr-2" style="color: #e75556;"></i>
+                        ${escapeHtml(cat.name)}
+                      </span>
+                      <span class="text-xs px-2 py-1 rounded-full" style="background-color: #4b5563; color: #d1d5db;">
+                        ${cat.pdf_count} 件
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <div class="flex-1 h-2 rounded-full overflow-hidden" style="background-color: #1f2937;">
+                        <div class="h-full rounded-full" style="background-color: #3b82f6; width: ${Math.min(100, (cat.total_downloads / overview.totalDownloads) * 100)}%;"></div>
+                      </div>
+                      <span class="text-sm font-bold" style="color: #3b82f6;">${cat.total_downloads || 0} DL</span>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Footer -->
+          <div class="mt-6 pt-4 border-t-2" style="border-color: #4b5563;">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+              <p class="text-sm" style="color: #9ca3af;">
+                <i class="fas fa-clock mr-1"></i>
+                最終更新: ${new Date().toLocaleString('ja-JP')}
+              </p>
+              <button onclick="closeModal(event)" class="px-4 py-2 rounded-lg font-semibold" style="background-color: #4b5563; color: #f3f4f6;">
+                閉じる
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  } catch (error) {
+    console.error('Failed to load analytics:', error)
+    alert('アクセス解析データの読み込みに失敗しました')
+  }
 }
 
 // Initialize on page load

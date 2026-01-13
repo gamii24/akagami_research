@@ -46,6 +46,17 @@ export const renderer = jsxRenderer(({ children }) => {
         {/* Web App Manifest (PWA) */}
         <link rel="manifest" href="/manifest.json" />
         
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JPMZ82RMGG');
+          `
+        }} />
+        
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `

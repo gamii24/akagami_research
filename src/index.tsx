@@ -72,6 +72,96 @@ async function requireAuth(c: any, next: any) {
 }
 
 // ============================================
+// API Routes - Analytics (protected)
+// ============================================
+
+// Get PDF download statistics
+app.get('/api/analytics/pdfs', requireAuth, async (c) => {
+  try {
+    // Get top 10 most downloaded PDFs
+    const { results: topPdfs } = await c.env.DB.prepare(`
+      SELECT 
+        p.id,
+        p.title,
+        p.download_count,
+        p.created_at,
+        c.name as category_name
+      FROM pdfs p
+      LEFT JOIN categories c ON p.category_id = c.id
+      ORDER BY p.download_count DESC
+      LIMIT 10
+    `).all()
+    
+    return c.json(topPdfs)
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500)
+  }
+})
+
+// Get category statistics
+app.get('/api/analytics/categories', requireAuth, async (c) => {
+  try {
+    const { results: categoryStats } = await c.env.DB.prepare(`
+      SELECT 
+        c.id,
+        c.name,
+        COUNT(p.id) as pdf_count,
+        SUM(p.download_count) as total_downloads
+      FROM categories c
+      LEFT JOIN pdfs p ON c.id = p.category_id
+      GROUP BY c.id, c.name
+      ORDER BY total_downloads DESC
+    `).all()
+    
+    return c.json(categoryStats)
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500)
+  }
+})
+
+// Get overall statistics
+app.get('/api/analytics/overview', requireAuth, async (c) => {
+  try {
+    // Total PDFs
+    const totalPdfs = await c.env.DB.prepare(
+      'SELECT COUNT(*) as count FROM pdfs'
+    ).first()
+    
+    // Total downloads
+    const totalDownloads = await c.env.DB.prepare(
+      'SELECT SUM(download_count) as count FROM pdfs'
+    ).first()
+    
+    // Total categories
+    const totalCategories = await c.env.DB.prepare(
+      'SELECT COUNT(*) as count FROM categories'
+    ).first()
+    
+    // Total tags
+    const totalTags = await c.env.DB.prepare(
+      'SELECT COUNT(*) as count FROM tags'
+    ).first()
+    
+    // Recent PDFs (last 7 days)
+    const recentPdfs = await c.env.DB.prepare(`
+      SELECT COUNT(*) as count 
+      FROM pdfs 
+      WHERE created_at >= datetime('now', '-7 days')
+    `).first()
+    
+    return c.json({
+      totalPdfs: totalPdfs?.count || 0,
+      totalDownloads: totalDownloads?.count || 0,
+      totalCategories: totalCategories?.count || 0,
+      totalTags: totalTags?.count || 0,
+      recentPdfs: recentPdfs?.count || 0
+    })
+  } catch (error: any) {
+    return c.json({ error: error.message }, 500)
+  }
+})
+
+// ============================================
 // API Routes - Categories
 // ============================================
 
@@ -793,6 +883,18 @@ app.get('/admin', (c) => {
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Akagami Research - 管理画面</title>
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JPMZ82RMGG');
+          `
+        }} />
+        
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
           __html: `

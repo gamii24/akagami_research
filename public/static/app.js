@@ -20,6 +20,24 @@ let state = {
   darkMode: false // Dark mode
 }
 
+// Google Analytics Event Tracking
+function trackGAEvent(eventName, params = {}) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', eventName, params)
+    console.log('GA Event:', eventName, params)
+  }
+}
+
+// Track page view
+function trackPageView(pagePath, pageTitle) {
+  if (typeof gtag !== 'undefined') {
+    gtag('config', 'G-JPMZ82RMGG', {
+      page_path: pagePath,
+      page_title: pageTitle
+    })
+  }
+}
+
 // Load downloaded PDFs from localStorage
 function loadDownloadedPdfs() {
   try {
@@ -294,10 +312,22 @@ function isFavorite(pdfId) {
 function toggleFavorite(event, pdfId) {
   event.stopPropagation() // Prevent triggering the card click
   
+  const isAdding = !state.favoritePdfs.has(pdfId)
+  
   if (state.favoritePdfs.has(pdfId)) {
     state.favoritePdfs.delete(pdfId)
   } else {
     state.favoritePdfs.add(pdfId)
+  }
+  
+  // Track favorite event
+  const pdf = state.allPdfs.find(p => p.id === pdfId)
+  if (pdf) {
+    trackGAEvent(isAdding ? 'favorite_add' : 'favorite_remove', {
+      pdf_id: pdfId,
+      pdf_title: pdf.title,
+      category: pdf.category_name || 'Unknown'
+    })
   }
   
   // Save to localStorage
@@ -334,6 +364,15 @@ function sharePDF(event, pdfId, title, url) {
     alert('このPDFのURLが設定されていません')
     return
   }
+  
+  // Track share event
+  const pdf = state.allPdfs.find(p => p.id === pdfId)
+  trackGAEvent('share', {
+    pdf_id: pdfId,
+    pdf_title: title,
+    category: pdf && pdf.category_name ? pdf.category_name : 'Unknown',
+    method: navigator.share ? 'web_share_api' : 'clipboard'
+  })
   
   const shareData = {
     title: title,
@@ -1293,6 +1332,19 @@ function closeDownloadModal(event) {
 
 // Confirm and start download
 async function confirmDownload(pdfId, url) {
+  // Get PDF details for tracking
+  const pdf = state.allPdfs.find(p => p.id === pdfId)
+  const pdfTitle = pdf ? pdf.title : 'Unknown PDF'
+  const categoryName = pdf && pdf.category_name ? pdf.category_name : 'Unknown Category'
+  
+  // Track PDF download event
+  trackGAEvent('pdf_download', {
+    pdf_id: pdfId,
+    pdf_title: pdfTitle,
+    category: categoryName,
+    url: url
+  })
+  
   // Mark as downloaded
   markAsDownloaded(pdfId)
   
@@ -1300,7 +1352,6 @@ async function confirmDownload(pdfId, url) {
   try {
     await fetch(`/api/pdfs/${pdfId}/download`, { method: 'POST' })
     // Update local state
-    const pdf = state.allPdfs.find(p => p.id === pdfId)
     if (pdf) {
       pdf.download_count = (pdf.download_count || 0) + 1
     }
@@ -1446,6 +1497,15 @@ async function bulkDownloadCategory() {
 }
 
 function filterByCategory(categoryId) {
+  // Track category selection
+  const category = state.categories.find(c => c.id === categoryId)
+  if (category) {
+    trackGAEvent('filter_category', {
+      category_id: categoryId,
+      category_name: category.name
+    })
+  }
+  
   state.selectedCategory = categoryId
   state.showDownloadHistory = false // Clear download history mode
   state.showAllMobile = false // Reset mobile "show all" state
@@ -1459,11 +1519,23 @@ function filterByCategory(categoryId) {
 
 function toggleTag(tagId) {
   const index = state.selectedTags.indexOf(tagId)
+  const isAdding = index === -1
+  
   if (index > -1) {
     state.selectedTags.splice(index, 1)
   } else {
     state.selectedTags.push(tagId)
   }
+  
+  // Track tag selection
+  const tag = state.tags.find(t => t.id === tagId)
+  if (tag) {
+    trackGAEvent(isAdding ? 'filter_tag_add' : 'filter_tag_remove', {
+      tag_id: tagId,
+      tag_name: tag.name
+    })
+  }
+  
   state.showDownloadHistory = false // Clear download history mode
   state.showAllMobile = false // Reset mobile "show all" state
   updateURL()
@@ -1514,6 +1586,14 @@ function searchPDFs() {
   const input = document.getElementById('search-input')
   if (input) {
     state.searchQuery = input.value
+    
+    // Track search event
+    if (state.searchQuery) {
+      trackGAEvent('search', {
+        search_term: state.searchQuery
+      })
+    }
+    
     state.showDownloadHistory = false // Clear download history mode
     state.showAllMobile = false // Reset mobile "show all" state
     updateURL()
@@ -1557,6 +1637,15 @@ function searchPDFsMobile() {
   const input = document.getElementById('mobile-search-input')
   if (input) {
     state.searchQuery = input.value
+    
+    // Track search event
+    if (state.searchQuery) {
+      trackGAEvent('search', {
+        search_term: state.searchQuery,
+        device: 'mobile'
+      })
+    }
+    
     state.showDownloadHistory = false // Clear download history mode
     state.showAllMobile = false // Reset mobile "show all" state
     updateURL()
