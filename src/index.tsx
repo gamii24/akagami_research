@@ -720,53 +720,63 @@ app.post('/api/pdfs/regenerate-tags', requireAuth, async (c) => {
 // ============================================
 
 // Category-specific meta information
-const categoryMeta: Record<number, { title: string; description: string; keywords: string }> = {
+const categoryMeta: Record<number, { name: string; title: string; description: string; keywords: string }> = {
   1: {
+    name: "YouTube資料",
     title: "YouTube資料 - Akagami Research",
     description: "YouTubeマーケティング・運用・戦略に関する資料を無料で公開。チャンネル運営、動画制作、収益化、SEO対策など、YouTube攻略のノウハウが満載。",
     keywords: "YouTube,YouTubeマーケティング,動画制作,チャンネル運営,収益化,YouTube SEO"
   },
   2: {
+    name: "Threads資料",
     title: "Threads資料 - Akagami Research",
     description: "Threadsマーケティング・運用戦略に関する資料を無料で公開。Meta社の新SNS「Threads」の効果的な活用方法、フォロワー獲得術を解説。",
     keywords: "Threads,Threadsマーケティング,Meta,SNS運用,フォロワー獲得"
   },
   3: {
+    name: "Podcast資料",
     title: "Podcast資料 - Akagami Research",
     description: "ポッドキャストマーケティング・配信戦略に関する資料を無料で公開。音声メディアの活用方法、収益化、リスナー獲得のノウハウを提供。",
     keywords: "Podcast,ポッドキャスト,音声配信,音声マーケティング,リスナー獲得"
   },
   4: {
+    name: "LINE公式資料",
     title: "LINE公式資料 - Akagami Research",
     description: "LINE公式アカウントのマーケティング・運用戦略に関する資料を無料で公開。友だち獲得、メッセージ配信、自動応答の活用方法を解説。",
     keywords: "LINE公式,LINE公式アカウント,LINEマーケティング,友だち獲得,メッセージ配信"
   },
   5: {
+    name: "Instagram資料",
     title: "Instagram資料 - Akagami Research",
     description: "Instagramマーケティング・運用戦略に関する資料を無料で公開。投稿戦略、リール活用、フォロワー増加、ストーリーズ運用など実践的なノウハウが満載。",
     keywords: "Instagram,インスタグラム,Instagramマーケティング,リール,ストーリーズ,フォロワー増加"
   },
   6: {
+    name: "TikTok資料",
     title: "TikTok資料 - Akagami Research",
     description: "TikTokマーケティング・運用戦略に関する資料を無料で公開。バズる動画の作り方、アルゴリズム攻略、フォロワー獲得の実践的なノウハウを提供。",
     keywords: "TikTok,TikTokマーケティング,ショート動画,バズる方法,TikTokアルゴリズム"
   },
   7: {
+    name: "X (旧Twitter) 資料",
     title: "X (旧Twitter) 資料 - Akagami Research",
     description: "X (旧Twitter) のマーケティング・運用戦略に関する資料を無料で公開。投稿戦略、エンゲージメント向上、フォロワー獲得の実践的なノウハウを解説。",
     keywords: "X,Twitter,Xマーケティング,Twitterマーケティング,SNS運用,フォロワー獲得"
   },
   8: {
+    name: "マーケティング資料",
     title: "マーケティング資料 - Akagami Research",
     description: "デジタルマーケティング・SNSマーケティングに関する資料を無料で公開。戦略立案、分析手法、広告運用、コンテンツマーケティングの実践ノウハウを提供。",
     keywords: "マーケティング,デジタルマーケティング,SNSマーケティング,広告運用,コンテンツマーケティング"
   },
   9: {
+    name: "その他資料",
     title: "その他資料 - Akagami Research",
     description: "SNSマーケティング全般に関する資料を無料で公開。トレンド情報、ツール紹介、分析手法など、幅広いマーケティング情報を提供。",
     keywords: "SNSマーケティング,マーケティングツール,トレンド,分析手法"
   },
   10: {
+    name: "生成AI資料",
     title: "生成AI資料 - Akagami Research",
     description: "生成AI・ChatGPT活用に関する資料を無料で公開。AIツールの使い方、プロンプトエンジニアリング、業務効率化の実践方法を解説。",
     keywords: "生成AI,ChatGPT,AI活用,プロンプトエンジニアリング,業務効率化,AIツール"
@@ -804,10 +814,10 @@ app.get('/', (c) => {
     : {
         title: "Akagami Research - SNSマーケティング・生成AI資料保管庫",
         description: "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。",
-        keywords: "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長"
+        keywords: "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長",
+        name: null as string | null
       }
   
-  // Pass meta information to renderer
   return c.render(
     <div class="min-h-screen bg-white flex flex-col">
       {/* Header */}
@@ -1033,7 +1043,9 @@ app.get('/', (c) => {
     {
       title: meta.title,
       description: meta.description,
-      keywords: meta.keywords
+      keywords: meta.keywords,
+      categoryName: meta.name || null,
+      categoryId: categoryId
     }
   )
 })

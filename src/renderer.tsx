@@ -1,10 +1,82 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
 
-export const renderer = jsxRenderer(({ children, title, description, keywords }) => {
+export const renderer = jsxRenderer(({ children, title, description, keywords, categoryName, categoryId }) => {
   // Default meta values
   const pageTitle = title || "Akagami Research - SNSマーケティング・生成AI資料保管庫"
   const pageDescription = description || "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。"
   const pageKeywords = keywords || "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長"
+  
+  // Build structured data based on page type
+  const structuredDataArray: any[] = [
+    // WebSite schema (always present)
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Akagami Research",
+      "description": "SNSマーケティング・生成AI資料保管庫",
+      "url": "https://akagami.net/",
+      "author": {
+        "@type": "Person",
+        "name": "Akagami",
+        "url": "https://www.instagram.com/akagami_sns/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Akagami Research",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://akagami.net/favicon-512.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://akagami.net/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "inLanguage": "ja-JP"
+    }
+  ]
+  
+  // Add BreadcrumbList for category pages
+  if (categoryId && categoryName) {
+    structuredDataArray.push({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "ホーム",
+          "item": "https://akagami.net/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": categoryName,
+          "item": `https://akagami.net/?category=${categoryId}`
+        }
+      ]
+    })
+    
+    // Add CollectionPage for category pages
+    structuredDataArray.push({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": pageTitle,
+      "description": pageDescription,
+      "url": `https://akagami.net/?category=${categoryId}`,
+      "about": {
+        "@type": "Thing",
+        "name": categoryName
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Akagami Research",
+        "url": "https://akagami.net/"
+      },
+      "inLanguage": "ja-JP"
+    })
+  }
   
   return (
     <html lang="ja">
@@ -81,34 +153,11 @@ export const renderer = jsxRenderer(({ children, title, description, keywords })
         }} />
         
         {/* Structured Data (JSON-LD) for SEO */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "Akagami Research",
-            "description": "SNSマーケティング・生成AI資料保管庫",
-            "url": "https://akagami.net/",
-            "author": {
-              "@type": "Person",
-              "name": "Akagami",
-              "url": "https://www.instagram.com/akagami_sns/"
-            },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Akagami Research",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://akagami.net/favicon-512.png"
-              }
-            },
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://akagami.net/?search={search_term_string}",
-              "query-input": "required name=search_term_string"
-            },
-            "inLanguage": "ja-JP"
-          })
-        }} />
+        {structuredDataArray.map((schema, index) => (
+          <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema)
+          }} />
+        ))}
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
