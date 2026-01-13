@@ -96,24 +96,43 @@ function renderMyPage(downloads, favorites) {
       </div>
     </div>
 
-    <!-- Notification Settings Section -->
+    <!-- Favorites Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
       <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-        <i class="fas fa-bell text-primary mr-3"></i>
-        メール通知設定
+        <i class="fas fa-heart text-primary mr-3"></i>
+        お気に入り
+        <span class="ml-3 text-lg font-normal text-gray-600">(${favorites.length}件)</span>
       </h3>
-      <p class="text-gray-600 mb-6 text-sm">
-        興味のあるSNSカテゴリを選択してください。チェックを入れたカテゴリの新着資料を毎週月曜日にメールでお知らせします。
-      </p>
       
-      <div id="notification-categories" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
-        ${renderNotificationCategories()}
-      </div>
-      
-      <button onclick="saveNotificationSettings()" 
-        class="mt-6 w-full md:w-auto px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors font-medium">
-        <i class="fas fa-save mr-2"></i>通知設定を保存
-      </button>
+      ${favorites.length > 0 ? `
+        <div class="space-y-3">
+          ${favorites.slice(0, 10).map(f => `
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <div class="flex-1">
+                <h4 class="font-medium text-gray-800 mb-1">${escapeHtml(f.title)}</h4>
+                <div class="flex items-center gap-4 text-sm text-gray-600">
+                  <span><i class="fas fa-folder mr-1"></i>${escapeHtml(f.categoryName)}</span>
+                  <span><i class="fas fa-clock mr-1"></i>${new Date(f.createdAt).toLocaleDateString('ja-JP')}</span>
+                </div>
+              </div>
+              <a href="${escapeHtml(f.googleDriveUrl)}" target="_blank" rel="noopener noreferrer"
+                class="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors">
+                <i class="fas fa-external-link-alt mr-2"></i>開く
+              </a>
+            </div>
+          `).join('')}
+        </div>
+        ${favorites.length > 10 ? `
+          <p class="text-center text-gray-600 mt-4 text-sm">
+            最新10件を表示中 (全${favorites.length}件)
+          </p>
+        ` : ''}
+      ` : `
+        <p class="text-center text-gray-500 py-8">
+          <i class="fas fa-inbox text-5xl mb-3 opacity-50"></i><br>
+          まだお気に入りがありません
+        </p>
+      `}
     </div>
 
     <!-- Download History Section -->
@@ -155,43 +174,24 @@ function renderMyPage(downloads, favorites) {
       `}
     </div>
 
-    <!-- Favorites Section -->
+    <!-- Notification Settings Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
       <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-        <i class="fas fa-heart text-primary mr-3"></i>
-        お気に入り
-        <span class="ml-3 text-lg font-normal text-gray-600">(${favorites.length}件)</span>
+        <i class="fas fa-bell text-primary mr-3"></i>
+        メール通知設定
       </h3>
+      <p class="text-gray-600 mb-6 text-sm">
+        興味のあるSNSカテゴリを選択してください。チェックを入れたカテゴリの新着資料を毎週月曜日にメールでお知らせします。
+      </p>
       
-      ${favorites.length > 0 ? `
-        <div class="space-y-3">
-          ${favorites.slice(0, 10).map(f => `
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <div class="flex-1">
-                <h4 class="font-medium text-gray-800 mb-1">${escapeHtml(f.title)}</h4>
-                <div class="flex items-center gap-4 text-sm text-gray-600">
-                  <span><i class="fas fa-folder mr-1"></i>${escapeHtml(f.categoryName)}</span>
-                  <span><i class="fas fa-clock mr-1"></i>${new Date(f.createdAt).toLocaleDateString('ja-JP')}</span>
-                </div>
-              </div>
-              <a href="${escapeHtml(f.googleDriveUrl)}" target="_blank" rel="noopener noreferrer"
-                class="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors">
-                <i class="fas fa-external-link-alt mr-2"></i>開く
-              </a>
-            </div>
-          `).join('')}
-        </div>
-        ${favorites.length > 10 ? `
-          <p class="text-center text-gray-600 mt-4 text-sm">
-            最新10件を表示中 (全${favorites.length}件)
-          </p>
-        ` : ''}
-      ` : `
-        <p class="text-center text-gray-500 py-8">
-          <i class="fas fa-inbox text-5xl mb-3 opacity-50"></i><br>
-          まだお気に入りがありません
-        </p>
-      `}
+      <div id="notification-categories" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+        ${renderNotificationCategories()}
+      </div>
+      
+      <button onclick="saveNotificationSettings()" 
+        class="mt-6 w-full md:w-auto px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors font-medium">
+        <i class="fas fa-save mr-2"></i>通知設定を保存
+      </button>
     </div>
 
     <!-- SNS Information Section -->
