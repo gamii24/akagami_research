@@ -88,6 +88,9 @@ function renderMyPage(downloads, favorites) {
           <p class="text-sm text-gray-600 truncate"><i class="fas fa-envelope mr-1"></i>${escapeHtml(userData.email)}</p>
           <p class="text-xs text-gray-500 mt-1">
             <i class="fas fa-calendar mr-1"></i>${new Date(userData.createdAt).toLocaleDateString('ja-JP')} 登録
+            <span class="ml-3">
+              <i class="fas fa-id-card mr-1"></i>会員番号: ${userData.id}
+            </span>
           </p>
         </div>
       </div>
