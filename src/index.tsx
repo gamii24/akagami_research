@@ -1461,28 +1461,15 @@ app.get('/', (c) => {
               </h1>
               <p class="text-white text-sm mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
             </a>
-            <div class="flex items-center gap-4">
-              {/* Auth Button */}
-              <div id="auth-button">
-                <button 
-                  class="hidden md:flex items-center gap-2 bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold"
-                  onclick="showLoginModal()"
-                  aria-label="ログイン"
-                >
-                  <i class="fas fa-sign-in-alt"></i>
-                  <span>ログイン</span>
-                </button>
-              </div>
-              {/* Mobile Menu Button */}
-              <button 
-                onclick="toggleMobileMenu()"
-                class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-                aria-label="メニューを開く"
-                aria-expanded="false"
-              >
-                <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
-              </button>
-            </div>
+            {/* Mobile Menu Button */}
+            <button 
+              onclick="toggleMobileMenu()"
+              class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+              aria-label="メニューを開く"
+              aria-expanded="false"
+            >
+              <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </header>
@@ -1588,6 +1575,11 @@ app.get('/', (c) => {
                   <i class="fas fa-history" aria-hidden="true"></i>
                   <span>ダウンロード履歴</span>
                 </button>
+              </div>
+
+              {/* User Account Section */}
+              <div id="user-account-section" class="mt-4">
+                {/* This will be populated by auth.js */}
               </div>
 
               {/* Dark Mode Toggle */}
@@ -1852,32 +1844,6 @@ app.get('/', (c) => {
       </div>
 
       {/* User Menu Dropdown */}
-      <div id="user-menu" class="hidden">
-        <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
-          <button 
-            onclick="showMyPage()"
-            class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-2"
-          >
-            <i class="fas fa-user"></i>
-            マイページ
-          </button>
-          <button 
-            onclick="showNotificationSettings()"
-            class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-2"
-          >
-            <i class="fas fa-bell"></i>
-            通知設定
-          </button>
-          <hr class="my-2 border-gray-200" />
-          <button 
-            onclick="handleLogout()"
-            class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
-          >
-            <i class="fas fa-sign-out-alt"></i>
-            ログアウト
-          </button>
-        </div>
-      </div>
     </div>,
     {
       title: meta.title,

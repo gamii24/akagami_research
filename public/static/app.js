@@ -1745,8 +1745,14 @@ function toggleMobileMenu() {
   const sidebar = document.getElementById('sidebar')
   const overlay = document.getElementById('sidebar-overlay')
   if (sidebar && overlay) {
+    const isOpening = !sidebar.classList.contains('show-mobile')
     sidebar.classList.toggle('show-mobile')
     overlay.classList.toggle('show')
+    
+    // Check auth when opening menu (if manualCheckAuth is available)
+    if (isOpening && typeof manualCheckAuth === 'function') {
+      manualCheckAuth()
+    }
   }
 }
 

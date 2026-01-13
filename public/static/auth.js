@@ -107,64 +107,60 @@ async function loadUserData() {
 
 // Update UI based on authentication status
 function updateAuthUI() {
-  const authButton = document.getElementById('auth-button')
-  const userMenu = document.getElementById('user-menu')
+  const userAccountSection = document.getElementById('user-account-section')
+  
+  if (!userAccountSection) return
   
   if (state.isAuthenticated && state.user) {
-    // Show user menu
-    if (authButton) {
-      authButton.innerHTML = `
-        <button 
-          class="flex items-center gap-2 text-gray-700 hover:text-red-600 transition-colors"
-          onclick="toggleUserMenu()"
-          aria-label="ユーザーメニュー"
-        >
-          <i class="fas fa-user-circle text-2xl"></i>
-          <span class="hidden md:inline">${escapeHtml(state.user.name)}</span>
-          <i class="fas fa-chevron-down text-sm"></i>
-        </button>
-      `
-    }
+    // Show user info and menu
+    userAccountSection.innerHTML = `
+      <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <i class="fas fa-user-circle text-2xl text-blue-600"></i>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-800 truncate">${escapeHtml(state.user.name)}</p>
+            <p class="text-xs text-gray-600 truncate">${escapeHtml(state.user.email)}</p>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <button 
+            onclick="showMyPage()"
+            class="w-full px-3 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-sm flex items-center gap-2 border border-gray-200"
+          >
+            <i class="fas fa-user"></i>
+            <span>マイページ</span>
+          </button>
+          <button 
+            onclick="showNotificationSettings()"
+            class="w-full px-3 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-sm flex items-center gap-2 border border-gray-200"
+          >
+            <i class="fas fa-bell"></i>
+            <span>通知設定</span>
+          </button>
+          <button 
+            onclick="handleLogout()"
+            class="w-full px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors text-sm flex items-center gap-2 border border-red-200"
+          >
+            <i class="fas fa-sign-out-alt"></i>
+            <span>ログアウト</span>
+          </button>
+        </div>
+      </div>
+    `
   } else {
     // Show login/register buttons
-    if (authButton) {
-      authButton.innerHTML = `
-        <button 
-          class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-          onclick="showLoginModal()"
-          aria-label="ログイン"
-        >
-          <i class="fas fa-sign-in-alt mr-2"></i>ログイン
-        </button>
-      `
-    }
-  }
-  
-  // Update user menu dropdown
-  if (userMenu && state.isAuthenticated) {
-    userMenu.classList.remove('hidden')
-  } else if (userMenu) {
-    userMenu.classList.add('hidden')
+    userAccountSection.innerHTML = `
+      <button 
+        onclick="showLoginModal()"
+        class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-semibold shadow-sm flex items-center justify-center gap-2"
+        aria-label="ログイン"
+      >
+        <i class="fas fa-sign-in-alt"></i>
+        <span>ログイン / 会員登録</span>
+      </button>
+    `
   }
 }
-
-// Toggle user menu dropdown
-function toggleUserMenu() {
-  const dropdown = document.getElementById('user-menu-dropdown')
-  if (dropdown) {
-    dropdown.classList.toggle('hidden')
-  }
-}
-
-// Close user menu when clicking outside
-document.addEventListener('click', (e) => {
-  const userMenu = document.getElementById('user-menu')
-  const dropdown = document.getElementById('user-menu-dropdown')
-  
-  if (userMenu && dropdown && !userMenu.contains(e.target)) {
-    dropdown.classList.add('hidden')
-  }
-})
 
 // Show login modal
 function showLoginModal() {
@@ -511,14 +507,23 @@ function escapeHtml(text) {
 
 // Check for magic link token on page load
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check authentication status
-  await checkAuthStatus()
-  
-  // Check for magic link token in URL
+  // Only check for magic link token, don't auto-check auth status
   const urlParams = new URLSearchParams(window.location.search)
   const token = urlParams.get('token')
   
   if (token) {
     await verifyMagicLink(token)
+  } else {
+    // Just update UI to show login button, no API call
+    updateAuthUI()
   }
 })
+
+// Manual check auth - only call when user opens menu or interacts
+async function manualCheckAuth() {
+  if (state.isAuthenticated) {
+    // Already checked
+    return
+  }
+  await checkAuthStatus()
+}
