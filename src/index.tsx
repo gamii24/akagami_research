@@ -991,4 +991,140 @@ app.get('/admin', (c) => {
   )
 })
 
+// 404 Not Found Page
+app.notFound((c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>404 Not Found - Akagami Research</title>
+        
+        {/* Performance Optimization */}
+        <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+        <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes float {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-20px); }
+            }
+            .float-animation {
+              animation: float 3s ease-in-out infinite;
+            }
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .fade-in {
+              animation: fadeIn 0.8s ease-out;
+            }
+          `
+        }} />
+      </head>
+      <body class="bg-gradient-to-br from-white via-pink-50 to-red-50 min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-2xl w-full text-center fade-in">
+          {/* Large 404 Text */}
+          <div class="float-animation mb-8">
+            <h1 class="text-9xl md:text-[12rem] font-bold text-primary mb-4" style="line-height: 1;">
+              404
+            </h1>
+          </div>
+          
+          {/* Error Icon */}
+          <div class="mb-6">
+            <i class="fas fa-exclamation-triangle text-6xl text-primary opacity-80"></i>
+          </div>
+          
+          {/* Error Message */}
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            ページが見つかりません
+          </h2>
+          <p class="text-lg text-gray-600 mb-8 px-4">
+            お探しのページは削除されたか、URLが変更された可能性があります。
+          </p>
+          
+          {/* Action Buttons */}
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <a 
+              href="/"
+              class="px-8 py-4 bg-primary text-white rounded-lg hover:bg-red-600 transition-all duration-300 shadow-lg hover:shadow-2xl font-semibold text-lg flex items-center gap-2"
+            >
+              <i class="fas fa-home"></i>
+              <span>ホームに戻る</span>
+            </a>
+            <button 
+              onclick="history.back()"
+              class="px-8 py-4 bg-white text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-300 shadow-md hover:shadow-lg font-semibold text-lg border-2 border-gray-300 flex items-center gap-2"
+            >
+              <i class="fas fa-arrow-left"></i>
+              <span>前のページへ</span>
+            </button>
+          </div>
+          
+          {/* Helpful Links */}
+          <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-primary">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-2">
+              <i class="fas fa-link text-primary"></i>
+              お役立ちリンク
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <a 
+                href="/?category=1"
+                class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+              >
+                <i class="fab fa-youtube"></i>
+                <span>YouTube資料</span>
+              </a>
+              <a 
+                href="/?category=5"
+                class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+              >
+                <i class="fab fa-instagram"></i>
+                <span>Instagram資料</span>
+              </a>
+              <a 
+                href="/?category=6"
+                class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+              >
+                <i class="fab fa-tiktok"></i>
+                <span>TikTok資料</span>
+              </a>
+              <a 
+                href="/?category=9"
+                class="px-4 py-3 bg-gray-50 hover:bg-primary hover:text-white rounded-lg transition-all duration-300 text-gray-700 font-medium flex items-center justify-center gap-2"
+              >
+                <i class="fas fa-robot"></i>
+                <span>生成AI資料</span>
+              </a>
+            </div>
+          </div>
+          
+          {/* Footer */}
+          <div class="mt-8 text-sm text-gray-500">
+            <p>&copy; 2026 Akagami Research. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  )
+})
+
 export default app
