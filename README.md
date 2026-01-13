@@ -38,6 +38,40 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 リアルタイムのアクセス解析は [Google Analyticsダッシュボード](https://analytics.google.com/analytics/web/#/p13287130556/reports/intelligenthome) で確認できます。
 
+## 🔍 SEO対策
+
+### robots.txt
+検索エンジンのクローリングを適切に制御：
+- **全ページ許可**: 公開ページは全て検索対象
+- **管理画面をブロック**: `/admin` は検索エンジンからブロック
+- **Sitemap参照**: `sitemap.xml` の場所を明示
+- **URL**: https://akagami.net/robots.txt
+
+### sitemap.xml (動的生成)
+検索エンジンに全コンテンツを通知：
+- **ホームページ**: 最高優先度 (1.0)、毎日更新
+- **カテゴリページ**: 優先度 0.8、週次更新
+- **PDFページ**: 優先度 0.6、月次更新、最終更新日付付き
+- **自動更新**: データベースから動的に生成、常に最新
+- **URL**: https://akagami.net/sitemap.xml
+
+### 強化されたメタタグ
+- **Robotsタグ**: `index, follow` で検索エンジンに完全インデックス許可
+- **言語タグ**: 日本語サイトとして明示
+- **Canonical URL**: 重複コンテンツを防止
+- **構造化データ (JSON-LD)**: Schema.org WebSite形式で検索エンジンに詳細情報提供
+  - サイト名、説明、URL
+  - 著者情報
+  - 検索機能の定義 (SearchAction)
+  - 言語情報 (ja-JP)
+
+### Google Search Consoleへの登録推奨
+SEO効果を最大化するため、以下の手順を推奨：
+1. [Google Search Console](https://search.google.com/search-console) にサイトを登録
+2. サイトマップ (`https://akagami.net/sitemap.xml`) を送信
+3. インデックス状況を定期的に確認
+4. 検索パフォーマンスをモニタリング
+
 ## 🎨 カラーパレット
 
 - **Primary**: #e75556 - メインの赤色
@@ -47,8 +81,10 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://6d8f7820.akagami-research.pages.dev
+- **最新デプロイ**: https://91bdf3da.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
+- **robots.txt**: https://akagami.net/robots.txt
+- **sitemap.xml**: https://akagami.net/sitemap.xml
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
