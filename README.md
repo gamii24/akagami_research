@@ -38,6 +38,41 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 リアルタイムのアクセス解析は [Google Analyticsダッシュボード](https://analytics.google.com/analytics/web/#/p13287130556/reports/intelligenthome) で確認できます。
 
+## ♿ アクセシビリティ対応
+
+### ARIA属性の実装
+スクリーンリーダーや支援技術をサポートするため、以下のアクセシビリティ機能を実装：
+
+1. **aria-label属性**: すべてのボタンと対話要素に説明的なラベルを追加
+2. **aria-pressed属性**: トグルボタン（ソート、フィルター、お気に入り）の状態を明示
+3. **aria-hidden="true"**: 装飾用アイコンを支援技術から隠す
+4. **role属性**: セマンティックな役割を明示（searchbox、button）
+5. **aria-expanded属性**: メニューの展開状態を明示
+
+### 実装箇所
+- **フロントエンド (app.js)**:
+  - カテゴリボタン、タグボタン
+  - ソートボタン（新着順、古い順、人気順）
+  - お気に入りフィルター、表示モード切り替え
+  - PDFカードの共有・お気に入りボタン
+  - 検索入力とボタン
+  
+- **管理画面 (admin.js)**:
+  - 全てのアクションボタン（PDF追加、一括アップロード、カテゴリ管理等）
+  - PDF編集・削除ボタン
+  - モーダルの閉じるボタン
+  - ログアウトボタン
+
+- **404ページ**:
+  - ホームボタン、戻るボタン
+  - カテゴリへのクイックリンク
+
+### アクセシビリティ向上の効果
+- スクリーンリーダーユーザーが各ボタンの機能を理解できる
+- キーボードナビゲーションが改善
+- WCAG 2.1 ガイドラインに準拠
+- より広い範囲のユーザーがサイトを利用可能
+
 ## 🔍 SEO対策
 
 ### robots.txt
@@ -207,11 +242,11 @@ SEO効果を最大化するため、以下の手順を推奨：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://4d35326c.akagami-research.pages.dev
+- **最新デプロイ**: https://d2f5deac.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
-- **404エラーページ**: https://4d35326c.akagami-research.pages.dev/test-404
+- **404エラーページ**: https://d2f5deac.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
