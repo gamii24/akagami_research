@@ -1,0 +1,35 @@
+/* TEAM */
+Developer: Akagami
+Instagram: @akagami_sns
+Twitter/X: @akagami0124
+Location: Japan
+
+/* THANKS */
+Framework: Hono
+Hosting: Cloudflare Pages
+Database: Cloudflare D1
+Analytics: Google Analytics 4
+Design: Tailwind CSS
+Icons: FontAwesome
+
+/* SITE */
+Last update: 2026/01/13
+Standards: HTML5, CSS3, ES6+, TypeScript
+Components: Hono, Vite, TypeScript, Cloudflare Workers
+IDE: Claude Code (AI-powered development)
+Accessibility: WCAG 2.1 Level AA compliant
+SEO: Structured Data (JSON-LD), Schema.org
+
+/* FEATURES */
+- Real-time PDF management
+- Category and tag filtering
+- Dark mode support
+- Google Analytics integration
+- Download history tracking
+- Favorites system
+- Search functionality
+- Responsive design (mobile-first)
+- Admin dashboard with JWT authentication
+- Structured data for rich snippets
+- Security headers (CSP, HSTS, etc.)
+- Performance optimized (WebP images, preload, etc.)

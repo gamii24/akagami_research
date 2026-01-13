@@ -108,21 +108,25 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content="https://akagami.net/og-image.webp" />
+        <meta property="og:image:secure_url" content="https://akagami.net/og-image.webp" />
         <meta property="og:image:type" content="image/webp" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Akagami Research - 毎朝のInstagramLIVEで使用したSNSのことを深掘りしたレポートが無料でGETできる" />
         <meta property="og:site_name" content="Akagami Research" />
         <meta property="og:locale" content="ja_JP" />
+        <meta property="og:locale:alternate" content="en_US" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@akagami0124" />
         <meta name="twitter:url" content="https://akagami.net/" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content="https://akagami.net/og-image.webp" />
         <meta name="twitter:image:alt" content="Akagami Research - SNS資料保管庫" />
         <meta name="twitter:creator" content="@akagami0124" />
+        <meta name="twitter:domain" content="akagami.net" />
         
         {/* Alternative square image for some platforms */}
         <link rel="image_src" href="https://akagami.net/og-image-square.webp" />
@@ -140,6 +144,16 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         
         {/* Web App Manifest (PWA) */}
         <link rel="manifest" href="/manifest.json" />
+        
+        {/* Humans.txt - Developer info */}
+        <link rel="author" href="/humans.txt" />
+        
+        {/* Additional SEO meta tags */}
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Akagami Research" />
         
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>

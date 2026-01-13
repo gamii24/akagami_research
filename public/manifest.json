@@ -1,21 +1,42 @@
 {
-  "name": "Akagami Research",
+  "name": "Akagami Research - SNSマーケティング・生成AI資料保管庫",
   "short_name": "Akagami Research",
-  "description": "SNSマーケティング・生成AI資料保管庫",
+  "description": "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#e75556",
+  "categories": ["business", "education", "productivity"],
+  "lang": "ja",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/favicon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/favicon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.webp",
+      "sizes": "1200x630",
+      "type": "image/webp",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/og-image-square.webp",
+      "sizes": "1080x1080",
+      "type": "image/webp",
+      "form_factor": "narrow"
     }
   ]
 }

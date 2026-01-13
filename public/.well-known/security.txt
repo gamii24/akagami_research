@@ -1,0 +1,12 @@
+Contact: https://www.instagram.com/akagami_sns/
+Expires: 2027-01-13T00:00:00.000Z
+Preferred-Languages: ja, en
+Canonical: https://akagami.net/.well-known/security.txt
+
+# セキュリティに関する問題を発見された場合は、Instagramでご連絡ください。
+# 責任ある情報開示にご協力いただき、ありがとうございます。
+
+# Security Policy
+# - Please report security issues through Instagram DM
+# - We appreciate responsible disclosure
+# - We will respond within 48 hours
