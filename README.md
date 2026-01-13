@@ -149,11 +149,45 @@ SNSシェア時にダークモード用の画像を自動選択：
 - **Robotsタグ**: `index, follow` で検索エンジンに完全インデックス許可
 - **言語タグ**: 日本語サイトとして明示
 - **Canonical URL**: 重複コンテンツを防止
-- **構造化データ (JSON-LD)**: Schema.org WebSite形式で検索エンジンに詳細情報提供
-  - サイト名、説明、URL
-  - 著者情報
-  - 検索機能の定義 (SearchAction)
-  - 言語情報 (ja-JP)
+
+### 構造化データ (JSON-LD) - リッチスニペット対応（NEW!）
+Schema.org形式の構造化データで検索エンジンに詳細情報を提供：
+
+#### 1. WebSite スキーマ（全ページ）
+- **サイト名**: Akagami Research
+- **説明**: SNSマーケティング・生成AI資料保管庫
+- **URL**: https://akagami.net/
+- **著者情報**: Akagami（Instagram: @akagami_sns）
+- **SearchAction**: サイト内検索機能の定義
+- **言語**: ja-JP
+
+#### 2. BreadcrumbList（カテゴリページ）
+カテゴリページごとにパンくずリストを自動生成：
+```
+ホーム > Instagram資料
+ホーム > TikTok資料
+ホーム > 生成AI資料
+```
+
+#### 3. CollectionPage（カテゴリページ）
+各カテゴリページに対して：
+- **カテゴリ名と説明**: カテゴリ専用の詳細情報
+- **URLとサイトの関連性**: WebSiteとの構造を明示
+- **about属性**: カテゴリのトピックを定義
+
+**期待される効果**:
+- ✅ Google検索結果にパンくずリストが表示される可能性
+- ✅ サイトリンク検索ボックスが表示される可能性
+- ✅ カテゴリページの説明が検索結果に表示される可能性
+- ✅ SEOランキングの向上
+- ✅ クリック率（CTR）の改善
+
+**検証方法**:
+1. [Google Rich Results Test](https://search.google.com/test/rich-results) でテスト
+2. [Schema.org Validator](https://validator.schema.org/) で検証
+3. Google Search Console の「エンハンスメント」レポートで確認
+
+詳細は `STRUCTURED_DATA_TEST.md` を参照してください。
 
 ### Google Search Consoleへの登録推奨
 SEO効果を最大化するため、以下の手順を推奨：
@@ -297,11 +331,11 @@ SEO効果を最大化するため、以下の手順を推奨：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://9bac8985.akagami-research.pages.dev
+- **最新デプロイ**: https://47f74f34.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
-- **404エラーページ**: https://9bac8985.akagami-research.pages.dev/test-404
+- **404エラーページ**: https://47f74f34.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
