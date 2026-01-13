@@ -134,6 +134,70 @@ SEO効果を最大化するため、以下の手順を推奨：
 - ✅ メインサイトと一貫したビジュアルデザイン
 - ✅ モバイルとデスクトップ完全対応のレスポンシブデザイン
 
+## 🔒 セキュリティヘッダー
+
+### 実装済みセキュリティヘッダー
+
+#### 1. Content-Security-Policy (CSP)
+厳格なコンテンツセキュリティポリシーで不正なスクリプト実行を防止：
+- **default-src**: `'self'` - デフォルトは自サイトのみ許可
+- **script-src**: 信頼されたCDNのみ許可（Tailwind, jsDelivr, Google Analytics）
+- **style-src**: 自サイト + 信頼されたCDN
+- **img-src**: 自サイト + data URIs + HTTPS/HTTP
+- **font-src**: 自サイト + jsDelivr
+- **connect-src**: 自サイト + Google Analytics
+- **frame-src**: `'none'` - iframeの埋め込みを禁止
+- **object-src**: `'none'` - プラグインをブロック
+- **frame-ancestors**: `'none'` - クリックジャッキング防止
+- **upgrade-insecure-requests** - 自動的にHTTPSにアップグレード
+
+#### 2. HTTP Strict Transport Security (HSTS)
+強制的にHTTPS接続を要求：
+- **max-age**: 31536000秒（1年間）
+- **includeSubDomains**: サブドメインも含む
+- **preload**: HSTSプリロードリストに登録可能
+
+#### 3. X-Frame-Options
+- **DENY** - iframeでの埋め込みを完全に禁止
+- クリックジャッキング攻撃を防止
+
+#### 4. X-Content-Type-Options
+- **nosniff** - MIMEタイプスニッフィングを防止
+- コンテンツタイプの改ざん攻撃をブロック
+
+#### 5. Referrer-Policy
+- **strict-origin-when-cross-origin**
+- ユーザープライバシーを保護しつつ、アナリティクスを維持
+
+#### 6. X-XSS-Protection
+- **1; mode=block**
+- 古いブラウザでXSSフィルタリングを有効化
+
+#### 7. Permissions-Policy
+不要なブラウザ機能を無効化：
+- **camera**: 無効
+- **microphone**: 無効
+- **geolocation**: 無効
+- **payment**: 無効
+
+### セキュリティ効果
+
+| 攻撃タイプ | 対策ヘッダー | 保護レベル |
+|-----------|-------------|----------|
+| XSS（クロスサイトスクリプティング） | CSP, X-XSS-Protection | ✅ 高 |
+| クリックジャッキング | X-Frame-Options, CSP frame-ancestors | ✅ 高 |
+| MIMEスニッフィング | X-Content-Type-Options | ✅ 高 |
+| 中間者攻撃（MITM） | HSTS | ✅ 高 |
+| プライバシー侵害 | Referrer-Policy | ✅ 中 |
+| 不正な機能アクセス | Permissions-Policy | ✅ 中 |
+
+### セキュリティスコア
+
+サイトのセキュリティヘッダーを確認：
+- [Security Headers](https://securityheaders.com/) でスキャン
+- [Mozilla Observatory](https://observatory.mozilla.org/) で評価
+- 期待スコア: **A+**
+
 ## 🎨 カラーパレット
 
 - **Primary**: #e75556 - メインの赤色
@@ -143,11 +207,11 @@ SEO効果を最大化するため、以下の手順を推奨：
 ## 🌐 公開URL
 
 - **本番環境（公開URL）**: https://akagami-research.pages.dev
-- **最新デプロイ**: https://79290968.akagami-research.pages.dev
+- **最新デプロイ**: https://4d35326c.akagami-research.pages.dev
 - **開発環境（Sandbox）**: https://3000-iwpfj0eebl4qd7e2klphb-5c13a017.sandbox.novita.ai
 - **robots.txt**: https://akagami.net/robots.txt
 - **sitemap.xml**: https://akagami.net/sitemap.xml
-- **404エラーページ**: https://79290968.akagami-research.pages.dev/test-404
+- **404エラーページ**: https://4d35326c.akagami-research.pages.dev/test-404
 - **公開ページ**: `/` - PDF一覧・検索・閲覧
 - **管理画面**: `/admin` - PDF登録・編集・削除（**完全ダークモード・コンパクトデザイン**）
   - **パスワード**: `TaylorAlisonSwift`
