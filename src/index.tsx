@@ -389,9 +389,13 @@ app.get('/api/user/me', async (c) => {
   }
   
   // Get user details
-  const user = await c.env.DB.prepare(
-    'SELECT id, email, name, login_method, created_at, last_login FROM users WHERE id = ?'
-  ).bind(currentUser.userId).first()
+  const user = await c.env.DB.prepare(`
+    SELECT 
+      id, email, name, login_method, created_at, last_login,
+      youtube_url, instagram_handle, tiktok_handle, twitter_handle
+    FROM users 
+    WHERE id = ?
+  `).bind(currentUser.userId).first()
   
   if (!user) {
     clearUserSessionCookie(c)
@@ -406,7 +410,11 @@ app.get('/api/user/me', async (c) => {
       name: user.name,
       loginMethod: user.login_method,
       createdAt: user.created_at,
-      lastLogin: user.last_login
+      lastLogin: user.last_login,
+      youtubeUrl: user.youtube_url,
+      instagramHandle: user.instagram_handle,
+      tiktokHandle: user.tiktok_handle,
+      twitterHandle: user.twitter_handle
     }
   })
 })
@@ -620,6 +628,43 @@ app.post('/api/user/favorites/bulk', requireUserAuth, async (c) => {
   } catch (error: any) {
     console.error('Bulk sync favorites error:', error)
     return c.json({ error: 'Failed to bulk sync favorites' }, 500)
+  }
+})
+
+// Update user profile
+app.put('/api/user/profile', requireUserAuth, async (c) => {
+  try {
+    const userId = c.get('userId')
+    const { 
+      name, 
+      youtubeUrl, 
+      instagramHandle, 
+      tiktokHandle, 
+      twitterHandle 
+    } = await c.req.json()
+    
+    await c.env.DB.prepare(`
+      UPDATE users 
+      SET 
+        name = ?,
+        youtube_url = ?,
+        instagram_handle = ?,
+        tiktok_handle = ?,
+        twitter_handle = ?
+      WHERE id = ?
+    `).bind(
+      name || null,
+      youtubeUrl || null,
+      instagramHandle || null,
+      tiktokHandle || null,
+      twitterHandle || null,
+      userId
+    ).run()
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('Update profile error:', error)
+    return c.json({ error: 'Failed to update profile' }, 500)
   }
 })
 
@@ -1855,9 +1900,67 @@ app.get('/', (c) => {
   )
 })
 
-// My Page - Simple placeholder (TODO: implement full features)
+// My Page - User dashboard
 app.get('/mypage', (c) => {
-  return c.text('My Page - Coming Soon')
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>マイページ - Akagami Research</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gray-50 min-h-screen">
+        {/* Header */}
+        <header class="bg-primary shadow-lg">
+          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+              <a href="/" class="hover:opacity-80 transition-opacity">
+                <h1 class="text-3xl font-bold text-white tracking-wide">
+                  Akagami Research
+                </h1>
+                <p class="text-white text-sm mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
+              </a>
+              <a href="/" class="text-white hover:text-gray-200">
+                <i class="fas fa-arrow-left mr-2"></i>トップに戻る
+              </a>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          <div id="mypage-content" class="space-y-6">
+            {/* Loading */}
+            <div class="text-center py-12">
+              <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+              <p class="text-gray-600">読み込み中...</p>
+            </div>
+          </div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/mypage.js"></script>
+      </body>
+    </html>
+  )
 })
 
 // Notification Settings - Simple placeholder (TODO: implement full features)
