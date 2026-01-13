@@ -1486,30 +1486,51 @@ async function confirmBulkDownload() {
   // Close modal first
   closeBulkDownloadModal()
   
-  // If category has a download URL, use it
-  if (downloadUrl) {
-    window.open(downloadUrl, '_blank')
-    return
-  }
-  
-  // Otherwise, download individual files
   // Get URLs from cached data
   const pdfsInCategory = state.allPdfs.filter(pdf => 
     pdf.category_id === state.selectedCategory && pdf.google_drive_url
   )
   
+  // Mark all PDFs in category as downloaded FIRST
+  pdfsInCategory.forEach(pdf => {
+    markAsDownloaded(pdf.id)
+  })
+  
+  // If category has a download URL, use it
+  if (downloadUrl) {
+    // Increment download count for all PDFs in category
+    try {
+      await fetch(`/api/categories/${state.selectedCategory}/download`, { method: 'POST' })
+      // Update local state for all PDFs in category
+      pdfsInCategory.forEach(pdf => {
+        pdf.download_count = (pdf.download_count || 0) + 1
+      })
+    } catch (error) {
+      console.error('Failed to increment download counts:', error)
+    }
+    
+    // Re-render to update counts and colors BEFORE opening URL
+    renderPDFList()
+    
+    // Open the category download URL
+    window.open(downloadUrl, '_blank')
+    return
+  }
+  
+  // Otherwise, download individual files
   // Increment download count for all PDFs in category
   try {
     await fetch(`/api/categories/${state.selectedCategory}/download`, { method: 'POST' })
     // Update local state for all PDFs in category
     pdfsInCategory.forEach(pdf => {
       pdf.download_count = (pdf.download_count || 0) + 1
-      // Mark each as downloaded
-      markAsDownloaded(pdf.id)
     })
   } catch (error) {
     console.error('Failed to increment download counts:', error)
   }
+  
+  // Re-render to update counts and colors BEFORE opening URLs
+  renderPDFList()
   
   // Open each URL in a new tab with a small delay to avoid browser blocking
   for (let i = 0; i < pdfsInCategory.length; i++) {
@@ -1517,9 +1538,6 @@ async function confirmBulkDownload() {
       window.open(pdfsInCategory[i].google_drive_url, '_blank')
     }, i * 500) // 500ms delay between each
   }
-  
-  // Re-render to update counts and colors
-  renderPDFList()
 }
 
 async function bulkDownloadCategory() {
