@@ -834,7 +834,16 @@ async function saveProfileInfo() {
       body: JSON.stringify(profileData)
     })
     
-    if (!res.ok) throw new Error('Failed to save')
+    if (res.status === 401) {
+      alert('セッションが切れています。再度ログインしてください。')
+      window.location.href = '/'
+      return
+    }
+    
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}))
+      throw new Error(errorData.error || 'Failed to save')
+    }
     
     // Update local userData
     userData.name = name
@@ -853,7 +862,15 @@ async function saveProfileInfo() {
     }, 2000)
   } catch (error) {
     console.error('Failed to save profile info:', error)
-    alert('プロフィール情報の保存に失敗しました')
+    
+    // Check if it's an authentication error
+    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+      alert('セッションが切れています。再度ログインしてください。')
+      window.location.href = '/'
+    } else {
+      alert('プロフィール情報の保存に失敗しました。もう一度お試しください。')
+    }
+    
     button.innerHTML = originalHtml
     button.disabled = false
   }
@@ -881,7 +898,16 @@ async function saveSnsInfo() {
       body: JSON.stringify(snsData)
     })
     
-    if (!res.ok) throw new Error('Failed to save')
+    if (res.status === 401) {
+      alert('セッションが切れています。再度ログインしてください。')
+      window.location.href = '/'
+      return
+    }
+    
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}))
+      throw new Error(errorData.error || 'Failed to save')
+    }
     
     button.innerHTML = '<i class="fas fa-check mr-2"></i>保存完了！'
     button.classList.remove('bg-primary', 'hover:bg-red-600')
@@ -895,7 +921,15 @@ async function saveSnsInfo() {
     }, 2000)
   } catch (error) {
     console.error('Failed to save SNS info:', error)
-    alert('SNS情報の保存に失敗しました')
+    
+    // Check if it's an authentication error
+    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+      alert('セッションが切れています。再度ログインしてください。')
+      window.location.href = '/'
+    } else {
+      alert('SNS情報の保存に失敗しました。もう一度お試しください。')
+    }
+    
     button.innerHTML = originalHtml
     button.disabled = false
   }
