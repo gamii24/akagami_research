@@ -110,8 +110,10 @@ app.post('/api/auth/login', async (c) => {
     return c.json({ error: 'Invalid password' }, 401)
   }
   
-  // Generate JWT token
-  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  // Generate JWT token - Check if env var exists and is not empty
+  const secret = (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
+    ? c.env.JWT_SECRET 
+    : 'your-super-secret-jwt-key-change-this-in-production'
   const token = await generateToken(secret)
   
   // Set cookie
@@ -128,28 +130,19 @@ app.post('/api/auth/logout', async (c) => {
 
 // Check authentication status
 app.get('/api/auth/check', async (c) => {
-  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
-  const token = getAuthToken(c)
-  
-  // Debug logging
-  console.log('Auth check - Token exists:', !!token)
-  console.log('Auth check - Token:', token ? token.substring(0, 20) + '...' : 'none')
-  
+  const secret = (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
+    ? c.env.JWT_SECRET 
+    : 'your-super-secret-jwt-key-change-this-in-production'
   const authenticated = await isAuthenticated(c, secret)
-  console.log('Auth check - Authenticated:', authenticated)
   
-  return c.json({ 
-    authenticated,
-    debug: {
-      hasToken: !!token,
-      tokenPreview: token ? token.substring(0, 20) + '...' : null
-    }
-  })
+  return c.json({ authenticated })
 })
 
 // Auth middleware for admin APIs
 async function requireAuth(c: any, next: any) {
-  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const secret = (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
+    ? c.env.JWT_SECRET 
+    : 'your-super-secret-jwt-key-change-this-in-production'
   const authenticated = await isAuthenticated(c, secret)
   
   if (!authenticated) {

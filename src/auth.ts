@@ -7,25 +7,19 @@ const TOKEN_MAX_AGE = 30 * 24 * 60 * 60 // 30 days in seconds
 
 // Generate JWT token
 export async function generateToken(secret: string): Promise<string> {
-  console.log('Generating token with secret:', secret.substring(0, 10) + '...')
   const payload = {
     admin: true,
     exp: Math.floor(Date.now() / 1000) + TOKEN_MAX_AGE,
   }
-  const token = await sign(payload, secret)
-  console.log('Token generated:', token.substring(0, 30) + '...')
-  return token
+  return await sign(payload, secret)
 }
 
 // Verify JWT token
 export async function verifyToken(token: string, secret: string): Promise<boolean> {
   try {
-    console.log('Verifying token with secret:', secret.substring(0, 10) + '...')
-    const payload = await verify(token, secret)
-    console.log('Token verified successfully, payload:', payload)
+    await verify(token, secret)
     return true
   } catch (error) {
-    console.error('Token verification failed:', error)
     return false
   }
 }
