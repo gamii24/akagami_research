@@ -1898,6 +1898,17 @@ app.get('/calendar/2', (c) => {
           </div>
         </div>
 
+
+        {/* 毎年2月に流行るもの */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-5 border border-blue-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-fire text-orange-500"></i>
+            毎年2月に流行るもの
+          </h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            バレンタインデー関連（チョコレート・ラッピング）、節分（恵方巻・豆まき）、冬の受験シーズン（応援メッセージ）、猫の日（2/22）、確定申告シーズン
+          </p>
+        </div>
         {/* イベント＆投稿ネタ 3カラム */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
@@ -2204,6 +2215,17 @@ app.get('/calendar/3', (c) => {
           </div>
         </div>
 
+
+        {/* 毎年3月に流行るもの */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-5 border border-blue-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-fire text-orange-500"></i>
+            毎年3月に流行るもの
+          </h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            ひなまつり（桃の節句）、ホワイトデー、卒業・卒園シーズン、引越し・新生活準備、花粉症対策グッズ、春コスメ・春ファッション
+          </p>
+        </div>
         {/* イベント＆投稿ネタ 3カラム */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
@@ -2506,6 +2528,17 @@ app.get('/calendar/4', (c) => {
           </div>
         </div>
 
+
+        {/* 毎年4月に流行るもの */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-5 border border-blue-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-fire text-orange-500"></i>
+            毎年4月に流行るもの
+          </h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            入学式・入社式、新生活・一人暮らし、桜・花見関連、イースター、ゴールデンウィーク準備、新学期の文房具
+          </p>
+        </div>
         {/* イベント＆投稿ネタ 3カラム */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
@@ -2805,6 +2838,17 @@ app.get('/calendar/5', (c) => {
           </div>
         </div>
 
+
+        {/* 毎年5月に流行るもの */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-5 border border-blue-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-fire text-orange-500"></i>
+            毎年5月に流行るもの
+          </h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            ゴールデンウィーク旅行、母の日ギフト、端午の節句（こどもの日）、初夏のファッション、紫外線対策・日焼け止め
+          </p>
+        </div>
         {/* イベント＆投稿ネタ 3カラム */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
@@ -3115,6 +3159,17 @@ app.get('/calendar/6', (c) => {
           </div>
         </div>
 
+
+        {/* 毎年6月に流行るもの */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-5 border border-blue-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-fire text-orange-500"></i>
+            毎年6月に流行るもの
+          </h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            梅雨対策グッズ（傘・レインコート）、父の日ギフト、ジューンブライド・結婚式、夏バテ予防レシピ、衣替え・夏服コーデ
+          </p>
+        </div>
         {/* イベント＆投稿ネタ 3カラム */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
@@ -3428,6 +3483,17 @@ app.get('/calendar/7', (c) => {
           </div>
         </div>
 
+
+        {/* 毎年7月に流行るもの */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-5 border border-blue-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-fire text-orange-500"></i>
+            毎年7月に流行るもの
+          </h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            七夕、夏休み計画、海・プール・花火大会、夏祭り・浴衣、夏の冷感グッズ、お中元ギフト
+          </p>
+        </div>
         {/* イベント＆投稿ネタ 3カラム */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
@@ -5375,6 +5441,17 @@ app.get('/calendar/1', (c) => {
           </div>
         </div>
 
+
+        {/* 毎年1月に流行るもの */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-5 border border-blue-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-fire text-orange-500"></i>
+            毎年1月に流行るもの
+          </h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            正月関連（おせち料理・初詣・お年玉）、冬の乾燥対策コスメ、新年の目標・習慣づくり、福袋・初売りセール、駅伝・箱根駅伝
+          </p>
+        </div>
         {/* イベント＆投稿ネタ 3カラム */}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
