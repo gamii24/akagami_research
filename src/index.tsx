@@ -6023,18 +6023,6 @@ app.get('/', (c) => {
                 </div>
               </div>
 
-              {/* Category List Page Link */}
-              <div class="mb-6 pb-6 border-b-2 border-gray-200">
-                <a
-                  href="/categories"
-                  class="w-full px-4 py-3 bg-gradient-to-r from-primary to-red-600 hover:from-red-600 hover:to-primary text-white rounded-lg transition-all font-semibold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                >
-                  <i class="fas fa-th-large"></i>
-                  <span>カテゴリ一覧</span>
-                  <i class="fas fa-arrow-right text-sm"></i>
-                </a>
-              </div>
-
               {/* Category Filter */}
               <div id="category-filter"></div>
 
