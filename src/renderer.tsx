@@ -213,21 +213,37 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
           rel="stylesheet"
         />
         <link href="/static/style.css" rel="stylesheet" />
-        {/* Eruda - Mobile Debug Console */}
-        <script src="https://cdn.jsdelivr.net/npm/eruda" />
+        {/* Eruda - Mobile Debug Console (Development only) */}
+        {/* Eruda is disabled in production for security. To enable for debugging:
+            Add ?debug=true to URL, or set localStorage.debug_mode = 'true' */}
         <script dangerouslySetInnerHTML={{
           __html: `
             (function() {
-              if (typeof eruda !== 'undefined') {
-                eruda.init();
-                console.log('[ERUDA] Debug console initialized');
-              } else {
-                setTimeout(() => {
+              // Only load Eruda if explicitly enabled
+              const urlParams = new URLSearchParams(window.location.search);
+              const debugParam = urlParams.get('debug');
+              const debugMode = localStorage.getItem('debug_mode') === 'true' || debugParam === 'true';
+              
+              // Save debug mode if URL parameter is present
+              if (debugParam === 'true') {
+                localStorage.setItem('debug_mode', 'true');
+                console.log('[DEBUG] Debug mode enabled via URL parameter');
+              } else if (debugParam === 'false') {
+                localStorage.removeItem('debug_mode');
+                console.log('[DEBUG] Debug mode disabled via URL parameter');
+              }
+              
+              // Load Eruda only in debug mode
+              if (debugMode) {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+                script.onload = function() {
                   if (typeof eruda !== 'undefined') {
                     eruda.init();
-                    console.log('[ERUDA] Debug console initialized (delayed)');
+                    console.log('[ERUDA] Debug console initialized');
                   }
-                }, 500);
+                };
+                document.head.appendChild(script);
               }
             })();
           `

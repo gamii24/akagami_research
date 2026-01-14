@@ -186,6 +186,15 @@ npx wrangler d1 migrations apply akagami-research-production --remote
 - ✅ **JWT認証**: HttpOnlyクッキーでセキュアなセッション管理
 - ✅ **マジックリンク有効期限**: 15分間のみ有効
 - ✅ **CSRF対策**: SameSite=Laxクッキー設定
+- ✅ **デバッグツール制御**: Erudaデバッグコンソールは本番環境でデフォルト無効化
+
+#### デバッグモードの有効化
+本番環境でのデバッグが必要な場合、以下の方法でErudaデバッグコンソールを有効化できます：
+- **URLパラメータで有効化**: `?debug=true` をURLに追加
+- **URLパラメータで無効化**: `?debug=false` をURLに追加
+- **ローカルストレージで管理**: 一度有効化すると、設定が保存されます
+
+例: `https://akagami.net/?debug=true`
 
 ### マイページの使い方
 
