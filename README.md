@@ -6,10 +6,12 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 ## 🌐 公開URL
 
-- **本番環境**: https://a3d2d1cd.akagami-research.pages.dev
+- **本番環境**: https://d496f80f.akagami-research.pages.dev
+- **管理画面**: https://d496f80f.akagami-research.pages.dev/admin
 - **プロジェクト名**: akagami-research
 - **プラットフォーム**: Cloudflare Pages
 - **デプロイ状態**: ✅ Active (2026-01-14)
+- **最終更新**: 2026-01-14 - カテゴリフィルター＆クイックカテゴリ変更機能追加
 
 ## 🎯 プロジェクト概要
 
@@ -907,10 +909,10 @@ npx wrangler pages secret put RESEND_API_KEY --project-name akagami-research
 
 ### デプロイ後の確認
 
-- **本番URL**: https://a3d2d1cd.akagami-research.pages.dev
-- **カテゴリAPI**: https://a3d2d1cd.akagami-research.pages.dev/api/categories
-- **PDF一覧API**: https://a3d2d1cd.akagami-research.pages.dev/api/pdfs
-- **管理画面**: https://a3d2d1cd.akagami-research.pages.dev/admin
+- **本番URL**: https://d496f80f.akagami-research.pages.dev
+- **カテゴリAPI**: https://d496f80f.akagami-research.pages.dev/api/categories
+- **PDF一覧API**: https://d496f80f.akagami-research.pages.dev/api/pdfs
+- **管理画面**: https://d496f80f.akagami-research.pages.dev/admin
 
 ## 📄 ライセンス
 
