@@ -1813,6 +1813,148 @@ const categoryMeta: Record<number, { name: string; title: string; description: s
 }
 
 // Home page (public view)
+// ============================================
+// Categories Page Route
+// ============================================
+app.get('/categories', async (c) => {
+  try {
+    // Fetch all categories with PDF counts
+    const { results: categories } = await c.env.DB.prepare(`
+      SELECT 
+        c.id,
+        c.name,
+        c.description,
+        c.download_url,
+        c.sort_order,
+        COUNT(p.id) as pdf_count
+      FROM categories c
+      LEFT JOIN pdfs p ON c.id = p.category_id
+      GROUP BY c.id, c.name, c.description, c.download_url, c.sort_order
+      ORDER BY c.sort_order ASC, c.name ASC
+    `).all()
+
+    return c.render(
+      <div class="min-h-screen bg-white">
+        {/* Header */}
+        <header class="bg-primary shadow-lg">
+          <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+              <a href="/" class="hover:opacity-80 transition-opacity">
+                <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
+                <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
+              </a>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          {/* Page Title */}
+          <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">
+              <i class="fas fa-folder-open mr-3 text-primary"></i>
+              カテゴリ一覧
+            </h2>
+            <p class="text-gray-600">資料をカテゴリごとに閲覧できます</p>
+          </div>
+
+          {/* Categories Grid */}
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categories.map((category: any) => (
+              <a
+                href={`/?category=${category.id}`}
+                class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-primary"
+              >
+                <div class="p-6">
+                  {/* Category Icon & Name */}
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                      <div class="w-12 h-12 bg-gradient-to-br from-primary to-red-600 rounded-lg flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-folder"></i>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 group-hover:text-primary transition-colors">
+                        {category.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  {category.description && (
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                      {category.description}
+                    </p>
+                  )}
+
+                  {/* PDF Count */}
+                  <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <span class="text-gray-500 text-sm flex items-center gap-2">
+                      <i class="fas fa-file-pdf text-primary"></i>
+                      資料数
+                    </span>
+                    <span class="text-2xl font-bold text-primary">
+                      {category.pdf_count}
+                      <span class="text-sm text-gray-500 ml-1">件</span>
+                    </span>
+                  </div>
+
+                  {/* Download All Button (if URL exists) */}
+                  {category.download_url && (
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                      <button
+                        onclick={`event.preventDefault(); event.stopPropagation(); window.open('${category.download_url}', '_blank')`}
+                        class="w-full px-4 py-2 bg-gradient-to-r from-primary to-red-600 text-white rounded-lg hover:from-red-600 hover:to-primary transition-all text-sm font-semibold flex items-center justify-center gap-2"
+                      >
+                        <i class="fas fa-download"></i>
+                        一括ダウンロード
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Hover Arrow */}
+                <div class="bg-gray-50 px-6 py-3 flex items-center justify-between group-hover:bg-primary group-hover:text-white transition-colors">
+                  <span class="text-sm font-medium">資料を見る</span>
+                  <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          {/* Back to Home Button */}
+          <div class="mt-12 text-center">
+            <a
+              href="/"
+              class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium"
+            >
+              <i class="fas fa-home"></i>
+              トップページに戻る
+            </a>
+          </div>
+        </main>
+
+        {/* Footer */}
+        <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-sm text-gray-500 text-center">
+              © 2026 Akagami Research. All rights reserved.
+            </p>
+          </div>
+        </footer>
+      </div>,
+      {
+        title: "カテゴリ一覧 - Akagami Research",
+        description: "Akagami Researchの全カテゴリ一覧。SNSマーケティング、生成AI関連の資料をカテゴリごとに閲覧できます。",
+        keywords: "カテゴリ一覧,SNSマーケティング,生成AI,資料,YouTube,Instagram,TikTok"
+      }
+    )
+  } catch (error: any) {
+    return c.text('Error loading categories: ' + error.message, 500)
+  }
+})
+
+// ============================================
+// Home Page Route
+// ============================================
 app.get('/', (c) => {
   // Get category from query parameter
   const categoryId = c.req.query('category') ? parseInt(c.req.query('category') as string) : null
@@ -1939,6 +2081,18 @@ app.get('/', (c) => {
                     <i class="fas fa-search" aria-hidden="true"></i>
                   </button>
                 </div>
+              </div>
+
+              {/* Category List Page Link */}
+              <div class="mb-6 pb-6 border-b-2 border-gray-200">
+                <a
+                  href="/categories"
+                  class="w-full px-4 py-3 bg-gradient-to-r from-primary to-red-600 hover:from-red-600 hover:to-primary text-white rounded-lg transition-all font-semibold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                >
+                  <i class="fas fa-th-large"></i>
+                  <span>カテゴリ一覧</span>
+                  <i class="fas fa-arrow-right text-sm"></i>
+                </a>
               </div>
 
               {/* Category Filter */}
