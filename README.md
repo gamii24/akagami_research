@@ -4,6 +4,13 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 **🎉 新機能: 会員制度実装！ログイン・履歴同期・メール通知機能を追加**
 
+## 🌐 公開URL
+
+- **本番環境**: https://a3d2d1cd.akagami-research.pages.dev
+- **プロジェクト名**: akagami-research
+- **プラットフォーム**: Cloudflare Pages
+- **デプロイ状態**: ✅ Active (2026-01-14)
+
 ## 🎯 プロジェクト概要
 
 - **サイト名**: Akagami Research
@@ -863,6 +870,45 @@ npx wrangler pages secret put ADMIN_PASSWORD --project-name akagami-research
 - **トークン有効期限**: 30日間
 - **保存場所**: HTTPクッキー（HttpOnly、SameSite=Lax）
 - **ログアウト**: 管理画面右上のログアウトボタン
+
+## 🚀 デプロイ
+
+### 本番環境（Cloudflare Pages）
+
+このプロジェクトはCloudflare Pagesにデプロイされています：
+
+```bash
+# ビルド
+npm run build
+
+# デプロイ
+npx wrangler pages deploy dist --project-name akagami-research
+
+# データベースマイグレーション（本番）
+npx wrangler d1 migrations apply akagami-research-production --remote
+```
+
+### 環境変数設定
+
+本番環境では以下のシークレットが設定されています：
+
+```bash
+# JWT Secret（セキュアなランダム文字列）
+npx wrangler pages secret put JWT_SECRET --project-name akagami-research
+
+# 管理画面パスワード
+npx wrangler pages secret put ADMIN_PASSWORD --project-name akagami-research
+
+# Resend API Key（メール送信用）
+npx wrangler pages secret put RESEND_API_KEY --project-name akagami-research
+```
+
+### デプロイ後の確認
+
+- **本番URL**: https://a3d2d1cd.akagami-research.pages.dev
+- **カテゴリAPI**: https://a3d2d1cd.akagami-research.pages.dev/api/categories
+- **PDF一覧API**: https://a3d2d1cd.akagami-research.pages.dev/api/pdfs
+- **管理画面**: https://a3d2d1cd.akagami-research.pages.dev/admin
 
 ## 📄 ライセンス
 
