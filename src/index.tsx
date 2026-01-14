@@ -1843,9 +1843,50 @@ app.get('/categories', async (c) => {
                 <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
                 <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
               </a>
+              {/* Menu Buttons */}
+              <div class="flex items-center gap-2">
+                <a
+                  href="/"
+                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+                  aria-label="ホームに戻る"
+                >
+                  <i class="fas fa-home text-xl"></i>
+                </a>
+                <button 
+                  onclick="document.getElementById('category-menu').classList.toggle('hidden')"
+                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+                  aria-label="メニューを開く"
+                >
+                  <i class="fas fa-bars text-xl"></i>
+                </button>
+              </div>
             </div>
           </div>
         </header>
+
+        {/* Hamburger Menu Dropdown */}
+        <div id="category-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
+          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <nav class="flex flex-col gap-2">
+              <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-home text-primary"></i>
+                <span class="font-medium text-gray-700">トップページ</span>
+              </a>
+              <a href="/categories" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
+                <i class="fas fa-folder-open text-primary"></i>
+                <span class="font-medium text-gray-700">カテゴリ一覧</span>
+              </a>
+              <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-user text-primary"></i>
+                <span class="font-medium text-gray-700">マイページ</span>
+              </a>
+              <a href="/admin" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-cog text-primary"></i>
+                <span class="font-medium text-gray-700">管理画面</span>
+              </a>
+            </nav>
+          </div>
+        </div>
 
         {/* Main Content */}
         <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
