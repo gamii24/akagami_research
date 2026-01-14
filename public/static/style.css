@@ -1066,3 +1066,24 @@ body.dark-mode .shadow-lg,
 body.dark-mode .shadow-xl {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
 }
+
+/* Highlight Flash Animation */
+@keyframes highlight-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(231, 85, 86, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(231, 85, 86, 0.3);
+    transform: scale(1.01);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(231, 85, 86, 0);
+    transform: scale(1);
+  }
+}
+
+.highlight-flash {
+  animation: highlight-flash 1s ease-in-out;
+  border-color: var(--primary) !important;
+}

@@ -349,16 +349,48 @@ function renderMyPage(downloads, favorites) {
           <input type="file" id="profile-photo-input" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
         </div>
         <div class="flex-1 min-w-0">
-          <h3 class="text-xl font-bold text-gray-800 truncate">${escapeHtml(userData.name || 'ユーザー')} さん</h3>
-          <p class="text-sm text-gray-600 truncate"><i class="fas fa-envelope mr-1"></i>${escapeHtml(userData.email)}</p>
-          ${userData.location ? `<p class="text-sm text-gray-600"><i class="fas fa-map-marker-alt mr-1"></i>${escapeHtml(userData.location)}</p>` : ''}
-          ${userData.birthday ? `<p class="text-sm text-gray-600"><i class="fas fa-birthday-cake mr-1"></i>${userData.birthday}</p>` : ''}
-          <p class="text-xs text-gray-500 mt-1">
-            <i class="fas fa-calendar mr-1"></i>${formatDate(userData.createdAt)} 登録
-            <span class="ml-3">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex-1 min-w-0">
+              <h3 class="text-xl font-bold text-gray-800 truncate">${escapeHtml(userData.name || 'ユーザー')} さん</h3>
+            </div>
+            <button 
+              onclick="scrollToProfileForm()"
+              class="px-3 py-1.5 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors text-xs font-semibold whitespace-nowrap flex items-center gap-1"
+              title="プロフィールを編集">
+              <i class="fas fa-edit"></i>
+              <span>編集</span>
+            </button>
+          </div>
+          
+          <p class="text-sm text-gray-600 truncate mt-1"><i class="fas fa-envelope mr-1"></i>${escapeHtml(userData.email)}</p>
+          
+          <div class="mt-2 space-y-1">
+            ${userData.location ? `
+              <p class="text-sm text-gray-600"><i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>${escapeHtml(userData.location)}</p>
+            ` : `
+              <p class="text-sm text-gray-400 italic"><i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>居住地未設定</p>
+            `}
+            
+            ${userData.birthday ? `
+              <p class="text-sm text-gray-600"><i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>${userData.birthday}</p>
+            ` : `
+              <p class="text-sm text-gray-400 italic"><i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>誕生日未設定</p>
+            `}
+          </div>
+          
+          <div class="mt-3 pt-3 border-t border-gray-200">
+            <p class="text-xs text-gray-500">
               <i class="fas fa-id-card mr-1"></i>会員番号: ${userData.id}
-            </span>
-          </p>
+              <span class="ml-3">
+                <i class="fas fa-calendar mr-1"></i>登録日: ${formatDate(userData.createdAt)}
+              </span>
+            </p>
+            ${userData.lastLogin ? `
+              <p class="text-xs text-gray-500 mt-1">
+                <i class="fas fa-sign-in-alt mr-1"></i>最終ログイン: ${formatDate(userData.lastLogin)}
+              </p>
+            ` : ''}
+          </div>
         </div>
       </div>
     </div>
@@ -501,7 +533,7 @@ function renderMyPage(downloads, favorites) {
     </div>
 
     <!-- Profile Information Section -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
+    <div id="profile-section" class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
       <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
         <i class="fas fa-user-edit text-primary mr-3"></i>
         プロフィール情報
@@ -921,6 +953,23 @@ function getAccountAge() {
   const now = new Date()
   const days = Math.floor((now - created) / (1000 * 60 * 60 * 24))
   return `${days}日`
+}
+
+// Scroll to profile form
+function scrollToProfileForm() {
+  const profileFormSection = document.getElementById('profile-section')
+  if (profileFormSection) {
+    profileFormSection.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    })
+    
+    // Add a highlight effect
+    profileFormSection.classList.add('highlight-flash')
+    setTimeout(() => {
+      profileFormSection.classList.remove('highlight-flash')
+    }, 2000)
+  }
 }
 
 // Escape HTML
