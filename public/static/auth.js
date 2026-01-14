@@ -323,27 +323,20 @@ async function handlePasswordLogin(event) {
 async function handleRegister(event) {
   event.preventDefault()
   
-  const name = document.getElementById('register-name').value
   const email = document.getElementById('register-email').value
   const password = document.getElementById('register-password').value
-  const passwordConfirm = document.getElementById('register-password-confirm').value
   const errorDiv = document.getElementById('register-error')
   const submitBtn = event.target.querySelector('button[type="submit"]')
   
-  if (!name || !email || !password || !passwordConfirm) {
-    errorDiv.textContent = 'すべての項目を入力してください'
+  if (!email) {
+    errorDiv.textContent = 'メールアドレスを入力してください'
     errorDiv.classList.remove('hidden')
     return
   }
   
-  if (password !== passwordConfirm) {
-    errorDiv.textContent = 'パスワードが一致しません'
-    errorDiv.classList.remove('hidden')
-    return
-  }
-  
-  if (password.length < 8) {
-    errorDiv.textContent = 'パスワードは8文字以上で入力してください'
+  // Password is optional, but if provided, must be at least 6 characters
+  if (password && password.length < 6) {
+    errorDiv.textContent = 'パスワードは6文字以上で入力してください'
     errorDiv.classList.remove('hidden')
     return
   }
@@ -356,11 +349,17 @@ async function handleRegister(event) {
   submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>登録中...'
   
   try {
+    const usePasswordless = !password || password.length === 0
+    
     const response = await fetch('/api/user/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ name, email, password, loginMethod: 'password' })
+      body: JSON.stringify({ 
+        email, 
+        password: password || null,
+        usePasswordless
+      })
     })
     
     const data = await response.json()
@@ -374,7 +373,7 @@ async function handleRegister(event) {
       setTimeout(() => {
         closeAuthModal()
         // Show success message
-        alert('会員登録が完了しました')
+        alert('会員登録が完了しました！\nマイページからプロフィール情報を追加できます。')
       }, 500)
     } else {
       submitBtn.disabled = false

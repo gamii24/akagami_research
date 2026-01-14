@@ -150,13 +150,20 @@ async function requireAuth(c: any, next: any) {
 // API Routes - User Authentication (public)
 // ============================================
 
-// User registration with password
+// User registration - simplified (email only)
 app.post('/api/user/register', async (c) => {
   try {
     const { email, name, password, usePasswordless } = await c.req.json()
     
-    if (!email || !name) {
-      return c.json({ error: 'Email and name are required' }, 400)
+    // Only email is required for registration
+    if (!email) {
+      return c.json({ error: 'Email is required' }, 400)
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return c.json({ error: 'Invalid email format' }, 400)
     }
     
     // Check if user already exists
@@ -168,9 +175,10 @@ app.post('/api/user/register', async (c) => {
       return c.json({ error: 'User already exists with this email' }, 400)
     }
     
-    // Create user
+    // Create user with minimal info
     let passwordHash = null
     let loginMethod = 'magic_link'
+    const userName = name || '' // Name is now optional
     
     if (!usePasswordless && password) {
       if (password.length < 6) {
@@ -182,16 +190,17 @@ app.post('/api/user/register', async (c) => {
     
     const result = await c.env.DB.prepare(
       'INSERT INTO users (email, name, password_hash, login_method) VALUES (?, ?, ?, ?)'
-    ).bind(email, name, passwordHash, loginMethod).run()
+    ).bind(email, userName, passwordHash, loginMethod).run()
     
     const userId = result.meta.last_row_id as number
     
     // Send welcome email to user
+    const displayName = userName || 'ユーザー'
     await sendEmail({
       to: email,
       subject: 'Akagami Research へようこそ！',
-      html: getWelcomeEmailHtml(name),
-      text: `こんにちは、${name}さん。Akagami Research の会員登録が完了しました！`
+      html: getWelcomeEmailHtml(displayName),
+      text: `こんにちは、${displayName}さん。Akagami Research の会員登録が完了しました！`
     }, c.env)
     
     // Note: Admin notification will be sent once daily via Cron job
@@ -395,7 +404,7 @@ app.get('/api/user/me', async (c) => {
   // Get user details
   const user = await c.env.DB.prepare(`
     SELECT 
-      id, email, name, login_method, created_at, last_login,
+      id, email, name, location, birthday, login_method, created_at, last_login,
       youtube_url, instagram_handle, tiktok_handle, twitter_handle,
       profile_photo_url
     FROM users 
@@ -413,6 +422,8 @@ app.get('/api/user/me', async (c) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      location: user.location,
+      birthday: user.birthday,
       loginMethod: user.login_method,
       createdAt: user.created_at,
       lastLogin: user.last_login,
@@ -643,16 +654,25 @@ app.put('/api/user/profile', requireUserAuth, async (c) => {
     const userId = c.get('userId')
     const { 
       name, 
+      location,
+      birthday,
       youtubeUrl, 
       instagramHandle, 
       tiktokHandle, 
       twitterHandle 
     } = await c.req.json()
     
+    // Validate birthday format if provided (YYYY-MM-DD)
+    if (birthday && !/^\d{4}-\d{2}-\d{2}$/.test(birthday)) {
+      return c.json({ error: 'Invalid birthday format. Use YYYY-MM-DD' }, 400)
+    }
+    
     await c.env.DB.prepare(`
       UPDATE users 
       SET 
         name = ?,
+        location = ?,
+        birthday = ?,
         youtube_url = ?,
         instagram_handle = ?,
         tiktok_handle = ?,
@@ -660,6 +680,8 @@ app.put('/api/user/profile', requireUserAuth, async (c) => {
       WHERE id = ?
     `).bind(
       name || null,
+      location || null,
+      birthday || null,
       youtubeUrl || null,
       instagramHandle || null,
       tiktokHandle || null,
@@ -2136,16 +2158,6 @@ app.get('/', (c) => {
             <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
               <div class="space-y-4 mb-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">お名前</label>
-                  <input 
-                    type="text" 
-                    id="register-name"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                    placeholder="山田太郎"
-                    required
-                  />
-                </div>
-                <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
                   <input 
                     type="email" 
@@ -2154,28 +2166,23 @@ app.get('/', (c) => {
                     placeholder="your@email.com"
                     required
                   />
+                  <p class="mt-1 text-xs text-gray-500">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    メールアドレスだけで簡単登録！名前や詳細情報は後からマイページで入力できます。
+                  </p>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">パスワード（8文字以上）</label>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">パスワード（6文字以上・任意）</label>
                   <input 
                     type="password" 
                     id="register-password"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                     placeholder="••••••••"
-                    minlength="8"
-                    required
+                    minlength="6"
                   />
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">パスワード（確認）</label>
-                  <input 
-                    type="password" 
-                    id="register-password-confirm"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-                    placeholder="••••••••"
-                    minlength="8"
-                    required
-                  />
+                  <p class="mt-1 text-xs text-gray-500">
+                    パスワードを設定しない場合、ログイン時にメールでマジックリンクが送信されます。
+                  </p>
                 </div>
               </div>
 
@@ -2187,7 +2194,7 @@ app.get('/', (c) => {
                 type="submit"
                 class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
               >
-                <i class="fas fa-user-plus mr-2"></i>会員登録
+                <i class="fas fa-user-plus mr-2"></i>会員登録（無料）
               </button>
             </form>
 
