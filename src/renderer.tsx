@@ -210,14 +210,28 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         }} />
         <link 
           href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" 
-          rel="preload" 
-          as="style"
-          onload="this.onload=null;this.rel='stylesheet'"
+          rel="stylesheet"
         />
-        <noscript>
-          <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
-        </noscript>
         <link href="/static/style.css" rel="stylesheet" />
+        {/* Eruda - Mobile Debug Console */}
+        <script src="https://cdn.jsdelivr.net/npm/eruda" />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              if (typeof eruda !== 'undefined') {
+                eruda.init();
+                console.log('[ERUDA] Debug console initialized');
+              } else {
+                setTimeout(() => {
+                  if (typeof eruda !== 'undefined') {
+                    eruda.init();
+                    console.log('[ERUDA] Debug console initialized (delayed)');
+                  }
+                }, 500);
+              }
+            })();
+          `
+        }} />
       </head>
       <body class="bg-white dark:bg-darker transition-colors duration-300">
         <script dangerouslySetInnerHTML={{
