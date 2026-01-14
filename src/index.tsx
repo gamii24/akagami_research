@@ -6527,6 +6527,29 @@ app.get('/news', async (c) => {
         }} />
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes slide-up {
+              from {
+                transform: translateY(100%);
+                opacity: 0;
+              }
+              to {
+                transform: translateY(0);
+                opacity: 1;
+              }
+            }
+            .animate-slide-up {
+              animation: slide-up 0.3s ease-out;
+            }
+            .line-clamp-4 {
+              display: -webkit-box;
+              -webkit-line-clamp: 4;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+          `
+        }} />
       </head>
       <body class="bg-gray-50">
         {/* Header */}
@@ -6642,12 +6665,12 @@ app.get('/news', async (c) => {
                 return;
               }
               
-              newsListEl.innerHTML = newsData.map(news => {
+              newsListEl.innerHTML = newsData.map((news, index) => {
                 const date = new Date(news.published_at);
                 const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
                 
                 return \`
-                  <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                  <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showNewsDetail(\${index})">
                     <div class="flex items-center gap-2 mb-2">
                       <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
                         \${news.category}
@@ -6655,14 +6678,65 @@ app.get('/news', async (c) => {
                       <span class="text-sm text-gray-500">\${dateStr}</span>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
-                    <p class="text-gray-600 mb-4">\${escapeHtml(news.summary)}</p>
-                    <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                    <p class="text-gray-600 mb-4 md:line-clamp-none line-clamp-4">\${escapeHtml(news.summary)}</p>
+                    <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="hidden md:inline-flex items-center gap-2 text-primary font-semibold hover:underline" onclick="event.stopPropagation()">
                       <i class="fas fa-external-link-alt"></i>
                       元記事を読む
                     </a>
                   </article>
                 \`;
               }).join('');
+            }
+
+            // Show news detail modal (for mobile)
+            function showNewsDetail(index) {
+              const news = newsData[index];
+              const date = new Date(news.published_at);
+              const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+              
+              // Create modal
+              const modal = document.createElement('div');
+              modal.id = 'news-detail-modal';
+              modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end md:items-center justify-center md:hidden';
+              modal.onclick = (e) => {
+                if (e.target === modal) closeNewsDetail();
+              };
+              
+              modal.innerHTML = \`
+                <div class="bg-white rounded-t-3xl md:rounded-3xl w-full md:max-w-2xl max-h-[90vh] overflow-y-auto p-6 animate-slide-up">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-2">
+                      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
+                        \${news.category}
+                      </span>
+                      <span class="text-sm text-gray-500">\${dateStr}</span>
+                    </div>
+                    <button onclick="closeNewsDetail()" class="text-gray-400 hover:text-gray-600">
+                      <i class="fas fa-times text-2xl"></i>
+                    </button>
+                  </div>
+                  
+                  <h2 class="text-2xl font-bold text-gray-800 mb-4">\${escapeHtml(news.title)}</h2>
+                  <p class="text-gray-600 mb-6 whitespace-pre-wrap">\${escapeHtml(news.summary)}</p>
+                  
+                  <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="block w-full bg-primary text-white text-center py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+                    <i class="fas fa-external-link-alt mr-2"></i>
+                    元記事を読む
+                  </a>
+                </div>
+              \`;
+              
+              document.body.appendChild(modal);
+              document.body.style.overflow = 'hidden';
+            }
+
+            // Close news detail modal
+            function closeNewsDetail() {
+              const modal = document.getElementById('news-detail-modal');
+              if (modal) {
+                modal.remove();
+                document.body.style.overflow = '';
+              }
             }
 
             // Escape HTML
