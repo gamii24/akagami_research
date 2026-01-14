@@ -699,27 +699,50 @@ app.put('/api/user/profile', requireUserAuth, async (c) => {
       return c.json({ error: 'Invalid birthday format. Use YYYY-MM-DD' }, 400)
     }
     
-    const result = await c.env.DB.prepare(`
-      UPDATE users 
-      SET 
-        name = ?,
-        location = ?,
-        birthday = ?,
-        youtube_url = ?,
-        instagram_handle = ?,
-        tiktok_handle = ?,
-        twitter_handle = ?
-      WHERE id = ?
-    `).bind(
-      name || null,
-      location || null,
-      birthday || null,
-      youtubeUrl || null,
-      instagramHandle || null,
-      tiktokHandle || null,
-      twitterHandle || null,
-      userId
-    ).run()
+    // Build dynamic UPDATE query - only update fields that are provided
+    const updates: string[] = []
+    const values: any[] = []
+    
+    if (name !== undefined) {
+      updates.push('name = ?')
+      values.push(name || null)
+    }
+    if (location !== undefined) {
+      updates.push('location = ?')
+      values.push(location || null)
+    }
+    if (birthday !== undefined) {
+      updates.push('birthday = ?')
+      values.push(birthday || null)
+    }
+    if (youtubeUrl !== undefined) {
+      updates.push('youtube_url = ?')
+      values.push(youtubeUrl || null)
+    }
+    if (instagramHandle !== undefined) {
+      updates.push('instagram_handle = ?')
+      values.push(instagramHandle || null)
+    }
+    if (tiktokHandle !== undefined) {
+      updates.push('tiktok_handle = ?')
+      values.push(tiktokHandle || null)
+    }
+    if (twitterHandle !== undefined) {
+      updates.push('twitter_handle = ?')
+      values.push(twitterHandle || null)
+    }
+    
+    if (updates.length === 0) {
+      return c.json({ error: 'No fields to update' }, 400)
+    }
+    
+    // Add userId at the end
+    values.push(userId)
+    
+    const query = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`
+    console.log('Update query:', query, 'Values count:', values.length)
+    
+    const result = await c.env.DB.prepare(query).bind(...values).run()
     
     console.log('Profile updated:', { userId, changes: result.meta.changes })
     return c.json({ success: true })
