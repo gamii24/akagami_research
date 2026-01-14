@@ -1883,18 +1883,18 @@ app.get('/calendar/2', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -2189,18 +2189,18 @@ app.get('/calendar/3', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -2491,18 +2491,18 @@ app.get('/calendar/4', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -2790,18 +2790,18 @@ app.get('/calendar/5', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -3100,18 +3100,18 @@ app.get('/calendar/6', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -3413,18 +3413,18 @@ app.get('/calendar/7', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -3746,18 +3746,18 @@ app.get('/calendar/8', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -4072,18 +4072,18 @@ app.get('/calendar/9', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -4398,18 +4398,18 @@ app.get('/calendar/10', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -4728,18 +4728,18 @@ app.get('/calendar/11', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -5062,18 +5062,18 @@ app.get('/calendar/12', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -5360,18 +5360,18 @@ app.get('/calendar/1', (c) => {
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+            <a href="/calendar/1" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -5902,7 +5902,7 @@ app.get('/', (c) => {
               <div class="mb-6 pb-6 border-b-2 border-gray-200">
                 <button
                   onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                  class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all font-semibold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                  class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2"
                   aria-label="SNS運用カレンダーを開く"
                 >
                   <i class="fas fa-calendar-alt"></i>
@@ -5911,20 +5911,20 @@ app.get('/', (c) => {
                 </button>
                 
                 {/* Calendar Dropdown Menu */}
-                <div id="calendar-menu" class="hidden bg-white shadow-lg border-2 border-blue-200 rounded-lg mt-2 p-3">
+                <div id="calendar-menu" class="hidden bg-white shadow-md border border-gray-200 rounded-lg mt-2 p-3">
                   <div class="grid grid-cols-3 gap-2">
-                    <a href="/calendar/1" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">1月</a>
-                    <a href="/calendar/2" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">2月</a>
-                    <a href="/calendar/3" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">3月</a>
-                    <a href="/calendar/4" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">4月</a>
-                    <a href="/calendar/5" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">5月</a>
-                    <a href="/calendar/6" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">6月</a>
-                    <a href="/calendar/7" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">7月</a>
-                    <a href="/calendar/8" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">8月</a>
-                    <a href="/calendar/9" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">9月</a>
-                    <a href="/calendar/10" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">10月</a>
-                    <a href="/calendar/11" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">11月</a>
-                    <a href="/calendar/12" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">12月</a>
+                    <a href="/calendar/1" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">1月</a>
+                    <a href="/calendar/2" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">2月</a>
+                    <a href="/calendar/3" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">3月</a>
+                    <a href="/calendar/4" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">4月</a>
+                    <a href="/calendar/5" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">5月</a>
+                    <a href="/calendar/6" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">6月</a>
+                    <a href="/calendar/7" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">7月</a>
+                    <a href="/calendar/8" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">8月</a>
+                    <a href="/calendar/9" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">9月</a>
+                    <a href="/calendar/10" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">10月</a>
+                    <a href="/calendar/11" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">11月</a>
+                    <a href="/calendar/12" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">12月</a>
                   </div>
                 </div>
               </div>
