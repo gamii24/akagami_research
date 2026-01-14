@@ -323,10 +323,9 @@ function renderMyPage(downloads, favorites) {
   content.innerHTML = `
     <!-- Page Title -->
     <div class="text-center mb-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-1">
-        <i class="fas fa-user-circle text-primary mr-2"></i>MY PAGE
+      <h2 class="text-2xl font-normal text-gray-800">
+        MY PAGE
       </h2>
-      <p class="text-gray-600 text-sm">アカウント情報と設定の管理</p>
     </div>
 
     <!-- User Info Card - Compact -->
