@@ -339,7 +339,7 @@ function renderMyPage(downloads, favorites) {
               class="w-16 h-16 rounded-full border-2 border-primary object-cover">
           ` : `
             <div class="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center text-2xl font-bold border-2 border-primary text-primary">
-              ${userData.name.charAt(0).toUpperCase()}
+              ${userData.name ? userData.name.charAt(0).toUpperCase() : 'U'}
             </div>
           `}
           <button onclick="document.getElementById('profile-photo-input').click()" 
@@ -349,8 +349,10 @@ function renderMyPage(downloads, favorites) {
           <input type="file" id="profile-photo-input" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
         </div>
         <div class="flex-1 min-w-0">
-          <h3 class="text-xl font-bold text-gray-800 truncate">${escapeHtml(userData.name)} さん</h3>
+          <h3 class="text-xl font-bold text-gray-800 truncate">${escapeHtml(userData.name || 'ユーザー')} さん</h3>
           <p class="text-sm text-gray-600 truncate"><i class="fas fa-envelope mr-1"></i>${escapeHtml(userData.email)}</p>
+          ${userData.location ? `<p class="text-sm text-gray-600"><i class="fas fa-map-marker-alt mr-1"></i>${escapeHtml(userData.location)}</p>` : ''}
+          ${userData.birthday ? `<p class="text-sm text-gray-600"><i class="fas fa-birthday-cake mr-1"></i>${userData.birthday}</p>` : ''}
           <p class="text-xs text-gray-500 mt-1">
             <i class="fas fa-calendar mr-1"></i>${formatDate(userData.createdAt)} 登録
             <span class="ml-3">
@@ -498,6 +500,132 @@ function renderMyPage(downloads, favorites) {
       </button>
     </div>
 
+    <!-- Profile Information Section -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-user-edit text-primary mr-3"></i>
+        プロフィール情報
+      </h3>
+      <p class="text-gray-600 mb-4 text-sm">
+        基本的なプロフィール情報を入力してください。
+      </p>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-user mr-2"></i>お名前
+          </label>
+          <input type="text" id="user-name" 
+            value="${userData.name || ''}"
+            placeholder="山田太郎"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-map-marker-alt mr-2"></i>居住地
+          </label>
+          <select id="user-location" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+            <option value="">選択してください</option>
+            <optgroup label="日本（都道府県）">
+              <option value="北海道" ${userData.location === '北海道' ? 'selected' : ''}>北海道</option>
+              <option value="青森県" ${userData.location === '青森県' ? 'selected' : ''}>青森県</option>
+              <option value="岩手県" ${userData.location === '岩手県' ? 'selected' : ''}>岩手県</option>
+              <option value="宮城県" ${userData.location === '宮城県' ? 'selected' : ''}>宮城県</option>
+              <option value="秋田県" ${userData.location === '秋田県' ? 'selected' : ''}>秋田県</option>
+              <option value="山形県" ${userData.location === '山形県' ? 'selected' : ''}>山形県</option>
+              <option value="福島県" ${userData.location === '福島県' ? 'selected' : ''}>福島県</option>
+              <option value="茨城県" ${userData.location === '茨城県' ? 'selected' : ''}>茨城県</option>
+              <option value="栃木県" ${userData.location === '栃木県' ? 'selected' : ''}>栃木県</option>
+              <option value="群馬県" ${userData.location === '群馬県' ? 'selected' : ''}>群馬県</option>
+              <option value="埼玉県" ${userData.location === '埼玉県' ? 'selected' : ''}>埼玉県</option>
+              <option value="千葉県" ${userData.location === '千葉県' ? 'selected' : ''}>千葉県</option>
+              <option value="東京都" ${userData.location === '東京都' ? 'selected' : ''}>東京都</option>
+              <option value="神奈川県" ${userData.location === '神奈川県' ? 'selected' : ''}>神奈川県</option>
+              <option value="新潟県" ${userData.location === '新潟県' ? 'selected' : ''}>新潟県</option>
+              <option value="富山県" ${userData.location === '富山県' ? 'selected' : ''}>富山県</option>
+              <option value="石川県" ${userData.location === '石川県' ? 'selected' : ''}>石川県</option>
+              <option value="福井県" ${userData.location === '福井県' ? 'selected' : ''}>福井県</option>
+              <option value="山梨県" ${userData.location === '山梨県' ? 'selected' : ''}>山梨県</option>
+              <option value="長野県" ${userData.location === '長野県' ? 'selected' : ''}>長野県</option>
+              <option value="岐阜県" ${userData.location === '岐阜県' ? 'selected' : ''}>岐阜県</option>
+              <option value="静岡県" ${userData.location === '静岡県' ? 'selected' : ''}>静岡県</option>
+              <option value="愛知県" ${userData.location === '愛知県' ? 'selected' : ''}>愛知県</option>
+              <option value="三重県" ${userData.location === '三重県' ? 'selected' : ''}>三重県</option>
+              <option value="滋賀県" ${userData.location === '滋賀県' ? 'selected' : ''}>滋賀県</option>
+              <option value="京都府" ${userData.location === '京都府' ? 'selected' : ''}>京都府</option>
+              <option value="大阪府" ${userData.location === '大阪府' ? 'selected' : ''}>大阪府</option>
+              <option value="兵庫県" ${userData.location === '兵庫県' ? 'selected' : ''}>兵庫県</option>
+              <option value="奈良県" ${userData.location === '奈良県' ? 'selected' : ''}>奈良県</option>
+              <option value="和歌山県" ${userData.location === '和歌山県' ? 'selected' : ''}>和歌山県</option>
+              <option value="鳥取県" ${userData.location === '鳥取県' ? 'selected' : ''}>鳥取県</option>
+              <option value="島根県" ${userData.location === '島根県' ? 'selected' : ''}>島根県</option>
+              <option value="岡山県" ${userData.location === '岡山県' ? 'selected' : ''}>岡山県</option>
+              <option value="広島県" ${userData.location === '広島県' ? 'selected' : ''}>広島県</option>
+              <option value="山口県" ${userData.location === '山口県' ? 'selected' : ''}>山口県</option>
+              <option value="徳島県" ${userData.location === '徳島県' ? 'selected' : ''}>徳島県</option>
+              <option value="香川県" ${userData.location === '香川県' ? 'selected' : ''}>香川県</option>
+              <option value="愛媛県" ${userData.location === '愛媛県' ? 'selected' : ''}>愛媛県</option>
+              <option value="高知県" ${userData.location === '高知県' ? 'selected' : ''}>高知県</option>
+              <option value="福岡県" ${userData.location === '福岡県' ? 'selected' : ''}>福岡県</option>
+              <option value="佐賀県" ${userData.location === '佐賀県' ? 'selected' : ''}>佐賀県</option>
+              <option value="長崎県" ${userData.location === '長崎県' ? 'selected' : ''}>長崎県</option>
+              <option value="熊本県" ${userData.location === '熊本県' ? 'selected' : ''}>熊本県</option>
+              <option value="大分県" ${userData.location === '大分県' ? 'selected' : ''}>大分県</option>
+              <option value="宮崎県" ${userData.location === '宮崎県' ? 'selected' : ''}>宮崎県</option>
+              <option value="鹿児島県" ${userData.location === '鹿児島県' ? 'selected' : ''}>鹿児島県</option>
+              <option value="沖縄県" ${userData.location === '沖縄県' ? 'selected' : ''}>沖縄県</option>
+            </optgroup>
+            <optgroup label="海外">
+              <option value="アメリカ" ${userData.location === 'アメリカ' ? 'selected' : ''}>アメリカ</option>
+              <option value="カナダ" ${userData.location === 'カナダ' ? 'selected' : ''}>カナダ</option>
+              <option value="イギリス" ${userData.location === 'イギリス' ? 'selected' : ''}>イギリス</option>
+              <option value="オーストラリア" ${userData.location === 'オーストラリア' ? 'selected' : ''}>オーストラリア</option>
+              <option value="中国" ${userData.location === '中国' ? 'selected' : ''}>中国</option>
+              <option value="韓国" ${userData.location === '韓国' ? 'selected' : ''}>韓国</option>
+              <option value="台湾" ${userData.location === '台湾' ? 'selected' : ''}>台湾</option>
+              <option value="シンガポール" ${userData.location === 'シンガポール' ? 'selected' : ''}>シンガポール</option>
+              <option value="タイ" ${userData.location === 'タイ' ? 'selected' : ''}>タイ</option>
+              <option value="ベトナム" ${userData.location === 'ベトナム' ? 'selected' : ''}>ベトナム</option>
+              <option value="インドネシア" ${userData.location === 'インドネシア' ? 'selected' : ''}>インドネシア</option>
+              <option value="フィリピン" ${userData.location === 'フィリピン' ? 'selected' : ''}>フィリピン</option>
+              <option value="インド" ${userData.location === 'インド' ? 'selected' : ''}>インド</option>
+              <option value="ドイツ" ${userData.location === 'ドイツ' ? 'selected' : ''}>ドイツ</option>
+              <option value="フランス" ${userData.location === 'フランス' ? 'selected' : ''}>フランス</option>
+              <option value="イタリア" ${userData.location === 'イタリア' ? 'selected' : ''}>イタリア</option>
+              <option value="スペイン" ${userData.location === 'スペイン' ? 'selected' : ''}>スペイン</option>
+              <option value="ブラジル" ${userData.location === 'ブラジル' ? 'selected' : ''}>ブラジル</option>
+              <option value="メキシコ" ${userData.location === 'メキシコ' ? 'selected' : ''}>メキシコ</option>
+              <option value="その他" ${userData.location && !['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県','アメリカ','カナダ','イギリス','オーストラリア','中国','韓国','台湾','シンガポール','タイ','ベトナム','インドネシア','フィリピン','インド','ドイツ','フランス','イタリア','スペイン','ブラジル','メキシコ'].includes(userData.location) ? 'selected' : ''}>その他</option>
+            </optgroup>
+          </select>
+          <p class="mt-1 text-xs text-gray-500">
+            <i class="fas fa-info-circle mr-1"></i>
+            都道府県または国を選択してください
+          </p>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-birthday-cake mr-2"></i>誕生日
+          </label>
+          <input type="date" id="user-birthday" 
+            value="${userData.birthday || ''}"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          <p class="mt-1 text-xs text-gray-500">
+            <i class="fas fa-info-circle mr-1"></i>
+            誕生日を登録すると、特別な日にお祝いメッセージが届きます
+          </p>
+        </div>
+      </div>
+      
+      <button onclick="saveProfileInfo()" 
+        class="mt-4 w-full md:w-auto px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors font-medium">
+        <i class="fas fa-save mr-2"></i>プロフィール情報を保存
+      </button>
+    </div>
+
     <!-- SNS Information Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
       <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
@@ -640,6 +768,65 @@ async function uploadProfilePhoto(event) {
 }
 
 // Save SNS information
+// Save profile information
+async function saveProfileInfo() {
+  const button = event.target
+  const originalHtml = button.innerHTML
+  
+  try {
+    button.disabled = true
+    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>保存中...'
+    
+    const name = document.getElementById('profile-name').value.trim()
+    const location = document.getElementById('profile-location').value
+    const birthday = document.getElementById('profile-birthday').value
+    
+    // 名前のバリデーション
+    if (!name) {
+      alert('お名前を入力してください')
+      button.innerHTML = originalHtml
+      button.disabled = false
+      return
+    }
+    
+    const profileData = {
+      name,
+      location: location || null,
+      birthday: birthday || null
+    }
+    
+    const res = await fetch('/api/user/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(profileData)
+    })
+    
+    if (!res.ok) throw new Error('Failed to save')
+    
+    // Update local userData
+    userData.name = name
+    userData.location = location
+    userData.birthday = birthday
+    
+    button.innerHTML = '<i class="fas fa-check mr-2"></i>保存完了！'
+    button.classList.remove('bg-primary', 'hover:bg-red-600')
+    button.classList.add('bg-green-600')
+    
+    setTimeout(() => {
+      button.innerHTML = originalHtml
+      button.classList.remove('bg-green-600')
+      button.classList.add('bg-primary', 'hover:bg-red-600')
+      button.disabled = false
+    }, 2000)
+  } catch (error) {
+    console.error('Failed to save profile info:', error)
+    alert('プロフィール情報の保存に失敗しました')
+    button.innerHTML = originalHtml
+    button.disabled = false
+  }
+}
+
 async function saveSnsInfo() {
   const button = event.target
   const originalHtml = button.innerHTML
