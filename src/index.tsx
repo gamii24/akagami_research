@@ -1863,27 +1863,19 @@ app.get('/categories', async (c) => {
             {categories.map((category: any) => (
               <a
                 href={`/?category=${category.id}`}
-                class="group bg-white rounded-lg shadow hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200 hover:border-primary"
+                class="group bg-white rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-primary p-3"
               >
-                <div class="p-3">
-                  {/* Category Name */}
-                  <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover:text-primary transition-colors text-center mb-2">
-                    {category.name}
-                  </h3>
+                {/* Category Name */}
+                <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover:text-primary transition-colors text-center mb-2">
+                  {category.name}
+                </h3>
 
-                  {/* PDF Count */}
-                  <div class="flex items-center justify-center pt-2 border-t border-gray-100">
-                    <span class="text-lg md:text-xl font-bold text-primary">
-                      {category.pdf_count}
-                    </span>
-                    <span class="text-xs text-gray-500 ml-1">件</span>
-                  </div>
-                </div>
-
-                {/* Hover Arrow */}
-                <div class="bg-gray-50 px-3 py-1.5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                  <span class="text-xs font-medium">見る</span>
-                  <i class="fas fa-arrow-right ml-1 text-xs group-hover:translate-x-1 transition-transform"></i>
+                {/* PDF Count */}
+                <div class="flex items-center justify-center pt-2 border-t border-gray-100">
+                  <span class="text-lg md:text-xl font-bold text-primary">
+                    {category.pdf_count}
+                  </span>
+                  <span class="text-xs text-gray-500 ml-1">件</span>
                 </div>
               </a>
             ))}
