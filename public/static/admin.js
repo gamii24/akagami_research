@@ -6,7 +6,8 @@ let adminState = {
   excludedTags: [],
   editingPdf: null,
   showModal: false,
-  authenticated: false
+  authenticated: false,
+  selectedCategoryFilter: null // null means "All Categories"
 }
 
 // Enable dark mode for admin pages
@@ -184,9 +185,35 @@ function renderAdminPage() {
         <!-- PDF List -->
         <div class="rounded-xl shadow-xl overflow-hidden" style="background-color: #2d2d2d; border: 2px solid #4b5563;">
           <div class="px-4 py-3" style="background-color: #3a3a3a; border-bottom: 2px solid #4b5563;">
-            <h2 class="text-lg font-bold" style="color: #f3f4f6;">
-              <i class="fas fa-list mr-2" style="color: #e75556;"></i>登録済みPDF一覧
-            </h2>
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-lg font-bold" style="color: #f3f4f6;">
+                <i class="fas fa-list mr-2" style="color: #e75556;"></i>登録済みPDF一覧
+              </h2>
+              <div class="text-sm" style="color: #9ca3af;">
+                全 <span id="pdf-count" style="color: #e75556; font-weight: bold;">${adminState.pdfs.length}</span> 件
+              </div>
+            </div>
+            
+            <!-- Category Filter Buttons -->
+            <div class="flex flex-wrap gap-2">
+              <button 
+                onclick="filterByCategory(null)" 
+                class="category-filter-btn px-3 py-1.5 text-sm rounded-lg transition-all duration-200 font-medium ${adminState.selectedCategoryFilter === null ? 'active' : ''}"
+                style="${adminState.selectedCategoryFilter === null ? 'background-color: #e75556; color: white;' : 'background-color: #4b5563; color: #d1d5db;'}"
+              >
+                <i class="fas fa-th-large mr-1"></i>すべて
+              </button>
+              ${adminState.categories.map(cat => `
+                <button 
+                  onclick="filterByCategory(${cat.id})" 
+                  class="category-filter-btn px-3 py-1.5 text-sm rounded-lg transition-all duration-200 font-medium ${adminState.selectedCategoryFilter === cat.id ? 'active' : ''}"
+                  style="${adminState.selectedCategoryFilter === cat.id ? 'background-color: #e75556; color: white;' : 'background-color: #4b5563; color: #d1d5db;'}"
+                >
+                  <i class="fas fa-folder mr-1"></i>${escapeHtml(cat.name)}
+                  <span class="ml-1 opacity-75">(${adminState.pdfs.filter(p => p.category_id === cat.id).length})</span>
+                </button>
+              `).join('')}
+            </div>
           </div>
           <div id="admin-pdf-list">
             ${renderAdminPdfList()}
@@ -201,27 +228,54 @@ function renderAdminPage() {
 }
 
 function renderAdminPdfList() {
-  if (adminState.pdfs.length === 0) {
+  // Filter PDFs by selected category
+  const filteredPdfs = adminState.selectedCategoryFilter === null 
+    ? adminState.pdfs 
+    : adminState.pdfs.filter(pdf => pdf.category_id === adminState.selectedCategoryFilter)
+  
+  if (filteredPdfs.length === 0) {
     return `
       <div class="px-6 py-16 text-center" style="color: #9ca3af;">
         <i class="fas fa-inbox text-7xl mb-4" style="color: #6b7280;"></i>
-        <p class="text-xl font-medium">PDFが登録されていません</p>
+        <p class="text-xl font-medium">
+          ${adminState.selectedCategoryFilter === null ? 'PDFが登録されていません' : 'このカテゴリにPDFが登録されていません'}
+        </p>
       </div>
     `
   }
   
-  return adminState.pdfs.map(pdf => `
+  return filteredPdfs.map(pdf => `
     <div class="px-4 py-2.5 transition-all duration-200" style="border-bottom: 1px solid #4b5563; background-color: #2d2d2d;">
       <div class="flex items-center justify-between">
         <div class="flex-1">
           <h3 class="text-sm font-bold mb-1.5" style="color: #f3f4f6;">
             ${escapeHtml(pdf.title)}
           </h3>
-          <div class="flex flex-wrap gap-1.5">
+          <div class="flex flex-wrap gap-1.5 items-center">
             ${pdf.category_name ? `
-              <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: #e75556; color: white;">
-                <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
-              </span>
+              <div class="relative inline-block category-change-wrapper">
+                <button 
+                  onclick="toggleCategoryDropdown(${pdf.id})" 
+                  class="text-xs px-2 py-0.5 rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+                  style="background-color: #e75556; color: white;"
+                  title="カテゴリを変更"
+                >
+                  <i class="fas fa-folder mr-1"></i>${escapeHtml(pdf.category_name)}
+                  <i class="fas fa-caret-down ml-1"></i>
+                </button>
+                <div id="category-dropdown-${pdf.id}" class="hidden absolute z-10 mt-1 rounded-lg shadow-xl" style="background-color: #3a3a3a; border: 2px solid #4b5563; min-width: 200px;">
+                  ${adminState.categories.map(cat => `
+                    <button 
+                      onclick="quickChangeCategory(${pdf.id}, ${cat.id}, '${escapeHtml(cat.name).replace(/'/g, "\\'")}')"
+                      class="block w-full text-left px-3 py-2 text-sm hover:bg-gray-700 transition-colors ${pdf.category_id === cat.id ? 'font-bold' : ''}"
+                      style="color: ${pdf.category_id === cat.id ? '#e75556' : '#d1d5db'};"
+                    >
+                      <i class="fas fa-folder mr-2"></i>${escapeHtml(cat.name)}
+                      ${pdf.category_id === cat.id ? '<i class="fas fa-check ml-2"></i>' : ''}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
             ` : ''}
             ${pdf.tags ? pdf.tags.map(tag => `
               <span class="text-xs px-2 py-0.5 rounded-full" style="background-color: #4b5563; color: #d1d5db;">
@@ -1432,4 +1486,120 @@ function exportUsersToCSV() {
   link.href = URL.createObjectURL(blob)
   link.download = `akagami_users_${new Date().toISOString().split('T')[0]}.csv`
   link.click()
+}
+
+// ============================================
+// Category Filter Functions
+// ============================================
+
+// Filter PDFs by category
+function filterByCategory(categoryId) {
+  adminState.selectedCategoryFilter = categoryId
+  
+  // Update PDF count
+  const filteredPdfs = categoryId === null 
+    ? adminState.pdfs 
+    : adminState.pdfs.filter(pdf => pdf.category_id === categoryId)
+  
+  const pdfCountElement = document.getElementById('pdf-count')
+  if (pdfCountElement) {
+    pdfCountElement.textContent = filteredPdfs.length
+  }
+  
+  // Re-render the admin page
+  renderAdminPage()
+}
+
+// Toggle category dropdown
+function toggleCategoryDropdown(pdfId) {
+  const dropdown = document.getElementById(`category-dropdown-${pdfId}`)
+  if (!dropdown) return
+  
+  // Close all other dropdowns first
+  document.querySelectorAll('[id^="category-dropdown-"]').forEach(d => {
+    if (d.id !== `category-dropdown-${pdfId}`) {
+      d.classList.add('hidden')
+    }
+  })
+  
+  // Toggle current dropdown
+  dropdown.classList.toggle('hidden')
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.category-change-wrapper')) {
+    document.querySelectorAll('[id^="category-dropdown-"]').forEach(d => {
+      d.classList.add('hidden')
+    })
+  }
+})
+
+// Quick change category
+async function quickChangeCategory(pdfId, newCategoryId, newCategoryName) {
+  try {
+    // Close dropdown
+    const dropdown = document.getElementById(`category-dropdown-${pdfId}`)
+    if (dropdown) {
+      dropdown.classList.add('hidden')
+    }
+    
+    // Find the PDF
+    const pdf = adminState.pdfs.find(p => p.id === pdfId)
+    if (!pdf) {
+      throw new Error('PDF not found')
+    }
+    
+    // If same category, do nothing
+    if (pdf.category_id === newCategoryId) {
+      return
+    }
+    
+    // Update via API
+    const response = await axios.put(`/api/pdfs/${pdfId}`, {
+      title: pdf.title,
+      google_drive_url: pdf.google_drive_url,
+      category_id: newCategoryId,
+      tag_ids: pdf.tags ? pdf.tags.map(t => t.id) : []
+    })
+    
+    if (response.data.success) {
+      // Update local state
+      pdf.category_id = newCategoryId
+      pdf.category_name = newCategoryName
+      
+      // Show success message
+      showToast(`「${pdf.title}」のカテゴリを「${newCategoryName}」に変更しました`, 'success')
+      
+      // Re-render the list
+      document.getElementById('admin-pdf-list').innerHTML = renderAdminPdfList()
+    }
+  } catch (error) {
+    console.error('Failed to change category:', error)
+    showToast('カテゴリの変更に失敗しました', 'error')
+  }
+}
+
+// Show toast notification
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div')
+  toast.className = 'fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-xl z-50 transition-all duration-300 transform translate-y-0'
+  toast.style.cssText = `
+    background-color: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+    color: white;
+    font-weight: 600;
+  `
+  
+  const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
+  toast.innerHTML = `
+    <i class="fas fa-${icon} mr-2"></i>${message}
+  `
+  
+  document.body.appendChild(toast)
+  
+  setTimeout(() => {
+    toast.style.transform = 'translateY(100px)'
+    toast.style.opacity = '0'
+    setTimeout(() => toast.remove(), 300)
+  }, 3000)
 }
