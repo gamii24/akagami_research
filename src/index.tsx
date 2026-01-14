@@ -2030,7 +2030,7 @@ app.get('/calendar/2', (c) => {
 
         {/* 赤髪Tips */}
         <div class="mb-6 bg-gradient-to-r from-red-100 via-pink-100 to-red-100 rounded-lg p-4 border border-red-300">
-          <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
             <i class="fas fa-lightbulb text-yellow-500"></i>
             赤髪Tips
           </h3>
@@ -2205,14 +2205,14 @@ app.get('/calendar/3', (c) => {
         </div>
 
         {/* イベント＆投稿ネタ 3カラム */}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
-          <div class="bg-gradient-to-b from-pink-50 to-purple-50 rounded-xl p-5 border-2 border-pink-200">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-calendar-day text-pink-500"></i>
+          <div class="bg-gradient-to-b from-pink-50 to-purple-50 rounded-lg p-4 border border-pink-200">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+              <i class="fas fa-calendar-day text-pink-500 text-xs"></i>
               主要イベント
             </h3>
-            <div class="space-y-3 text-sm">
+            <div class="space-y-2 text-sm">
               <div class="flex items-start gap-2">
                 <span class="font-bold text-primary whitespace-nowrap">3/3</span>
                 <span class="text-gray-700">ひなまつり</span>
@@ -2233,9 +2233,9 @@ app.get('/calendar/3', (c) => {
           </div>
 
           {/* みんなが見るテレビ */}
-          <div class="bg-gradient-to-b from-blue-50 to-cyan-50 rounded-xl p-5 border-2 border-blue-200">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-tv text-blue-500"></i>
+          <div class="bg-gradient-to-b from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-200">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+              <i class="fas fa-tv text-blue-500 text-xs"></i>
               みんなが見るTV
             </h3>
             <div class="space-y-2 text-sm text-gray-700">
@@ -2259,12 +2259,12 @@ app.get('/calendar/3', (c) => {
           </div>
 
           {/* 保存されやすいネタ */}
-          <div class="bg-gradient-to-b from-green-50 to-teal-50 rounded-xl p-5 border-2 border-green-200">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-bookmark text-green-600"></i>
+          <div class="bg-gradient-to-b from-green-50 to-teal-50 rounded-lg p-4 border border-green-200">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+              <i class="fas fa-bookmark text-green-600 text-xs"></i>
               保存されやすいネタ
             </h3>
-            <div class="space-y-3 text-sm">
+            <div class="space-y-2 text-sm">
               <div>
                 <p class="font-bold text-gray-800 mb-1">感情ストーリー</p>
                 <p class="text-gray-600 text-xs">卒業・別れ・転機の話</p>
@@ -2293,35 +2293,35 @@ app.get('/calendar/3', (c) => {
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-4 border border-pink-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">1〜3日</span>
                 <span class="text-xs bg-pink-200 text-pink-800 px-2 py-0.5 rounded-full">ひなまつり</span>
               </p>
               <p class="text-sm text-gray-700">女の子の行事・親子エピソード</p>
             </div>
             <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">4〜10日</span>
                 <span class="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">卒業シーズン</span>
               </p>
               <p class="text-sm text-gray-700">送別の言葉・春への振り返り</p>
             </div>
             <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">11〜14日</span>
                 <span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full">ホワイトデー</span>
               </p>
               <p class="text-sm text-gray-700">恋愛感情とすれ違い投稿</p>
             </div>
             <div class="bg-gradient-to-r from-teal-50 to-green-50 rounded-lg p-4 border border-teal-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">15〜21日</span>
                 <span class="text-xs bg-teal-200 text-teal-800 px-2 py-0.5 rounded-full">心の整理</span>
               </p>
               <p class="text-sm text-gray-700">引越し準備・退職・振り返り系</p>
             </div>
             <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4 border border-yellow-200 md:col-span-2">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">22〜31日</span>
                 <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded-full">新生活準備</span>
               </p>
@@ -2332,7 +2332,7 @@ app.get('/calendar/3', (c) => {
 
         {/* 赤髪Tips */}
         <div class="mb-6 bg-gradient-to-r from-red-100 via-pink-100 to-red-100 rounded-lg p-4 border border-red-300">
-          <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
             <i class="fas fa-lightbulb text-yellow-500"></i>
             赤髪Tips
           </h3>
@@ -2507,14 +2507,14 @@ app.get('/calendar/4', (c) => {
         </div>
 
         {/* イベント＆投稿ネタ 3カラム */}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
           {/* イベント */}
-          <div class="bg-gradient-to-b from-rose-50 to-pink-50 rounded-xl p-5 border-2 border-rose-200">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-calendar-day text-rose-500"></i>
+          <div class="bg-gradient-to-b from-rose-50 to-pink-50 rounded-lg p-4 border border-rose-200">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+              <i class="fas fa-calendar-day text-rose-500 text-xs"></i>
               主要イベント
             </h3>
-            <div class="space-y-3 text-sm">
+            <div class="space-y-2 text-sm">
               <div class="flex items-start gap-2">
                 <span class="font-bold text-primary whitespace-nowrap">4/1</span>
                 <span class="text-gray-700">エイプリルフール</span>
@@ -2535,9 +2535,9 @@ app.get('/calendar/4', (c) => {
           </div>
 
           {/* みんなが見るテレビ */}
-          <div class="bg-gradient-to-b from-blue-50 to-sky-50 rounded-xl p-5 border-2 border-blue-200">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-tv text-blue-500"></i>
+          <div class="bg-gradient-to-b from-blue-50 to-sky-50 rounded-lg p-4 border border-blue-200">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+              <i class="fas fa-tv text-blue-500 text-xs"></i>
               みんなが見るTV
             </h3>
             <div class="space-y-2 text-sm text-gray-700">
@@ -2565,12 +2565,12 @@ app.get('/calendar/4', (c) => {
           </div>
 
           {/* 保存されやすいネタ */}
-          <div class="bg-gradient-to-b from-green-50 to-emerald-50 rounded-xl p-5 border-2 border-green-200">
-            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-bookmark text-green-600"></i>
+          <div class="bg-gradient-to-b from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+              <i class="fas fa-bookmark text-green-600 text-xs"></i>
               保存されやすいネタ
             </h3>
-            <div class="space-y-3 text-sm">
+            <div class="space-y-2 text-sm">
               <div>
                 <p class="font-bold text-gray-800 mb-1">自己紹介・再設計</p>
                 <p class="text-gray-600 text-xs">プロフィール投稿・スタート宣言</p>
@@ -2599,21 +2599,21 @@ app.get('/calendar/4', (c) => {
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg p-4 border border-sky-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">1〜7日</span>
                 <span class="text-xs bg-sky-200 text-sky-800 px-2 py-0.5 rounded-full">スタート</span>
               </p>
               <p class="text-sm text-gray-700">自己紹介・新しい場所の空気感・エイプリルフール</p>
             </div>
             <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-lg p-4 border border-pink-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">8〜15日</span>
                 <span class="text-xs bg-pink-200 text-pink-800 px-2 py-0.5 rounded-full">新生活</span>
               </p>
               <p class="text-sm text-gray-700">環境の変化・朝のルーティン・新生活リアル</p>
             </div>
             <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">16〜22日</span>
                 <span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full">4月病</span>
               </p>
@@ -2631,7 +2631,7 @@ app.get('/calendar/4', (c) => {
 
         {/* 赤髪Tips */}
         <div class="mb-6 bg-gradient-to-r from-red-100 via-pink-100 to-red-100 rounded-lg p-4 border border-red-300">
-          <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
             <i class="fas fa-lightbulb text-yellow-500"></i>
             赤髪Tips
           </h3>
@@ -2937,7 +2937,7 @@ app.get('/calendar/5', (c) => {
 
         {/* 赤髪Tips */}
         <div class="mb-6 bg-gradient-to-r from-red-100 via-pink-100 to-red-100 rounded-lg p-4 border border-red-300">
-          <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
             <i class="fas fa-lightbulb text-yellow-500"></i>
             赤髪Tips
           </h3>
@@ -3247,7 +3247,7 @@ app.get('/calendar/6', (c) => {
 
         {/* 赤髪Tips */}
         <div class="mb-6 bg-gradient-to-r from-red-100 via-pink-100 to-red-100 rounded-lg p-4 border border-red-300">
-          <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
             <i class="fas fa-lightbulb text-yellow-500"></i>
             赤髪Tips
           </h3>
@@ -5478,14 +5478,14 @@ app.get('/calendar/1', (c) => {
               <p class="text-sm text-gray-700">成人式/年頭投稿/目標宣言</p>
             </div>
             <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-4 border border-orange-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">14〜21日</span>
                 <span class="text-xs bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full">リセット</span>
               </p>
               <p class="text-sm text-gray-700">正月疲れ/リセット投稿/習慣化</p>
             </div>
             <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <p class="font-bold text-gray-800 mb-1 flex items-center gap-2">
                 <span class="text-primary">22〜31日</span>
                 <span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full">振り返り</span>
               </p>
@@ -5496,7 +5496,7 @@ app.get('/calendar/1', (c) => {
 
         {/* 赤髪Tips */}
         <div class="mb-6 bg-gradient-to-r from-red-100 via-pink-100 to-red-100 rounded-lg p-4 border border-red-300">
-          <h3 class="text-base font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
             <i class="fas fa-lightbulb text-yellow-500"></i>
             赤髪Tips
           </h3>
