@@ -123,9 +123,8 @@ GoogleはAI動画生成ツールVeoの最新版を発表し、画像からの動
                   <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">カテゴリ <span style="color: #10b981;">*</span></label>
                   <select id="bulk-category" class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;">
                     <option value="SNS">SNS</option>
-                    <option value="AI">AI</option>
                     <option value="テクノロジー">テクノロジー</option>
-                    <option value="マーケティング">マーケティング</option>
+                    <option value="その他">その他</option>
                   </select>
                 </div>
                 
@@ -182,9 +181,8 @@ GoogleはAI動画生成ツールVeoの最新版を発表し、画像からの動
                   <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">カテゴリ <span style="color: #ef4444;">*</span></label>
                   <select id="news-category" required class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;">
                     <option value="SNS">SNS</option>
-                    <option value="AI">AI</option>
                     <option value="テクノロジー">テクノロジー</option>
-                    <option value="マーケティング">マーケティング</option>
+                    <option value="その他">その他</option>
                   </select>
                 </div>
                 
@@ -261,8 +259,16 @@ function renderNewsList() {
         <div class="flex-1">
           <h3 class="font-semibold mb-1" style="color: #f3f4f6;">${escapeHtml(news.title)}</h3>
           <p class="text-sm mb-2" style="color: #9ca3af;">${escapeHtml(news.summary)}</p>
-          <div class="flex gap-2 text-xs mb-2">
-            <span class="px-2 py-1 rounded" style="background-color: #f59e0b; color: white;">${news.category}</span>
+          <div class="flex gap-2 text-xs mb-2 items-center">
+            <select 
+              onchange="updateCategory(${news.id}, this.value)" 
+              class="px-2 py-1 rounded text-xs font-semibold" 
+              style="background-color: #f59e0b; color: white; border: none; cursor: pointer;"
+              title="カテゴリを変更">
+              <option value="SNS" ${news.category === 'SNS' ? 'selected' : ''}>SNS</option>
+              <option value="テクノロジー" ${news.category === 'テクノロジー' ? 'selected' : ''}>テクノロジー</option>
+              <option value="その他" ${news.category === 'その他' ? 'selected' : ''}>その他</option>
+            </select>
             <span style="color: #9ca3af;">${new Date(news.published_at).toLocaleDateString('ja-JP')}</span>
           </div>
           <a href="${news.url}" target="_blank" class="text-xs hover:underline" style="color: #60a5fa;">
@@ -552,6 +558,30 @@ function parseJapaneseDate(dateStr) {
   
   // If all else fails, return current date
   return new Date().toISOString()
+}
+
+// Update category
+async function updateCategory(id, newCategory) {
+  try {
+    const response = await axios.put(`/api/news/${id}`, { category: newCategory })
+    
+    if (response.data.success) {
+      showToast(`カテゴリを「${newCategory}」に変更しました`, 'success')
+      
+      // Update local state
+      const news = newsState.newsArticles.find(n => n.id === id)
+      if (news) {
+        news.category = newCategory
+      }
+    }
+  } catch (error) {
+    console.error('Failed to update category:', error)
+    showToast('カテゴリの変更に失敗しました', 'error')
+    
+    // Reload to restore original state
+    await loadNewsArticles()
+    document.getElementById('news-list').innerHTML = renderNewsList()
+  }
 }
 
 // Initialize on page load
