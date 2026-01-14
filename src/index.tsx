@@ -1867,6 +1867,43 @@ app.delete('/api/news/:id', requireAuth, async (c) => {
   return c.json({ success: true })
 })
 
+// Google Suggest Proxy API (for question finder)
+app.get('/api/suggest', async (c) => {
+  const keyword = c.req.query('q')
+  
+  if (!keyword) {
+    return c.json({ error: 'Missing keyword parameter' }, 400)
+  }
+  
+  try {
+    // Google Suggest API (Firefox client)
+    const url = `https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(keyword)}`
+    
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    })
+    
+    if (!response.ok) {
+      return c.json({ error: 'Failed to fetch suggestions', suggestions: [] }, 500)
+    }
+    
+    const data = await response.json()
+    
+    // Google Suggest returns [keyword, [suggestions]]
+    const suggestions = Array.isArray(data) && data.length > 1 ? data[1] : []
+    
+    return c.json({ 
+      keyword,
+      suggestions: suggestions.slice(0, 10) // Top 10 suggestions
+    })
+  } catch (error) {
+    console.error('Google Suggest error:', error)
+    return c.json({ error: 'Failed to fetch suggestions', suggestions: [] }, 500)
+  }
+})
+
 // Regenerate tags for all existing PDFs (protected)
 app.post('/api/pdfs/regenerate-tags', requireAuth, async (c) => {
   try {
@@ -6811,8 +6848,71 @@ app.get('/mypage', (c) => {
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
         <script src="/static/mypage.js"></script>
+      </body>
+    </html>
+  )
+})
+
+// Question Finder - SNS運用ネタ向け質問生成ツール
+app.get('/question-finder', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>キーワードチェック - Akagami Research</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes fade-in-up {
+              from {
+                opacity: 0;
+                transform: translateY(20px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .animate-fade-in-up {
+              animation: fade-in-up 0.3s ease-out;
+            }
+          `
+        }} />
+      </head>
+      <body>
+        <div id="question-finder-app">
+          <div class="min-h-screen flex items-center justify-center bg-gray-100">
+            <div class="text-center">
+              <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+              <p class="text-gray-600">読み込み中...</p>
+            </div>
+          </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/utils.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/question-finder.js?v=2026011407"></script>
       </body>
     </html>
   )
@@ -6933,6 +7033,7 @@ app.get('/admin', (c) => {
           </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
+        <script src="/static/utils.js" defer></script>
         <script src="/static/admin.js" defer></script>
       </body>
     </html>
@@ -6990,7 +7091,8 @@ app.get('/admin/news', (c) => {
           </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
-        <script src="/static/news-admin.js" defer></script>
+        <script src="/static/utils.js" defer></script>
+        <script src="/static/news-admin.js?v=2026011402" defer></script>
       </body>
     </html>
   )

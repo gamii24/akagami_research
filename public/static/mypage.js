@@ -252,17 +252,7 @@ function getUpcomingEvents() {
   })
 }
 
-// Helper function to safely format dates
-function formatDate(dateString) {
-  if (!dateString) return '日付不明'
-  try {
-    const date = new Date(dateString)
-    if (isNaN(date.getTime())) return '日付不明'
-    return date.toLocaleDateString('ja-JP')
-  } catch (error) {
-    return '日付不明'
-  }
-}
+// formatDate is now in utils.js
 
 // Load my page data
 async function loadMyPage() {
@@ -407,6 +397,14 @@ function renderMyPage(downloads, favorites) {
         </button>
       </div>
     </div>
+
+    <!-- Keyword Checker Link -->
+    <a href="/question-finder" class="block bg-gradient-to-r from-pink-50 to-red-50 rounded-xl shadow-lg p-6 mb-6 border-2 border-primary hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
+      <div>
+        <h3 class="text-lg font-bold text-gray-800 mb-1">キーワードチェック</h3>
+        <p class="text-sm text-gray-600">Google検索データからSNS投稿ネタを発見</p>
+      </div>
+    </a>
 
     <!-- Favorites Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
@@ -1028,12 +1026,7 @@ function scrollToProfileForm() {
   }
 }
 
-// Escape HTML
-function escapeHtml(text) {
-  const div = document.createElement('div')
-  div.textContent = text || ''
-  return div.innerHTML
-}
+// escapeHtml is now in utils.js
 
 // Update user info card at the top of the page
 function updateUserInfoCard() {

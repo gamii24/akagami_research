@@ -16,13 +16,15 @@ async function checkAuthStatus() {
         state.isAuthenticated = true
         state.user = data.user
         
-        // Sync local storage data to server
-        await syncLocalDataToServer()
-        
-        // Load server data
-        await loadUserData()
-        
+        // Update UI immediately for fast menu display
         updateAuthUI()
+        
+        // Sync local storage data to server (background)
+        syncLocalDataToServer().catch(err => console.error('Sync failed:', err))
+        
+        // Load server data (background)
+        loadUserData().catch(err => console.error('Load user data failed:', err))
+        
         return true
       }
     }
@@ -112,35 +114,23 @@ function updateAuthUI() {
   if (!userAccountSection) return
   
   if (state.isAuthenticated && state.user) {
-    // Show user menu without user info header
+    // Show user menu - only MyPage button with double height
     userAccountSection.innerHTML = `
-      <div class="space-y-2 mb-4">
+      <div class="mb-4">
         <button 
           onclick="showMyPage()"
-          class="w-full px-3 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-sm flex items-center gap-2 border border-gray-200"
+          class="w-full px-4 py-6 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-base flex items-center justify-center gap-3 border border-gray-200 shadow-sm"
         >
           ${state.user.profilePhotoUrl ? `
             <img src="${escapeHtml(state.user.profilePhotoUrl)}" 
               alt="Profile" 
-              class="w-5 h-5 rounded-full object-cover">
+              class="w-7 h-7 rounded-full object-cover"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+            <i class="fas fa-user text-lg" style="display:none;"></i>
           ` : `
-            <i class="fas fa-user"></i>
+            <i class="fas fa-user text-lg"></i>
           `}
-          <span>マイページ</span>
-        </button>
-        <button 
-          onclick="showNotificationSettings()"
-          class="w-full px-3 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-sm flex items-center gap-2 border border-gray-200"
-        >
-          <i class="fas fa-bell"></i>
-          <span>通知設定</span>
-        </button>
-        <button 
-          onclick="handleLogout()"
-          class="w-full px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors text-sm flex items-center gap-2 border border-red-200"
-        >
-          <i class="fas fa-sign-out-alt"></i>
-          <span>ログアウト</span>
+          <span class="font-semibold">マイページ</span>
         </button>
       </div>
     `
@@ -497,12 +487,7 @@ function showNotificationSettings() {
   window.location.href = '/notifications'
 }
 
-// Utility function to escape HTML
-function escapeHtml(text) {
-  const div = document.createElement('div')
-  div.textContent = text
-  return div.innerHTML
-}
+// escapeHtml is now in utils.js
 
 // Check for magic link token on page load
 document.addEventListener('DOMContentLoaded', async () => {

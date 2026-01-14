@@ -1169,30 +1169,7 @@ async function logout() {
   location.reload()
 }
 
-// Utility functions
-function escapeHtml(text) {
-  if (!text) return ''
-  const div = document.createElement('div')
-  div.textContent = text
-  return div.innerHTML
-}
-
-function getCategoryIcon(categoryName) {
-  const iconMap = {
-    'YouTube': 'fab fa-youtube',
-    'Threads': 'fab fa-threads',
-    'Podcast': 'fas fa-podcast',
-    'LINE公式': 'fab fa-line',
-    'Instagram': 'fab fa-instagram',
-    'TikTok': 'fab fa-tiktok',
-    'X': 'fab fa-x-twitter',
-    'マーケティング': 'fas fa-chart-line',
-    'その他': 'fas fa-folder',
-    '生成AI': 'fas fa-robot',
-    '画像&動画生成': 'fas fa-image'
-  }
-  return iconMap[categoryName] || 'fas fa-file-pdf'
-}
+// Utility functions are now in utils.js
 
 // ============================================
 // Analytics Modal
@@ -1581,29 +1558,7 @@ async function quickChangeCategory(pdfId, newCategoryId, newCategoryName) {
   }
 }
 
-// Show toast notification
-function showToast(message, type = 'info') {
-  const toast = document.createElement('div')
-  toast.className = 'fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-xl z-50 transition-all duration-300 transform translate-y-0'
-  toast.style.cssText = `
-    background-color: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-    color: white;
-    font-weight: 600;
-  `
-  
-  const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
-  toast.innerHTML = `
-    <i class="fas fa-${icon} mr-2"></i>${message}
-  `
-  
-  document.body.appendChild(toast)
-  
-  setTimeout(() => {
-    toast.style.transform = 'translateY(100px)'
-    toast.style.opacity = '0'
-    setTimeout(() => toast.remove(), 300)
-  }, 3000)
-}
+// showToast is now in utils.js
 
 // Initialize admin app on page load
 document.addEventListener('DOMContentLoaded', initAdminApp)

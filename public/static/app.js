@@ -382,35 +382,7 @@ function fallbackCopyToClipboard(text) {
   document.body.removeChild(textArea)
 }
 
-// Show toast notification
-function showToast(message) {
-  // Remove existing toast if any
-  const existingToast = document.getElementById('toast-notification')
-  if (existingToast) {
-    existingToast.remove()
-  }
-  
-  const toast = document.createElement('div')
-  toast.id = 'toast-notification'
-  toast.className = 'fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 animate-fade-in'
-  toast.innerHTML = `
-    <i class="fas fa-check-circle text-green-400"></i>
-    <span>${message}</span>
-  `
-  
-  document.body.appendChild(toast)
-  
-  // Auto remove after 3 seconds
-  setTimeout(() => {
-    toast.style.opacity = '0'
-    toast.style.transition = 'opacity 0.3s'
-    setTimeout(() => {
-      if (toast.parentNode) {
-        toast.remove()
-      }
-    }, 300)
-  }, 3000)
-}
+// showToast is now in utils.js
 
 // Initialize app
 async function initApp() {
@@ -1707,40 +1679,7 @@ function showAllMobileCards() {
   renderPDFList()
 }
 
-// Utility functions
-function escapeHtml(text) {
-  if (!text) return ''
-  const div = document.createElement('div')
-  div.textContent = text
-  return div.innerHTML
-}
-
-function formatDate(dateString) {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
-
-function getCategoryIcon(categoryName) {
-  const iconMap = {
-    'YouTube': 'fab fa-youtube',
-    'Threads': 'fab fa-threads',
-    'Podcast': 'fas fa-podcast',
-    'LINE公式': 'fab fa-line',
-    'Instagram': 'fab fa-instagram',
-    'TikTok': 'fab fa-tiktok',
-    'X': 'fab fa-x-twitter',
-    'マーケティング': 'fas fa-chart-line',
-    'その他': 'fas fa-folder',
-    '生成AI': 'fas fa-robot',
-    '画像&動画生成': 'fas fa-image'
-  }
-  return iconMap[categoryName] || 'fas fa-file-pdf'
-}
+// Utility functions are now in utils.js
 
 // Check if date is within 7 days
 function isWithin7Days(dateString) {

@@ -86,7 +86,7 @@ function renderNewsAdminPage() {
               <i class="fas fa-paste mr-2"></i>
               コピペで簡単登録
             </h2>
-            <p class="text-sm text-white opacity-90 mt-1">タイトル、公開日時、要約をまとめてコピペして、ボタン1つで登録！</p>
+            <p class="text-sm text-white opacity-90 mt-1">タイトル、要約をまとめてコピペして、ボタン1つで登録！</p>
           </div>
           
           <div class="p-6">
@@ -94,7 +94,7 @@ function renderNewsAdminPage() {
               <div>
                 <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">
                   記事情報を貼り付け <span style="color: #10b981;">*</span>
-                  <span class="text-xs opacity-75 ml-2">（タイトル、公開日時、要約を含むテキストをコピペ）</span>
+                  <span class="text-xs opacity-75 ml-2">（タイトル、要約を含むテキストをコピペ）</span>
                 </label>
                 <textarea 
                   id="bulk-input" 
@@ -105,9 +105,6 @@ function renderNewsAdminPage() {
 
 タイトル
 GoogleがAI動画生成ツールVeoを強化し縦型動画と高画質出力に対応
-
-記事公開日時
-2026年1月13日
 
 要約
 GoogleはAI動画生成ツールVeoの最新版を発表し、画像からの動画生成、縦型動画対応..."></textarea>
@@ -148,70 +145,6 @@ GoogleはAI動画生成ツールVeoの最新版を発表し、画像からの動
           </div>
         </div>
 
-        <!-- Add/Edit Form -->
-        <div class="mb-6 rounded-xl shadow-xl overflow-hidden" style="background-color: #2d2d2d; border: 2px solid #4b5563;">
-          <div class="px-6 py-4" style="background-color: #3a3a3a; border-bottom: 2px solid #4b5563;">
-            <h2 class="text-lg font-bold" style="color: #f3f4f6;">
-              <i class="fas fa-plus-circle mr-2" style="color: #f59e0b;"></i>
-              <span id="form-title">新規ニュース記事を追加</span>
-            </h2>
-          </div>
-          
-          <div class="p-6">
-            <form id="news-form" class="space-y-4">
-              <input type="hidden" id="news-id" value="">
-              
-              <div>
-                <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">タイトル <span style="color: #ef4444;">*</span></label>
-                <input type="text" id="news-title" required class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;" placeholder="記事のタイトルを入力">
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">要約 <span style="color: #ef4444;">*</span></label>
-                <textarea id="news-summary" required rows="4" class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;" placeholder="記事の要約を入力"></textarea>
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">記事URL <span style="color: #ef4444;">*</span></label>
-                <input type="url" id="news-url" required class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;" placeholder="https://example.com/article">
-              </div>
-              
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">カテゴリ <span style="color: #ef4444;">*</span></label>
-                  <select id="news-category" required class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;">
-                    <option value="SNS">SNS</option>
-                    <option value="テクノロジー">テクノロジー</option>
-                    <option value="その他">その他</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">言語 <span style="color: #ef4444;">*</span></label>
-                  <select id="news-language" required class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;">
-                    <option value="en">英語</option>
-                    <option value="ja">日本語</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">公開日時（省略可）</label>
-                <input type="datetime-local" id="news-published-at" class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;">
-              </div>
-              
-              <div class="flex gap-3">
-                <button type="submit" id="submit-btn" class="flex-1 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg" style="background-color: #f59e0b; color: white;">
-                  <i class="fas fa-save mr-2"></i><span id="submit-text">ニュースを追加</span>
-                </button>
-                <button type="button" onclick="cancelEdit()" id="cancel-btn" class="hidden px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg" style="background-color: #6b7280; color: white;">
-                  <i class="fas fa-times mr-2"></i>キャンセル
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
         <!-- News List -->
         <div class="rounded-xl shadow-xl overflow-hidden" style="background-color: #2d2d2d; border: 2px solid #4b5563;">
           <div class="px-6 py-4" style="background-color: #3a3a3a; border-bottom: 2px solid #4b5563;">
@@ -234,12 +167,6 @@ GoogleはAI動画生成ツールVeoの最新版を発表し、画像からの動
       </main>
     </div>
   `
-  
-  // Add form submit handler
-  document.getElementById('news-form').addEventListener('submit', async (e) => {
-    e.preventDefault()
-    await saveNews()
-  })
 }
 
 // Render news list
@@ -269,16 +196,13 @@ function renderNewsList() {
               <option value="テクノロジー" ${news.category === 'テクノロジー' ? 'selected' : ''}>テクノロジー</option>
               <option value="その他" ${news.category === 'その他' ? 'selected' : ''}>その他</option>
             </select>
-            <span style="color: #9ca3af;">${new Date(news.published_at).toLocaleDateString('ja-JP')}</span>
+            <span style="color: #9ca3af;">${news.published_at ? new Date(news.published_at).toLocaleDateString('ja-JP') : '日付未設定'}</span>
           </div>
           <a href="${news.url}" target="_blank" class="text-xs hover:underline" style="color: #60a5fa;">
             <i class="fas fa-external-link-alt mr-1"></i>${news.url}
           </a>
         </div>
         <div class="ml-4 flex gap-2">
-          <button onclick="editNews(${news.id})" class="px-3 py-2 rounded text-sm transition-colors" style="background-color: #3b82f6; color: white;" title="編集">
-            <i class="fas fa-edit"></i>
-          </button>
           <button onclick="deleteNews(${news.id}, '${escapeHtml(news.title).replace(/'/g, "\\'")}')  " class="px-3 py-2 rounded text-sm transition-colors" style="background-color: #dc2626; color: white;" title="削除">
             <i class="fas fa-trash"></i>
           </button>
@@ -286,97 +210,6 @@ function renderNewsList() {
       </div>
     </div>
   `).join('')
-}
-
-// Save news (add or update)
-async function saveNews() {
-  const id = document.getElementById('news-id').value
-  const title = document.getElementById('news-title').value.trim()
-  const summary = document.getElementById('news-summary').value.trim()
-  const url = document.getElementById('news-url').value.trim()
-  const category = document.getElementById('news-category').value
-  const language = document.getElementById('news-language').value
-  const publishedAtInput = document.getElementById('news-published-at').value
-  
-  if (!title || !summary || !url) {
-    showToast('すべての必須項目を入力してください', 'error')
-    return
-  }
-  
-  try {
-    const data = {
-      title,
-      summary,
-      url,
-      category,
-      language
-    }
-    
-    if (publishedAtInput) {
-      data.published_at = new Date(publishedAtInput).toISOString()
-    }
-    
-    let response
-    if (id) {
-      // Update existing news
-      response = await axios.put(`/api/news/${id}`, data)
-      showToast('ニュース記事を更新しました', 'success')
-    } else {
-      // Add new news
-      response = await axios.post('/api/news', data)
-      showToast('ニュース記事を追加しました', 'success')
-    }
-    
-    if (response.data.success) {
-      // Reset form
-      cancelEdit()
-      
-      // Reload and re-render
-      await loadNewsArticles()
-      document.getElementById('news-list').innerHTML = renderNewsList()
-      document.getElementById('news-count').textContent = newsState.newsArticles.length
-    }
-  } catch (error) {
-    console.error('Failed to save news:', error)
-    showToast('ニュース記事の保存に失敗しました', 'error')
-  }
-}
-
-// Edit news
-async function editNews(id) {
-  const news = newsState.newsArticles.find(n => n.id === id)
-  if (!news) return
-  
-  // Fill form with news data
-  document.getElementById('news-id').value = news.id
-  document.getElementById('news-title').value = news.title
-  document.getElementById('news-summary').value = news.summary
-  document.getElementById('news-url').value = news.url
-  document.getElementById('news-category').value = news.category
-  document.getElementById('news-language').value = news.language
-  
-  if (news.published_at) {
-    const date = new Date(news.published_at)
-    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-    document.getElementById('news-published-at').value = localDate.toISOString().slice(0, 16)
-  }
-  
-  // Update UI
-  document.getElementById('form-title').textContent = 'ニュース記事を編集'
-  document.getElementById('submit-text').textContent = '更新する'
-  document.getElementById('cancel-btn').classList.remove('hidden')
-  
-  // Scroll to form
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-// Cancel edit
-function cancelEdit() {
-  document.getElementById('news-form').reset()
-  document.getElementById('news-id').value = ''
-  document.getElementById('form-title').textContent = '新規ニュース記事を追加'
-  document.getElementById('submit-text').textContent = 'ニュースを追加'
-  document.getElementById('cancel-btn').classList.add('hidden')
 }
 
 // Delete news
@@ -402,36 +235,9 @@ async function deleteNews(id, title) {
   }
 }
 
-// Show toast notification
-function showToast(message, type = 'info') {
-  const toast = document.createElement('div')
-  toast.className = 'fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-xl z-50 transition-all duration-300 transform translate-y-0'
-  toast.style.cssText = `
-    background-color: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-    color: white;
-    font-weight: 600;
-  `
-  
-  const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'
-  toast.innerHTML = `
-    <i class="fas fa-${icon} mr-2"></i>${message}
-  `
-  
-  document.body.appendChild(toast)
-  
-  setTimeout(() => {
-    toast.style.transform = 'translateY(100px)'
-    toast.style.opacity = '0'
-    setTimeout(() => toast.remove(), 300)
-  }, 3000)
-}
+// showToast is now in utils.js
 
-// Escape HTML
-function escapeHtml(text) {
-  const div = document.createElement('div')
-  div.textContent = text
-  return div.innerHTML
-}
+// escapeHtml is now in utils.js
 
 // Parse bulk input and auto-fill form
 async function parseBulkInput() {
@@ -450,7 +256,6 @@ async function parseBulkInput() {
     const lines = bulkText.split('\n').map(line => line.trim()).filter(line => line)
     
     let title = ''
-    let publishedAt = ''
     let summary = ''
     
     let currentSection = ''
@@ -463,9 +268,6 @@ async function parseBulkInput() {
       if (line === 'タイトル' || line.toLowerCase() === 'title') {
         currentSection = 'title'
         continue
-      } else if (line === '記事公開日時' || line.toLowerCase().includes('date') || line.includes('公開日')) {
-        currentSection = 'date'
-        continue
       } else if (line === '要約' || line.toLowerCase() === 'summary' || line === '概要') {
         currentSection = 'summary'
         continue
@@ -474,8 +276,6 @@ async function parseBulkInput() {
       // Store content based on current section
       if (currentSection === 'title' && !title) {
         title = line
-      } else if (currentSection === 'date' && !publishedAt) {
-        publishedAt = parseJapaneseDate(line)
       } else if (currentSection === 'summary') {
         summaryLines.push(line)
       }
@@ -503,10 +303,6 @@ async function parseBulkInput() {
       language
     }
     
-    if (publishedAt) {
-      data.published_at = publishedAt
-    }
-    
     // Save to API
     const response = await axios.post('/api/news', data)
     
@@ -528,51 +324,31 @@ async function parseBulkInput() {
   }
 }
 
-// Parse Japanese date to ISO format
-function parseJapaneseDate(dateStr) {
-  // Remove common prefixes
-  dateStr = dateStr.replace(/^(記事公開日時|公開日|日時)[:：\s]*/gi, '').trim()
-  
-  // Try to parse various Japanese date formats
-  // Format: 2026年1月13日
-  const match1 = dateStr.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/)
-  if (match1) {
-    const [, year, month, day] = match1
-    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toISOString()
-  }
-  
-  // Format: 2026/1/13 or 2026-1-13
-  const match2 = dateStr.match(/(\d{4})[/-](\d{1,2})[/-](\d{1,2})/)
-  if (match2) {
-    const [, year, month, day] = match2
-    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toISOString()
-  }
-  
-  // Format: 1月13日 (assume current year)
-  const match3 = dateStr.match(/(\d{1,2})月(\d{1,2})日/)
-  if (match3) {
-    const [, month, day] = match3
-    const year = new Date().getFullYear()
-    return new Date(year, parseInt(month) - 1, parseInt(day)).toISOString()
-  }
-  
-  // If all else fails, return current date
-  return new Date().toISOString()
-}
-
 // Update category
 async function updateCategory(id, newCategory) {
   try {
-    const response = await axios.put(`/api/news/${id}`, { category: newCategory })
+    // Get the full news article data
+    const news = newsState.newsArticles.find(n => n.id === id)
+    if (!news) {
+      showToast('記事が見つかりませんでした', 'error')
+      return
+    }
+    
+    // Send full data with updated category
+    const response = await axios.put(`/api/news/${id}`, {
+      title: news.title,
+      summary: news.summary,
+      url: news.url,
+      category: newCategory,
+      language: news.language,
+      published_at: news.published_at
+    })
     
     if (response.data.success) {
       showToast(`カテゴリを「${newCategory}」に変更しました`, 'success')
       
       // Update local state
-      const news = newsState.newsArticles.find(n => n.id === id)
-      if (news) {
-        news.category = newCategory
-      }
+      news.category = newCategory
     }
   } catch (error) {
     console.error('Failed to update category:', error)
