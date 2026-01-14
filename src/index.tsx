@@ -1866,19 +1866,16 @@ app.get('/categories', async (c) => {
                 class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-primary"
               >
                 <div class="p-4 md:p-6">
-                  {/* Category Icon & Name */}
+                  {/* Category Name */}
                   <div class="flex flex-col items-center text-center mb-4">
-                    <div class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary to-red-600 rounded-lg flex items-center justify-center text-white text-xl md:text-2xl group-hover:scale-110 transition-transform mb-3">
-                      <i class="fas fa-folder"></i>
-                    </div>
-                    <h3 class="text-base md:text-lg font-bold text-gray-800 group-hover:text-primary transition-colors">
+                    <h3 class="text-base md:text-xl font-bold text-gray-800 group-hover:text-primary transition-colors mb-3">
                       {category.name}
                     </h3>
                   </div>
 
                   {/* Description - Hide on mobile */}
                   {category.description && (
-                    <p class="hidden md:block text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p class="hidden md:block text-gray-600 text-sm mb-4 line-clamp-2 text-center">
                       {category.description}
                     </p>
                   )}
