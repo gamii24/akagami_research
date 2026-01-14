@@ -6700,9 +6700,6 @@ app.get('/news', async (c) => {
                           <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
                             \${news.category}
                           </span>
-                          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
-                            \${news.language === 'en' ? '英語' : '日本語'}
-                          </span>
                           <span class="text-sm text-gray-500">\${dateStr}</span>
                         </div>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
@@ -6913,6 +6910,63 @@ app.get('/admin', (c) => {
         </div>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
         <script src="/static/admin.js" defer></script>
+      </body>
+    </html>
+  )
+})
+
+// Admin News Management Page
+app.get('/admin/news', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ニュース管理 - Akagami Research</title>
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JPMZ82RMGG');
+          `
+        }} />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    secondary: '#e75556',
+                    accent: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                    light: '#ffffff',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+        <link href="/static/admin-dark.css" rel="stylesheet" />
+      </head>
+      <body class="admin-dark bg-darker">
+        <div id="news-admin-app">
+          <div class="text-center py-12 text-gray-300">
+            <i class="fas fa-spinner fa-spin text-4xl mb-4 text-primary"></i>
+            <p>読み込み中...</p>
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
+        <script src="/static/news-admin.js" defer></script>
       </body>
     </html>
   )
