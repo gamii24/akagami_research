@@ -1850,62 +1850,50 @@ app.get('/categories', async (c) => {
         {/* Main Content */}
         <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
           {/* Page Title */}
-          <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">
-              <i class="fas fa-folder-open mr-3 text-primary"></i>
+          <div class="mb-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-1">
+              <i class="fas fa-folder-open mr-2 text-primary"></i>
               カテゴリ一覧
             </h2>
-            <p class="text-gray-600">資料をカテゴリごとに閲覧できます</p>
+            <p class="text-sm text-gray-600">資料をカテゴリごとに閲覧できます</p>
           </div>
 
-          {/* Categories Grid - 2 columns on mobile, 3 on desktop */}
-          <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {/* Categories Grid - Compact 2 columns on mobile, 3 on desktop */}
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {categories.map((category: any) => (
               <a
                 href={`/?category=${category.id}`}
-                class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-primary"
+                class="group bg-white rounded-lg shadow hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200 hover:border-primary"
               >
-                <div class="p-4 md:p-6">
+                <div class="p-3">
                   {/* Category Name */}
-                  <div class="flex flex-col items-center text-center mb-4">
-                    <h3 class="text-base md:text-xl font-bold text-gray-800 group-hover:text-primary transition-colors mb-3">
-                      {category.name}
-                    </h3>
-                  </div>
-
-                  {/* Description - Hide on mobile */}
-                  {category.description && (
-                    <p class="hidden md:block text-gray-600 text-sm mb-4 line-clamp-2 text-center">
-                      {category.description}
-                    </p>
-                  )}
+                  <h3 class="text-sm md:text-base font-bold text-gray-800 group-hover:text-primary transition-colors text-center mb-2">
+                    {category.name}
+                  </h3>
 
                   {/* PDF Count */}
-                  <div class="flex items-center justify-center pt-4 border-t border-gray-100">
-                    <span class="text-gray-500 text-xs md:text-sm flex items-center gap-2">
-                      <i class="fas fa-file-pdf text-primary"></i>
-                      <span class="text-xl md:text-2xl font-bold text-primary">
-                        {category.pdf_count}
-                      </span>
-                      <span class="text-xs md:text-sm text-gray-500">件</span>
+                  <div class="flex items-center justify-center pt-2 border-t border-gray-100">
+                    <span class="text-lg md:text-xl font-bold text-primary">
+                      {category.pdf_count}
                     </span>
+                    <span class="text-xs text-gray-500 ml-1">件</span>
                   </div>
                 </div>
 
                 {/* Hover Arrow */}
-                <div class="bg-gray-50 px-4 py-2 md:py-3 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                  <span class="text-xs md:text-sm font-medium">資料を見る</span>
-                  <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+                <div class="bg-gray-50 px-3 py-1.5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                  <span class="text-xs font-medium">見る</span>
+                  <i class="fas fa-arrow-right ml-1 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
               </a>
             ))}
           </div>
 
           {/* Back to Home Button */}
-          <div class="mt-12 text-center">
+          <div class="mt-8 text-center">
             <a
               href="/"
-              class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium"
+              class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
             >
               <i class="fas fa-home"></i>
               トップページに戻る
