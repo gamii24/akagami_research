@@ -177,60 +177,11 @@ function proceedToDownload() {
 
 // Check if first visit and show welcome message
 function checkFirstVisit() {
+  // Welcome message removed - no longer showing on first visit
   const hasVisited = localStorage.getItem('has_visited')
   
   if (!hasVisited) {
-    // Wait a bit for page to load before showing welcome
-    setTimeout(() => {
-      showWelcomeMessage()
-    }, 800)
     localStorage.setItem('has_visited', 'true')
-  }
-}
-
-// Show welcome message (Instagram like style with SNS logos)
-function showWelcomeMessage() {
-  const modalHtml = `
-    <div class="welcome-modal" id="welcome-modal" onclick="closeWelcome(event)">
-      <div class="welcome-content" onclick="event.stopPropagation()">
-        <div class="floating-sns-logos">
-          <div class="floating-sns-logo"><i class="fab fa-youtube"></i></div>
-          <div class="floating-sns-logo"><i class="fab fa-instagram"></i></div>
-          <div class="floating-sns-logo"><i class="fab fa-tiktok"></i></div>
-          <div class="floating-sns-logo"><i class="fab fa-x-twitter"></i></div>
-          <div class="floating-sns-logo"><i class="fab fa-threads"></i></div>
-          <div class="floating-sns-logo"><i class="fas fa-podcast"></i></div>
-          <div class="floating-sns-logo"><i class="fab fa-line"></i></div>
-          <div class="floating-sns-logo"><i class="fas fa-robot"></i></div>
-        </div>
-        <div class="welcome-heart">❤️</div>
-        <h2 class="welcome-title">ようこそ！</h2>
-        <p class="welcome-message">
-          ここではSNS運用や最新AI情報などを<br>
-          学べる資料を配布しています。<br>
-          あなたのSNSライフがより楽しくなりますように！<br>
-          活用してね！
-        </p>
-        <button class="welcome-button" onclick="closeWelcome()">
-          <i class="fas fa-heart"></i>
-          はじめる
-        </button>
-      </div>
-    </div>
-  `
-  
-  document.body.insertAdjacentHTML('beforeend', modalHtml)
-}
-
-// Close welcome modal
-function closeWelcome(event) {
-  if (event && event.target.id !== 'welcome-modal') return
-  const modal = document.getElementById('welcome-modal')
-  if (modal) {
-    modal.style.opacity = '0'
-    setTimeout(() => {
-      modal.remove()
-    }, 300)
   }
 }
 
