@@ -1880,64 +1880,21 @@ app.get('/calendar/2', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/1"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            1月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <a
-            href="/calendar/3"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            3月
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">2月❄️</h2>
-          </div>
-          <p class="text-gray-600">冬の疲れが出る時期。共感と癒しのコンテンツが響く</p>
-        </div>
-
-        {/* 世間の空気 */}
-        <div class="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-wind text-blue-500 text-xs"></i>
-            世間の空気
-          </h3>
-          <p class="text-base text-gray-700 font-medium">
-            気合いも抜けて、寒さと疲れがじわじわ効いてくる 😮‍💨
-          </p>
-        </div>
-
-        {/* よく検索されるキーワード */}
-        <div class="mb-4 bg-white rounded-lg p-4 border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-search text-primary text-xs"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {["バレンタイン", "チョコレート", "友チョコ", "節分", "恵方巻き", 
-              "乾燥", "花粉症", "保湿", "受験", "低気圧", "メンタル", "猫の日"].map(keyword => (
-              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
-                #{keyword}
-              </span>
-            ))}
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -2229,61 +2186,21 @@ app.get('/calendar/3', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/2"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            2月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            4月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">3月🌱</h2>
-          </div>
-          <p class="text-gray-600">別れと旅立ち、静かな決意と振り返りが交差する時期</p>
-        </div>
-
-        {/* 世間の空気 */}
-        <div class="mb-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-4 border border-pink-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-wind text-pink-500 text-xs"></i>
-            世間の空気
-          </h3>
-          <p class="text-base text-gray-700 font-medium">
-            別れと旅立ち、静かな決意と振り返りが交差する時期 🌸
-          </p>
-        </div>
-
-        {/* よく検索されるキーワード */}
-        <div class="mb-4 bg-white rounded-lg p-4 border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-search text-primary text-xs"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {["卒業", "送別会", "春休み", "ホワイトデー", "ひなまつり", 
-              "引越し", "転勤", "新生活準備", "桜", "花粉症", "春服", "春メイク"].map(keyword => (
-              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
-                #{keyword}
-              </span>
-            ))}
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -2571,61 +2488,21 @@ app.get('/calendar/4', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/3"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            3月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            5月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">4月🌸</h2>
-          </div>
-          <p class="text-gray-600">出会いと変化、環境に飲まれながらも始めようとする月</p>
-        </div>
-
-        {/* 世間の空気 */}
-        <div class="mb-4 bg-gradient-to-r from-pink-50 to-rose-50 rounded-lg p-4 border border-pink-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-wind text-pink-500 text-xs"></i>
-            世間の空気
-          </h3>
-          <p class="text-base text-gray-700 font-medium">
-            出会いと変化、環境に飲まれながらも始めようとする月 🌸
-          </p>
-        </div>
-
-        {/* よく検索されるキーワード */}
-        <div class="mb-4 bg-white rounded-lg p-4 border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-search text-primary text-xs"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {["入学", "入社", "新学期", "初出勤", "新年度", "自己紹介", 
-              "桜", "お花見", "歓迎会", "春ファッション", "春メイク", "環境の変化", "緊張感"].map(keyword => (
-              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
-                #{keyword}
-              </span>
-            ))}
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -2910,61 +2787,21 @@ app.get('/calendar/5', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/4"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            4月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            6月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">5月🎏</h2>
-          </div>
-          <p class="text-gray-600">ゆるめる・整え直す・夏への助走</p>
-        </div>
-
-        {/* 世間の空気 */}
-        <div class="mb-4 bg-gradient-to-r from-green-50 to-teal-50 rounded-lg p-4 border border-green-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-wind text-green-500 text-xs"></i>
-            世間の空気
-          </h3>
-          <p class="text-base text-gray-700 font-medium">
-            ゆるめる・整え直す・夏への助走 🎏
-          </p>
-        </div>
-
-        {/* よく検索されるキーワード */}
-        <div class="mb-4 bg-white rounded-lg p-4 border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-search text-primary text-xs"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {["ゴールデンウィーク", "母の日", "こどもの日", "五月病", 
-              "新緑", "初夏", "紫外線対策", "衣替え", "おうち時間", "疲労感", "メンタルケア", "自律神経"].map(keyword => (
-              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
-                #{keyword}
-              </span>
-            ))}
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -3260,61 +3097,21 @@ app.get('/calendar/6', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/5"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            5月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            7月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">6月☔</h2>
-          </div>
-          <p class="text-gray-600">湿気と不調、でも外には出られないから、内側にこもる月</p>
-        </div>
-
-        {/* 世間の空気 */}
-        <div class="mb-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-wind text-blue-500 text-xs"></i>
-            世間の空気
-          </h3>
-          <p class="text-base text-gray-700 font-medium">
-            湿気と不調、でも外には出られないから、内側にこもる月 ☔
-          </p>
-        </div>
-
-        {/* よく検索されるキーワード */}
-        <div class="mb-4 bg-white rounded-lg p-4 border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-search text-primary text-xs"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {["梅雨", "湿気", "紫陽花", "雨の日", "くせ毛", "カビ", "レイングッズ", 
-              "体調不良", "低気圧", "頭痛", "自律神経", "父の日", "防災", "おうち時間", "除湿", "洗濯物"].map(keyword => (
-              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
-                #{keyword}
-              </span>
-            ))}
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -3613,61 +3410,21 @@ app.get('/calendar/7', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/6"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            6月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            8月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">7月🍉</h2>
-          </div>
-          <p class="text-gray-600">夏のはじまり、でもまだスイッチは入りきらない</p>
-        </div>
-
-        {/* 世間の空気 */}
-        <div class="mb-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-4 border border-orange-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-wind text-orange-500 text-xs"></i>
-            世間の空気
-          </h3>
-          <p class="text-base text-gray-700 font-medium">
-            夏のはじまり、でもまだスイッチは入りきらない 🍉
-          </p>
-        </div>
-
-        {/* よく検索されるキーワード */}
-        <div class="mb-4 bg-white rounded-lg p-4 border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-search text-primary text-xs"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {["七夕", "海開き", "夏休み", "花火大会", "夏祭り", "かき氷", 
-              "浴衣", "日焼け止め", "冷感グッズ", "熱中症", "プール", "フェス", "BBQ", "セミの声"].map(keyword => (
-              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
-                #{keyword}
-              </span>
-            ))}
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -3986,70 +3743,21 @@ app.get('/calendar/8', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/7"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            7月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            9月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">8月🏄️</h2>
-          </div>
-          <p class="text-gray-600">暑さのピーク、でも少しずつ終わりの気配が混じり始める</p>
-        </div>
-
-        {/* World Atmosphere */}
-        <div class="mb-6 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg p-6 border border-orange-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <i class="fas fa-sun text-orange-500"></i>
-            世間の空気
-          </h3>
-          <p class="text-gray-700">暑さのピーク、でも少しずつ終わりの気配が混じり始める</p>
-        </div>
-
-        {/* Search Keywords */}
-        <div class="mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-6 border border-blue-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <i class="fas fa-search text-blue-500"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">熱中症</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">お盆</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">帰省</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">花火大会</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">夏祭り</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">自由研究</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">スイカ</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">かき氷</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">浴衣</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">フェス</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">夏バテ</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">海</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">夏休み</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">終戦記念日</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">残暑</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">虫の声</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">青春</span>
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -4361,67 +4069,21 @@ app.get('/calendar/9', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/8"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            8月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            10月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">9月🍂</h2>
-          </div>
-          <p class="text-gray-600">静まる・深まる・整える</p>
-        </div>
-
-        {/* World Atmosphere */}
-        <div class="mb-6 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg p-6 border border-amber-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <i class="fas fa-wind text-amber-500"></i>
-            世間の空気
-          </h3>
-          <p class="text-gray-700">静まる・深まる・整える</p>
-        </div>
-
-        {/* Search Keywords */}
-        <div class="mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-6 border border-blue-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <i class="fas fa-search text-blue-500"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">新学期</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">防災の日</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">敬老の日</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">十五夜</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋分の日</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋ファッション</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋メイク</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">虫の声</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">台風</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">冷え</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">衣替え</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">紅葉の始まり</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋の夜長</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">メンタルケア</span>
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -4733,68 +4395,21 @@ app.get('/calendar/10', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/9"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            9月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            11月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">10月📖</h2>
-          </div>
-          <p class="text-gray-600">気温とともに感情が内側に入っていく、静けさと揺れが共存する月</p>
-        </div>
-
-        {/* World Atmosphere */}
-        <div class="mb-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-6 border border-orange-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <i class="fas fa-leaf text-orange-500"></i>
-            世間の空気
-          </h3>
-          <p class="text-gray-700">気温とともに感情が内側に入っていく、静けさと揺れが共存する月</p>
-        </div>
-
-        {/* Search Keywords */}
-        <div class="mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-6 border border-blue-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <i class="fas fa-search text-blue-500"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">ハロウィン</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">かぼちゃ</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋メイク</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">紅葉</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">芸術の秋</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">読書の秋</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">スポーツの秋</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">モンブラン</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">焼き芋</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">栗</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋ネイル</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">夜長</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">月</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">ブーツ</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋服</span>
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -5110,67 +4725,21 @@ app.get('/calendar/11', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/10"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            10月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            12月
-            <i class="fas fa-arrow-right"></i>
-          </span>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">11月🍁</h2>
-          </div>
-          <p class="text-gray-600">静かに冷えていく季節、でも年末を意識したそわそわも混じり始める</p>
-        </div>
-
-        {/* World Atmosphere */}
-        <div class="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-6 border border-amber-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <i class="fas fa-snowflake text-amber-500"></i>
-            世間の空気
-          </h3>
-          <p class="text-gray-700">静かに冷えていく季節、でも年末を意識したそわそわも混じり始める</p>
-        </div>
-
-        {/* Search Keywords */}
-        <div class="mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-6 border border-blue-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <i class="fas fa-search text-blue-500"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">紅葉</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">秋の終わり</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">七五三</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">文化の日</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">こたつ</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">乾燥対策</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">加湿</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">ストーブ</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">年末準備</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">冬支度</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">イルミネーション</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">買ってよかったもの</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">年賀状</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-blue-200">手帳</span>
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -5490,71 +5059,21 @@ app.get('/calendar/12', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <a
-            href="/calendar/11"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-arrow-left"></i>
-            11月
-          </a>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <a
-            href="/calendar/1"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            1月
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">12月🧣</h2>
-          </div>
-          <p class="text-gray-600">外はにぎやかでも、心の中は静かに「今年どうだった？」を問う季節</p>
-        </div>
-
-        {/* World Atmosphere */}
-        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <i class="fas fa-snowflake text-blue-500"></i>
-            世間の空気
-          </h3>
-          <p class="text-gray-700">外はにぎやかでも、心の中は静かに「今年どうだった？」を問う季節</p>
-        </div>
-
-        {/* Search Keywords */}
-        <div class="mb-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-200">
-          <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
-            <i class="fas fa-search text-purple-500"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">クリスマス</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">年末</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">振り返り</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">大掃除</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">忘年会</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">買ってよかったもの</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">冬休み</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">年越し</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">イルミネーション</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">ご褒美</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">反省</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">来年の目標</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">手帳</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">こたつ</span>
-            <span class="px-3 py-1.5 bg-white text-gray-700 rounded-full text-sm border border-purple-200">今年の漢字</span>
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 
@@ -5838,61 +5357,21 @@ app.get('/calendar/1', (c) => {
 
       {/* Main Content */}
       <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Navigation - Top */}
-        <div class="flex justify-between items-center mb-6">
-          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-200 text-gray-400 rounded-lg text-sm cursor-not-allowed">
-            <i class="fas fa-arrow-left"></i>
-            12月
-          </span>
-          <a
-            href="/"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            <i class="fas fa-home"></i>
-            トップページ
-          </a>
-          <a
-            href="/calendar/2"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium text-sm"
-          >
-            2月
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-
-        {/* Page Title */}
-        <div class="mb-6">
-          <div class="flex items-center gap-3 mb-2">
-            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
-            <h2 class="text-3xl font-bold text-gray-800">1月☃️</h2>
-          </div>
-          <p class="text-gray-600">新年のスタート！フォロワーの熱量が高い時期を逃さず投稿しよう</p>
-        </div>
-
-        {/* 世間の空気 */}
-        <div class="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-wind text-blue-500 text-xs"></i>
-            世間の空気
-          </h3>
-          <p class="text-base text-gray-700 font-medium">
-            年の始まり、みんなやる気だけはある。✨
-          </p>
-        </div>
-
-        {/* よく検索されるキーワード */}
-        <div class="mb-4 bg-white rounded-lg p-4 border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
-            <i class="fas fa-search text-primary text-xs"></i>
-            よく検索されるキーワード
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {["お正月", "初詣", "新年の抱負", "福袋", "初売り", "書き初め", 
-              "正月太り", "目標", "帰省", "おせち", "成人式", "冬休み明け", "手帳"].map(keyword => (
-              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
-                #{keyword}
-              </span>
-            ))}
+        {/* Month Navigation - Horizontal Scroll */}
+        <div class="mb-6 overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max pb-2">
+            <a href="/calendar/1" class="px-4 py-2 bg-primary hover:bg-red-600 text-white font-bold rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+            <a href="/calendar/2" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+            <a href="/calendar/3" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+            <a href="/calendar/4" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+            <a href="/calendar/5" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+            <a href="/calendar/6" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+            <a href="/calendar/7" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+            <a href="/calendar/8" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+            <a href="/calendar/9" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+            <a href="/calendar/10" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+            <a href="/calendar/11" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+            <a href="/calendar/12" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
           </div>
         </div>
 

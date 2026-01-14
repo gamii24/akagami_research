@@ -1087,3 +1087,18 @@ body.dark-mode .shadow-xl {
   animation: highlight-flash 1s ease-in-out;
   border-color: var(--primary) !important;
 }
+
+/* Hide scrollbar for horizontal scroll navigation */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Smooth scroll for month navigation */
+.overflow-x-auto {
+  scroll-behavior: smooth;
+}
