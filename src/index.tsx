@@ -6584,30 +6584,10 @@ app.get('/news', async (c) => {
         {/* Main Content */}
         <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
           {/* Page Title */}
-          <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">
-              <i class="fas fa-newspaper text-primary mr-2"></i>最新ニュース
+          <div class="mb-6">
+            <h2 class="text-lg font-normal text-gray-700">
+              NEWS
             </h2>
-            <p class="text-gray-600">SNS、AI、テクノロジー、マーケティングに関する最新情報をお届けします</p>
-          </div>
-
-          {/* Category Filter */}
-          <div class="mb-6 flex flex-wrap gap-2">
-            <button onclick="filterNews('all')" id="filter-all" class="px-4 py-2 rounded-lg font-medium transition-all bg-primary text-white">
-              すべて
-            </button>
-            <button onclick="filterNews('SNS')" id="filter-SNS" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
-              SNS
-            </button>
-            <button onclick="filterNews('AI')" id="filter-AI" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
-              AI
-            </button>
-            <button onclick="filterNews('テクノロジー')" id="filter-テクノロジー" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
-              テクノロジー
-            </button>
-            <button onclick="filterNews('マーケティング')" id="filter-マーケティング" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
-              マーケティング
-            </button>
           </div>
 
           {/* News List */}
@@ -6630,7 +6610,6 @@ app.get('/news', async (c) => {
         <script dangerouslySetInnerHTML={{
           __html: `
             let newsData = [];
-            let currentFilter = 'all';
 
             // Load news articles
             async function loadNews() {
@@ -6649,43 +6628,21 @@ app.get('/news', async (c) => {
               }
             }
 
-            // Filter news by category
-            function filterNews(category) {
-              currentFilter = category;
-              
-              // Update button styles
-              const buttons = ['all', 'SNS', 'AI', 'テクノロジー', 'マーケティング'];
-              buttons.forEach(btn => {
-                const el = document.getElementById('filter-' + btn);
-                if (btn === category) {
-                  el.className = 'px-4 py-2 rounded-lg font-medium transition-all bg-primary text-white';
-                } else {
-                  el.className = 'px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300';
-                }
-              });
-              
-              renderNews();
-            }
-
             // Render news list
             function renderNews() {
-              const filteredNews = currentFilter === 'all' 
-                ? newsData 
-                : newsData.filter(news => news.category === currentFilter);
-              
               const newsListEl = document.getElementById('news-list');
               
-              if (filteredNews.length === 0) {
+              if (newsData.length === 0) {
                 newsListEl.innerHTML = \`
                   <div class="text-center py-12">
                     <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
-                    <p class="text-gray-600">該当するニュース記事がありません</p>
+                    <p class="text-gray-600">ニュース記事がありません</p>
                   </div>
                 \`;
                 return;
               }
               
-              newsListEl.innerHTML = filteredNews.map(news => {
+              newsListEl.innerHTML = newsData.map(news => {
                 const date = new Date(news.published_at);
                 const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
                 
