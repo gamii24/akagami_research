@@ -26,10 +26,13 @@ export async function verifyToken(token: string, secret: string): Promise<boolea
 
 // Set auth cookie
 export function setAuthCookie(c: Context, token: string) {
+  // Auto-detect HTTPS environment
+  const isProduction = c.req.url.startsWith('https://')
+  
   setCookie(c, TOKEN_NAME, token, {
     maxAge: TOKEN_MAX_AGE,
     httpOnly: true,
-    secure: false, // Set to true in production with HTTPS
+    secure: isProduction, // Auto-detect: true for HTTPS, false for local dev
     sameSite: 'Lax',
     path: '/',
   })
