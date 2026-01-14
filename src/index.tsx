@@ -6419,6 +6419,37 @@ app.get('/', (c) => {
                 {/* This will be populated by auth.js */}
               </div>
 
+              {/* SNS Calendar Link */}
+              <div class="mb-6 pb-6 border-b-2 border-gray-200">
+                <button
+                  onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
+                  class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all font-semibold shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                  aria-label="SNS運用カレンダーを開く"
+                >
+                  <i class="fas fa-calendar-alt"></i>
+                  <span>📅 SNS運用カレンダー</span>
+                  <i class="fas fa-chevron-down text-sm"></i>
+                </button>
+                
+                {/* Calendar Dropdown Menu */}
+                <div id="calendar-menu" class="hidden bg-white shadow-lg border-2 border-blue-200 rounded-lg mt-2 p-3">
+                  <div class="grid grid-cols-3 gap-2">
+                    <a href="/calendar/1" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">1月</a>
+                    <a href="/calendar/2" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">2月</a>
+                    <a href="/calendar/3" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">3月</a>
+                    <a href="/calendar/4" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">4月</a>
+                    <a href="/calendar/5" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">5月</a>
+                    <a href="/calendar/6" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">6月</a>
+                    <a href="/calendar/7" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">7月</a>
+                    <a href="/calendar/8" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">8月</a>
+                    <a href="/calendar/9" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">9月</a>
+                    <a href="/calendar/10" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">10月</a>
+                    <a href="/calendar/11" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">11月</a>
+                    <a href="/calendar/12" class="px-3 py-2 text-center hover:bg-blue-50 rounded text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border border-gray-200">12月</a>
+                  </div>
+                </div>
+              </div>
+
               {/* Search - Desktop Only */}
               <div class="mb-8 hidden lg:block">
                 <h2 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
