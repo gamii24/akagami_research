@@ -672,9 +672,11 @@ app.post('/api/user/favorites/bulk', requireUserAuth, async (c) => {
 })
 
 // Update user profile
+// Update user profile
 app.put('/api/user/profile', requireUserAuth, async (c) => {
   try {
     const userId = c.get('userId')
+    const body = await c.req.json()
     const { 
       name, 
       location,
@@ -683,14 +685,21 @@ app.put('/api/user/profile', requireUserAuth, async (c) => {
       instagramHandle, 
       tiktokHandle, 
       twitterHandle 
-    } = await c.req.json()
+    } = body
+    
+    console.log('Profile update request:', { 
+      userId, 
+      hasName: !!name, 
+      bodyKeys: Object.keys(body) 
+    })
     
     // Validate birthday format if provided (YYYY-MM-DD)
     if (birthday && !/^\d{4}-\d{2}-\d{2}$/.test(birthday)) {
+      console.error('Invalid birthday format:', birthday)
       return c.json({ error: 'Invalid birthday format. Use YYYY-MM-DD' }, 400)
     }
     
-    await c.env.DB.prepare(`
+    const result = await c.env.DB.prepare(`
       UPDATE users 
       SET 
         name = ?,
@@ -712,10 +721,11 @@ app.put('/api/user/profile', requireUserAuth, async (c) => {
       userId
     ).run()
     
+    console.log('Profile updated:', { userId, changes: result.meta.changes })
     return c.json({ success: true })
   } catch (error: any) {
     console.error('Update profile error:', error)
-    return c.json({ error: 'Failed to update profile' }, 500)
+    return c.json({ error: error.message || 'Failed to update profile' }, 500)
   }
 })
 
@@ -6006,7 +6016,7 @@ app.get('/', (c) => {
                   aria-label="SNS運用カレンダーを開く"
                 >
                   <i class="fas fa-calendar-alt"></i>
-                  <span>📅 SNS運用カレンダー</span>
+                  <span>SNS運用カレンダー</span>
                 </a>
               </div>
 
