@@ -129,9 +129,22 @@ app.post('/api/auth/logout', async (c) => {
 // Check authentication status
 app.get('/api/auth/check', async (c) => {
   const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
-  const authenticated = await isAuthenticated(c, secret)
+  const token = getAuthToken(c)
   
-  return c.json({ authenticated })
+  // Debug logging
+  console.log('Auth check - Token exists:', !!token)
+  console.log('Auth check - Token:', token ? token.substring(0, 20) + '...' : 'none')
+  
+  const authenticated = await isAuthenticated(c, secret)
+  console.log('Auth check - Authenticated:', authenticated)
+  
+  return c.json({ 
+    authenticated,
+    debug: {
+      hasToken: !!token,
+      tokenPreview: token ? token.substring(0, 20) + '...' : null
+    }
+  })
 })
 
 // Auth middleware for admin APIs
