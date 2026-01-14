@@ -6681,7 +6681,7 @@ app.get('/news', async (c) => {
                     <p class="text-gray-600 mb-4 md:line-clamp-none line-clamp-4">\${escapeHtml(news.summary)}</p>
                     <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="hidden md:inline-flex items-center gap-2 text-primary font-semibold hover:underline" onclick="event.stopPropagation()">
                       <i class="fas fa-external-link-alt"></i>
-                      元記事を読む
+                      元記事を読む（外部サイト）
                     </a>
                   </article>
                 \`;
@@ -6721,7 +6721,7 @@ app.get('/news', async (c) => {
                   
                   <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="block w-full bg-primary text-white text-center py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
                     <i class="fas fa-external-link-alt mr-2"></i>
-                    元記事を読む
+                    元記事を読む（外部サイト）
                   </a>
                 </div>
               \`;
