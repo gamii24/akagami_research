@@ -1735,6 +1735,138 @@ app.post('/api/categories/:id/download', async (c) => {
   return c.json({ success: true })
 })
 
+// ==========================================
+// News Articles API Routes
+// ==========================================
+
+// Get all news articles (public)
+app.get('/api/news', async (c) => {
+  const { category } = c.req.query()
+  
+  let query = 'SELECT * FROM news_articles'
+  const params: any[] = []
+  
+  if (category && category !== 'all') {
+    query += ' WHERE category = ?'
+    params.push(category)
+  }
+  
+  query += ' ORDER BY published_at DESC LIMIT 50'
+  
+  const stmt = c.env.DB.prepare(query)
+  if (params.length > 0) {
+    stmt.bind(...params)
+  }
+  
+  const { results } = await stmt.all()
+  return c.json(results)
+})
+
+// Get single news article (public)
+app.get('/api/news/:id', async (c) => {
+  const id = c.req.param('id')
+  
+  const { results } = await c.env.DB.prepare(
+    'SELECT * FROM news_articles WHERE id = ?'
+  ).bind(id).all()
+  
+  if (results.length === 0) {
+    return c.json({ error: 'News article not found' }, 404)
+  }
+  
+  return c.json(results[0])
+})
+
+// Create news article (protected - admin only)
+app.post('/api/news', requireAuth, async (c) => {
+  const { title, summary, url, category, language, published_at } = await c.req.json()
+  
+  // Validation
+  if (!title || !summary || !url || !category || !language) {
+    return c.json({ error: 'Missing required fields' }, 400)
+  }
+  
+  // Valid categories
+  const validCategories = ['SNS', 'AI', 'テクノロジー', 'マーケティング']
+  if (!validCategories.includes(category)) {
+    return c.json({ error: 'Invalid category' }, 400)
+  }
+  
+  // Valid languages
+  const validLanguages = ['en', 'ja']
+  if (!validLanguages.includes(language)) {
+    return c.json({ error: 'Invalid language' }, 400)
+  }
+  
+  const result = await c.env.DB.prepare(`
+    INSERT INTO news_articles (title, summary, url, category, language, published_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).bind(
+    title,
+    summary,
+    url,
+    category,
+    language,
+    published_at || new Date().toISOString()
+  ).run()
+  
+  return c.json({ 
+    success: true, 
+    id: result.meta.last_row_id 
+  })
+})
+
+// Update news article (protected - admin only)
+app.put('/api/news/:id', requireAuth, async (c) => {
+  const id = c.req.param('id')
+  const { title, summary, url, category, language, published_at } = await c.req.json()
+  
+  // Validation
+  if (!title || !summary || !url || !category || !language) {
+    return c.json({ error: 'Missing required fields' }, 400)
+  }
+  
+  // Valid categories
+  const validCategories = ['SNS', 'AI', 'テクノロジー', 'マーケティング']
+  if (!validCategories.includes(category)) {
+    return c.json({ error: 'Invalid category' }, 400)
+  }
+  
+  // Valid languages
+  const validLanguages = ['en', 'ja']
+  if (!validLanguages.includes(language)) {
+    return c.json({ error: 'Invalid language' }, 400)
+  }
+  
+  await c.env.DB.prepare(`
+    UPDATE news_articles 
+    SET title = ?, summary = ?, url = ?, category = ?, language = ?, 
+        published_at = ?, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `).bind(
+    title,
+    summary,
+    url,
+    category,
+    language,
+    published_at || new Date().toISOString(),
+    id
+  ).run()
+  
+  return c.json({ success: true })
+})
+
+// Delete news article (protected - admin only)
+app.delete('/api/news/:id', requireAuth, async (c) => {
+  const id = c.req.param('id')
+  
+  await c.env.DB.prepare(
+    'DELETE FROM news_articles WHERE id = ?'
+  ).bind(id).run()
+  
+  return c.json({ success: true })
+})
+
 // Regenerate tags for all existing PDFs (protected)
 app.post('/api/pdfs/regenerate-tags', requireAuth, async (c) => {
   try {
@@ -1921,6 +2053,10 @@ app.get('/calendar/2', (c) => {
             <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">4月のカレンダー</span>
+            </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
             </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
@@ -2235,6 +2371,10 @@ app.get('/calendar/3', (c) => {
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">4月のカレンダー</span>
             </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
+            </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
               <span class="font-medium text-gray-700">マイページ</span>
@@ -2544,6 +2684,10 @@ app.get('/calendar/4', (c) => {
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">4月のカレンダー</span>
             </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
+            </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
               <span class="font-medium text-gray-700">マイページ</span>
@@ -2849,6 +2993,10 @@ app.get('/calendar/5', (c) => {
             <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">5月のカレンダー</span>
+            </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
             </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
@@ -3166,6 +3314,10 @@ app.get('/calendar/6', (c) => {
             <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">6月のカレンダー</span>
+            </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
             </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
@@ -3486,6 +3638,10 @@ app.get('/calendar/7', (c) => {
             <a href="/calendar/7" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">7月のカレンダー</span>
+            </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
             </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
@@ -3827,6 +3983,10 @@ app.get('/calendar/8', (c) => {
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">8月のSNS運用カレンダー</span>
             </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
+            </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
               <span class="font-medium text-gray-700">マイページ</span>
@@ -4149,6 +4309,10 @@ app.get('/calendar/9', (c) => {
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">9月のSNS運用カレンダー</span>
             </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
+            </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
               <span class="font-medium text-gray-700">マイページ</span>
@@ -4470,6 +4634,10 @@ app.get('/calendar/10', (c) => {
             <a href="/calendar/10" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">10月のSNS運用カレンダー</span>
+            </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
             </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
@@ -4796,6 +4964,10 @@ app.get('/calendar/11', (c) => {
             <a href="/calendar/11" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">11月のSNS運用カレンダー</span>
+            </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
             </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
@@ -5126,6 +5298,10 @@ app.get('/calendar/12', (c) => {
             <a href="/calendar/12" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">12月のSNS運用カレンダー</span>
+            </a>
+            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-newspaper text-primary"></i>
+              <span class="font-medium text-gray-700">最新ニュース</span>
             </a>
             <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-user text-primary"></i>
@@ -5733,6 +5909,10 @@ app.get('/categories', async (c) => {
                 <i class="fas fa-folder-open text-primary"></i>
                 <span class="font-medium text-gray-700">カテゴリ一覧</span>
               </a>
+              <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-newspaper text-primary"></i>
+                <span class="font-medium text-gray-700">最新ニュース</span>
+              </a>
               <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
                 <i class="fas fa-user text-primary"></i>
                 <span class="font-medium text-gray-700">マイページ</span>
@@ -5991,11 +6171,19 @@ app.get('/', (c) => {
               <div class="mb-6 pb-6 border-b-2 border-gray-200">
                 <a
                   href="/calendar/1"
-                  class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2"
+                  class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2 mb-3"
                   aria-label="SNS運用カレンダーを開く"
                 >
                   <i class="fas fa-calendar-alt"></i>
                   <span>SNS運用カレンダー</span>
+                </a>
+                <a
+                  href="/news"
+                  class="w-full px-4 py-3 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-lg transition-colors font-medium border-2 border-yellow-200 flex items-center justify-center gap-2"
+                  aria-label="最新ニュースを開く"
+                >
+                  <i class="fas fa-newspaper"></i>
+                  <span>最新ニュース</span>
                 </a>
               </div>
 
@@ -6297,6 +6485,252 @@ app.get('/', (c) => {
       categoryName: meta.name || null,
       categoryId: categoryId
     }
+  )
+})
+
+// ============================================
+// News Page Route
+// ============================================
+app.get('/news', async (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>最新ニュース - Akagami Research</title>
+        <meta name="description" content="SNS、AI、テクノロジー、マーケティングに関する最新ニュースをお届けします。" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JPMZ82RMGG');
+          `
+        }} />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gray-50">
+        {/* Header */}
+        <header class="bg-primary shadow-lg">
+          <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+              <a href="/" class="hover:opacity-80 transition-opacity">
+                <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
+                <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
+              </a>
+              <div class="flex items-center gap-2">
+                <a
+                  href="/"
+                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+                  aria-label="ホームに戻る"
+                >
+                  <i class="fas fa-home text-xl"></i>
+                </a>
+                <button 
+                  onclick="document.getElementById('news-menu').classList.toggle('hidden')"
+                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+                  aria-label="メニューを開く"
+                >
+                  <i class="fas fa-bars text-xl"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Hamburger Menu */}
+        <div id="news-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
+          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <nav class="flex flex-col gap-2">
+              <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-home text-primary"></i>
+                <span class="font-medium text-gray-700">トップページ</span>
+              </a>
+              <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-folder-open text-primary"></i>
+                <span class="font-medium text-gray-700">カテゴリ一覧</span>
+              </a>
+              <a href="/news" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
+                <i class="fas fa-newspaper text-primary"></i>
+                <span class="font-medium text-gray-700">最新ニュース</span>
+              </a>
+              <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="fas fa-user text-primary"></i>
+                <span class="font-medium text-gray-700">マイページ</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          {/* Page Title */}
+          <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">
+              <i class="fas fa-newspaper text-primary mr-2"></i>最新ニュース
+            </h2>
+            <p class="text-gray-600">SNS、AI、テクノロジー、マーケティングに関する最新情報をお届けします</p>
+          </div>
+
+          {/* Category Filter */}
+          <div class="mb-6 flex flex-wrap gap-2">
+            <button onclick="filterNews('all')" id="filter-all" class="px-4 py-2 rounded-lg font-medium transition-all bg-primary text-white">
+              すべて
+            </button>
+            <button onclick="filterNews('SNS')" id="filter-SNS" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
+              SNS
+            </button>
+            <button onclick="filterNews('AI')" id="filter-AI" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
+              AI
+            </button>
+            <button onclick="filterNews('テクノロジー')" id="filter-テクノロジー" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
+              テクノロジー
+            </button>
+            <button onclick="filterNews('マーケティング')" id="filter-マーケティング" class="px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300">
+              マーケティング
+            </button>
+          </div>
+
+          {/* News List */}
+          <div id="news-list" class="space-y-6">
+            <div class="text-center py-12">
+              <i class="fas fa-spinner fa-spin text-4xl text-primary mb-4"></i>
+              <p class="text-gray-600">読み込み中...</p>
+            </div>
+          </div>
+        </main>
+
+        {/* Footer */}
+        <footer class="bg-gray-800 text-white py-6 mt-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Akagami Research. All rights reserved.</p>
+          </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            let newsData = [];
+            let currentFilter = 'all';
+
+            // Load news articles
+            async function loadNews() {
+              try {
+                const response = await axios.get('/api/news');
+                newsData = response.data;
+                renderNews();
+              } catch (error) {
+                console.error('Failed to load news:', error);
+                document.getElementById('news-list').innerHTML = \`
+                  <div class="text-center py-12">
+                    <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                    <p class="text-gray-600">ニュースの読み込みに失敗しました</p>
+                  </div>
+                \`;
+              }
+            }
+
+            // Filter news by category
+            function filterNews(category) {
+              currentFilter = category;
+              
+              // Update button styles
+              const buttons = ['all', 'SNS', 'AI', 'テクノロジー', 'マーケティング'];
+              buttons.forEach(btn => {
+                const el = document.getElementById('filter-' + btn);
+                if (btn === category) {
+                  el.className = 'px-4 py-2 rounded-lg font-medium transition-all bg-primary text-white';
+                } else {
+                  el.className = 'px-4 py-2 rounded-lg font-medium transition-all bg-gray-200 text-gray-700 hover:bg-gray-300';
+                }
+              });
+              
+              renderNews();
+            }
+
+            // Render news list
+            function renderNews() {
+              const filteredNews = currentFilter === 'all' 
+                ? newsData 
+                : newsData.filter(news => news.category === currentFilter);
+              
+              const newsListEl = document.getElementById('news-list');
+              
+              if (filteredNews.length === 0) {
+                newsListEl.innerHTML = \`
+                  <div class="text-center py-12">
+                    <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-600">該当するニュース記事がありません</p>
+                  </div>
+                \`;
+                return;
+              }
+              
+              newsListEl.innerHTML = filteredNews.map(news => {
+                const date = new Date(news.published_at);
+                const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+                
+                return \`
+                  <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <div class="flex items-start gap-4">
+                      <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                        <i class="fas fa-newspaper text-white text-xl"></i>
+                      </div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
+                            \${news.category}
+                          </span>
+                          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
+                            \${news.language === 'en' ? '英語' : '日本語'}
+                          </span>
+                          <span class="text-sm text-gray-500">\${dateStr}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
+                        <p class="text-gray-600 mb-4">\${escapeHtml(news.summary)}</p>
+                        <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                          <i class="fas fa-external-link-alt"></i>
+                          元記事を読む
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                \`;
+              }).join('');
+            }
+
+            // Escape HTML
+            function escapeHtml(text) {
+              const div = document.createElement('div');
+              div.textContent = text;
+              return div.innerHTML;
+            }
+
+            // Initialize
+            loadNews();
+          `
+        }} />
+      </body>
+    </html>
   )
 })
 
