@@ -87,7 +87,9 @@ async function handleLogin(event) {
     
     if (response.data.success) {
       adminState.authenticated = true
-      await initAdminApp()
+      // Load data and render admin page directly without re-checking auth
+      await loadAdminData()
+      renderAdminPage()
     }
   } catch (error) {
     console.error('Login error:', error)
