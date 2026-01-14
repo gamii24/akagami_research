@@ -1814,6 +1814,296 @@ const categoryMeta: Record<number, { name: string; title: string; description: s
 
 // Home page (public view)
 // ============================================
+// Monthly Calendar Page Route (January)
+// ============================================
+app.get('/calendar/1', (c) => {
+  return c.render(
+    <div class="min-h-screen bg-white">
+      {/* Header */}
+      <header class="bg-primary shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between">
+            <a href="/" class="hover:opacity-80 transition-opacity">
+              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
+              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
+            </a>
+            {/* Menu Buttons */}
+            <div class="flex items-center gap-2">
+              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
+                <i class="fas fa-home text-xl"></i>
+              </a>
+              <button 
+                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
+                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+              >
+                <i class="fas fa-bars text-xl"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hamburger Menu */}
+      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+          <nav class="flex flex-col gap-2">
+            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-home text-primary"></i>
+              <span class="font-medium text-gray-700">トップページ</span>
+            </a>
+            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-folder-open text-primary"></i>
+              <span class="font-medium text-gray-700">カテゴリ一覧</span>
+            </a>
+            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
+              <i class="fas fa-calendar-alt text-primary"></i>
+              <span class="font-medium text-gray-700">1月のSNS運用カレンダー</span>
+            </a>
+            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
+              <i class="fas fa-user text-primary"></i>
+              <span class="font-medium text-gray-700">マイページ</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        {/* Page Title */}
+        <div class="mb-6">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fas fa-calendar-alt text-3xl text-primary"></i>
+            <h2 class="text-3xl font-bold text-gray-800">1月のSNS運用カレンダー</h2>
+          </div>
+          <p class="text-gray-600">新年のスタート！フォロワーの熱量が高い時期を逃さず投稿しよう</p>
+        </div>
+
+        {/* 世間の空気 */}
+        <div class="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+          <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="fas fa-wind text-blue-500"></i>
+            世間の空気
+          </h3>
+          <p class="text-lg text-gray-700 font-medium">
+            年の始まり、みんなやる気だけはある。✨
+          </p>
+          <p class="text-sm text-gray-600 mt-2">
+            正月気分から徐々に日常モードへ。目標設定やリセット投稿が響きやすい時期です。
+          </p>
+        </div>
+
+        {/* よく検索されるキーワード */}
+        <div class="mb-6 bg-white rounded-xl p-6 border-2 border-gray-200 shadow-sm">
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-search text-primary"></i>
+            よく検索されるキーワード
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            {["お正月", "初詣", "新年の抱負", "福袋", "初売り", "書き初め", 
+              "正月太り", "目標", "帰省", "おせち", "成人式", "冬休み明け", "手帳"].map(keyword => (
+              <span class="px-3 py-1.5 bg-red-50 text-primary rounded-full text-sm font-medium border border-red-200">
+                #{keyword}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* イベント＆投稿ネタ 3カラム */}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* イベント */}
+          <div class="bg-gradient-to-b from-red-50 to-pink-50 rounded-xl p-5 border-2 border-red-200">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-calendar-day text-red-500"></i>
+              主要イベント
+            </h3>
+            <div class="space-y-3 text-sm">
+              <div class="flex items-start gap-2">
+                <span class="font-bold text-primary whitespace-nowrap">1/1</span>
+                <span class="text-gray-700">元日</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-bold text-primary whitespace-nowrap">1/2-3</span>
+                <span class="text-gray-700">正月休み</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-bold text-primary whitespace-nowrap">1/7</span>
+                <span class="text-gray-700">七草がゆ</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="font-bold text-primary whitespace-nowrap">1/13</span>
+                <span class="text-gray-700">成人の日（2025年）</span>
+              </div>
+            </div>
+          </div>
+
+          {/* みんなが見るテレビ */}
+          <div class="bg-gradient-to-b from-purple-50 to-pink-50 rounded-xl p-5 border-2 border-purple-200">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-tv text-purple-500"></i>
+              みんなが見るTV
+            </h3>
+            <div class="space-y-2 text-sm text-gray-700">
+              <div class="flex items-start gap-2">
+                <i class="fas fa-circle text-xs text-purple-400 mt-1.5"></i>
+                <span>紅白などの再放送</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-circle text-xs text-purple-400 mt-1.5"></i>
+                <span>お正月特番</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-circle text-xs text-purple-400 mt-1.5"></i>
+                <span>駅伝（1/2〜3）</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="fas fa-circle text-xs text-purple-400 mt-1.5"></i>
+                <span>冬ドラマ開始</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 保存されやすいネタ */}
+          <div class="bg-gradient-to-b from-yellow-50 to-orange-50 rounded-xl p-5 border-2 border-yellow-200">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-bookmark text-yellow-600"></i>
+              保存されやすいネタ
+            </h3>
+            <div class="space-y-3 text-sm">
+              <div>
+                <p class="font-bold text-gray-800 mb-1">ライフスタイル</p>
+                <p class="text-gray-600 text-xs">初詣/帰省/カウコン</p>
+              </div>
+              <div>
+                <p class="font-bold text-gray-800 mb-1">美容</p>
+                <p class="text-gray-600 text-xs">正月太り/肌リセット</p>
+              </div>
+              <div>
+                <p class="font-bold text-gray-800 mb-1">買い物</p>
+                <p class="text-gray-600 text-xs">福袋/初売りアイテム</p>
+              </div>
+              <div>
+                <p class="font-bold text-gray-800 mb-1">自己啓発</p>
+                <p class="text-gray-600 text-xs">目標設定/手帳/習慣</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 週ごとのおすすめネタ */}
+        <div class="mb-6 bg-white rounded-xl p-6 border-2 border-gray-200 shadow-sm">
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-chart-line text-green-500"></i>
+            週ごとのおすすめネタ
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gradient-to-r from-green-50 to-teal-50 rounded-lg p-4 border border-green-200">
+              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span class="text-primary">1〜7日</span>
+                <span class="text-xs bg-green-200 text-green-800 px-2 py-0.5 rounded-full">正月ムード</span>
+              </p>
+              <p class="text-sm text-gray-700">カウコン/初詣/箱根駅伝/帰省ライフログ</p>
+            </div>
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span class="text-primary">8〜13日</span>
+                <span class="text-xs bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">スタート</span>
+              </p>
+              <p class="text-sm text-gray-700">成人式/年頭投稿/目標宣言</p>
+            </div>
+            <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-lg p-4 border border-orange-200">
+              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span class="text-primary">14〜21日</span>
+                <span class="text-xs bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full">リセット</span>
+              </p>
+              <p class="text-sm text-gray-700">正月疲れ/リセット投稿/習慣化</p>
+            </div>
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
+              <p class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span class="text-primary">22〜31日</span>
+                <span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full">振り返り</span>
+              </p>
+              <p class="text-sm text-gray-700">冬セール最終/1月振り返り/2月予告</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 赤髪Tips */}
+        <div class="mb-8 bg-gradient-to-r from-red-100 via-pink-100 to-red-100 rounded-xl p-6 border-2 border-red-300 shadow-lg">
+          <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-lightbulb text-yellow-500"></i>
+            赤髪Tips
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-white/80 backdrop-blur rounded-lg p-4">
+              <p class="font-bold text-primary mb-2 flex items-center gap-2">
+                <span class="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">①</span>
+                「自己紹介＋2025年の方向性」は必ず1本出す
+              </p>
+              <p class="text-sm text-gray-700 ml-8">
+                新年は新規フォロワーが増えやすい時期。あなたが誰で、今年何をするのかを伝えよう。
+              </p>
+            </div>
+            <div class="bg-white/80 backdrop-blur rounded-lg p-4">
+              <p class="font-bold text-primary mb-2 flex items-center gap-2">
+                <span class="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">②</span>
+                目標は立派じゃなくていい
+              </p>
+              <p class="text-sm text-gray-700 ml-8">
+                宣言するより、<strong>今やってる行動を中心に伝える</strong>ほうが効果的。口だけ人間よりも、実際に行動しているほうが憧れてもらいやすい。
+              </p>
+            </div>
+            <div class="bg-white/80 backdrop-blur rounded-lg p-4">
+              <p class="font-bold text-primary mb-2 flex items-center gap-2">
+                <span class="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">③</span>
+                買ってよかったもの or 福袋レビューは保存されやすさNo.1
+              </p>
+              <p class="text-sm text-gray-700 ml-8">
+                年始の購買意欲が高い時期に、実体験ベースのレビューは超強力。
+              </p>
+            </div>
+            <div class="bg-white/80 backdrop-blur rounded-lg p-4">
+              <p class="font-bold text-primary mb-2 flex items-center gap-2">
+                <i class="fas fa-fire text-orange-500"></i>
+                お正月（特に元旦）はSNSが見られやすい
+              </p>
+              <p class="text-sm text-gray-700">
+                紅白なのか、箱根駅伝なのか、どのトレンドに乗っかるか<strong>事前に準備</strong>。正月企画をするのもあり。
+                仕事はじめからは、世間のテンションは下がっていくから、そのテンション感をしっかり拾おう。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Back Button */}
+        <div class="text-center">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium"
+          >
+            <i class="fas fa-home"></i>
+            トップページに戻る
+          </a>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p class="text-sm text-gray-500 text-center">
+            © 2026 Akagami Research. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>,
+    {
+      title: "1月のSNS運用カレンダー - Akagami Research",
+      description: "1月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。世間の空気を読んで効果的な投稿を！",
+      keywords: "SNS運用,1月,カレンダー,イベント,投稿ネタ,お正月,福袋,目標設定"
+    }
+  )
+})
+
+// ============================================
 // Categories Page Route
 // ============================================
 app.get('/categories', async (c) => {
