@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import type { Context } from 'hono'
 import { cors } from 'hono/cors'
 import { secureHeaders } from 'hono/secure-headers'
 import { renderer } from './renderer'
@@ -36,6 +37,21 @@ type Bindings = {
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
+
+// ============================================
+// Helper Functions
+// ============================================
+
+/**
+ * Get JWT secret from environment with fallback
+ * @param c - Hono context
+ * @returns JWT secret string
+ */
+function getJWTSecret(c: Context<{ Bindings: Bindings }>): string {
+  return (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
+    ? c.env.JWT_SECRET 
+    : 'your-super-secret-jwt-key-change-this-in-production'
+}
 
 // ============================================
 // Security Headers Middleware
@@ -111,10 +127,8 @@ app.post('/api/auth/login', async (c) => {
     return c.json({ error: 'Invalid password' }, 401)
   }
   
-  // Generate JWT token - Check if env var exists and is not empty
-  const secret = (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
-    ? c.env.JWT_SECRET 
-    : 'your-super-secret-jwt-key-change-this-in-production'
+  // Generate JWT token
+  const secret = getJWTSecret(c)
   const token = await generateToken(secret)
   
   // Set cookie
@@ -134,9 +148,7 @@ app.post('/api/auth/logout', async (c) => {
 
 // Check authentication status
 app.get('/api/auth/check', async (c) => {
-  const secret = (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
-    ? c.env.JWT_SECRET 
-    : 'your-super-secret-jwt-key-change-this-in-production'
+  const secret = getJWTSecret(c)
   const token = getAuthToken(c)
   const authenticated = await isAuthenticated(c, secret)
   
@@ -147,9 +159,7 @@ app.get('/api/auth/check', async (c) => {
 
 // Auth middleware for admin APIs
 async function requireAuth(c: any, next: any) {
-  const secret = (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
-    ? c.env.JWT_SECRET 
-    : 'your-super-secret-jwt-key-change-this-in-production'
+  const secret = getJWTSecret(c)
   const authenticated = await isAuthenticated(c, secret)
   
   if (!authenticated) {
@@ -219,7 +229,7 @@ app.post('/api/user/register', async (c) => {
     // Note: Admin notification will be sent once daily via Cron job
     
     // Generate session token
-    const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+    const secret = getJWTSecret(c)
     const token = await generateUserToken(userId, secret)
     setUserSessionCookie(c, token)
     
@@ -268,7 +278,7 @@ app.post('/api/user/login', async (c) => {
     ).bind(user.id).run()
     
     // Generate session token
-    const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+    const secret = getJWTSecret(c)
     const token = await generateUserToken(user.id as number, secret)
     setUserSessionCookie(c, token)
     
@@ -380,7 +390,7 @@ app.get('/api/user/verify-magic-link', async (c) => {
     ).bind(user.id).run()
     
     // Generate session token
-    const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+    const secret = getJWTSecret(c)
     const sessionToken = await generateUserToken(user.id as number, secret)
     setUserSessionCookie(c, sessionToken)
     
@@ -407,7 +417,7 @@ app.post('/api/user/logout', async (c) => {
 
 // Get current user info
 app.get('/api/user/me', async (c) => {
-  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const secret = getJWTSecret(c)
   const currentUser = await getCurrentUser(c, secret)
   
   if (!currentUser) {
@@ -455,7 +465,7 @@ app.get('/api/user/me', async (c) => {
 
 // User auth middleware
 async function requireUserAuth(c: any, next: any) {
-  const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
+  const secret = getJWTSecret(c)
   const currentUser = await getCurrentUser(c, secret)
   
   if (!currentUser) {
