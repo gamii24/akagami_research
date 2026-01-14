@@ -809,9 +809,9 @@ async function saveProfileInfo() {
     button.disabled = true
     button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>保存中...'
     
-    const name = document.getElementById('profile-name').value.trim()
-    const location = document.getElementById('profile-location').value
-    const birthday = document.getElementById('profile-birthday').value
+    const name = document.getElementById('user-name').value.trim()
+    const location = document.getElementById('user-location').value
+    const birthday = document.getElementById('user-birthday').value
     
     // 名前のバリデーション
     if (!name) {
@@ -834,6 +834,12 @@ async function saveProfileInfo() {
       body: JSON.stringify(profileData)
     })
     
+    console.log('Profile update response:', {
+      status: res.status,
+      ok: res.ok,
+      statusText: res.statusText
+    })
+    
     if (res.status === 401) {
       alert('セッションが切れています。再度ログインしてください。')
       window.location.href = '/'
@@ -842,6 +848,7 @@ async function saveProfileInfo() {
     
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}))
+      console.error('Profile update failed:', errorData)
       throw new Error(errorData.error || 'Failed to save')
     }
     
@@ -898,6 +905,12 @@ async function saveSnsInfo() {
       body: JSON.stringify(snsData)
     })
     
+    console.log('SNS info update response:', {
+      status: res.status,
+      ok: res.ok,
+      statusText: res.statusText
+    })
+    
     if (res.status === 401) {
       alert('セッションが切れています。再度ログインしてください。')
       window.location.href = '/'
@@ -906,6 +919,7 @@ async function saveSnsInfo() {
     
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}))
+      console.error('SNS info update failed:', errorData)
       throw new Error(errorData.error || 'Failed to save')
     }
     
