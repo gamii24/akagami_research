@@ -17,7 +17,10 @@ let state = {
   selectedPdfs: new Set(), // Selected PDFs in multi-select mode
   showAllMobile: false, // Show all cards on mobile (default: false, show 15)
   viewMode: 'grid', // View mode: 'grid' or 'list'
-  darkMode: false // Dark mode
+  darkMode: false, // Dark mode
+  displayedCount: 15, // Number of PDFs currently displayed (for infinite scroll)
+  itemsPerLoad: 15, // Number of items to load per scroll
+  isLoading: false // Loading state for infinite scroll
 }
 
 // Google Analytics Event Tracking
@@ -442,6 +445,9 @@ async function initApp() {
   // Render PDF list
   renderPDFList()
   
+  // Setup infinite scroll
+  setTimeout(() => setupInfiniteScroll(), 100)
+  
   // Show welcome message for first-time visitors (after everything is ready)
   checkFirstVisit()
 }
@@ -583,6 +589,9 @@ async function loadPDFs() {
   // Use cached data instead of API call (no skeleton for filtering)
   applyFiltersFromAllPdfs()
   renderPDFList()
+  
+  // Setup infinite scroll after rendering
+  setTimeout(() => setupInfiniteScroll(), 100)
 }
 
 // Sort PDFs based on current sort option
@@ -614,9 +623,15 @@ function changeSortBy(sortOption) {
     console.error('Failed to save sort option:', error)
   }
   
+  // Reset displayed count for infinite scroll
+  resetDisplayedCount()
+  
   // Re-sort and re-render
   sortPDFs()
   renderPDFList()
+  
+  // Setup infinite scroll
+  setTimeout(() => setupInfiniteScroll(), 100)
 }
 
 // Change view mode
@@ -1053,17 +1068,9 @@ function renderPDFList() {
     `
   }
   
-  // Determine how many PDFs to show on mobile
-  const isMobile = window.innerWidth < 1024 // lg breakpoint
-  const isTopPage = !state.selectedCategory && state.selectedTags.length === 0 && !state.searchQuery && !state.showOnlyFavorites && !state.showDownloadHistory
-  let pdfsToShow = state.pdfs
-  let hasMore = false
-  
-  // On mobile top page, limit to 15 cards unless "show all" is clicked
-  if (isMobile && isTopPage && !state.showAllMobile && state.pdfs.length > 15) {
-    pdfsToShow = state.pdfs.slice(0, 15)
-    hasMore = true
-  }
+  // Infinite scroll: limit displayed PDFs
+  let pdfsToShow = state.pdfs.slice(0, state.displayedCount)
+  const hasMore = state.displayedCount < state.pdfs.length
   
   html += pdfsToShow.map((pdf, index) => {
     // Only use Google Drive URL
@@ -1194,34 +1201,38 @@ function renderPDFList() {
   `
   }).join('')
   
-  // Mobile: Show "More" button if there are more cards
-  if (isMobile && hasMore) {
+  // Infinite scroll: Show loading indicator if there are more items
+  if (hasMore) {
     html += `
       <div class="col-span-full mt-6 text-center">
-        <button 
-          onclick="showAllMobileCards()"
-          class="px-8 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg"
-          aria-label="もっと見る 残り${state.pdfs.length - 15}件"
-        >
-          <i class="fas fa-chevron-down mr-2"></i>
-          もっと見る（残り${state.pdfs.length - 15}件）
-        </button>
+        <div id="infinite-scroll-trigger" class="py-8">
+          ${state.isLoading ? `
+            <div class="flex flex-col items-center gap-3">
+              <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+              <p class="text-gray-600 text-sm">読み込み中...</p>
+            </div>
+          ` : `
+            <div class="text-gray-400 text-sm">
+              <i class="fas fa-arrow-down mr-2"></i>
+              スクロールして続きを読み込む
+            </div>
+          `}
+        </div>
+      </div>
+    `
+  } else if (state.pdfs.length > state.itemsPerLoad) {
+    // Show "All loaded" message only if we loaded more than initial items
+    html += `
+      <div class="col-span-full mt-6 text-center">
+        <p class="text-gray-500 text-sm">
+          <i class="fas fa-check-circle mr-2"></i>
+          すべての資料を表示しました（${state.pdfs.length}件）
+        </p>
       </div>
     `
   }
   
-  // Mobile: Show Download History button (only on top page)
-  if (isMobile && isTopPage) {
-    html += `
-      <!-- Mobile: Download History Button -->
-      <div class="col-span-full mt-8 lg:hidden">
-        <button 
-          onclick="toggleDownloadHistory()"
-          class="w-full px-4 py-4 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl transition-colors font-bold shadow-lg border-2 border-pink-200 flex items-center justify-center gap-3"
-          aria-label="ダウンロード履歴を表示"
-        >
-          <i class="fas fa-history text-xl"></i>
-          <span>ダウンロード履歴</span>
+  // Note: Download History button is now in the sidebar, accessible via hamburger menu
         </button>
       </div>
     `
@@ -1552,7 +1563,7 @@ function clearAllFilters() {
   state.selectedTags = []
   state.searchQuery = ''
   state.showDownloadHistory = false
-  state.showAllMobile = false // Reset mobile "show all" state
+  resetDisplayedCount() // Reset for infinite scroll
   
   // Update URL
   updateURL()
@@ -1595,7 +1606,7 @@ function searchPDFs() {
     }
     
     state.showDownloadHistory = false // Clear download history mode
-    state.showAllMobile = false // Reset mobile "show all" state
+    resetDisplayedCount() // Reset for infinite scroll
     updateURL()
     loadPDFs()
   }
@@ -1647,7 +1658,7 @@ function searchPDFsMobile() {
     }
     
     state.showDownloadHistory = false // Clear download history mode
-    state.showAllMobile = false // Reset mobile "show all" state
+    resetDisplayedCount() // Reset for infinite scroll
     updateURL()
     loadPDFs()
   }
@@ -1666,14 +1677,14 @@ function toggleMobileMenu() {
 // Toggle favorite filter
 function toggleFavoriteFilter() {
   state.showOnlyFavorites = !state.showOnlyFavorites
-  state.showAllMobile = false // Reset mobile "show all" state
+  resetDisplayedCount() // Reset for infinite scroll
   loadPDFs()
 }
 
 // Toggle download history filter
 function toggleDownloadHistory() {
   state.showDownloadHistory = !state.showDownloadHistory
-  state.showAllMobile = false // Reset mobile "show all" state
+  resetDisplayedCount() // Reset for infinite scroll
   
   // When showing download history, clear other filters
   if (state.showDownloadHistory) {
@@ -1702,10 +1713,7 @@ function toggleDownloadHistory() {
 }
 
 // Show all cards on mobile
-function showAllMobileCards() {
-  state.showAllMobile = true
-  renderPDFList()
-}
+// Note: showAllMobileCards function removed - now using infinite scroll
 
 // Utility functions
 function escapeHtml(text) {
@@ -1844,4 +1852,59 @@ function updateDarkModeButtons() {
       sidebarText.textContent = 'ダークモード'
     }
   }
+}
+
+// ============================================
+// Infinite Scroll Implementation
+// ============================================
+
+// Load more items for infinite scroll
+function loadMoreItems() {
+  if (state.isLoading) return
+  if (state.displayedCount >= state.pdfs.length) return
+  
+  state.isLoading = true
+  renderPDFList()
+  
+  // Simulate loading delay (for better UX)
+  setTimeout(() => {
+    state.displayedCount += state.itemsPerLoad
+    state.isLoading = false
+    renderPDFList()
+    
+    // Re-setup observer after rendering
+    setupInfiniteScroll()
+  }, 300)
+}
+
+// Setup Intersection Observer for infinite scroll
+function setupInfiniteScroll() {
+  const trigger = document.getElementById('infinite-scroll-trigger')
+  if (!trigger) return
+  
+  // Disconnect previous observer if exists
+  if (window.infiniteScrollObserver) {
+    window.infiniteScrollObserver.disconnect()
+  }
+  
+  // Create new observer
+  window.infiniteScrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !state.isLoading) {
+        loadMoreItems()
+      }
+    })
+  }, {
+    root: null,
+    rootMargin: '200px', // Trigger 200px before reaching the element
+    threshold: 0.1
+  })
+  
+  window.infiniteScrollObserver.observe(trigger)
+}
+
+// Reset displayed count when filters change
+function resetDisplayedCount() {
+  state.displayedCount = state.itemsPerLoad
+  state.isLoading = false
 }
