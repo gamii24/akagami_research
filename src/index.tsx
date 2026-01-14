@@ -4,6 +4,7 @@ import { secureHeaders } from 'hono/secure-headers'
 import { renderer } from './renderer'
 import { 
   generateToken, 
+  verifyToken,
   setAuthCookie, 
   clearAuthCookie, 
   isAuthenticated,
@@ -119,7 +120,10 @@ app.post('/api/auth/login', async (c) => {
   // Set cookie
   setAuthCookie(c, token)
   
-  return c.json({ success: true, message: 'Login successful' })
+  return c.json({ 
+    success: true, 
+    message: 'Login successful'
+  })
 })
 
 // Logout API
@@ -133,9 +137,12 @@ app.get('/api/auth/check', async (c) => {
   const secret = (c.env.JWT_SECRET && c.env.JWT_SECRET.trim() !== '') 
     ? c.env.JWT_SECRET 
     : 'your-super-secret-jwt-key-change-this-in-production'
+  const token = getAuthToken(c)
   const authenticated = await isAuthenticated(c, secret)
   
-  return c.json({ authenticated })
+  return c.json({ 
+    authenticated
+  })
 })
 
 // Auth middleware for admin APIs

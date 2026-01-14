@@ -11,13 +11,15 @@ export async function generateToken(secret: string): Promise<string> {
     admin: true,
     exp: Math.floor(Date.now() / 1000) + TOKEN_MAX_AGE,
   }
-  return await sign(payload, secret)
+  // Explicitly specify algorithm
+  return await sign(payload, secret, 'HS256')
 }
 
 // Verify JWT token
 export async function verifyToken(token: string, secret: string): Promise<boolean> {
   try {
-    await verify(token, secret)
+    // Explicitly specify algorithm to match signing
+    await verify(token, secret, 'HS256')
     return true
   } catch (error) {
     return false
