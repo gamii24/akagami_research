@@ -32,13 +32,13 @@ export async function generateUserToken(userId: number, secret: string): Promise
     userId,
     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30 days
   }
-  return await sign(payload, secret)
+  return await sign(payload, secret, 'HS256')
 }
 
 // Verify JWT token
 export async function verifyUserToken(token: string, secret: string): Promise<{ userId: number } | null> {
   try {
-    const payload = await verify(token, secret)
+    const payload = await verify(token, secret, 'HS256')
     if (typeof payload.userId === 'number') {
       return { userId: payload.userId }
     }
@@ -50,9 +50,12 @@ export async function verifyUserToken(token: string, secret: string): Promise<{ 
 
 // Set user session cookie
 export function setUserSessionCookie(c: Context, token: string): void {
+  // Auto-detect HTTPS environment
+  const isProduction = c.req.url.startsWith('https://')
+  
   setCookie(c, 'user_token', token, {
     httpOnly: true,
-    secure: true,
+    secure: isProduction, // Auto-detect: true for HTTPS, false for local dev
     sameSite: 'Lax',
     maxAge: 60 * 60 * 24 * 30, // 30 days
     path: '/',
