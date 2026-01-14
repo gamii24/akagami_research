@@ -654,17 +654,17 @@ function renderCategoryFilter() {
         <i class="fas fa-layer-group mr-2 text-primary"></i>カテゴリ
       </h2>
       <div class="space-y-1">
-        <button 
-          onclick="filterByCategory(null)" 
-          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-sm"
+        <a 
+          href="/categories"
+          class="category-btn ${!state.selectedCategory ? 'active' : ''} w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-sm block hover:no-underline"
           aria-label="すべてのカテゴリを表示"
-          role="button"
+          role="link"
         >
           <span>
             <i class="fas fa-th-large mr-2 text-xs" aria-hidden="true"></i>すべて
           </span>
           ${totalCount > 0 ? `<span class="badge bg-primary text-white px-1.5 py-0.5 rounded-full text-xs font-medium">${totalCount}</span>` : ''}
-        </button>
+        </a>
         ${sortedCategories.map(cat => {
           const count = state.categoryCounts[cat.id] || 0
           return `

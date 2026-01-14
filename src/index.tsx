@@ -1906,10 +1906,6 @@ app.get('/calendar/2', (c) => {
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
             </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
-            </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">1月のカレンダー</span>
@@ -2223,10 +2219,6 @@ app.get('/calendar/3', (c) => {
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
             </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
-            </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">1月のカレンダー</span>
@@ -2536,10 +2528,6 @@ app.get('/calendar/4', (c) => {
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
             </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
-            </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">1月のカレンダー</span>
@@ -2841,10 +2829,6 @@ app.get('/calendar/5', (c) => {
             <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
             </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
@@ -3158,10 +3142,6 @@ app.get('/calendar/6', (c) => {
             <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
             </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
@@ -3478,10 +3458,6 @@ app.get('/calendar/7', (c) => {
             <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
             </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
@@ -3819,10 +3795,6 @@ app.get('/calendar/8', (c) => {
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
             </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
-            </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">1月のカレンダー</span>
@@ -4141,10 +4113,6 @@ app.get('/calendar/9', (c) => {
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
             </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
-            </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
               <span class="font-medium text-gray-700">1月のカレンダー</span>
@@ -4462,10 +4430,6 @@ app.get('/calendar/10', (c) => {
             <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
             </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
@@ -4788,10 +4752,6 @@ app.get('/calendar/11', (c) => {
             <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
             </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
@@ -5118,10 +5078,6 @@ app.get('/calendar/12', (c) => {
             <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-home text-primary"></i>
               <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
             </a>
             <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
               <i class="fas fa-calendar-alt text-primary"></i>
