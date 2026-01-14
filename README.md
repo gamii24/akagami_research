@@ -6,13 +6,14 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 ## 🌐 公開URL
 
-- **本番環境**: https://9e679281.akagami-research.pages.dev
-- **管理画面**: https://9e679281.akagami-research.pages.dev/admin
-- **マイページ**: https://9e679281.akagami-research.pages.dev/mypage
+- **本番環境**: https://a239e790.akagami-research.pages.dev
+- **管理画面**: https://a239e790.akagami-research.pages.dev/admin
+- **マイページ**: https://a239e790.akagami-research.pages.dev/mypage
+- **GitHub**: https://github.com/gamii24/akagami_research
 - **プロジェクト名**: akagami-research
 - **プラットフォーム**: Cloudflare Pages
 - **デプロイ状態**: ✅ Active (2026-01-14)
-- **最終更新**: 2026-01-14 - プロフィール編集機能追加（居住地・誕生日）
+- **最終更新**: 2026-01-14 - 無限スクロール実装、マイページ改善、セキュリティ修正
 
 ## 🎯 プロジェクト概要
 
