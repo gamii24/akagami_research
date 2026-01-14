@@ -6,18 +6,18 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 ## 🌐 公開URL
 
-- **本番環境**: https://8a009fb1.akagami-research.pages.dev
-- **管理画面**: https://8a009fb1.akagami-research.pages.dev/admin
-- **マイページ**: https://8a009fb1.akagami-research.pages.dev/mypage
-- **カテゴリ一覧**: https://8a009fb1.akagami-research.pages.dev/categories
+- **本番環境**: https://2455d584.akagami-research.pages.dev
+- **管理画面**: https://2455d584.akagami-research.pages.dev/admin
+- **マイページ**: https://2455d584.akagami-research.pages.dev/mypage
+- **カテゴリ一覧**: https://2455d584.akagami-research.pages.dev/categories
 - **📅 SNS運用カレンダー（全12ヶ月）**:
-  - [1月](https://8a009fb1.akagami-research.pages.dev/calendar/1) | [2月](https://8a009fb1.akagami-research.pages.dev/calendar/2) | [3月](https://8a009fb1.akagami-research.pages.dev/calendar/3) | [4月](https://8a009fb1.akagami-research.pages.dev/calendar/4) | [5月](https://8a009fb1.akagami-research.pages.dev/calendar/5) | [6月](https://8a009fb1.akagami-research.pages.dev/calendar/6)
-  - [7月](https://8a009fb1.akagami-research.pages.dev/calendar/7) | [8月](https://8a009fb1.akagami-research.pages.dev/calendar/8) | [9月](https://8a009fb1.akagami-research.pages.dev/calendar/9) | [10月](https://8a009fb1.akagami-research.pages.dev/calendar/10) | [11月](https://8a009fb1.akagami-research.pages.dev/calendar/11) | [12月](https://8a009fb1.akagami-research.pages.dev/calendar/12)
+  - [1月](https://2455d584.akagami-research.pages.dev/calendar/1) | [2月](https://2455d584.akagami-research.pages.dev/calendar/2) | [3月](https://2455d584.akagami-research.pages.dev/calendar/3) | [4月](https://2455d584.akagami-research.pages.dev/calendar/4) | [5月](https://2455d584.akagami-research.pages.dev/calendar/5) | [6月](https://2455d584.akagami-research.pages.dev/calendar/6)
+  - [7月](https://2455d584.akagami-research.pages.dev/calendar/7) | [8月](https://2455d584.akagami-research.pages.dev/calendar/8) | [9月](https://2455d584.akagami-research.pages.dev/calendar/9) | [10月](https://2455d584.akagami-research.pages.dev/calendar/10) | [11月](https://2455d584.akagami-research.pages.dev/calendar/11) | [12月](https://2455d584.akagami-research.pages.dev/calendar/12)
 - **GitHub**: https://github.com/gamii24/akagami_research
 - **プロジェクト名**: akagami-research
 - **プラットフォーム**: Cloudflare Pages
 - **デプロイ状態**: ✅ Active (2026-01-14)
-- **最終更新**: 2026-01-14 - 📅 全12ヶ月のカレンダーデザインを1月に統一
+- **最終更新**: 2026-01-14 - 🔥 全12ヶ月のカレンダーに「毎年○月に流行るもの」セクションを追加
 
 ## 🎯 プロジェクト概要
 
@@ -32,6 +32,7 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 Instagram投稿を計画的に管理できる**12ヶ月分のインタラクティブなカレンダー**を実装しました。各月の季節イベントやトレンドに合わせた投稿テーマを提案します。
 
 ### 主な機能
+- 🔥 **毎年○月に流行るもの**: 各月に流行するトレンド・イベント・コンテンツを表示（2026-01-14追加）
 - 📆 **月別カレンダービュー**: 全日程が一目でわかるグリッドレイアウト
 - 🎯 **日別投稿テーマ**: 各日に最適化された投稿テーマの提案
 - 🎉 **イベント連動**: 祝日、季節イベント、記念日をハイライト表示
