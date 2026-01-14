@@ -194,22 +194,7 @@ app.post('/api/user/register', async (c) => {
       text: `こんにちは、${name}さん。Akagami Research の会員登録が完了しました！`
     }, c.env)
     
-    // Send admin notification
-    const registrationDate = new Date().toLocaleString('ja-JP', { 
-      timeZone: 'Asia/Tokyo',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    })
-    await sendEmail({
-      to: 'akagami.syatyo@gmail.com',
-      subject: `[Akagami Research] 新規会員登録: ${name}`,
-      html: getAdminNewUserNotificationHtml(name, email, userId, registrationDate),
-      text: `新規会員が登録されました。\n\n会員番号: ${userId}\n名前: ${name}\nメールアドレス: ${email}\n登録日時: ${registrationDate}`
-    }, c.env)
+    // Note: Admin notification will be sent once daily via Cron job
     
     // Generate session token
     const secret = c.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production'
@@ -2552,4 +2537,141 @@ app.notFound((c) => {
   )
 })
 
-export default app
+// ============================================
+// Scheduled Job - Daily New User Summary
+// ============================================
+export default {
+  fetch: app.fetch,
+  async scheduled(event: ScheduledEvent, env: any, ctx: ExecutionContext) {
+    // Run daily at 9:00 AM JST (00:00 UTC)
+    try {
+      // Get users registered in the last 24 hours
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const yesterdayStr = yesterday.toISOString()
+      
+      const { results: newUsers } = await env.DB.prepare(`
+        SELECT id, name, email, login_method, created_at
+        FROM users
+        WHERE created_at >= ?
+        ORDER BY created_at DESC
+      `).bind(yesterdayStr).all()
+      
+      // Only send email if there are new users
+      if (newUsers && newUsers.length > 0) {
+        // Create HTML table
+        const userRows = newUsers.map((user: any) => {
+          const registrationDate = new Date(user.created_at).toLocaleString('ja-JP', {
+            timeZone: 'Asia/Tokyo',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+          return `
+            <tr style="border-bottom: 1px solid #e5e7eb;">
+              <td style="padding: 12px; text-align: center;">${user.id}</td>
+              <td style="padding: 12px;">${user.name}</td>
+              <td style="padding: 12px;">${user.email}</td>
+              <td style="padding: 12px; text-align: center;">${user.login_method === 'password' ? 'パスワード' : 'マジックリンク'}</td>
+              <td style="padding: 12px; text-align: center;">${registrationDate}</td>
+            </tr>
+          `
+        }).join('')
+        
+        const html = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+          </head>
+          <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px;">
+            <div style="background: linear-gradient(135deg, #e75556 0%, #ff6b6b 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+              <h1 style="margin: 0; font-size: 28px;">📊 新規会員登録レポート</h1>
+              <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Akagami Research</p>
+            </div>
+            
+            <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb; border-top: none;">
+              <p style="font-size: 18px; font-weight: bold; color: #e75556; margin-top: 0;">
+                過去24時間で <span style="font-size: 24px;">${newUsers.length}</span> 名の新規会員が登録されました！
+              </p>
+              
+              <table style="width: 100%; border-collapse: collapse; background: white; margin-top: 20px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <thead>
+                  <tr style="background: #e75556; color: white;">
+                    <th style="padding: 12px; text-align: center;">会員番号</th>
+                    <th style="padding: 12px; text-align: left;">名前</th>
+                    <th style="padding: 12px; text-align: left;">メールアドレス</th>
+                    <th style="padding: 12px; text-align: center;">認証方法</th>
+                    <th style="padding: 12px; text-align: center;">登録日時</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${userRows}
+                </tbody>
+              </table>
+              
+              <div style="margin-top: 30px; padding: 20px; background: white; border-radius: 8px; border-left: 4px solid #e75556;">
+                <p style="margin: 0 0 10px 0; font-weight: bold; color: #e75556;">📈 管理画面で詳細を確認</p>
+                <a href="https://akagami-research.pages.dev/admin" 
+                   style="display: inline-block; padding: 12px 24px; background: #e75556; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
+                  管理画面を開く
+                </a>
+              </div>
+              
+              <p style="margin-top: 30px; font-size: 14px; color: #6b7280; text-align: center;">
+                このメールは毎日自動的に送信されます。<br>
+                © 2026 Akagami Research. All rights reserved.
+              </p>
+            </div>
+          </body>
+          </html>
+        `
+        
+        const text = `
+【新規会員登録レポート - Akagami Research】
+
+過去24時間で ${newUsers.length} 名の新規会員が登録されました！
+
+${newUsers.map((user: any, index: number) => {
+  const registrationDate = new Date(user.created_at).toLocaleString('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+  return `
+${index + 1}. 会員番号: ${user.id}
+   名前: ${user.name}
+   メールアドレス: ${user.email}
+   認証方法: ${user.login_method === 'password' ? 'パスワード' : 'マジックリンク'}
+   登録日時: ${registrationDate}
+  `
+}).join('\n')}
+
+管理画面: https://akagami-research.pages.dev/admin
+
+---
+このメールは毎日自動的に送信されます。
+© 2026 Akagami Research. All rights reserved.
+        `
+        
+        await sendEmail({
+          to: 'akagami.syatyo@gmail.com',
+          subject: `[Akagami Research] 新規会員登録レポート (${newUsers.length}名)`,
+          html,
+          text
+        }, env)
+        
+        console.log(`Daily summary email sent: ${newUsers.length} new users`)
+      } else {
+        console.log('No new users in the last 24 hours')
+      }
+    } catch (error: any) {
+      console.error('Scheduled job error:', error)
+    }
+  }
+}
