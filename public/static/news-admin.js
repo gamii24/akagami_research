@@ -79,6 +79,76 @@ function renderNewsAdminPage() {
       </header>
 
       <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <!-- Quick Paste Form -->
+        <div class="mb-6 rounded-xl shadow-xl overflow-hidden" style="background-color: #2d2d2d; border: 2px solid #10b981;">
+          <div class="px-6 py-4" style="background-color: #059669; border-bottom: 2px solid #10b981;">
+            <h2 class="text-lg font-bold text-white">
+              <i class="fas fa-paste mr-2"></i>
+              コピペで簡単登録
+            </h2>
+            <p class="text-sm text-white opacity-90 mt-1">タイトル、公開日時、要約をまとめてコピペして、ボタン1つで登録！</p>
+          </div>
+          
+          <div class="p-6">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">
+                  記事情報を貼り付け <span style="color: #10b981;">*</span>
+                  <span class="text-xs opacity-75 ml-2">（タイトル、公開日時、要約を含むテキストをコピペ）</span>
+                </label>
+                <textarea 
+                  id="bulk-input" 
+                  rows="8" 
+                  class="w-full px-4 py-3 rounded-lg font-mono text-sm" 
+                  style="background-color: #1a1a1a; border: 2px solid #10b981; color: #f3f4f6;" 
+                  placeholder="例:
+
+タイトル
+GoogleがAI動画生成ツールVeoを強化し縦型動画と高画質出力に対応
+
+記事公開日時
+2026年1月13日
+
+要約
+GoogleはAI動画生成ツールVeoの最新版を発表し、画像からの動画生成、縦型動画対応..."></textarea>
+              </div>
+              
+              <div class="grid grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">記事URL <span style="color: #10b981;">*</span></label>
+                  <input type="url" id="bulk-url" class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;" placeholder="https://example.com/article">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">カテゴリ <span style="color: #10b981;">*</span></label>
+                  <select id="bulk-category" class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;">
+                    <option value="SNS">SNS</option>
+                    <option value="AI">AI</option>
+                    <option value="テクノロジー">テクノロジー</option>
+                    <option value="マーケティング">マーケティング</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium mb-2" style="color: #d1d5db;">言語 <span style="color: #10b981;">*</span></label>
+                  <select id="bulk-language" class="w-full px-4 py-2 rounded-lg" style="background-color: #1a1a1a; border: 1px solid #4b5563; color: #f3f4f6;">
+                    <option value="en">英語</option>
+                    <option value="ja">日本語</option>
+                  </select>
+                </div>
+              </div>
+              
+              <button 
+                type="button" 
+                onclick="parseBulkInput()" 
+                class="w-full py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg text-white" 
+                style="background-color: #10b981;">
+                <i class="fas fa-magic mr-2"></i>自動解析して登録
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Add/Edit Form -->
         <div class="mb-6 rounded-xl shadow-xl overflow-hidden" style="background-color: #2d2d2d; border: 2px solid #4b5563;">
           <div class="px-6 py-4" style="background-color: #3a3a3a; border-bottom: 2px solid #4b5563;">
@@ -355,6 +425,133 @@ function escapeHtml(text) {
   const div = document.createElement('div')
   div.textContent = text
   return div.innerHTML
+}
+
+// Parse bulk input and auto-fill form
+async function parseBulkInput() {
+  const bulkText = document.getElementById('bulk-input').value.trim()
+  const url = document.getElementById('bulk-url').value.trim()
+  const category = document.getElementById('bulk-category').value
+  const language = document.getElementById('bulk-language').value
+  
+  if (!bulkText || !url) {
+    showToast('記事情報とURLを入力してください', 'error')
+    return
+  }
+  
+  try {
+    // Parse the text
+    const lines = bulkText.split('\n').map(line => line.trim()).filter(line => line)
+    
+    let title = ''
+    let publishedAt = ''
+    let summary = ''
+    
+    let currentSection = ''
+    let summaryLines = []
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+      
+      // Detect section headers
+      if (line === 'タイトル' || line.toLowerCase() === 'title') {
+        currentSection = 'title'
+        continue
+      } else if (line === '記事公開日時' || line.toLowerCase().includes('date') || line.includes('公開日')) {
+        currentSection = 'date'
+        continue
+      } else if (line === '要約' || line.toLowerCase() === 'summary' || line === '概要') {
+        currentSection = 'summary'
+        continue
+      }
+      
+      // Store content based on current section
+      if (currentSection === 'title' && !title) {
+        title = line
+      } else if (currentSection === 'date' && !publishedAt) {
+        publishedAt = parseJapaneseDate(line)
+      } else if (currentSection === 'summary') {
+        summaryLines.push(line)
+      }
+    }
+    
+    summary = summaryLines.join('\n')
+    
+    // Validation
+    if (!title) {
+      showToast('タイトルが見つかりませんでした', 'error')
+      return
+    }
+    
+    if (!summary) {
+      showToast('要約が見つかりませんでした', 'error')
+      return
+    }
+    
+    // Prepare data
+    const data = {
+      title,
+      summary,
+      url,
+      category,
+      language
+    }
+    
+    if (publishedAt) {
+      data.published_at = publishedAt
+    }
+    
+    // Save to API
+    const response = await axios.post('/api/news', data)
+    
+    if (response.data.success) {
+      showToast('ニュース記事を追加しました！', 'success')
+      
+      // Clear bulk input
+      document.getElementById('bulk-input').value = ''
+      document.getElementById('bulk-url').value = ''
+      
+      // Reload and re-render
+      await loadNewsArticles()
+      document.getElementById('news-list').innerHTML = renderNewsList()
+      document.getElementById('news-count').textContent = newsState.newsArticles.length
+    }
+  } catch (error) {
+    console.error('Failed to parse and save:', error)
+    showToast('記事の解析または保存に失敗しました', 'error')
+  }
+}
+
+// Parse Japanese date to ISO format
+function parseJapaneseDate(dateStr) {
+  // Remove common prefixes
+  dateStr = dateStr.replace(/^(記事公開日時|公開日|日時)[:：\s]*/gi, '').trim()
+  
+  // Try to parse various Japanese date formats
+  // Format: 2026年1月13日
+  const match1 = dateStr.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/)
+  if (match1) {
+    const [, year, month, day] = match1
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toISOString()
+  }
+  
+  // Format: 2026/1/13 or 2026-1-13
+  const match2 = dateStr.match(/(\d{4})[/-](\d{1,2})[/-](\d{1,2})/)
+  if (match2) {
+    const [, year, month, day] = match2
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toISOString()
+  }
+  
+  // Format: 1月13日 (assume current year)
+  const match3 = dateStr.match(/(\d{1,2})月(\d{1,2})日/)
+  if (match3) {
+    const [, month, day] = match3
+    const year = new Date().getFullYear()
+    return new Date(year, parseInt(month) - 1, parseInt(day)).toISOString()
+  }
+  
+  // If all else fails, return current date
+  return new Date().toISOString()
 }
 
 // Initialize on page load
