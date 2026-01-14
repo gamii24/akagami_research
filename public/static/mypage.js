@@ -323,7 +323,7 @@ function renderMyPage(downloads, favorites) {
   content.innerHTML = `
     <!-- Page Title -->
     <div class="text-center mb-6">
-      <h2 class="text-2xl font-normal text-gray-800">
+      <h2 class="font-normal" style="font-size: 1.05rem; color: #E75556;">
         MY PAGE
       </h2>
     </div>
