@@ -6,18 +6,18 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 
 ## 🌐 公開URL
 
-- **本番環境**: https://f5fc6f07.akagami-research.pages.dev
-- **管理画面**: https://f5fc6f07.akagami-research.pages.dev/admin
-- **マイページ**: https://f5fc6f07.akagami-research.pages.dev/mypage
-- **カテゴリ一覧**: https://f5fc6f07.akagami-research.pages.dev/categories
+- **本番環境**: https://8a009fb1.akagami-research.pages.dev
+- **管理画面**: https://8a009fb1.akagami-research.pages.dev/admin
+- **マイページ**: https://8a009fb1.akagami-research.pages.dev/mypage
+- **カテゴリ一覧**: https://8a009fb1.akagami-research.pages.dev/categories
 - **📅 SNS運用カレンダー（全12ヶ月）**:
-  - [1月](https://f5fc6f07.akagami-research.pages.dev/calendar/1) | [2月](https://f5fc6f07.akagami-research.pages.dev/calendar/2) | [3月](https://f5fc6f07.akagami-research.pages.dev/calendar/3) | [4月](https://f5fc6f07.akagami-research.pages.dev/calendar/4) | [5月](https://f5fc6f07.akagami-research.pages.dev/calendar/5) | [6月](https://f5fc6f07.akagami-research.pages.dev/calendar/6)
-  - [7月](https://f5fc6f07.akagami-research.pages.dev/calendar/7) | [8月](https://f5fc6f07.akagami-research.pages.dev/calendar/8) | [9月](https://f5fc6f07.akagami-research.pages.dev/calendar/9) | [10月](https://f5fc6f07.akagami-research.pages.dev/calendar/10) | [11月](https://f5fc6f07.akagami-research.pages.dev/calendar/11) | [12月](https://f5fc6f07.akagami-research.pages.dev/calendar/12)
+  - [1月](https://8a009fb1.akagami-research.pages.dev/calendar/1) | [2月](https://8a009fb1.akagami-research.pages.dev/calendar/2) | [3月](https://8a009fb1.akagami-research.pages.dev/calendar/3) | [4月](https://8a009fb1.akagami-research.pages.dev/calendar/4) | [5月](https://8a009fb1.akagami-research.pages.dev/calendar/5) | [6月](https://8a009fb1.akagami-research.pages.dev/calendar/6)
+  - [7月](https://8a009fb1.akagami-research.pages.dev/calendar/7) | [8月](https://8a009fb1.akagami-research.pages.dev/calendar/8) | [9月](https://8a009fb1.akagami-research.pages.dev/calendar/9) | [10月](https://8a009fb1.akagami-research.pages.dev/calendar/10) | [11月](https://8a009fb1.akagami-research.pages.dev/calendar/11) | [12月](https://8a009fb1.akagami-research.pages.dev/calendar/12)
 - **GitHub**: https://github.com/gamii24/akagami_research
 - **プロジェクト名**: akagami-research
 - **プラットフォーム**: Cloudflare Pages
 - **デプロイ状態**: ✅ Active (2026-01-14)
-- **最終更新**: 2026-01-14 - 📅 ハンバーガーメニューのカレンダーボタンを現在の月（1月）への直接リンクに変更
+- **最終更新**: 2026-01-14 - 📅 全12ヶ月のカレンダーデザインを1月に統一
 
 ## 🎯 プロジェクト概要
 
