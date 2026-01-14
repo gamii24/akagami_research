@@ -1858,63 +1858,47 @@ app.get('/categories', async (c) => {
             <p class="text-gray-600">資料をカテゴリごとに閲覧できます</p>
           </div>
 
-          {/* Categories Grid */}
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Categories Grid - 2 columns on mobile, 3 on desktop */}
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {categories.map((category: any) => (
               <a
                 href={`/?category=${category.id}`}
                 class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-primary"
               >
-                <div class="p-6">
+                <div class="p-4 md:p-6">
                   {/* Category Icon & Name */}
-                  <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                      <div class="w-12 h-12 bg-gradient-to-br from-primary to-red-600 rounded-lg flex items-center justify-center text-white text-xl group-hover:scale-110 transition-transform">
-                        <i class="fas fa-folder"></i>
-                      </div>
-                      <h3 class="text-xl font-bold text-gray-800 group-hover:text-primary transition-colors">
-                        {category.name}
-                      </h3>
+                  <div class="flex flex-col items-center text-center mb-4">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary to-red-600 rounded-lg flex items-center justify-center text-white text-xl md:text-2xl group-hover:scale-110 transition-transform mb-3">
+                      <i class="fas fa-folder"></i>
                     </div>
+                    <h3 class="text-base md:text-lg font-bold text-gray-800 group-hover:text-primary transition-colors">
+                      {category.name}
+                    </h3>
                   </div>
 
-                  {/* Description */}
+                  {/* Description - Hide on mobile */}
                   {category.description && (
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p class="hidden md:block text-gray-600 text-sm mb-4 line-clamp-2">
                       {category.description}
                     </p>
                   )}
 
                   {/* PDF Count */}
-                  <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <span class="text-gray-500 text-sm flex items-center gap-2">
+                  <div class="flex items-center justify-center pt-4 border-t border-gray-100">
+                    <span class="text-gray-500 text-xs md:text-sm flex items-center gap-2">
                       <i class="fas fa-file-pdf text-primary"></i>
-                      資料数
-                    </span>
-                    <span class="text-2xl font-bold text-primary">
-                      {category.pdf_count}
-                      <span class="text-sm text-gray-500 ml-1">件</span>
+                      <span class="text-xl md:text-2xl font-bold text-primary">
+                        {category.pdf_count}
+                      </span>
+                      <span class="text-xs md:text-sm text-gray-500">件</span>
                     </span>
                   </div>
-
-                  {/* Download All Button (if URL exists) */}
-                  {category.download_url && (
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                      <button
-                        onclick={`event.preventDefault(); event.stopPropagation(); window.open('${category.download_url}', '_blank')`}
-                        class="w-full px-4 py-2 bg-gradient-to-r from-primary to-red-600 text-white rounded-lg hover:from-red-600 hover:to-primary transition-all text-sm font-semibold flex items-center justify-center gap-2"
-                      >
-                        <i class="fas fa-download"></i>
-                        一括ダウンロード
-                      </button>
-                    </div>
-                  )}
                 </div>
 
                 {/* Hover Arrow */}
-                <div class="bg-gray-50 px-6 py-3 flex items-center justify-between group-hover:bg-primary group-hover:text-white transition-colors">
-                  <span class="text-sm font-medium">資料を見る</span>
-                  <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                <div class="bg-gray-50 px-4 py-2 md:py-3 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+                  <span class="text-xs md:text-sm font-medium">資料を見る</span>
+                  <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
               </a>
             ))}
