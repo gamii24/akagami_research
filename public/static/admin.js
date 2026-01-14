@@ -1372,15 +1372,11 @@ let usersCache = []
 
 async function showUsersModal() {
   try {
-    const response = await fetch('/api/analytics/users', {
-      credentials: 'include'
+    const response = await axios.get('/api/analytics/users', {
+      withCredentials: true
     })
     
-    if (!response.ok) {
-      throw new Error('Failed to fetch users')
-    }
-    
-    usersCache = await response.json()
+    usersCache = response.data
     
     const modalHtml = `
       <div class="modal-overlay" onclick="closeModal(event)" id="users-modal">
@@ -1460,7 +1456,7 @@ async function showUsersModal() {
     document.body.insertAdjacentHTML('beforeend', modalHtml)
   } catch (error) {
     console.error('Failed to load users:', error)
-    alert('登録者データの読み込みに失敗しました')
+    alert('登録者データの読み込みに失敗しました: ' + (error.response?.data?.error || error.message))
   }
 }
 
