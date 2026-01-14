@@ -857,6 +857,9 @@ async function saveProfileInfo() {
     userData.location = location
     userData.birthday = birthday
     
+    // Update the user info card at the top of the page
+    updateUserInfoCard()
+    
     button.innerHTML = '<i class="fas fa-check mr-2"></i>保存完了！'
     button.classList.remove('bg-primary', 'hover:bg-red-600')
     button.classList.add('bg-green-600')
@@ -922,6 +925,12 @@ async function saveSnsInfo() {
       console.error('SNS info update failed:', errorData)
       throw new Error(errorData.error || 'Failed to save')
     }
+    
+    // Update local userData
+    userData.youtubeUrl = snsData.youtubeUrl
+    userData.instagramHandle = snsData.instagramHandle
+    userData.tiktokHandle = snsData.tiktokHandle
+    userData.twitterHandle = snsData.twitterHandle
     
     button.innerHTML = '<i class="fas fa-check mr-2"></i>保存完了！'
     button.classList.remove('bg-primary', 'hover:bg-red-600')
@@ -1025,6 +1034,59 @@ function escapeHtml(text) {
   const div = document.createElement('div')
   div.textContent = text || ''
   return div.innerHTML
+}
+
+// Update user info card at the top of the page
+function updateUserInfoCard() {
+  // Find the user info card container
+  const userInfoCard = document.querySelector('.bg-white.rounded-lg.shadow-md.border-2.border-gray-200.p-4.mb-6')
+  
+  if (!userInfoCard) {
+    console.warn('User info card not found')
+    return
+  }
+  
+  // Update user name
+  const nameElement = userInfoCard.querySelector('h3.text-xl')
+  if (nameElement) {
+    nameElement.textContent = `${escapeHtml(userData.name || 'ユーザー')} さん`
+  }
+  
+  // Update location
+  const locationElements = userInfoCard.querySelectorAll('p.text-sm')
+  locationElements.forEach(el => {
+    if (el.innerHTML.includes('fa-map-marker-alt')) {
+      if (userData.location) {
+        el.innerHTML = `<i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>${escapeHtml(userData.location)}`
+        el.classList.remove('text-gray-400', 'italic')
+        el.classList.add('text-gray-600')
+      } else {
+        el.innerHTML = '<i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>居住地未設定'
+        el.classList.remove('text-gray-600')
+        el.classList.add('text-gray-400', 'italic')
+      }
+    }
+    
+    // Update birthday
+    if (el.innerHTML.includes('fa-birthday-cake')) {
+      if (userData.birthday) {
+        el.innerHTML = `<i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>${userData.birthday}`
+        el.classList.remove('text-gray-400', 'italic')
+        el.classList.add('text-gray-600')
+      } else {
+        el.innerHTML = '<i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>誕生日未設定'
+        el.classList.remove('text-gray-600')
+        el.classList.add('text-gray-400', 'italic')
+      }
+    }
+  })
+  
+  // Add a subtle highlight animation
+  userInfoCard.style.transition = 'box-shadow 0.3s ease'
+  userInfoCard.style.boxShadow = '0 0 20px rgba(231, 85, 86, 0.3)'
+  setTimeout(() => {
+    userInfoCard.style.boxShadow = ''
+  }, 1000)
 }
 
 // Initialize page on load
