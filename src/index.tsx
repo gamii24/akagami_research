@@ -5900,33 +5900,14 @@ app.get('/', (c) => {
 
               {/* SNS Calendar Link */}
               <div class="mb-6 pb-6 border-b-2 border-gray-200">
-                <button
-                  onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
+                <a
+                  href="/calendar/1"
                   class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2"
                   aria-label="SNS運用カレンダーを開く"
                 >
                   <i class="fas fa-calendar-alt"></i>
                   <span>📅 SNS運用カレンダー</span>
-                  <i class="fas fa-chevron-down text-sm"></i>
-                </button>
-                
-                {/* Calendar Dropdown Menu */}
-                <div id="calendar-menu" class="hidden bg-white shadow-md border border-gray-200 rounded-lg mt-2 p-3">
-                  <div class="grid grid-cols-3 gap-2">
-                    <a href="/calendar/1" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">1月</a>
-                    <a href="/calendar/2" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">2月</a>
-                    <a href="/calendar/3" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">3月</a>
-                    <a href="/calendar/4" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">4月</a>
-                    <a href="/calendar/5" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">5月</a>
-                    <a href="/calendar/6" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">6月</a>
-                    <a href="/calendar/7" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">7月</a>
-                    <a href="/calendar/8" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">8月</a>
-                    <a href="/calendar/9" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">9月</a>
-                    <a href="/calendar/10" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">10月</a>
-                    <a href="/calendar/11" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">11月</a>
-                    <a href="/calendar/12" class="px-3 py-2 text-center hover:bg-pink-50 rounded text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors">12月</a>
-                  </div>
-                </div>
+                </a>
               </div>
 
               {/* Search - Desktop Only */}
