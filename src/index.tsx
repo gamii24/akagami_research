@@ -1932,6 +1932,75 @@ app.get('/categories', async (c) => {
               トップページに戻る
             </a>
           </div>
+
+          {/* Usage Guide & Request Section */}
+          <div class="mt-12 space-y-6">
+            {/* Usage Guide */}
+            <div class="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-6 border-2 border-red-100">
+              <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-lightbulb text-yellow-500"></i>
+                資料の活用方法
+              </h3>
+              <div class="space-y-3 text-gray-700">
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-check-circle text-primary mt-1"></i>
+                  <p class="text-sm md:text-base">
+                    <strong>トレンド把握：</strong>最新のSNS動向やアルゴリズム変更をキャッチアップして、戦略を最適化
+                  </p>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-check-circle text-primary mt-1"></i>
+                  <p class="text-sm md:text-base">
+                    <strong>コンテンツ企画：</strong>成功事例やベストプラクティスを参考に、投稿内容を改善
+                  </p>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-check-circle text-primary mt-1"></i>
+                  <p class="text-sm md:text-base">
+                    <strong>数値分析：</strong>データに基づいた運用で、エンゲージメント率やフォロワー増加を実現
+                  </p>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-check-circle text-primary mt-1"></i>
+                  <p class="text-sm md:text-base">
+                    <strong>競合調査：</strong>他社の成功パターンを学び、自社アカウントに応用
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Request Section */}
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-100">
+              <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-paper-plane text-blue-500"></i>
+                資料リクエスト受付中！
+              </h3>
+              <div class="space-y-4">
+                <p class="text-sm md:text-base text-gray-700">
+                  「こんな資料が欲しい！」「このテーマについて深掘りしてほしい！」というご要望がありましたら、お気軽にお知らせください。
+                </p>
+                <div class="bg-white rounded-lg p-4 border-2 border-blue-200">
+                  <p class="text-sm md:text-base text-gray-700 mb-3">
+                    <i class="fas fa-comment-dots text-primary mr-2"></i>
+                    リクエストは<strong class="text-primary">赤髪のInstagram DM</strong>まで！
+                  </p>
+                  <a
+                    href="https://www.instagram.com/akagami_sns/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-lg transition-all font-bold shadow-lg hover:shadow-xl"
+                  >
+                    <i class="fab fa-instagram text-xl"></i>
+                    <span>赤髪のInstagramへ</span>
+                    <i class="fas fa-external-link-alt text-sm"></i>
+                  </a>
+                </div>
+                <p class="text-xs text-gray-500">
+                  ※ DMでのご質問・ご相談も大歓迎です。SNS運用でお困りのことがあれば、お気軽にどうぞ！
+                </p>
+              </div>
+            </div>
+          </div>
         </main>
 
         {/* Footer */}
