@@ -6648,25 +6648,18 @@ app.get('/news', async (c) => {
                 
                 return \`
                   <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                    <div class="flex items-start gap-4">
-                      <div class="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                        <i class="fas fa-newspaper text-white text-xl"></i>
-                      </div>
-                      <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-2">
-                          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
-                            \${news.category}
-                          </span>
-                          <span class="text-sm text-gray-500">\${dateStr}</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
-                        <p class="text-gray-600 mb-4">\${escapeHtml(news.summary)}</p>
-                        <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
-                          <i class="fas fa-external-link-alt"></i>
-                          元記事を読む
-                        </a>
-                      </div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
+                        \${news.category}
+                      </span>
+                      <span class="text-sm text-gray-500">\${dateStr}</span>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
+                    <p class="text-gray-600 mb-4">\${escapeHtml(news.summary)}</p>
+                    <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                      <i class="fas fa-external-link-alt"></i>
+                      元記事を読む
+                    </a>
                   </article>
                 \`;
               }).join('');
