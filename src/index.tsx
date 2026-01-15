@@ -6600,8 +6600,6 @@ app.get('/news', async (c) => {
               
               // Initialize categories in sidebar (from app.js)
               if (typeof loadCategories === 'function' && typeof renderCategoryFilter === 'function') {
-                console.log('[NEWS] Loading categories for sidebar...');
-                
                 // Load categories and tags together
                 await Promise.all([
                   loadCategories(),
@@ -6609,11 +6607,8 @@ app.get('/news', async (c) => {
                   typeof loadAllPdfsOnce === 'function' ? loadAllPdfsOnce() : Promise.resolve()
                 ]);
                 
-                console.log('[NEWS] Categories loaded:', typeof state !== 'undefined' ? state.categories?.length : 'state undefined');
-                
                 // Render categories only once, after all data is loaded
                 renderCategoryFilter();
-                console.log('[NEWS] renderCategoryFilter() called');
               }
               
               await loadNews();

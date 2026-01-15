@@ -898,6 +898,10 @@ body.dark-mode .text-gray-800 {
   color: #e0e0e0 !important;
 }
 
+.text-darker {
+  color: #333333;
+}
+
 body.dark-mode .text-darker {
   color: #e0e0e0 !important;
 }

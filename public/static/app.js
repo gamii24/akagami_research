@@ -609,14 +609,9 @@ function changeViewMode(mode) {
 // Render functions
 function renderCategoryFilter() {
   const container = document.getElementById('category-filter')
-  console.log('[DEBUG] renderCategoryFilter - container:', container, 'categories:', state.categories?.length)
-  if (!container) {
-    console.warn('[DEBUG] category-filter container not found!')
-    return
-  }
+  if (!container) return
   
   const totalCount = Object.values(state.categoryCounts).reduce((sum, count) => sum + count, 0)
-  console.log('[DEBUG] totalCount:', totalCount, 'categoryCounts:', state.categoryCounts)
   
   // Sort categories by count (descending)
   const sortedCategories = [...state.categories].sort((a, b) => {
@@ -684,7 +679,6 @@ function renderCategoryFilter() {
     </div>
   `
   container.innerHTML = html
-  console.log('[DEBUG] Category filter HTML set! Length:', html.length)
   
   // Update download history button style
   const downloadHistoryBtn = document.getElementById('download-history-btn')
