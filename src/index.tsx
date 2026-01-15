@@ -7805,8 +7805,11 @@ app.get('/article/:slug', async (c) => {
           {/* Main Content with Sidebar */}
           <main class="max-w-7xl mx-auto px-4 py-6">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Sidebar - Same as homepage */}
+              <CommonSidebar />
+              
               {/* Article Content */}
-              <div class="lg:col-span-3 order-2 lg:order-1">
+              <div class="lg:col-span-3 order-1 lg:order-1">
                 {/* Back Button */}
                 <div class="mb-4">
                   <a href="/" class="inline-flex items-center gap-2 text-primary hover:underline">
@@ -7818,9 +7821,6 @@ app.get('/article/:slug', async (c) => {
                 {/* Article Content - Raw HTML */}
                 <div id="article-content" dangerouslySetInnerHTML={{ __html: article.content }}></div>
               </div>
-              
-              {/* Sidebar - Same as homepage */}
-              <CommonSidebar />
             </div>
           </main>
           
