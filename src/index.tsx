@@ -181,9 +181,7 @@ app.use('*', secureHeaders({
     defaultSrc: ["'self'"],
     scriptSrc: [
       "'self'",
-      "'unsafe-inline'", // Required for Tailwind CDN and inline scripts
-      "https://cdn.tailwindcss.com",
-      "https://cdn.jsdelivr.net",
+      "'unsafe-inline'", // Required for inline scripts and Google Analytics
       "https://www.googletagmanager.com",
       "https://www.google-analytics.com",
       "https://static.cloudflareinsights.com", // Cloudflare Analytics
@@ -191,9 +189,7 @@ app.use('*', secureHeaders({
     ],
     styleSrc: [
       "'self'",
-      "'unsafe-inline'", // Required for Tailwind and inline styles
-      "https://cdn.tailwindcss.com",
-      "https://cdn.jsdelivr.net"
+      "'unsafe-inline'" // Required for inline styles
     ],
     imgSrc: [
       "'self'",
@@ -203,12 +199,10 @@ app.use('*', secureHeaders({
     ],
     fontSrc: [
       "'self'",
-      "https://cdn.jsdelivr.net",
       "data:"
     ],
     connectSrc: [
       "'self'",
-      "https://cdn.jsdelivr.net", // For axios and other CDN resources
       "https://www.google-analytics.com",
       "https://www.googletagmanager.com",
       "https://static.cloudflareinsights.com", // Cloudflare Analytics
