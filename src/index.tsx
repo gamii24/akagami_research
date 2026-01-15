@@ -142,7 +142,7 @@ function CommonSidebar() {
           </a>
           <button
             onclick="showInfographics()"
-            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-300 flex items-center justify-center gap-2"
+            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-300 flex items-center justify-center gap-2 mb-3"
             aria-label="インフォグラフィック記事を表示"
           >
             <i class="fas fa-chart-bar"></i>
