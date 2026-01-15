@@ -425,6 +425,7 @@ function showArticleForm(articleId = null) {
                 type="button"
                 onclick="switchEditorMode('visual')"
                 class="px-3 py-1 text-xs rounded transition-colors ${articlesState.editorMode === 'visual' ? 'bg-primary text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
+                id="visual-mode-btn"
               >
                 <i class="fas fa-eye mr-1"></i>ビジュアル
               </button>
@@ -432,6 +433,7 @@ function showArticleForm(articleId = null) {
                 type="button"
                 onclick="switchEditorMode('code')"
                 class="px-3 py-1 text-xs rounded transition-colors ${articlesState.editorMode === 'code' ? 'bg-primary text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
+                id="code-mode-btn"
               >
                 <i class="fas fa-code mr-1"></i>コード
               </button>
@@ -439,12 +441,12 @@ function showArticleForm(articleId = null) {
           </div>
           
           <!-- Quill Editor (Visual Mode) -->
-          <div id="visual-editor-container" class="border-2 border-gray-600 rounded-lg overflow-hidden ${articlesState.editorMode === 'visual' ? '' : 'hidden'}" style="height: 500px;">
+          <div id="visual-editor-container" class="border-2 border-gray-600 rounded-lg overflow-hidden" style="height: 500px; ${articlesState.editorMode === 'visual' ? '' : 'display: none;'}">
             <div id="quill-editor" style="height: calc(100% - 42px); background: white;"></div>
           </div>
           
           <!-- Monaco Editor (Code Mode) -->
-          <div id="code-editor-container" class="border-2 border-gray-600 rounded-lg overflow-hidden ${articlesState.editorMode === 'code' ? '' : 'hidden'}" style="height: 500px;">
+          <div id="code-editor-container" class="border-2 border-gray-600 rounded-lg overflow-hidden" style="height: 500px; ${articlesState.editorMode === 'code' ? '' : 'display: none;'}">
             <div id="monaco-editor" style="width: 100%; height: 100%;"></div>
           </div>
           
@@ -491,30 +493,47 @@ function switchEditorMode(mode) {
   // Switch mode
   articlesState.editorMode = mode
   
-  // Update visibility
+  // Update visibility and button styles
   const visualContainer = document.getElementById('visual-editor-container')
   const codeContainer = document.getElementById('code-editor-container')
+  const visualBtn = document.getElementById('visual-mode-btn')
+  const codeBtn = document.getElementById('code-mode-btn')
   
   if (mode === 'visual') {
-    visualContainer.classList.remove('hidden')
-    codeContainer.classList.add('hidden')
+    // Show visual editor, hide code editor
+    if (visualContainer) visualContainer.style.display = ''
+    if (codeContainer) codeContainer.style.display = 'none'
+    
+    // Update button styles
+    if (visualBtn) {
+      visualBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-primary text-white'
+    }
+    if (codeBtn) {
+      codeBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-gray-700 text-gray-300 hover:bg-gray-600'
+    }
     
     // Update Quill content
     if (articlesState.quillEditor) {
       articlesState.quillEditor.root.innerHTML = currentContent
     }
   } else {
-    visualContainer.classList.add('hidden')
-    codeContainer.classList.remove('hidden')
+    // Show code editor, hide visual editor
+    if (visualContainer) visualContainer.style.display = 'none'
+    if (codeContainer) codeContainer.style.display = ''
+    
+    // Update button styles
+    if (visualBtn) {
+      visualBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-gray-700 text-gray-300 hover:bg-gray-600'
+    }
+    if (codeBtn) {
+      codeBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-primary text-white'
+    }
     
     // Update Monaco content
     if (articlesState.editor) {
       articlesState.editor.setValue(currentContent)
     }
   }
-  
-  // Update button styles
-  showArticleForm(articlesState.editingArticle ? articlesState.editingArticle.id : null)
 }
 
 // Initialize Monaco Editor for article content
