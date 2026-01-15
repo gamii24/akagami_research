@@ -1899,3 +1899,36 @@ function updateDarkModeButtons() {
     }
   }
 }
+
+// Show infographic articles only
+function showInfographics() {
+  // Clear filters
+  state.selectedCategory = null
+  state.selectedTags = []
+  state.searchQuery = ''
+  state.showOnlyFavorites = false
+  state.showDownloadHistory = false
+  
+  // Filter to show only infographic articles
+  state.pdfs = state.articles.slice()
+  
+  // Update UI
+  renderPdfList()
+  
+  // Clear category selection in sidebar
+  const categoryButtons = document.querySelectorAll('#category-filter button')
+  categoryButtons.forEach(btn => btn.classList.remove('active'))
+  
+  // Show toast
+  showToast(`インフォグラフィック記事: ${state.articles.length}件を表示`, 'info')
+  
+  // Track event
+  trackGAEvent('filter_infographics', {
+    count: state.articles.length
+  })
+  
+  // Close mobile menu if open
+  if (window.innerWidth < 1024) {
+    toggleMobileMenu()
+  }
+}
