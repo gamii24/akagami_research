@@ -10,19 +10,6 @@ let articlesState = {
 
 // Initialize
 async function init() {
-  // Check authentication first
-  try {
-    const authResponse = await axios.get('/api/user/me', { withCredentials: true })
-    if (!authResponse.data.authenticated) {
-      window.location.href = '/admin'
-      return
-    }
-  } catch (error) {
-    console.error('Authentication check failed:', error)
-    window.location.href = '/admin'
-    return
-  }
-  
   await loadCategories()
   await loadArticles()
   initMonaco()
@@ -47,13 +34,7 @@ async function loadArticles() {
   } catch (error) {
     console.error('Failed to load articles:', error)
     
-    // If 401, redirect to admin login
-    if (error.response && error.response.status === 401) {
-      window.location.href = '/admin'
-      return
-    }
-    
-    // Otherwise, show error and render empty list
+    // Show error and render empty list
     articlesState.articles = []
     renderArticleList()
     showToast('記事の読み込みに失敗しました', 'error')
