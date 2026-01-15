@@ -1076,9 +1076,14 @@ function renderPDFList() {
   }
   
   html += itemsToShow.map((item, index) => {
-    // Render article card
+    // Render article card (legacy - keep for compatibility)
     if (item.type === 'article') {
       return renderArticleCard(item.data)
+    }
+    
+    // Render infographic article card (from new unified API)
+    if (item.type === 'pdf' && item.data.source_type === 'infographic') {
+      return renderInfographicCard(item.data)
     }
     
     // Render PDF card
@@ -1724,14 +1729,15 @@ function showAllMobileCards() {
 // Utility functions are now in utils.js
 
 // Render article card (for infographic articles)
-function renderArticleCard(article) {
+// Render infographic article card (from new unified API)
+function renderInfographicCard(article) {
   const isNew = isWithin7Days(article.created_at)
   const categoryName = article.category_name || 'その他'
   
   return `
     <a 
       href="/article/${article.slug}"
-      class="pdf-card bg-white hover:bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-200 cursor-pointer block"
+      class="pdf-card bg-white hover:bg-pink-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-pink-400 cursor-pointer block"
       style="position: relative;"
       data-article-id="${article.id}"
     >
@@ -1741,8 +1747,8 @@ function renderArticleCard(article) {
         </div>
       ` : ''}
       
-      <!-- Article Badge -->
-      <div class="absolute top-2 right-2 z-10 px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded shadow-md flex items-center gap-1">
+      <!-- Article Badge with Pink Theme -->
+      <div class="absolute top-2 right-2 z-10 px-2 py-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-xs font-bold rounded shadow-md flex items-center gap-1">
         <i class="fas fa-newspaper"></i>
         <span>記事</span>
       </div>
@@ -1757,8 +1763,68 @@ function renderArticleCard(article) {
           />
         </div>
       ` : `
-        <div class="aspect-video bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-          <i class="fas fa-newspaper text-6xl text-purple-300"></i>
+        <div class="aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
+          <i class="fas fa-newspaper text-6xl text-pink-300"></i>
+        </div>
+      `}
+      
+      <div class="p-4">
+        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
+          ${escapeHtml(article.title)}
+        </h3>
+        
+        ${article.summary ? `
+          <p class="text-xs text-gray-600 line-clamp-2 mb-3">
+            ${escapeHtml(article.summary)}
+          </p>
+        ` : ''}
+        
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <div class="flex items-center gap-2">
+            <span><i class="fas fa-calendar mr-1"></i>${formatDate(article.created_at)}</span>
+            ${categoryName ? `<span><i class="fas fa-folder mr-1"></i>${escapeHtml(categoryName)}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    </a>
+  `
+}
+
+function renderArticleCard(article) {
+  const isNew = isWithin7Days(article.created_at)
+  const categoryName = article.category_name || 'その他'
+  
+  return `
+    <a 
+      href="/article/${article.slug}"
+      class="pdf-card bg-white hover:bg-pink-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-pink-400 cursor-pointer block"
+      style="position: relative;"
+      data-article-id="${article.id}"
+    >
+      ${isNew ? `
+        <div class="absolute top-2 left-2 z-10 px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300">
+          NEW
+        </div>
+      ` : ''}
+      
+      <!-- Article Badge -->
+      <div class="absolute top-2 right-2 z-10 px-2 py-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-xs font-bold rounded shadow-md flex items-center gap-1">
+        <i class="fas fa-newspaper"></i>
+        <span>記事</span>
+      </div>
+      
+      ${article.thumbnail_url ? `
+        <div class="aspect-video overflow-hidden bg-gray-100">
+          <img 
+            src="${article.thumbnail_url}" 
+            alt="${escapeHtml(article.title)}"
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      ` : `
+        <div class="aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
+          <i class="fas fa-newspaper text-6xl text-pink-300"></i>
         </div>
       `}
       
@@ -1885,4 +1951,5 @@ function updateDarkModeButtons() {
       sidebarText.textContent = 'ダークモード'
     }
   }
+}
 }
