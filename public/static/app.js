@@ -1095,9 +1095,6 @@ function renderPDFList() {
     const isSelected = state.selectedPdfs.has(pdf.id)
     const bgColor = isSelected ? 'bg-blue-50 border-blue-500' : (downloaded ? 'bg-[#f4eee0]' : 'bg-white')
     
-    // Check if uploaded within 7 days
-    const isNew = isWithin7Days(pdf.created_at)
-    
     // Card click handler
     const cardClick = state.multiSelectMode 
       ? `togglePdfSelection(event, ${pdf.id})`
@@ -1121,12 +1118,9 @@ function renderPDFList() {
         ` : ''}
         <div class="p-4 flex items-center gap-4">
           <div class="flex-1">
-            <div class="flex items-center gap-3 mb-2">
-              <h3 class="text-base font-bold text-gray-800 leading-snug break-words">
-                ${escapeHtml(pdf.title)}
-              </h3>
-              ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300">NEW</span>' : ''}
-            </div>
+            <h3 class="text-base font-bold text-gray-800 leading-snug break-words mb-2">
+              ${escapeHtml(pdf.title)}
+            </h3>
             
             <div class="flex items-center gap-4 text-xs text-gray-500">
               <span><i class="fas fa-calendar mr-1"></i>${formatDate(pdf.created_at)}</span>
@@ -1176,12 +1170,9 @@ function renderPDFList() {
         </div>
       ` : ''}
       <div class="p-4">
-        <div class="flex items-start justify-between gap-2 mb-2">
-          <h3 class="text-sm font-bold text-gray-800 leading-snug break-words flex-1">
-            ${escapeHtml(pdf.title)}
-          </h3>
-          ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300 flex-shrink-0">NEW</span>' : ''}
-        </div>
+        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
+          ${escapeHtml(pdf.title)}
+        </h3>
         
         <div class="flex items-center justify-between text-xs text-gray-500 mt-3">
           <div class="flex items-center gap-2 flex-wrap">
@@ -1731,7 +1722,6 @@ function showAllMobileCards() {
 // Render article card (for infographic articles)
 // Render infographic article card (from new unified API)
 function renderInfographicCard(article) {
-  const isNew = isWithin7Days(article.created_at)
   const categoryName = article.category_name || 'その他'
   
   return `
@@ -1742,12 +1732,9 @@ function renderInfographicCard(article) {
       data-article-id="${article.id}"
     >
       <div class="p-4">
-        <div class="flex items-start justify-between gap-2 mb-2">
-          <h3 class="text-sm font-bold text-gray-800 leading-snug break-words flex-1">
-            ${escapeHtml(article.title)}
-          </h3>
-          ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300 flex-shrink-0">NEW</span>' : ''}
-        </div>
+        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
+          ${escapeHtml(article.title)}
+        </h3>
         
         <!-- Article Badge with Pink Theme -->
         <div class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-xs font-bold rounded shadow-md mb-2">
@@ -1767,7 +1754,6 @@ function renderInfographicCard(article) {
 }
 
 function renderArticleCard(article) {
-  const isNew = isWithin7Days(article.created_at)
   const categoryName = article.category_name || 'その他'
   
   return `
@@ -1777,12 +1763,6 @@ function renderArticleCard(article) {
       style="position: relative;"
       data-article-id="${article.id}"
     >
-      ${isNew ? `
-        <div class="absolute top-2 left-2 z-10 px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300">
-          NEW
-        </div>
-      ` : ''}
-      
       <!-- Article Badge -->
       <div class="absolute top-2 right-2 z-10 px-2 py-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-xs font-bold rounded shadow-md flex items-center gap-1">
         <i class="fas fa-newspaper"></i>
@@ -1827,15 +1807,6 @@ function renderArticleCard(article) {
 }
 
 // Check if date is within 7 days
-function isWithin7Days(dateString) {
-  if (!dateString) return false
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffTime = Math.abs(now - date)
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  return diffDays <= 7
-}
-
 // Long press detection for multi-select
 window.window.longPressTimer = window.window.longPressTimer || null
 window.window.longPressTriggered = window.window.longPressTriggered || false
