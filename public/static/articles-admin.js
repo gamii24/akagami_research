@@ -442,7 +442,7 @@ function showArticleForm(articleId = null) {
           
           <!-- Quill Editor (Visual Mode) -->
           <div id="visual-editor-container" class="border-2 border-gray-600 rounded-lg overflow-hidden" style="height: 500px; ${articlesState.editorMode === 'visual' ? '' : 'display: none;'}">
-            <div id="quill-editor" style="height: calc(100% - 42px); background: white;"></div>
+            <div id="quill-editor" style="height: 100%; background: white;"></div>
           </div>
           
           <!-- Monaco Editor (Code Mode) -->
@@ -541,6 +541,7 @@ function initArticleEditor(content) {
   // Initialize Quill Editor (Visual Mode)
   const quillContainer = document.getElementById('quill-editor')
   if (quillContainer) {
+    console.log('Initializing Quill editor...', { content })
     articlesState.quillEditor = new Quill('#quill-editor', {
       theme: 'snow',
       modules: {
@@ -559,10 +560,16 @@ function initArticleEditor(content) {
       placeholder: '記事の内容を入力してください...'
     })
     
+    // Ensure editor is enabled
+    articlesState.quillEditor.enable(true)
+    console.log('Quill editor initialized:', articlesState.quillEditor)
+    
     // Set initial content
     if (content) {
       articlesState.quillEditor.root.innerHTML = content
     }
+  } else {
+    console.error('Quill editor container not found!')
   }
   
   // Initialize Monaco Editor (Code Mode)

@@ -313,3 +313,46 @@ body.admin-dark {
 .admin-dark .text-red-500 i {
   color: var(--accent-color) !important;
 }
+
+/* Quill Editor Styles */
+#quill-editor .ql-toolbar {
+  background: white;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#quill-editor .ql-container {
+  border: none;
+  font-size: 14px;
+  height: calc(100% - 42px);
+}
+
+#quill-editor .ql-editor {
+  min-height: 400px;
+  color: #1f2937 !important;
+  background: white;
+}
+
+#quill-editor .ql-editor p,
+#quill-editor .ql-editor h1,
+#quill-editor .ql-editor h2,
+#quill-editor .ql-editor h3,
+#quill-editor .ql-editor h4,
+#quill-editor .ql-editor h5,
+#quill-editor .ql-editor h6,
+#quill-editor .ql-editor ul,
+#quill-editor .ql-editor ol,
+#quill-editor .ql-editor li,
+#quill-editor .ql-editor span {
+  color: #1f2937 !important;
+}
+
+#quill-editor .ql-editor.ql-blank::before {
+  color: #9ca3af !important;
+  font-style: italic;
+}
+
+/* Ensure Quill editor is editable */
+#quill-editor .ql-editor {
+  cursor: text;
+}
