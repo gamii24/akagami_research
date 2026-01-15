@@ -2213,6 +2213,212 @@ app.delete('/api/admin/instagram-faq/:id', requireAuth, async (c) => {
   }
 })
 
+// ============================================
+// Infographic Articles API
+// ============================================
+
+// Get all published articles (public)
+app.get('/api/articles', async (c) => {
+  try {
+    const categoryId = c.req.query('category')
+    
+    let query = `
+      SELECT 
+        ia.id, ia.title, ia.slug, ia.category_id, ia.thumbnail_url, 
+        ia.summary, ia.sort_order, ia.created_at, ia.updated_at,
+        cat.name as category_name
+      FROM infographic_articles ia
+      LEFT JOIN categories cat ON ia.category_id = cat.id
+      WHERE ia.published = 1
+    `
+    
+    if (categoryId) {
+      query += ` AND ia.category_id = ?`
+    }
+    
+    query += ` ORDER BY ia.sort_order ASC, ia.created_at DESC`
+    
+    const stmt = categoryId 
+      ? c.env.DB.prepare(query).bind(categoryId)
+      : c.env.DB.prepare(query)
+    
+    const { results } = await stmt.all()
+    
+    return c.json(results)
+  } catch (error) {
+    console.error('Failed to fetch articles:', error)
+    return c.json({ error: 'Failed to fetch articles' }, 500)
+  }
+})
+
+// Get single article by slug (public)
+app.get('/api/articles/:slug', async (c) => {
+  try {
+    const slug = c.req.param('slug')
+    
+    const { results } = await c.env.DB.prepare(`
+      SELECT 
+        ia.id, ia.title, ia.slug, ia.category_id, ia.thumbnail_url,
+        ia.content, ia.summary, ia.created_at, ia.updated_at,
+        cat.name as category_name
+      FROM infographic_articles ia
+      LEFT JOIN categories cat ON ia.category_id = cat.id
+      WHERE ia.slug = ? AND ia.published = 1
+    `).bind(slug).all()
+    
+    if (!results || results.length === 0) {
+      return c.json({ error: 'Article not found' }, 404)
+    }
+    
+    return c.json(results[0])
+  } catch (error) {
+    console.error('Failed to fetch article:', error)
+    return c.json({ error: 'Failed to fetch article' }, 500)
+  }
+})
+
+// Get all articles for admin (including unpublished)
+app.get('/api/admin/articles', requireAuth, async (c) => {
+  try {
+    const { results } = await c.env.DB.prepare(`
+      SELECT 
+        ia.id, ia.title, ia.slug, ia.category_id, ia.thumbnail_url,
+        ia.summary, ia.published, ia.sort_order, ia.created_at, ia.updated_at,
+        cat.name as category_name
+      FROM infographic_articles ia
+      LEFT JOIN categories cat ON ia.category_id = cat.id
+      ORDER BY ia.sort_order ASC, ia.created_at DESC
+    `).all()
+    
+    return c.json(results)
+  } catch (error) {
+    console.error('Failed to fetch articles:', error)
+    return c.json({ error: 'Failed to fetch articles' }, 500)
+  }
+})
+
+// Get single article by ID for admin
+app.get('/api/admin/articles/:id', requireAuth, async (c) => {
+  try {
+    const id = c.req.param('id')
+    
+    const { results } = await c.env.DB.prepare(`
+      SELECT * FROM infographic_articles WHERE id = ?
+    `).bind(id).all()
+    
+    if (!results || results.length === 0) {
+      return c.json({ error: 'Article not found' }, 404)
+    }
+    
+    return c.json(results[0])
+  } catch (error) {
+    console.error('Failed to fetch article:', error)
+    return c.json({ error: 'Failed to fetch article' }, 500)
+  }
+})
+
+// Create new article
+app.post('/api/admin/articles', requireAuth, async (c) => {
+  try {
+    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order } = await c.req.json()
+    
+    if (!title || !slug || !content) {
+      return c.json({ error: 'Title, slug, and content are required' }, 400)
+    }
+    
+    const result = await c.env.DB.prepare(`
+      INSERT INTO infographic_articles 
+      (title, slug, category_id, thumbnail_url, content, summary, published, sort_order)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `).bind(
+      title,
+      slug,
+      category_id || null,
+      thumbnail_url || '',
+      content,
+      summary || '',
+      published !== undefined ? (published ? 1 : 0) : 0,
+      sort_order || 0
+    ).run()
+    
+    return c.json({ 
+      success: true,
+      id: result.meta.last_row_id,
+      message: 'Article created successfully'
+    })
+  } catch (error) {
+    console.error('Failed to create article:', error)
+    
+    if (error instanceof Error && error.message.includes('UNIQUE constraint')) {
+      return c.json({ error: 'Slug already exists. Please use a different slug.' }, 400)
+    }
+    
+    return c.json({ error: 'Failed to create article' }, 500)
+  }
+})
+
+// Update article
+app.put('/api/admin/articles/:id', requireAuth, async (c) => {
+  try {
+    const id = c.req.param('id')
+    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order } = await c.req.json()
+    
+    if (!title || !slug || !content) {
+      return c.json({ error: 'Title, slug, and content are required' }, 400)
+    }
+    
+    await c.env.DB.prepare(`
+      UPDATE infographic_articles 
+      SET title = ?, slug = ?, category_id = ?, thumbnail_url = ?, 
+          content = ?, summary = ?, published = ?, sort_order = ?,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).bind(
+      title,
+      slug,
+      category_id || null,
+      thumbnail_url || '',
+      content,
+      summary || '',
+      published !== undefined ? (published ? 1 : 0) : 0,
+      sort_order || 0,
+      id
+    ).run()
+    
+    return c.json({ 
+      success: true,
+      message: 'Article updated successfully'
+    })
+  } catch (error) {
+    console.error('Failed to update article:', error)
+    
+    if (error instanceof Error && error.message.includes('UNIQUE constraint')) {
+      return c.json({ error: 'Slug already exists. Please use a different slug.' }, 400)
+    }
+    
+    return c.json({ error: 'Failed to update article' }, 500)
+  }
+})
+
+// Delete article
+app.delete('/api/admin/articles/:id', requireAuth, async (c) => {
+  try {
+    const id = c.req.param('id')
+    
+    await c.env.DB.prepare(`
+      DELETE FROM infographic_articles WHERE id = ?
+    `).bind(id).run()
+    
+    return c.json({ 
+      success: true,
+      message: 'Article deleted successfully'
+    })
+  } catch (error) {
+    console.error('Failed to delete article:', error)
+    return c.json({ error: 'Failed to delete article' }, 500)
+  }
+})
+
 // Google Suggest Proxy API (for question finder)
 app.get('/api/suggest', async (c) => {
   const keyword = c.req.query('q')
@@ -7405,6 +7611,182 @@ app.get('/admin/news', (c) => {
       </body>
     </html>
   )
+})
+
+// Article Management Page
+app.get('/admin/articles', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>インフォグラフィック記事管理 - Akagami.net</title>
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JPMZ82RMGG');
+          `
+        }} />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    secondary: '#e75556',
+                    accent: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                    light: '#ffffff',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+        <link href="/static/admin-dark.css" rel="stylesheet" />
+        {/* Monaco Editor */}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css" />
+      </head>
+      <body class="admin-dark bg-darker">
+        <div id="articles-admin-app">
+          <div class="text-center py-12 text-gray-300">
+            <i class="fas fa-spinner fa-spin text-4xl mb-4 text-primary"></i>
+            <p>読み込み中...</p>
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/utils.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+        <script src="/static/articles-admin.js?v=2026011501"></script>
+      </body>
+    </html>
+  )
+})
+
+// Infographic Article Display Page
+app.get('/article/:slug', async (c) => {
+  try {
+    const slug = c.req.param('slug')
+    
+    // Fetch article data
+    const { results } = await c.env.DB.prepare(`
+      SELECT 
+        ia.id, ia.title, ia.slug, ia.category_id, ia.content,
+        ia.summary, ia.created_at, ia.updated_at,
+        cat.name as category_name
+      FROM infographic_articles ia
+      LEFT JOIN categories cat ON ia.category_id = cat.id
+      WHERE ia.slug = ? AND ia.published = 1
+    `).bind(slug).all()
+    
+    if (!results || results.length === 0) {
+      return c.notFound()
+    }
+    
+    const article = results[0]
+    
+    return c.html(
+      <html lang="ja">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>{article.title} - Akagami.net</title>
+          <meta name="description" content={article.summary || article.title} />
+          
+          {/* OGP Tags */}
+          <meta property="og:title" content={`${article.title} - Akagami.net`} />
+          <meta property="og:description" content={article.summary || article.title} />
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content={`https://akagami.net/article/${slug}`} />
+          <meta property="og:site_name" content="Akagami.net" />
+          
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={article.title} />
+          <meta name="twitter:description" content={article.summary || article.title} />
+          
+          {/* Google Analytics */}
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-JPMZ82RMGG');
+            `
+          }} />
+          
+          <link rel="stylesheet" href="/static/style.css" />
+        </head>
+        <body class="bg-gray-50">
+          {/* Header */}
+          <header class="bg-primary shadow-lg sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 py-3">
+              <div class="flex items-center justify-between">
+                <a href="/" class="hover:opacity-80 transition-opacity">
+                  <h1 class="text-xl font-bold text-white tracking-wide">Akagami.net</h1>
+                </a>
+                <button 
+                  onclick="toggleMobileMenu()"
+                  class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+                  aria-label="メニューを開く"
+                >
+                  <i class="fas fa-bars text-2xl"></i>
+                </button>
+              </div>
+            </div>
+          </header>
+          
+          {/* Sidebar Overlay */}
+          <div 
+            id="sidebar-overlay" 
+            class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"
+            onclick="toggleMobileMenu()"
+          ></div>
+          
+          {/* Main Content with Sidebar */}
+          <main class="max-w-7xl mx-auto px-4 py-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Article Content */}
+              <div class="lg:col-span-3 order-2 lg:order-1">
+                {/* Back Button */}
+                <div class="mb-4">
+                  <a href="/" class="inline-flex items-center gap-2 text-primary hover:underline">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>トップページへ戻る</span>
+                  </a>
+                </div>
+                
+                {/* Article Content - Raw HTML */}
+                <div id="article-content" dangerouslySetInnerHTML={{ __html: article.content }}></div>
+              </div>
+              
+              {/* Sidebar - Same as homepage */}
+              <CommonSidebar />
+            </div>
+          </main>
+          
+          <script src="/static/utils.js"></script>
+          <script src="/static/auth.js"></script>
+          <script src="/static/app.js"></script>
+        </body>
+      </html>
+    )
+  } catch (error) {
+    console.error('Failed to load article:', error)
+    return c.notFound()
+  }
 })
 
 // 404 Not Found Page

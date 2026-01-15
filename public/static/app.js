@@ -1,6 +1,7 @@
 // State management
 let state = {
   pdfs: [],
+  articles: [], // Infographic articles
   categories: [],
   tags: [],
   selectedCategory: null,
@@ -396,13 +397,16 @@ async function initApp() {
   // Show skeleton for PDF area only
   showSkeletonScreen()
   
-  // Phase 2: Load PDFs in background (can be slower)
-  await loadAllPdfsOnce()
+  // Phase 2: Load PDFs and articles in background (can be slower)
+  await Promise.all([
+    loadAllPdfsOnce(),
+    loadArticles()
+  ])
   
   // Re-render category filter with counts
   renderCategoryFilter()
   
-  // Render PDF list
+  // Render PDF list (includes articles)
   renderPDFList()
   
   // Show welcome message for first-time visitors (after everything is ready)
@@ -477,6 +481,16 @@ async function loadAllPdfsOnce() {
     // Set initial PDFs for display
     applyFiltersFromAllPdfs()
   } catch (error) {
+  }
+}
+
+// Load published articles
+async function loadArticles() {
+  try {
+    const response = await fetch('/api/articles')
+    state.articles = await response.json()
+  } catch (error) {
+    console.error('Failed to load articles:', error)
   }
 }
 
