@@ -5,8 +5,14 @@
   "pages_build_output_dir": "./dist",
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "akagami-research-production",
+      "database_id": "local-db"
+    }
   ]
-  // Note: D1 bindings are configured in Cloudflare Dashboard
   // Note: Environment variables (JWT_SECRET, ADMIN_PASSWORD, RESEND_API_KEY) are configured in:
   // - Local development: .dev.vars file
   // - Production: Cloudflare Pages dashboard or `wrangler pages secret put` command
