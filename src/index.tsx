@@ -6734,13 +6734,16 @@ app.get('/infographics', async (c) => {
             {/* Content Area */}
             <div class="lg:col-span-3 order-1 lg:order-2">
               {/* Page Header */}
-              <div class="mb-6">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
-                  <i class="fas fa-chart-bar mr-3 text-pink-600"></i>
-                  インフォグラフィック記事
+              <div class="mb-8 text-center lg:text-left">
+                <h1 class="text-4xl font-bold text-gray-800 mb-3 flex items-center justify-center lg:justify-start">
+                  <i class="fas fa-chart-bar mr-3 text-pink-600 text-5xl"></i>
+                  <span>インフォグラフィック記事</span>
                 </h1>
-                <p class="text-gray-600">
-                  データで見るSNSマーケティング・生成AIの記事一覧（全{articles.length}件）
+                <p class="text-lg text-gray-600 mb-2">
+                  データで見るSNSマーケティング・生成AIの最新トレンド
+                </p>
+                <p class="text-sm text-pink-600 font-semibold">
+                  全{articles.length}件の記事
                 </p>
               </div>
 
@@ -6752,52 +6755,41 @@ app.get('/infographics', async (c) => {
                       href={`/article/${article.slug}`}
                       class="infographic-card bg-white hover:bg-pink-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 overflow-hidden border-2 border-pink-400 group"
                     >
-                      {/* Thumbnail */}
-                      {article.thumbnail_url ? (
-                        <div class="aspect-video w-full overflow-hidden bg-gray-100">
-                          <img
-                            src={article.thumbnail_url}
-                            alt={article.title}
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                            loading="lazy"
-                          />
-                        </div>
-                      ) : (
-                        <div class="aspect-video w-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
-                          <i class="fas fa-chart-bar text-6xl text-pink-400"></i>
-                        </div>
-                      )}
+                      {/* Icon Header - No Thumbnail */}
+                      <div class="aspect-video w-full bg-gradient-to-br from-pink-100 via-pink-200 to-pink-300 flex items-center justify-center">
+                        <i class="fas fa-chart-bar text-7xl text-pink-500 group-hover:scale-110 transition-transform duration-300"></i>
+                      </div>
 
                       {/* Content */}
-                      <div class="p-4">
+                      <div class="p-5">
                         {/* Badge */}
-                        <div class="mb-2">
-                          <span class="inline-block px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-pink-500 to-pink-600 rounded-full">
-                            <i class="fas fa-chart-bar mr-1"></i>
-                            infographic
+                        <div class="mb-3">
+                          <span class="inline-block px-3 py-1 text-xs font-bold text-white bg-gradient-to-r from-pink-500 via-pink-600 to-pink-700 rounded-full shadow-sm">
+                            <i class="fas fa-chart-line mr-1"></i>
+                            INFOGRAPHIC
                           </span>
                         </div>
 
                         {/* Title */}
-                        <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-pink-600 transition-colors">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-pink-600 transition-colors leading-snug">
                           {article.title}
                         </h3>
 
                         {/* Summary */}
                         {article.summary && (
-                          <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                          <p class="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
                             {article.summary}
                           </p>
                         )}
 
                         {/* Meta */}
-                        <div class="flex items-center justify-between text-xs text-gray-500">
-                          <span>
-                            <i class="fas fa-calendar-alt mr-1"></i>
-                            {new Date(article.created_at).toLocaleDateString('ja-JP')}
+                        <div class="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-100">
+                          <span class="flex items-center">
+                            <i class="fas fa-calendar-alt mr-1.5 text-pink-500"></i>
+                            {new Date(article.created_at).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })}
                           </span>
                           {article.category_name && (
-                            <span class="px-2 py-1 bg-gray-100 rounded-full">
+                            <span class="px-2.5 py-1 bg-pink-50 text-pink-600 rounded-full font-semibold">
                               {article.category_name}
                             </span>
                           )}
@@ -6806,9 +6798,12 @@ app.get('/infographics', async (c) => {
                     </a>
                   ))
                 ) : (
-                  <div class="col-span-full text-center py-12">
-                    <i class="fas fa-chart-bar text-6xl text-gray-300 mb-4"></i>
-                    <p class="text-gray-600 text-lg">まだインフォグラフィック記事がありません</p>
+                  <div class="col-span-full text-center py-16">
+                    <div class="inline-block p-8 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full mb-6">
+                      <i class="fas fa-chart-bar text-7xl text-pink-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-700 mb-2">インフォグラフィック記事はまだありません</h3>
+                    <p class="text-gray-500">新しい記事が公開されるまでお待ちください</p>
                   </div>
                 )}
               </div>
