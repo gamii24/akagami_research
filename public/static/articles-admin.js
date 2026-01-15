@@ -513,9 +513,14 @@ async function saveArticle(event) {
     const url = isEdit ? `/api/admin/articles/${articlesState.editingArticle.id}` : '/api/admin/articles'
     const method = isEdit ? 'put' : 'post'
     
-    await axios[method](url, articleData, { withCredentials: true })
+    const response = await axios[method](url, articleData, { withCredentials: true })
     
     showToast(isEdit ? '記事を更新しました' : '記事を作成しました', 'success')
+    
+    // Open article page in new tab
+    const articleUrl = `/article/${encodeURIComponent(articleData.slug)}`
+    window.open(articleUrl, '_blank')
+    
     closeModal()
     await loadArticles()
   } catch (error) {
