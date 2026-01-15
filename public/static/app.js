@@ -1026,19 +1026,59 @@ function renderPDFList() {
     `
   }
   
-  // Determine how many PDFs to show on mobile
+  // Combine PDFs and articles into a unified list
+  const combinedItems = [
+    ...state.pdfs.map(pdf => ({ type: 'pdf', data: pdf, created_at: pdf.created_at })),
+    ...state.articles
+      .filter(article => article.published)
+      .filter(article => {
+        // Apply category filter
+        if (state.selectedCategory && article.category_id !== state.selectedCategory) {
+          return false
+        }
+        // Apply search filter
+        if (state.searchQuery) {
+          const query = state.searchQuery.toLowerCase()
+          const title = (article.title || '').toLowerCase()
+          const summary = (article.summary || '').toLowerCase()
+          return title.includes(query) || summary.includes(query)
+        }
+        return true
+      })
+      .map(article => ({ type: 'article', data: article, created_at: article.created_at }))
+  ]
+  
+  // Sort combined items by created_at
+  combinedItems.sort((a, b) => {
+    if (state.sortBy === 'newest') {
+      return new Date(b.created_at) - new Date(a.created_at)
+    } else if (state.sortBy === 'oldest') {
+      return new Date(a.created_at) - new Date(b.created_at)
+    }
+    // For 'popular', keep original order (PDFs first, then articles)
+    return 0
+  })
+  
+  // Determine how many items to show on mobile
   const isMobile = window.innerWidth < 1024 // lg breakpoint
   const isTopPage = !state.selectedCategory && state.selectedTags.length === 0 && !state.searchQuery && !state.showOnlyFavorites && !state.showDownloadHistory
-  let pdfsToShow = state.pdfs
+  let itemsToShow = combinedItems
   let hasMore = false
   
   // On mobile top page, limit to 15 cards unless "show all" is clicked
-  if (isMobile && isTopPage && !state.showAllMobile && state.pdfs.length > 15) {
-    pdfsToShow = state.pdfs.slice(0, 15)
+  if (isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 15) {
+    itemsToShow = combinedItems.slice(0, 15)
     hasMore = true
   }
   
-  html += pdfsToShow.map((pdf, index) => {
+  html += itemsToShow.map((item, index) => {
+    // Render article card
+    if (item.type === 'article') {
+      return renderArticleCard(item.data)
+    }
+    
+    // Render PDF card
+    const pdf = item.data
     // Only use Google Drive URL
     const downloadUrl = pdf.google_drive_url || ''
     const downloaded = isDownloaded(pdf.id)
@@ -1678,6 +1718,67 @@ function showAllMobileCards() {
 }
 
 // Utility functions are now in utils.js
+
+// Render article card (for infographic articles)
+function renderArticleCard(article) {
+  const isNew = isWithin7Days(article.created_at)
+  const categoryName = article.category_name || 'その他'
+  
+  return `
+    <a 
+      href="/article/${article.slug}"
+      class="pdf-card bg-white hover:bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-200 cursor-pointer block"
+      style="position: relative;"
+      data-article-id="${article.id}"
+    >
+      ${isNew ? `
+        <div class="absolute top-2 left-2 z-10 px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300">
+          NEW
+        </div>
+      ` : ''}
+      
+      <!-- Article Badge -->
+      <div class="absolute top-2 right-2 z-10 px-2 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded shadow-md flex items-center gap-1">
+        <i class="fas fa-newspaper"></i>
+        <span>記事</span>
+      </div>
+      
+      ${article.thumbnail_url ? `
+        <div class="aspect-video overflow-hidden bg-gray-100">
+          <img 
+            src="${article.thumbnail_url}" 
+            alt="${escapeHtml(article.title)}"
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      ` : `
+        <div class="aspect-video bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+          <i class="fas fa-newspaper text-6xl text-purple-300"></i>
+        </div>
+      `}
+      
+      <div class="p-4">
+        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
+          ${escapeHtml(article.title)}
+        </h3>
+        
+        ${article.summary ? `
+          <p class="text-xs text-gray-600 line-clamp-2 mb-3">
+            ${escapeHtml(article.summary)}
+          </p>
+        ` : ''}
+        
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <div class="flex items-center gap-2">
+            <span><i class="fas fa-calendar mr-1"></i>${formatDate(article.created_at)}</span>
+            ${categoryName ? `<span><i class="fas fa-folder mr-1"></i>${escapeHtml(categoryName)}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    </a>
+  `
+}
 
 // Check if date is within 7 days
 function isWithin7Days(dateString) {
