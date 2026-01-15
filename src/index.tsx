@@ -6317,6 +6317,7 @@ app.get('/news', async (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
+        <script src="/static/app.js"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
             let newsData = [];
@@ -6596,6 +6597,25 @@ app.get('/news', async (c) => {
             async function init() {
               console.log('[NEWS] Initializing news page...');
               await checkAuth();
+              
+              // Initialize categories in sidebar (from app.js)
+              if (typeof loadCategories === 'function' && typeof renderCategoryFilter === 'function') {
+                console.log('[NEWS] Loading categories for sidebar...');
+                
+                // Load categories and tags together
+                await Promise.all([
+                  loadCategories(),
+                  typeof loadTags === 'function' ? loadTags() : Promise.resolve(),
+                  typeof loadAllPdfsOnce === 'function' ? loadAllPdfsOnce() : Promise.resolve()
+                ]);
+                
+                console.log('[NEWS] Categories loaded:', typeof state !== 'undefined' ? state.categories?.length : 'state undefined');
+                
+                // Render categories only once, after all data is loaded
+                renderCategoryFilter();
+                console.log('[NEWS] renderCategoryFilter() called');
+              }
+              
               await loadNews();
             }
             
