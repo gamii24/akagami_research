@@ -6624,6 +6624,12 @@ app.get('/news', async (c) => {
             }
           `
         }} />
+        
+        {/* External Scripts */}
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script defer src="/static/utils.js"></script>
+        <script defer src="/static/auth.js"></script>
+        <script defer src="/static/app.js"></script>
       </body>
     </html>
   )
