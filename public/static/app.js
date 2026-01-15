@@ -1736,10 +1736,10 @@ function renderInfographicCard(article) {
           ${escapeHtml(article.title)}
         </h3>
         
-        <!-- Article Badge with Pink Theme -->
-        <div class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-xs font-bold rounded shadow-md mb-2">
-          <i class="fas fa-newspaper"></i>
-          <span>記事</span>
+        <!-- Infographic Badge -->
+        <div class="inline-flex items-center gap-1 px-2 py-1 text-white text-xs font-bold rounded shadow-md mb-2" style="background-color: #E75556;">
+          <i class="fas fa-chart-bar"></i>
+          <span>infographic</span>
         </div>
         
         <div class="flex items-center justify-between text-xs text-gray-500 mt-3">
