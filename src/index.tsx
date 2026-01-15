@@ -6818,8 +6818,6 @@ app.get('/infographics', async (c) => {
             <CommonSidebar />
           </div>
         </main>
-
-        <CommonFooter />
       </div>,
       {
         title: 'インフォグラフィック記事一覧 - Akagami.net',
