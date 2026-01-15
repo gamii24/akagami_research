@@ -6409,7 +6409,7 @@ app.get('/news', async (c) => {
               }
               
               console.log('[NEWS] Generating HTML for', newsData.length, 'items');
-              newsListEl.innerHTML = newsData.map((news, index) => {
+              const htmlContent = newsData.map((news, index) => {
                 const date = new Date(news.published_at);
                 const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
                 const likesCount = parseInt(news.likes_count) || 0;
@@ -6486,7 +6486,9 @@ app.get('/news', async (c) => {
                   </article>
                 \`;
               }).join('');
-              console.log('[NEWS] Render complete!');
+              
+              newsListEl.innerHTML = htmlContent;
+              console.log('[NEWS] Render complete! HTML length:', htmlContent.length);
             }
             
             // Toggle summary expansion
