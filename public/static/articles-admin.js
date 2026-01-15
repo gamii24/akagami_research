@@ -10,6 +10,19 @@ let articlesState = {
 
 // Initialize
 async function init() {
+  // Check authentication first
+  try {
+    const authResponse = await axios.get('/api/user/me', { withCredentials: true })
+    if (!authResponse.data.authenticated) {
+      window.location.href = '/admin'
+      return
+    }
+  } catch (error) {
+    console.error('Authentication check failed:', error)
+    window.location.href = '/admin'
+    return
+  }
+  
   await loadCategories()
   await loadArticles()
   initMonaco()
@@ -29,10 +42,20 @@ async function loadCategories() {
 async function loadArticles() {
   try {
     const response = await axios.get('/api/admin/articles', { withCredentials: true })
-    articlesState.articles = response.data
+    articlesState.articles = response.data || []
     renderArticleList()
   } catch (error) {
     console.error('Failed to load articles:', error)
+    
+    // If 401, redirect to admin login
+    if (error.response && error.response.status === 401) {
+      window.location.href = '/admin'
+      return
+    }
+    
+    // Otherwise, show error and render empty list
+    articlesState.articles = []
+    renderArticleList()
     showToast('記事の読み込みに失敗しました', 'error')
   }
 }
@@ -562,6 +585,12 @@ function showToast(message, type = 'info') {
   const toast = document.getElementById('toast')
   const toastMessage = document.getElementById('toast-message')
   
+  // Check if elements exist
+  if (!toast || !toastMessage) {
+    console.warn('Toast elements not found, message:', message)
+    return
+  }
+  
   toastMessage.textContent = message
   
   const bgColors = {
@@ -570,7 +599,10 @@ function showToast(message, type = 'info') {
     info: 'bg-blue-600'
   }
   
-  toast.querySelector('.bg-gray-800').className = `${bgColors[type] || bgColors.info} text-white px-6 py-3 rounded-lg shadow-xl`
+  const toastContent = toast.querySelector('.bg-gray-800')
+  if (toastContent) {
+    toastContent.className = `${bgColors[type] || bgColors.info} text-white px-6 py-3 rounded-lg shadow-xl`
+  }
   
   toast.classList.remove('translate-y-20', 'opacity-0')
   toast.classList.add('translate-y-0', 'opacity-100')
