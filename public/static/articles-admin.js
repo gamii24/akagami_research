@@ -472,10 +472,10 @@ function showArticleForm(articleId = null) {
   modal.querySelector('.bg-gray-800').innerHTML = modalContent
   modal.classList.remove('hidden')
   
-  // Initialize editors
+  // Initialize editors with longer delay to ensure DOM is ready
   setTimeout(() => {
     initArticleEditor(article ? article.content : '')
-  }, 100)
+  }, 300)
 }
 
 // Switch between visual and code editor modes
@@ -538,35 +538,57 @@ function switchEditorMode(mode) {
 
 // Initialize Monaco Editor for article content
 function initArticleEditor(content) {
+  // Check if Quill is loaded
+  if (typeof Quill === 'undefined') {
+    console.error('Quill is not loaded!')
+    setTimeout(() => initArticleEditor(content), 500)
+    return
+  }
+  
   // Initialize Quill Editor (Visual Mode)
   const quillContainer = document.getElementById('quill-editor')
   if (quillContainer) {
     console.log('Initializing Quill editor...', { content })
-    articlesState.quillEditor = new Quill('#quill-editor', {
-      theme: 'snow',
-      modules: {
-        toolbar: [
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-          [{ 'size': ['small', false, 'large', 'huge'] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ 'color': [] }, { 'background': [] }],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          [{ 'align': [] }],
-          ['blockquote', 'code-block'],
-          ['link', 'image'],
-          ['clean']
-        ]
-      },
-      placeholder: '記事の内容を入力してください...'
-    })
     
-    // Ensure editor is enabled
-    articlesState.quillEditor.enable(true)
-    console.log('Quill editor initialized:', articlesState.quillEditor)
-    
-    // Set initial content
-    if (content) {
-      articlesState.quillEditor.root.innerHTML = content
+    try {
+      articlesState.quillEditor = new Quill('#quill-editor', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'align': [] }],
+            ['blockquote', 'code-block'],
+            ['link', 'image'],
+            ['clean']
+          ]
+        },
+        placeholder: '記事の内容を入力してください...'
+      })
+      
+      // Ensure editor is enabled
+      articlesState.quillEditor.enable(true)
+      console.log('Quill editor initialized successfully:', {
+        isEnabled: !articlesState.quillEditor.isEnabled || articlesState.quillEditor.isEnabled(),
+        editor: articlesState.quillEditor
+      })
+      
+      // Set initial content
+      if (content) {
+        articlesState.quillEditor.root.innerHTML = content
+      }
+      
+      // Focus the editor
+      setTimeout(() => {
+        if (articlesState.quillEditor) {
+          articlesState.quillEditor.focus()
+        }
+      }, 100)
+    } catch (error) {
+      console.error('Failed to initialize Quill:', error)
     }
   } else {
     console.error('Quill editor container not found!')
