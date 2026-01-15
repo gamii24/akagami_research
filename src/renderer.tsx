@@ -2,7 +2,7 @@ import { jsxRenderer } from 'hono/jsx-renderer'
 
 export const renderer = jsxRenderer(({ children, title, description, keywords, categoryName, categoryId }) => {
   // Default meta values
-  const pageTitle = title || "Akagami Research - SNSマーケティング・生成AI資料保管庫"
+  const pageTitle = title || "Akagami.net - SNSマーケティング・生成AI資料保管庫"
   const pageDescription = description || "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。"
   const pageKeywords = keywords || "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長"
   
@@ -12,7 +12,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Akagami Research",
+      "name": "Akagami.net",
       "description": "SNSマーケティング・生成AI資料保管庫",
       "url": "https://akagami.net/",
       "author": {
@@ -22,7 +22,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
       },
       "publisher": {
         "@type": "Organization",
-        "name": "Akagami Research",
+        "name": "Akagami.net",
         "logo": {
           "@type": "ImageObject",
           "url": "https://akagami.net/favicon-512.png"
@@ -71,7 +71,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
       },
       "isPartOf": {
         "@type": "WebSite",
-        "name": "Akagami Research",
+        "name": "Akagami.net",
         "url": "https://akagami.net/"
       },
       "inLanguage": "ja-JP"
@@ -109,11 +109,11 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         <meta property="og:description" content={pageDescription} />
         <meta property="og:image" content="https://akagami.net/og-image.webp" />
         <meta property="og:image:secure_url" content="https://akagami.net/og-image.webp" />
-        <meta property="og:image:type" content="image/webp" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Akagami Research - 毎朝のInstagramLIVEで使用したSNSのことを深掘りしたレポートが無料でGETできる" />
-        <meta property="og:site_name" content="Akagami Research" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1024" />
+        <meta property="og:image:height" content="538" />
+        <meta property="og:image:alt" content="Akagami.net - SNSマーケティング・生成AI資料保管庫" />
+        <meta property="og:site_name" content="Akagami.net" />
         <meta property="og:locale" content="ja_JP" />
         <meta property="og:locale:alternate" content="en_US" />
         
@@ -124,7 +124,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content="https://akagami.net/og-image.webp" />
-        <meta name="twitter:image:alt" content="Akagami Research - SNS資料保管庫" />
+        <meta name="twitter:image:alt" content="Akagami.net - SNS資料保管庫" />
         <meta name="twitter:creator" content="@akagami0124" />
         <meta name="twitter:domain" content="akagami.net" />
         
@@ -153,7 +153,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Akagami Research" />
+        <meta name="apple-mobile-web-app-title" content="Akagami.net" />
         
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>

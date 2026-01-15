@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test FAQ JS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="faq-app">Loading...</div>
+    
+    <script>
+    // Minimal test
+    let faqData = []
+    let currentCategory = 'instagram'
+    
+    async function testLoad() {
+        console.log('Starting load...')
+        try {
+            const response = await fetch('https://akagami.net/api/instagram-faq?category=instagram')
+            console.log('Response status:', response.status)
+            if (response.ok) {
+                faqData = await response.json()
+                console.log('Loaded FAQs:', faqData.length)
+                document.getElementById('faq-app').innerHTML = `<h1>Loaded ${faqData.length} FAQs!</h1>`
+            } else {
+                document.getElementById('faq-app').innerHTML = '<h1>Error loading FAQs</h1>'
+            }
+        } catch (error) {
+            console.error('Error:', error)
+            document.getElementById('faq-app').innerHTML = '<h1>Exception: ' + error.message + '</h1>'
+        }
+    }
+    
+    testLoad()
+    </script>
+</body>
+</html>

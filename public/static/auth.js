@@ -13,30 +13,41 @@ async function checkAuthStatus() {
       const data = await response.json()
       
       if (data.authenticated && data.user) {
-        state.isAuthenticated = true
-        state.user = data.user
+        // Check if state exists (for pages that use state)
+        if (typeof state !== 'undefined') {
+          state.isAuthenticated = true
+          state.user = data.user
+        }
         
         // Update UI immediately for fast menu display
         updateAuthUI()
         
-        // Sync local storage data to server (background)
-        syncLocalDataToServer().catch(err => console.error('Sync failed:', err))
+        // Sync local storage data to server (background) - only if state exists
+        if (typeof state !== 'undefined' && typeof syncLocalDataToServer !== 'undefined') {
+          syncLocalDataToServer().catch(err => console.error('Sync failed:', err))
+        }
         
-        // Load server data (background)
-        loadUserData().catch(err => console.error('Load user data failed:', err))
+        // Load server data (background) - only if function exists
+        if (typeof loadUserData !== 'undefined') {
+          loadUserData().catch(err => console.error('Load user data failed:', err))
+        }
         
         return true
       }
     }
     
-    state.isAuthenticated = false
-    state.user = null
+    // Check if state exists
+    if (typeof state !== 'undefined') {
+      state.isAuthenticated = false
+      state.user = null
+    }
     updateAuthUI()
     return false
   } catch (error) {
-    console.error('Auth check failed:', error)
-    state.isAuthenticated = false
-    state.user = null
+    if (typeof state !== 'undefined') {
+      state.isAuthenticated = false
+      state.user = null
+    }
     updateAuthUI()
     return false
   }
@@ -44,9 +55,14 @@ async function checkAuthStatus() {
 
 // Sync localStorage data to server after login
 async function syncLocalDataToServer() {
+  // Check if state exists
+  if (typeof state === 'undefined') {
+    return
+  }
+  
   try {
     // Sync downloaded PDFs
-    if (state.downloadedPdfs.size > 0) {
+    if (state.downloadedPdfs && state.downloadedPdfs.size > 0) {
       const pdfIds = Array.from(state.downloadedPdfs)
       await fetch('/api/user/downloads/bulk', {
         method: 'POST',
@@ -67,7 +83,6 @@ async function syncLocalDataToServer() {
       })
     }
   } catch (error) {
-    console.error('Failed to sync local data:', error)
   }
 }
 
@@ -103,7 +118,6 @@ async function loadUserData() {
     // Reload PDF list to reflect changes
     await loadPDFs()
   } catch (error) {
-    console.error('Failed to load user data:', error)
   }
 }
 
@@ -119,7 +133,7 @@ function updateAuthUI() {
       <div class="mb-4">
         <button 
           onclick="showMyPage()"
-          class="w-full px-4 py-6 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-base flex items-center justify-center gap-3 border border-gray-200 shadow-sm"
+          class="w-full px-4 py-5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-base flex items-center justify-center gap-3 border border-gray-200 shadow-sm"
         >
           ${state.user.profilePhotoUrl ? `
             <img src="${escapeHtml(state.user.profilePhotoUrl)}" 
@@ -149,6 +163,33 @@ function updateAuthUI() {
         <span>Login</span>
       </button>
     `
+  }
+  
+  // Update logout section at the bottom
+  updateLogoutSection()
+}
+
+// Update logout section
+function updateLogoutSection() {
+  const logoutSection = document.getElementById('logout-section')
+  
+  if (!logoutSection) return
+  
+  if (state.isAuthenticated && state.user) {
+    // Show logout button for authenticated users
+    logoutSection.innerHTML = `
+      <button 
+        onclick="if(confirm('ログアウトしますか？')) { handleLogout() }"
+        class="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 border border-gray-300"
+        aria-label="ログアウト"
+      >
+        <i class="fas fa-sign-out-alt"></i>
+        <span>ログアウト</span>
+      </button>
+    `
+  } else {
+    // Hide logout section for non-authenticated users
+    logoutSection.innerHTML = ''
   }
 }
 
@@ -276,8 +317,15 @@ async function handlePasswordLogin(event) {
       
       setTimeout(() => {
         closeAuthModal()
-        // Show success message
-        alert('ログインしました')
+        
+        // Redirect to mypage if on restricted pages
+        const currentPath = window.location.pathname
+        if (currentPath === '/sns-faq' || currentPath === '/question-finder') {
+          window.location.href = '/mypage'
+        } else {
+          // Show success message and reload for other pages
+          window.location.reload()
+        }
       }, 500)
     } else {
       submitBtn.disabled = false
@@ -286,7 +334,6 @@ async function handlePasswordLogin(event) {
       errorDiv.classList.remove('hidden')
     }
   } catch (error) {
-    console.error('Login error:', error)
     submitBtn.disabled = false
     submitBtn.innerHTML = originalBtnContent
     errorDiv.textContent = 'ログインに失敗しました。もう一度お試しください。'
@@ -347,8 +394,16 @@ async function handleRegister(event) {
       
       setTimeout(() => {
         closeAuthModal()
-        // Show success message
-        alert('会員登録が完了しました！\nマイページからプロフィール情報を追加できます。')
+        
+        // Redirect to mypage if on restricted pages
+        const currentPath = window.location.pathname
+        if (currentPath === '/sns-faq' || currentPath === '/question-finder') {
+          window.location.href = '/mypage'
+        } else {
+          // Show success message and reload for other pages
+          alert('会員登録が完了しました！\nマイページからプロフィール情報を追加できます。')
+          window.location.reload()
+        }
       }, 500)
     } else {
       submitBtn.disabled = false
@@ -357,7 +412,6 @@ async function handleRegister(event) {
       errorDiv.classList.remove('hidden')
     }
   } catch (error) {
-    console.error('Registration error:', error)
     submitBtn.disabled = false
     submitBtn.innerHTML = originalBtnContent
     errorDiv.textContent = '会員登録に失敗しました。もう一度お試しください。'
@@ -418,7 +472,6 @@ async function handleMagicLinkRequest(event) {
       errorDiv.classList.remove('hidden')
     }
   } catch (error) {
-    console.error('Magic link error:', error)
     submitBtn.disabled = false
     submitBtn.innerHTML = originalBtnContent
     errorDiv.textContent = 'ログインリンクの送信に失敗しました。もう一度お試しください。'
@@ -448,7 +501,6 @@ async function verifyMagicLink(token) {
       alert('ログインリンクが無効または期限切れです')
     }
   } catch (error) {
-    console.error('Magic link verification error:', error)
     alert('ログインに失敗しました')
   }
 }
@@ -472,7 +524,6 @@ async function handleLogout() {
       window.location.reload()
     }
   } catch (error) {
-    console.error('Logout error:', error)
     alert('ログアウトに失敗しました')
   }
 }

@@ -70,8 +70,11 @@ function calculateSNSScore(keyword) {
   return Math.max(0, Math.min(100, score))
 }
 
+// Note: app.js already provides the state object for auth compatibility
+// We use keywordCheckerState for local keyword-specific state
+
 // State管理
-const state = {
+const keywordCheckerState = {
   keywords: [],
   generatedKeywords: [],
   loading: false
@@ -79,16 +82,77 @@ const state = {
 
 // 初期化
 function initKeywordChecker() {
-  console.log('Keyword Checker initialized')
+  // Hide empty category and tag filters
+  const categoryFilter = document.getElementById('category-filter')
+  const tagFilter = document.getElementById('tag-filter')
+  if (categoryFilter && !categoryFilter.hasChildNodes()) {
+    categoryFilter.style.display = 'none'
+  }
+  if (tagFilter && !tagFilter.hasChildNodes()) {
+    tagFilter.style.display = 'none'
+  }
+  
+  // Immediately render page (don't wait for auth)
   renderKeywordCheckerPage()
+  
+  // Check authentication in background (non-blocking)
+  checkAuthStatus()
   
   // イベントリスナー設定
   document.getElementById('generate-btn')?.addEventListener('click', generateKeywords)
+  document.getElementById('generate-btn-mobile')?.addEventListener('click', generateKeywords)
   document.getElementById('keywords-input')?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       generateKeywords()
     }
   })
+}
+
+// Show login required page
+function showLoginRequiredPage() {
+  const app = document.getElementById('question-finder-app')
+  if (!app) return
+  
+  app.innerHTML = `
+    <div class="min-h-screen bg-gradient-to-br from-red-50 via-white to-pink-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center border-2 border-primary">
+        <div class="mb-6">
+          <i class="fas fa-lock text-6xl text-primary mb-4"></i>
+          <h2 class="text-2xl font-bold text-gray-800 mb-2">ログインが必要です</h2>
+          <p class="text-gray-600 mb-6">
+            キーワードチェック機能は会員限定です。<br>
+            ログインまたは会員登録してご利用ください。
+          </p>
+        </div>
+        
+        <div class="space-y-3">
+          <button 
+            onclick="showLoginModal()"
+            class="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <i class="fas fa-sign-in-alt"></i>
+            <span>ログイン</span>
+          </button>
+          
+          <button 
+            onclick="showRegisterModal()"
+            class="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <i class="fas fa-user-plus"></i>
+            <span>会員登録（無料）</span>
+          </button>
+          
+          <a 
+            href="/"
+            class="block w-full px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors"
+          >
+            <i class="fas fa-home mr-2"></i>
+            トップページに戻る
+          </a>
+        </div>
+      </div>
+    </div>
+  `
 }
 
 // ページレンダリング
@@ -132,30 +196,202 @@ function renderKeywordCheckerPage() {
         </div>
 
         <!-- 入力エリア -->
-        <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-gray-100">
-          <label class="block text-xs sm:text-sm font-bold text-gray-700 mb-3">
-            <i class="fas fa-keyboard mr-2 text-primary"></i>キーワードを入力
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg p-5 sm:p-8 mb-4 sm:mb-6 border-2 border-primary/20">
+          <label class="block text-base sm:text-xl font-bold text-gray-800 mb-4">
+            <i class="fas fa-keyboard mr-2 text-primary text-lg sm:text-2xl"></i>キーワードを入力
           </label>
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <input 
               type="text" 
               id="keywords-input" 
-              class="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-200 rounded-lg sm:rounded-xl focus:border-primary focus:outline-none transition-colors text-gray-800 text-sm sm:text-base"
+              class="flex-1 px-4 sm:px-6 py-4 sm:py-5 border-2 border-gray-300 rounded-xl focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-gray-800 text-base sm:text-lg font-medium placeholder:text-gray-400"
               placeholder="例：Instagram, ネイル"
+              style="height: 60px;"
             >
             <button 
               id="generate-btn"
-              class="w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-primary to-pink-500 text-white font-bold rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 whitespace-nowrap text-sm sm:text-base">
+              class="hidden sm:block px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-primary to-pink-500 text-white font-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 whitespace-nowrap text-base sm:text-lg"
+              style="min-height: 60px;">
               <i class="fas fa-search mr-2"></i>チェック
             </button>
           </div>
-          <p class="text-xs text-gray-500 mt-2">
+          <!-- Mobile Check Button (Below Input) -->
+          <button 
+            id="generate-btn-mobile"
+            class="sm:hidden w-full mt-3 px-6 py-4 bg-gradient-to-r from-primary to-pink-500 text-white font-bold rounded-xl hover:shadow-2xl transition-all duration-300 text-base"
+            style="min-height: 56px;">
+            <i class="fas fa-search mr-2"></i>チェック
+          </button>
+          <p class="text-sm text-gray-500 mt-3">
             <i class="fas fa-info-circle mr-1"></i>複数入力時はカンマ（,）区切り
           </p>
         </div>
 
         <!-- 結果エリア -->
         <div id="results-area"></div>
+
+        <!-- SNS運用のヒント -->
+        <div class="mt-8 space-y-6">
+          <!-- 一貫性の重要性 -->
+          <div class="bg-gradient-to-br from-pink-50 to-red-50 rounded-2xl shadow-lg p-6 border border-pink-100">
+            <div class="flex items-start gap-3 mb-4">
+              <div class="bg-white rounded-full p-3 shadow-md">
+                <i class="fas fa-sync-alt text-2xl text-primary"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">SNS運用における一貫性の重要性</h2>
+                <p class="text-sm text-gray-600">継続的な発信で信頼を築く</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 space-y-4">
+              <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">テーマの一貫性を保つ</h3>
+                  <p class="text-sm text-gray-600">あなたのアカウントが何の専門家なのかを明確にしましょう。「ネイルサロン経営者」「料理研究家」「育児アドバイザー」など、軸を決めることでフォロワーが期待する投稿内容が定まります。</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">投稿頻度の一貫性</h3>
+                  <p class="text-sm text-gray-600">週3回なら週3回、毎日なら毎日と、投稿リズムを一定に保つことでフォロワーの期待値をコントロールできます。不規則な投稿は「このアカウントは更新されているのか？」という不安を生みます。</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="fas fa-check-circle text-green-500 mt-1 flex-shrink-0"></i>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">トーン＆マナーの統一</h3>
+                  <p class="text-sm text-gray-600">「です・ます調」か「だ・である調」か、絵文字を使うか使わないか、丁寧語かフランクな口調か。文体やビジュアルの雰囲気を統一することで、ブランドイメージが確立されます。</p>
+                </div>
+              </div>
+              <div class="bg-pink-50 rounded-lg p-4 mt-4">
+                <p class="text-sm text-gray-700">
+                  <i class="fas fa-quote-left text-pink-400 mr-2"></i>
+                  <strong>赤髪Tips:</strong> 一貫性があると「このアカウントは信頼できる」という印象を与え、フォロワーが離脱しにくくなります。投稿ネタに困ったときこそ、軸となるテーマに立ち返りましょう。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- キーワードから投稿を考えるポイント -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-lg p-6 border border-blue-100">
+            <div class="flex items-start gap-3 mb-4">
+              <div class="bg-white rounded-full p-3 shadow-md">
+                <i class="fas fa-lightbulb text-2xl text-blue-500"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">キーワードから投稿を考えるポイント</h2>
+                <p class="text-sm text-gray-600">検索データを投稿ネタに変換する方法</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-blue-600">1</div>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">「〇〇 おすすめ」系キーワード → ランキング投稿</h3>
+                  <p class="text-sm text-gray-600">「ネイル おすすめ」なら「今月おすすめのネイルデザインBEST5」として画像カルーセルで紹介。視覚的に分かりやすく、保存されやすい投稿になります。</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-blue-600">2</div>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">「〇〇 やり方」系キーワード → ハウツー投稿</h3>
+                  <p class="text-sm text-gray-600">「セルフネイル やり方」なら、ステップバイステップで解説する投稿に。「STEP1: 爪の形を整える」「STEP2: ベースコートを塗る」のように手順を分けると保存率UP。</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-blue-600">3</div>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">「〇〇 失敗」系キーワード → 注意喚起投稿</h3>
+                  <p class="text-sm text-gray-600">「ネイル 失敗」なら「セルフネイルでやりがちな失敗5選と対策」として、NG例と正解例をセットで紹介。共感と学びが得られる投稿は反応率が高くなります。</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-blue-600">4</div>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">「〇〇 トレンド」系キーワード → 最新情報投稿</h3>
+                  <p class="text-sm text-gray-600">「ネイル トレンド 2024」なら「2024年春夏トレンドネイル」として、今シーズンの人気デザインや色を紹介。タイムリーな情報は拡散されやすい特徴があります。</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-blue-600">5</div>
+                <div>
+                  <h3 class="font-bold text-gray-800 mb-1">「〇〇 初心者」系キーワード → 入門ガイド投稿</h3>
+                  <p class="text-sm text-gray-600">「ネイル 初心者」なら「初心者さん向け！必要な道具リスト」や「まずはこれから始めよう」といった、ハードルを下げる投稿に。初心者層の獲得に有効です。</p>
+                </div>
+              </div>
+              <div class="bg-blue-50 rounded-lg p-4 mt-4">
+                <p class="text-sm text-gray-700 mb-3">
+                  <i class="fas fa-star text-yellow-500 mr-2"></i>
+                  <strong>キーワード活用の黄金ルール</strong>
+                </p>
+                <ul class="text-sm text-gray-600 space-y-2 ml-4">
+                  <li class="flex items-start gap-2">
+                    <i class="fas fa-caret-right text-blue-500 mt-1"></i>
+                    <span><strong>検索意図を理解する:</strong> そのキーワードで検索する人は何を知りたいのか？を考える</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <i class="fas fa-caret-right text-blue-500 mt-1"></i>
+                    <span><strong>自分の強みと掛け合わせる:</strong> キーワード + あなただけの経験や知識</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <i class="fas fa-caret-right text-blue-500 mt-1"></i>
+                    <span><strong>視覚的に訴える:</strong> テキストだけでなく、画像や動画で分かりやすく</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <i class="fas fa-caret-right text-blue-500 mt-1"></i>
+                    <span><strong>保存・共有を促す:</strong> 「保存しておくと便利！」など行動を促す一言を添える</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- データ活用のコツ -->
+          <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border border-purple-100">
+            <div class="flex items-start gap-3 mb-4">
+              <div class="bg-white rounded-full p-3 shadow-md">
+                <i class="fas fa-chart-line text-2xl text-purple-500"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">検索データを活用するコツ</h2>
+                <p class="text-sm text-gray-600">SNSスコアの見方と活用法</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-green-50 rounded-lg p-4 border border-green-200">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">80-100</span>
+                    <span class="font-bold text-gray-800">高スコア</span>
+                  </div>
+                  <p class="text-xs text-gray-600">積極的に投稿ネタとして活用。視覚的なコンテンツに最適です。</p>
+                </div>
+                <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-bold">50-79</span>
+                    <span class="font-bold text-gray-800">中スコア</span>
+                  </div>
+                  <p class="text-xs text-gray-600">工夫次第で投稿ネタに。あなたの経験談と組み合わせると◎</p>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-gray-500 text-white px-2 py-1 rounded text-xs font-bold">0-49</span>
+                    <span class="font-bold text-gray-800">低スコア</span>
+                  </div>
+                  <p class="text-xs text-gray-600">参考情報として活用。直接的な投稿ネタには不向きです。</p>
+                </div>
+              </div>
+              <div class="bg-purple-50 rounded-lg p-4 mt-4">
+                <p class="text-sm text-gray-700">
+                  <i class="fas fa-info-circle text-purple-500 mr-2"></i>
+                  <strong>活用のヒント:</strong> 高スコアのキーワードを月間投稿カレンダーに組み込み、中スコアのキーワードはストーリーズやリール短編で活用、低スコアは補足情報として使いましょう。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   `
@@ -163,7 +399,7 @@ function renderKeywordCheckerPage() {
 
 // キーワード生成
 async function generateKeywords() {
-  if (state.loading) return
+  if (keywordCheckerState.loading) return
   
   const input = document.getElementById('keywords-input')
   const keywords = input.value
@@ -176,9 +412,9 @@ async function generateKeywords() {
     return
   }
   
-  state.loading = true
-  state.keywords = keywords
-  state.generatedKeywords = []
+  keywordCheckerState.loading = true
+  keywordCheckerState.keywords = keywords
+  keywordCheckerState.generatedKeywords = []
   
   // ローディング表示
   const resultsArea = document.getElementById('results-area')
@@ -195,7 +431,7 @@ async function generateKeywords() {
     for (const keyword of keywords) {
       const keywordData = await generateKeywordsForKeyword(keyword)
       
-      state.generatedKeywords.push({
+      keywordCheckerState.generatedKeywords.push({
         keyword: keyword,
         keywords: keywordData
       })
@@ -204,11 +440,10 @@ async function generateKeywords() {
     renderResults()
     showToast(`${keywords.length}個のキーワードで関連キーワードを取得しました！`, 'success')
   } catch (error) {
-    console.error('Keyword generation error:', error)
     showToast('関連キーワードの取得に失敗しました', 'error')
     resultsArea.innerHTML = ''
   } finally {
-    state.loading = false
+    keywordCheckerState.loading = false
   }
 }
 
@@ -253,7 +488,6 @@ async function fetchGoogleSuggestions(keyword) {
     
     return []
   } catch (error) {
-    console.error('Google Suggest fetch error:', error)
     return []
   }
 }
@@ -261,9 +495,9 @@ async function fetchGoogleSuggestions(keyword) {
 // 結果表示
 function renderResults() {
   const resultsArea = document.getElementById('results-area')
-  if (!resultsArea || state.generatedKeywords.length === 0) return
+  if (!resultsArea || keywordCheckerState.generatedKeywords.length === 0) return
   
-  resultsArea.innerHTML = state.generatedKeywords.map((item, index) => {
+  resultsArea.innerHTML = keywordCheckerState.generatedKeywords.map((item, index) => {
     const snsCount = item.keywords.snsKeywords.length
     const refCount = item.keywords.referenceKeywords.length
     const totalCount = snsCount + refCount
@@ -375,14 +609,13 @@ function copyKeyword(keyword) {
   navigator.clipboard.writeText(decodedKeyword).then(() => {
     showToast('キーワードをコピーしました', 'success')
   }).catch(err => {
-    console.error('Copy failed:', err)
     showToast('コピーに失敗しました', 'error')
   })
 }
 
 // 全キーワードをコピー
 function copyAllKeywords(index) {
-  const item = state.generatedKeywords[index]
+  const item = keywordCheckerState.generatedKeywords[index]
   const snsTexts = item.keywords.snsKeywords.map(k => k.text)
   const refTexts = item.keywords.referenceKeywords.map(k => k.text)
   const allTexts = [...snsTexts, ...refTexts]
@@ -391,14 +624,13 @@ function copyAllKeywords(index) {
   navigator.clipboard.writeText(text).then(() => {
     showToast(`${item.keyword}の全キーワードをコピーしました`, 'success')
   }).catch(err => {
-    console.error('Copy failed:', err)
     showToast('コピーに失敗しました', 'error')
   })
 }
 
 // テキストファイルとしてエクスポート
 function exportToText(index) {
-  const item = state.generatedKeywords[index]
+  const item = keywordCheckerState.generatedKeywords[index]
   let text = `【${item.keyword}】の関連キーワード\n\n`
   
   if (item.keywords.snsKeywords.length > 0) {
@@ -418,7 +650,7 @@ function exportToText(index) {
 
 // CSVファイルとしてエクスポート
 function exportToCSV(index) {
-  const item = state.generatedKeywords[index]
+  const item = keywordCheckerState.generatedKeywords[index]
   let csv = 'No,カテゴリ,キーワード,SNSスコア\n'
   
   let no = 1
@@ -441,6 +673,17 @@ function exportToCSV(index) {
 // escapeHtml is now in utils.js
 
 // showToast is now in utils.js
+
+// Toggle mobile menu (for hamburger menu)
+function toggleMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  if (sidebar && overlay) {
+    sidebar.classList.toggle('translate-x-full');
+    overlay.classList.toggle('hidden');
+  }
+}
 
 // ページ読み込み時に実行
 if (document.readyState === 'loading') {

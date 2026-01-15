@@ -1,52 +1,44 @@
-# prod
-dist/
-
-# dev
-.yarn/
-!.yarn/releases
-.vscode/*
-!.vscode/launch.json
-!.vscode/*.code-snippets
-.idea/workspace.xml
-.idea/usage.statistics.xml
-.idea/shelf
-
-# deps
+# Dependencies
 node_modules/
-.wrangler
 
-# env
-.env
-.env.production
+# Build outputs
+dist/
+.wrangler/
+
+# Environment files
 .dev.vars
+.env
+.env.*
 
-# logs
-logs/
+# Logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+logs/
+pids/
+*.pid
+*.seed
+*.pid.lock
 
-# misc
+# Backup files
+*.backup
+*.backup*
+*.bak
+*~
+
+# PM2
+.pm2/
+ecosystem.config.cjs
+
+# OS files
 .DS_Store
+Thumbs.db
 
-# Unnecessary documentation files (should not be deployed)
-*.md
-!README.md
-GITHUB_PUSH_GUIDE.md
-HOW_TO_READ_DOCS.md
-INTERNAL_DOCUMENTATION.md
-PUSH_COMMANDS.sh
-QUICK_REFERENCE.md
-SEO_CHECKLIST.md
-STRUCTURED_DATA_TEST.md
-EMAIL_QUICKSTART.md
-REGISTRATION_NOTIFICATION_GUIDE.md
-RESEND_SETUP_GUIDE.md
-public/INTERNAL_DOCUMENTATION.md
-public/QUICK_REFERENCE.md
-public/README.md
-public/SEO_CHECKLIST.md
-public/STRUCTURED_DATA_TEST.md
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+*.tmp

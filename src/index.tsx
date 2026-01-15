@@ -43,6 +43,126 @@ const app = new Hono<{ Bindings: Bindings }>()
 // ============================================
 
 /**
+ * Common Header Component for all user-facing pages
+ */
+function CommonHeader() {
+  return (
+    <>
+      {/* Header */}
+      <header class="bg-primary shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between">
+            <a href="/" class="hover:opacity-80 transition-opacity" aria-label="Akagami.net ホームページ">
+              <h1 class="text-xl font-bold text-white tracking-wide">
+                Akagami.net
+              </h1>
+            </a>
+            {/* Mobile Menu Button */}
+            <button 
+              onclick="toggleMobileMenu()"
+              class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
+              aria-label="メニューを開く"
+              aria-expanded="false"
+            >
+              <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Sidebar Overlay for Mobile */}
+      <div 
+        id="sidebar-overlay" 
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"
+        onclick="toggleMobileMenu()"
+        aria-label="メニューを閉じる"
+        role="button"
+      ></div>
+    </>
+  )
+}
+
+/**
+ * Common Sidebar Menu Component
+ */
+function CommonSidebar() {
+  return (
+    <aside 
+      id="sidebar"
+      class="lg:col-span-1 order-1 lg:order-1 fixed lg:static inset-y-0 right-0 lg:left-auto transform translate-x-full lg:translate-x-0 lg:transform-none transition-transform duration-300 ease-in-out lg:transition-none z-50 lg:z-auto w-80 lg:w-auto"
+    >
+      <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 border-2 border-primary h-full lg:h-auto overflow-y-auto">
+        {/* Close button for mobile */}
+        <button 
+          onclick="toggleMobileMenu()"
+          class="lg:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          aria-label="メニューを閉じる"
+        >
+          <i class="fas fa-times text-2xl" aria-hidden="true"></i>
+        </button>
+        
+        {/* User Account Section - Move to top */}
+        <div id="user-account-section" class="mb-6">
+          {/* This will be populated by auth.js */}
+        </div>
+
+        {/* Navigation Links */}
+        <div class="mb-6 pb-6 border-b-2 border-gray-200">
+          <a
+            href="/categories"
+            class="w-full px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors font-medium border-2 border-indigo-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="資料一覧を開く"
+          >
+            <i class="fas fa-folder-open"></i>
+            <span>資料一覧</span>
+          </a>
+          <a
+            href="/calendar/1"
+            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="SNS運用カレンダーを開く"
+          >
+            <i class="fas fa-calendar-alt"></i>
+            <span>SNS運用カレンダー</span>
+          </a>
+          <a
+            href="/news"
+            class="w-full px-4 py-3 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-lg transition-colors font-medium border-2 border-yellow-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="最新ニュースを開く"
+          >
+            <i class="fas fa-newspaper"></i>
+            <span>最新ニュース</span>
+          </a>
+          <a
+            href="/question-finder"
+            class="w-full px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors font-medium border-2 border-blue-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="キーワードチェックを開く"
+          >
+            <i class="fas fa-search"></i>
+            <span>キーワードチェック</span>
+          </a>
+          <a
+            href="/sns-faq"
+            class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
+            aria-label="よくある質問を開く"
+          >
+            <i class="fas fa-question-circle"></i>
+            <span>よくある質問</span>
+          </a>
+        </div>
+
+        {/* Category Filter - Will be populated by app.js */}
+        <div id="category-filter"></div>
+
+        {/* Logout Button Section */}
+        <div id="logout-section" class="mt-6 pt-6 border-t-2 border-gray-200">
+          {/* This will be populated by auth.js when user is logged in */}
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+/**
  * Get JWT secret from environment with fallback
  * @param c - Hono context
  * @returns JWT secret string
@@ -65,7 +185,9 @@ app.use('*', secureHeaders({
       "https://cdn.tailwindcss.com",
       "https://cdn.jsdelivr.net",
       "https://www.googletagmanager.com",
-      "https://www.google-analytics.com"
+      "https://www.google-analytics.com",
+      "https://static.cloudflareinsights.com", // Cloudflare Analytics
+      "https://cloudflareinsights.com" // Cloudflare Analytics (alternative domain)
     ],
     styleSrc: [
       "'self'",
@@ -87,7 +209,9 @@ app.use('*', secureHeaders({
     connectSrc: [
       "'self'",
       "https://www.google-analytics.com",
-      "https://www.googletagmanager.com"
+      "https://www.googletagmanager.com",
+      "https://static.cloudflareinsights.com", // Cloudflare Analytics
+      "https://cloudflareinsights.com" // Cloudflare Analytics
     ],
     frameSrc: ["'none'"],
     objectSrc: ["'none'"],
@@ -221,9 +345,9 @@ app.post('/api/user/register', async (c) => {
     const displayName = userName || 'ユーザー'
     await sendEmail({
       to: email,
-      subject: 'Akagami Research へようこそ！',
+      subject: 'Akagami.net へようこそ！',
       html: getWelcomeEmailHtml(displayName),
-      text: `こんにちは、${displayName}さん。Akagami Research の会員登録が完了しました！`
+      text: `こんにちは、${displayName}さん。Akagami.net の会員登録が完了しました！`
     }, c.env)
     
     // Note: Admin notification will be sent once daily via Cron job
@@ -329,7 +453,7 @@ app.post('/api/user/send-magic-link', async (c) => {
     const magicLink = `https://akagami.net/auth/magic-link?token=${token}`
     await sendEmail({
       to: email,
-      subject: 'Akagami Research ログインリンク',
+      subject: 'Akagami.net ログインリンク',
       html: getMagicLinkEmailHtml(user.name as string, magicLink),
       text: `こんにちは、${user.name}さん。ログインリンク: ${magicLink} （15分間有効）`
     }, c.env)
@@ -1634,7 +1758,7 @@ app.post('/api/pdfs', requireAuth, async (c) => {
     for (const subscriber of subscribers) {
       await sendEmail({
         to: subscriber.email,
-        subject: `[Akagami Research] ${categoryName}カテゴリに新しい資料が追加されました`,
+        subject: `[Akagami.net] ${categoryName}カテゴリに新しい資料が追加されました`,
         html: getNewPdfNotificationEmailHtml(
           subscriber.name,
           title,
@@ -1867,6 +1991,228 @@ app.delete('/api/news/:id', requireAuth, async (c) => {
   return c.json({ success: true })
 })
 
+// ============================================
+// News Likes API Endpoints
+// ============================================
+
+// Get likes count for a news article
+app.get('/api/news/:id/likes', async (c) => {
+  const newsId = c.req.param('id')
+  
+  const { results } = await c.env.DB.prepare(
+    'SELECT COUNT(*) as count FROM news_likes WHERE news_id = ?'
+  ).bind(newsId).all()
+  
+  return c.json({ count: results[0]?.count || 0 })
+})
+
+// Get all news with likes count and user's like status
+app.get('/api/news-with-likes', async (c) => {
+  const { category } = c.req.query()
+  
+  // Get current user if authenticated
+  const currentUser = await getCurrentUser(c, getJWTSecret(c))
+  const userId = currentUser?.userId || null
+  
+  let query = `
+    SELECT 
+      n.*,
+      COUNT(DISTINCT nl.id) as likes_count,
+      ${userId ? `MAX(CASE WHEN nl.user_id = ? THEN 1 ELSE 0 END) as user_liked` : '0 as user_liked'}
+    FROM news_articles n
+    LEFT JOIN news_likes nl ON n.id = nl.news_id
+  `
+  
+  const params: any[] = []
+  if (userId) {
+    params.push(userId)
+  }
+  
+  if (category && category !== 'all') {
+    query += ' WHERE n.category = ?'
+    params.push(category)
+  }
+  
+  query += ' GROUP BY n.id ORDER BY n.published_at DESC LIMIT 50'
+  
+  const stmt = c.env.DB.prepare(query)
+  if (params.length > 0) {
+    stmt.bind(...params)
+  }
+  
+  const { results } = await stmt.all()
+  return c.json(results)
+})
+
+// Toggle like for a news article (requires authentication)
+app.post('/api/news/:id/like', async (c) => {
+  const newsId = c.req.param('id')
+  
+  // Get current user
+  const currentUser = await getCurrentUser(c, getJWTSecret(c))
+  if (!currentUser) {
+    return c.json({ error: 'Authentication required' }, 401)
+  }
+  
+  const userId = currentUser.userId
+  
+  // Check if already liked
+  const { results: existing } = await c.env.DB.prepare(
+    'SELECT id FROM news_likes WHERE news_id = ? AND user_id = ?'
+  ).bind(newsId, userId).all()
+  
+  if (existing.length > 0) {
+    // Unlike
+    await c.env.DB.prepare(
+      'DELETE FROM news_likes WHERE news_id = ? AND user_id = ?'
+    ).bind(newsId, userId).run()
+    
+    return c.json({ liked: false, message: 'Unliked' })
+  } else {
+    // Like
+    await c.env.DB.prepare(
+      'INSERT INTO news_likes (news_id, user_id) VALUES (?, ?)'
+    ).bind(newsId, userId).run()
+    
+    return c.json({ liked: true, message: 'Liked' })
+  }
+})
+
+// ============================================
+// Instagram FAQ API Endpoints
+// ============================================
+
+// Get all FAQ items (published only for public)
+app.get('/api/instagram-faq', async (c) => {
+  try {
+    const category = c.req.query('category') || 'instagram'
+    
+    const { results } = await c.env.DB.prepare(`
+      SELECT id, question, answer, sort_order, is_published, sns_category, created_at, updated_at
+      FROM instagram_faq
+      WHERE is_published = 1 AND sns_category = ?
+      ORDER BY sort_order ASC, id ASC
+    `).bind(category).all()
+    
+    return c.json(results)
+  } catch (error) {
+    console.error('Failed to fetch FAQ:', error)
+    return c.json({ error: 'Failed to fetch FAQ' }, 500)
+  }
+})
+
+// Get all FAQ items for admin (including unpublished)
+app.get('/api/admin/instagram-faq', requireAuth, async (c) => {
+  try {
+    const category = c.req.query('category') || 'all'
+    
+    let query = `
+      SELECT id, question, answer, sort_order, is_published, sns_category, created_at, updated_at
+      FROM instagram_faq
+    `
+    
+    if (category !== 'all') {
+      query += ` WHERE sns_category = ?`
+    }
+    
+    query += ` ORDER BY sns_category ASC, sort_order ASC, id ASC`
+    
+    const stmt = category !== 'all' 
+      ? c.env.DB.prepare(query).bind(category)
+      : c.env.DB.prepare(query)
+    
+    const { results } = await stmt.all()
+    
+    return c.json(results)
+  } catch (error) {
+    console.error('Failed to fetch FAQ:', error)
+    return c.json({ error: 'Failed to fetch FAQ' }, 500)
+  }
+})
+
+// Create new FAQ item
+app.post('/api/admin/instagram-faq', requireAuth, async (c) => {
+  try {
+    const { question, answer, sort_order, is_published, sns_category } = await c.req.json()
+    
+    if (!question || !answer) {
+      return c.json({ error: 'Question and answer are required' }, 400)
+    }
+    
+    const result = await c.env.DB.prepare(`
+      INSERT INTO instagram_faq (question, answer, sort_order, is_published, sns_category)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(
+      question,
+      answer,
+      sort_order || 0,
+      is_published !== undefined ? (is_published ? 1 : 0) : 1,
+      sns_category || 'instagram'
+    ).run()
+    
+    return c.json({ 
+      success: true, 
+      id: result.meta.last_row_id,
+      message: 'FAQ created successfully'
+    })
+  } catch (error) {
+    console.error('Failed to create FAQ:', error)
+    return c.json({ error: 'Failed to create FAQ' }, 500)
+  }
+})
+
+// Update FAQ item
+app.put('/api/admin/instagram-faq/:id', requireAuth, async (c) => {
+  try {
+    const id = c.req.param('id')
+    const { question, answer, sort_order, is_published, sns_category } = await c.req.json()
+    
+    if (!question || !answer) {
+      return c.json({ error: 'Question and answer are required' }, 400)
+    }
+    
+    await c.env.DB.prepare(`
+      UPDATE instagram_faq
+      SET question = ?, answer = ?, sort_order = ?, is_published = ?, sns_category = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).bind(
+      question,
+      answer,
+      sort_order || 0,
+      is_published !== undefined ? (is_published ? 1 : 0) : 1,
+      sns_category || 'instagram',
+      id
+    ).run()
+    
+    return c.json({ 
+      success: true,
+      message: 'FAQ updated successfully'
+    })
+  } catch (error) {
+    console.error('Failed to update FAQ:', error)
+    return c.json({ error: 'Failed to update FAQ' }, 500)
+  }
+})
+
+// Delete FAQ item
+app.delete('/api/admin/instagram-faq/:id', requireAuth, async (c) => {
+  try {
+    const id = c.req.param('id')
+    
+    await c.env.DB.prepare(`
+      DELETE FROM instagram_faq WHERE id = ?
+    `).bind(id).run()
+    
+    return c.json({ 
+      success: true,
+      message: 'FAQ deleted successfully'
+    })
+  } catch (error) {
+    console.error('Failed to delete FAQ:', error)
+    return c.json({ error: 'Failed to delete FAQ' }, 500)
+  }
+})
+
 // Google Suggest Proxy API (for question finder)
 app.get('/api/suggest', async (c) => {
   const keyword = c.req.query('q')
@@ -1957,81 +2303,81 @@ app.post('/api/pdfs/regenerate-tags', requireAuth, async (c) => {
 const categoryMeta: Record<number, { name: string; title: string; description: string; keywords: string }> = {
   1: {
     name: "YouTube資料",
-    title: "YouTube資料 - Akagami Research",
+    title: "YouTube資料 - Akagami.net",
     description: "YouTubeマーケティング・運用・戦略に関する資料を無料で公開。チャンネル運営、動画制作、収益化、SEO対策など、YouTube攻略のノウハウが満載。",
     keywords: "YouTube,YouTubeマーケティング,動画制作,チャンネル運営,収益化,YouTube SEO"
   },
   2: {
     name: "Threads資料",
-    title: "Threads資料 - Akagami Research",
+    title: "Threads資料 - Akagami.net",
     description: "Threadsマーケティング・運用戦略に関する資料を無料で公開。Meta社の新SNS「Threads」の効果的な活用方法、フォロワー獲得術を解説。",
     keywords: "Threads,Threadsマーケティング,Meta,SNS運用,フォロワー獲得"
   },
   3: {
     name: "Podcast資料",
-    title: "Podcast資料 - Akagami Research",
+    title: "Podcast資料 - Akagami.net",
     description: "ポッドキャストマーケティング・配信戦略に関する資料を無料で公開。音声メディアの活用方法、収益化、リスナー獲得のノウハウを提供。",
     keywords: "Podcast,ポッドキャスト,音声配信,音声マーケティング,リスナー獲得"
   },
   4: {
     name: "LINE公式資料",
-    title: "LINE公式資料 - Akagami Research",
+    title: "LINE公式資料 - Akagami.net",
     description: "LINE公式アカウントのマーケティング・運用戦略に関する資料を無料で公開。友だち獲得、メッセージ配信、自動応答の活用方法を解説。",
     keywords: "LINE公式,LINE公式アカウント,LINEマーケティング,友だち獲得,メッセージ配信"
   },
   5: {
     name: "Instagram資料",
-    title: "Instagram資料 - Akagami Research",
+    title: "Instagram資料 - Akagami.net",
     description: "Instagramマーケティング・運用戦略に関する資料を無料で公開。投稿戦略、リール活用、フォロワー増加、ストーリーズ運用など実践的なノウハウが満載。",
     keywords: "Instagram,インスタグラム,Instagramマーケティング,リール,ストーリーズ,フォロワー増加"
   },
   6: {
     name: "TikTok資料",
-    title: "TikTok資料 - Akagami Research",
+    title: "TikTok資料 - Akagami.net",
     description: "TikTokマーケティング・運用戦略に関する資料を無料で公開。バズる動画の作り方、アルゴリズム攻略、フォロワー獲得の実践的なノウハウを提供。",
     keywords: "TikTok,TikTokマーケティング,ショート動画,バズる方法,TikTokアルゴリズム"
   },
   7: {
     name: "X (旧Twitter) 資料",
-    title: "X (旧Twitter) 資料 - Akagami Research",
+    title: "X (旧Twitter) 資料 - Akagami.net",
     description: "X (旧Twitter) のマーケティング・運用戦略に関する資料を無料で公開。投稿戦略、エンゲージメント向上、フォロワー獲得の実践的なノウハウを解説。",
     keywords: "X,Twitter,Xマーケティング,Twitterマーケティング,SNS運用,フォロワー獲得"
   },
   8: {
     name: "マーケティング資料",
-    title: "マーケティング資料 - Akagami Research",
+    title: "マーケティング資料 - Akagami.net",
     description: "デジタルマーケティング・SNSマーケティングに関する資料を無料で公開。戦略立案、分析手法、広告運用、コンテンツマーケティングの実践ノウハウを提供。",
     keywords: "マーケティング,デジタルマーケティング,SNSマーケティング,広告運用,コンテンツマーケティング"
   },
   9: {
     name: "その他資料",
-    title: "その他資料 - Akagami Research",
+    title: "その他資料 - Akagami.net",
     description: "SNSマーケティング全般に関する資料を無料で公開。トレンド情報、ツール紹介、分析手法など、幅広いマーケティング情報を提供。",
     keywords: "SNSマーケティング,マーケティングツール,トレンド,分析手法"
   },
   10: {
     name: "生成AI資料",
-    title: "生成AI資料 - Akagami Research",
+    title: "生成AI資料 - Akagami.net",
     description: "生成AI・ChatGPT活用に関する資料を無料で公開。AIツールの使い方、プロンプトエンジニアリング、業務効率化の実践方法を解説。",
     keywords: "生成AI,ChatGPT,AI活用,プロンプトエンジニアリング,業務効率化,AIツール"
   },
   11: {
-    title: "画像&動画生成資料 - Akagami Research",
+    title: "画像&動画生成資料 - Akagami.net",
     description: "AI画像生成・動画生成ツールの活用方法に関する資料を無料で公開。Midjourney、Stable Diffusion、動画生成AIの実践的な使い方を解説。",
     keywords: "AI画像生成,AI動画生成,Midjourney,Stable Diffusion,生成AI"
   },
   19: {
-    title: "note資料 - Akagami Research",
+    title: "note資料 - Akagami.net",
     description: "noteマーケティング・記事作成に関する資料を無料で公開。記事の書き方、フォロワー獲得、収益化、SEO対策など実践的なノウハウを提供。",
     keywords: "note,noteマーケティング,記事作成,ライティング,収益化"
   },
   20: {
-    title: "ブログ資料 - Akagami Research",
+    title: "ブログ資料 - Akagami.net",
     description: "ブログマーケティング・SEO対策に関する資料を無料で公開。記事の書き方、アクセスアップ、収益化の実践的なノウハウを解説。",
     keywords: "ブログ,ブログマーケティング,SEO対策,アクセスアップ,収益化"
   },
   22: {
-    title: "AEO対策資料 - Akagami Research",
+    title: "AEO対策資料 - Akagami.net",
     description: "AEO（Answer Engine Optimization）対策に関する資料を無料で公開。AI検索エンジン最適化、ChatGPT・Perplexity対策の実践方法を解説。",
     keywords: "AEO,Answer Engine Optimization,AI検索,ChatGPT,Perplexity,検索最適化"
   }
@@ -2043,68 +2389,17 @@ const categoryMeta: Record<number, { name: string; title: string; description: s
 // ============================================
 app.get('/calendar/2', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -2336,19 +2631,12 @@ app.get('/calendar/2', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "2月のSNS運用カレンダー - Akagami Research",
+      title: "2月のSNS運用カレンダー - Akagami.net",
       description: "2月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。バレンタイン、節分、猫の日など。",
       keywords: "SNS運用,2月,カレンダー,イベント,バレンタイン,節分,猫の日,恋愛投稿"
     }
@@ -2360,68 +2648,17 @@ app.get('/calendar/2', (c) => {
 // ============================================
 app.get('/calendar/3', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -2649,19 +2886,12 @@ app.get('/calendar/3', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "3月のSNS運用カレンダー - Akagami Research",
+      title: "3月のSNS運用カレンダー - Akagami.net",
       description: "3月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。卒業、ホワイトデー、ひなまつり、桜など。",
       keywords: "SNS運用,3月,カレンダー,イベント,卒業,ホワイトデー,ひなまつり,桜,春"
     }
@@ -2673,68 +2903,17 @@ app.get('/calendar/3', (c) => {
 // ============================================
 app.get('/calendar/4', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -2955,19 +3134,12 @@ app.get('/calendar/4', (c) => {
             <i class="fas fa-arrow-right"></i>
           </span>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "4月🌸のSNS運用カレンダー - Akagami Research",
+      title: "4月🌸のSNS運用カレンダー - Akagami.net",
       description: "4月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。入学、入社、桜、お花見、新生活など。",
       keywords: "SNS運用,4月,カレンダー,イベント,入学,入社,桜,お花見,新生活,春"
     }
@@ -2979,72 +3151,17 @@ app.get('/calendar/4', (c) => {
 // ============================================
 app.get('/calendar/5', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -3272,19 +3389,12 @@ app.get('/calendar/5', (c) => {
             <i class="fas fa-arrow-right"></i>
           </span>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "5月🎏のSNS運用カレンダー - Akagami Research",
+      title: "5月🎏のSNS運用カレンダー - Akagami.net",
       description: "5月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。ゴールデンウィーク、母の日、こどもの日、五月病など。",
       keywords: "SNS運用,5月,カレンダー,イベント,ゴールデンウィーク,母の日,こどもの日,五月病,初夏"
     }
@@ -3296,76 +3406,17 @@ app.get('/calendar/5', (c) => {
 // ============================================
 app.get('/calendar/6', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">6月のカレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -3592,19 +3643,12 @@ app.get('/calendar/6', (c) => {
             <i class="fas fa-arrow-right"></i>
           </span>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "6月☔のSNS運用カレンダー - Akagami Research",
+      title: "6月☔のSNS運用カレンダー - Akagami.net",
       description: "6月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。梅雨、紫陽花、父の日、湿気対策など。",
       keywords: "SNS運用,6月,カレンダー,イベント,梅雨,紫陽花,父の日,雨の日,湿気対策"
     }
@@ -3616,80 +3660,17 @@ app.get('/calendar/6', (c) => {
 // ============================================
 app.get('/calendar/7', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">6月のカレンダー</span>
-            </a>
-            <a href="/calendar/7" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">7月のカレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -3931,19 +3912,12 @@ app.get('/calendar/7', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "7月🍉のSNS運用カレンダー - Akagami Research",
+      title: "7月🍉のSNS運用カレンダー - Akagami.net",
       description: "7月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。七夕、海の日、夏休み、花火大会、夏祭りなど。",
       keywords: "SNS運用,7月,カレンダー,イベント,七夕,海の日,夏休み,花火大会,夏祭り,夏"
     }
@@ -3955,85 +3929,17 @@ app.get('/calendar/7', (c) => {
 // ============================================
 app.get('/calendar/8', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            {/* Menu Buttons */}
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">6月のカレンダー</span>
-            </a>
-            <a href="/calendar/7" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">7月のカレンダー</span>
-            </a>
-            <a href="/calendar/8" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">8月のSNS運用カレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -4253,19 +4159,12 @@ app.get('/calendar/8', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "8月🏄️のSNS運用カレンダー - Akagami Research",
+      title: "8月🏄️のSNS運用カレンダー - Akagami.net",
       description: "8月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。お盆、帰省、花火大会、終戦記念日、夏休み最終週など。",
       keywords: "SNS運用,8月,カレンダー,イベント,お盆,帰省,花火大会,夏祭り,終戦記念日,甲子園,夏バテ"
     }
@@ -4277,89 +4176,17 @@ app.get('/calendar/8', (c) => {
 // ============================================
 app.get('/calendar/9', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            {/* Menu Buttons */}
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">6月のカレンダー</span>
-            </a>
-            <a href="/calendar/7" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">7月のカレンダー</span>
-            </a>
-            <a href="/calendar/8" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">8月のカレンダー</span>
-            </a>
-            <a href="/calendar/9" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">9月のSNS運用カレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -4575,19 +4402,12 @@ app.get('/calendar/9', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "9月🍂のSNS運用カレンダー - Akagami Research",
+      title: "9月🍂のSNS運用カレンダー - Akagami.net",
       description: "9月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。防災の日、敬老の日、十五夜、秋分の日、台風警戒期など。",
       keywords: "SNS運用,9月,カレンダー,イベント,防災の日,敬老の日,十五夜,秋分の日,台風,秋ファッション,メンタルケア"
     }
@@ -4599,93 +4419,17 @@ app.get('/calendar/9', (c) => {
 // ============================================
 app.get('/calendar/10', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            {/* Menu Buttons */}
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">6月のカレンダー</span>
-            </a>
-            <a href="/calendar/7" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">7月のカレンダー</span>
-            </a>
-            <a href="/calendar/8" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">8月のカレンダー</span>
-            </a>
-            <a href="/calendar/9" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">9月のカレンダー</span>
-            </a>
-            <a href="/calendar/10" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">10月のSNS運用カレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -4901,19 +4645,12 @@ app.get('/calendar/10', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "10月📖のSNS運用カレンダー - Akagami Research",
+      title: "10月📖のSNS運用カレンダー - Akagami.net",
       description: "10月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。ハロウィン、衣替え、紅葉、秋メイク、秋の味覚など。",
       keywords: "SNS運用,10月,カレンダー,イベント,ハロウィン,衣替え,紅葉,秋メイク,秋の味覚,読書の秋,芸術の秋"
     }
@@ -4925,97 +4662,17 @@ app.get('/calendar/10', (c) => {
 // ============================================
 app.get('/calendar/11', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            {/* Menu Buttons */}
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">6月のカレンダー</span>
-            </a>
-            <a href="/calendar/7" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">7月のカレンダー</span>
-            </a>
-            <a href="/calendar/8" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">8月のカレンダー</span>
-            </a>
-            <a href="/calendar/9" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">9月のカレンダー</span>
-            </a>
-            <a href="/calendar/10" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">10月のカレンダー</span>
-            </a>
-            <a href="/calendar/11" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">11月のSNS運用カレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -5231,19 +4888,12 @@ app.get('/calendar/11', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "11月🍁のSNS運用カレンダー - Akagami Research",
+      title: "11月🍁のSNS運用カレンダー - Akagami.net",
       description: "11月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。紅葉、七五三、文化の日、勤労感謝の日、イルミネーション、年末準備など。",
       keywords: "SNS運用,11月,カレンダー,イベント,紅葉,七五三,文化の日,勤労感謝の日,こたつ,イルミネーション,年末準備"
     }
@@ -5255,101 +4905,17 @@ app.get('/calendar/11', (c) => {
 // ============================================
 app.get('/calendar/12', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            {/* Menu Buttons */}
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のカレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/calendar/5" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">5月のカレンダー</span>
-            </a>
-            <a href="/calendar/6" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">6月のカレンダー</span>
-            </a>
-            <a href="/calendar/7" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">7月のカレンダー</span>
-            </a>
-            <a href="/calendar/8" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">8月のカレンダー</span>
-            </a>
-            <a href="/calendar/9" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">9月のカレンダー</span>
-            </a>
-            <a href="/calendar/10" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">10月のSNS運用カレンダー</span>
-            </a>
-            <a href="/calendar/11" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">11月のSNS運用カレンダー</span>
-            </a>
-            <a href="/calendar/12" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">12月のSNS運用カレンダー</span>
-            </a>
-            <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-newspaper text-primary"></i>
-              <span class="font-medium text-gray-700">最新ニュース</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
         {/* Month Navigation - Horizontal Scroll */}
         <div class="mb-6 overflow-x-auto scrollbar-hide">
           <div class="flex gap-2 min-w-max pb-2">
@@ -5561,19 +5127,12 @@ app.get('/calendar/12', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "12月🧣のSNS運用カレンダー - Akagami Research",
+      title: "12月🧣のSNS運用カレンダー - Akagami.net",
       description: "12月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。クリスマス、年末、振り返り、大掃除、買ってよかったもの、年越しなど。",
       keywords: "SNS運用,12月,カレンダー,イベント,クリスマス,年末,振り返り,大掃除,買ってよかったもの,年越し,手帳,今年の漢字"
     }
@@ -5585,86 +5144,34 @@ app.get('/calendar/12', (c) => {
 // ============================================
 app.get('/calendar/1', (c) => {
   return c.render(
-    <div class="min-h-screen bg-white">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity">
-              <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-              <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-            </a>
-            {/* Menu Buttons */}
-            <div class="flex items-center gap-2">
-              <a href="/" class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-              <button 
-                onclick="document.getElementById('calendar-menu').classList.toggle('hidden')"
-                class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hamburger Menu */}
-      <div id="calendar-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-          <nav class="flex flex-col gap-2">
-            <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-home text-primary"></i>
-              <span class="font-medium text-gray-700">トップページ</span>
-            </a>
-            <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-folder-open text-primary"></i>
-              <span class="font-medium text-gray-700">カテゴリ一覧</span>
-            </a>
-            <a href="/calendar/1" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">1月のSNS運用カレンダー</span>
-            </a>
-            <a href="/calendar/2" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">2月のカレンダー</span>
-            </a>
-            <a href="/calendar/3" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">3月のカレンダー</span>
-            </a>
-            <a href="/calendar/4" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-calendar-alt text-primary"></i>
-              <span class="font-medium text-gray-700">4月のカレンダー</span>
-            </a>
-            <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-              <i class="fas fa-user text-primary"></i>
-              <span class="font-medium text-gray-700">マイページ</span>
-            </a>
-          </nav>
-        </div>
-      </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
       {/* Main Content */}
-      <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        {/* Month Navigation - Horizontal Scroll */}
-        <div class="mb-6 overflow-x-auto scrollbar-hide">
-          <div class="flex gap-2 min-w-max pb-2">
-            <a href="/calendar/1" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
-            <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
-            <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
-            <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
-            <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
-            <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
-            <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
-            <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
-            <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
-            <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
-            <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
-            <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
-          </div>
-        </div>
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar */}
+          <CommonSidebar />
+          
+          {/* Calendar Content */}
+          <div class="lg:col-span-3 order-1 lg:order-1">
+            {/* Month Navigation - Horizontal Scroll */}
+            <div class="mb-6 overflow-x-auto scrollbar-hide">
+              <div class="flex gap-2 min-w-max pb-2">
+                <a href="/calendar/1" class="px-3 py-2 text-primary font-bold underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">1月</a>
+                <a href="/calendar/2" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">2月</a>
+                <a href="/calendar/3" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">3月</a>
+                <a href="/calendar/4" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">4月</a>
+                <a href="/calendar/5" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">5月</a>
+                <a href="/calendar/6" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">6月</a>
+                <a href="/calendar/7" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">7月</a>
+                <a href="/calendar/8" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">8月</a>
+                <a href="/calendar/9" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">9月</a>
+                <a href="/calendar/10" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">10月</a>
+                <a href="/calendar/11" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">11月</a>
+                <a href="/calendar/12" class="px-3 py-2 text-gray-600 hover:text-primary hover:underline transition-colors font-medium text-sm whitespace-nowrap flex-shrink-0">12月</a>
+              </div>
+            </div>
 
 
         {/* 毎年1月に流行るもの */}
@@ -5864,19 +5371,12 @@ app.get('/calendar/1', (c) => {
             <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p class="text-sm text-gray-500 text-center">
-            © 2026 Akagami Research. All rights reserved.
-          </p>
+          </div>
         </div>
-      </footer>
+      </main>
     </div>,
     {
-      title: "1月のSNS運用カレンダー - Akagami Research",
+      title: "1月のSNS運用カレンダー - Akagami.net",
       description: "1月のSNS運用に役立つイベント、バズワード、投稿ネタをまとめました。世間の空気を読んで効果的な投稿を！",
       keywords: "SNS運用,1月,カレンダー,イベント,投稿ネタ,お正月,福袋,目標設定"
     }
@@ -5888,7 +5388,7 @@ app.get('/calendar/1', (c) => {
 // ============================================
 app.get('/categories', async (c) => {
   try {
-    // Fetch all categories with PDF counts
+    // Fetch all categories with PDF counts, ordered by pdf_count DESC
     const { results: categories } = await c.env.DB.prepare(`
       SELECT 
         c.id,
@@ -5900,70 +5400,18 @@ app.get('/categories', async (c) => {
       FROM categories c
       LEFT JOIN pdfs p ON c.id = p.category_id
       GROUP BY c.id, c.name, c.description, c.download_url, c.sort_order
-      ORDER BY c.sort_order ASC, c.name ASC
+      ORDER BY pdf_count DESC, c.name ASC
     `).all()
 
     return c.render(
-      <div class="min-h-screen bg-white">
-        {/* Header */}
-        <header class="bg-primary shadow-lg">
-          <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-              <a href="/" class="hover:opacity-80 transition-opacity">
-                <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-                <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-              </a>
-              {/* Menu Buttons */}
-              <div class="flex items-center gap-2">
-                <a
-                  href="/"
-                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-                  aria-label="ホームに戻る"
-                >
-                  <i class="fas fa-home text-xl"></i>
-                </a>
-                <button 
-                  onclick="document.getElementById('category-menu').classList.toggle('hidden')"
-                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-                  aria-label="メニューを開く"
-                >
-                  <i class="fas fa-bars text-xl"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Hamburger Menu Dropdown */}
-        <div id="category-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-            <nav class="flex flex-col gap-2">
-              <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-home text-primary"></i>
-                <span class="font-medium text-gray-700">トップページ</span>
-              </a>
-              <a href="/categories" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-                <i class="fas fa-folder-open text-primary"></i>
-                <span class="font-medium text-gray-700">カテゴリ一覧</span>
-              </a>
-              <a href="/news" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-newspaper text-primary"></i>
-                <span class="font-medium text-gray-700">最新ニュース</span>
-              </a>
-              <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-user text-primary"></i>
-                <span class="font-medium text-gray-700">マイページ</span>
-              </a>
-              <a href="/admin" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-cog text-primary"></i>
-                <span class="font-medium text-gray-700">管理画面</span>
-              </a>
-            </nav>
-          </div>
-        </div>
+      <div class="min-h-screen bg-white flex flex-col">
+        <CommonHeader />
 
         {/* Main Content */}
-        <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
           {/* Page Title */}
           <div class="mb-4">
             <h2 class="text-2xl font-bold text-gray-800 mb-1">
@@ -6075,20 +5523,40 @@ app.get('/categories', async (c) => {
               </div>
             </div>
           </div>
-        </main>
+            </div>
 
-        {/* Footer */}
-        <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="text-sm text-gray-500 text-center">
-              © 2026 Akagami Research. All rights reserved.
-            </p>
+            {/* Sidebar */}
+            <CommonSidebar />
           </div>
-        </footer>
+        </main>
+        
+        <script src="/static/utils.js"></script>
+        <script src="/static/auth.js"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Toggle mobile menu
+            function toggleMobileMenu() {
+              const sidebar = document.getElementById('sidebar');
+              const overlay = document.getElementById('sidebar-overlay');
+              
+              if (sidebar && overlay) {
+                const isHidden = sidebar.classList.contains('translate-x-full');
+                
+                if (isHidden) {
+                  sidebar.classList.remove('translate-x-full');
+                  overlay.classList.remove('hidden');
+                } else {
+                  sidebar.classList.add('translate-x-full');
+                  overlay.classList.add('hidden');
+                }
+              }
+            }
+          `
+        }} />
       </div>,
       {
-        title: "カテゴリ一覧 - Akagami Research",
-        description: "Akagami Researchの全カテゴリ一覧。SNSマーケティング、生成AI関連の資料をカテゴリごとに閲覧できます。",
+        title: "カテゴリ一覧 - Akagami.net",
+        description: "Akagami.netの全カテゴリ一覧。SNSマーケティング、生成AI関連の資料をカテゴリごとに閲覧できます。",
         keywords: "カテゴリ一覧,SNSマーケティング,生成AI,資料,YouTube,Instagram,TikTok"
       }
     )
@@ -6108,7 +5576,7 @@ app.get('/', (c) => {
   const meta = categoryId && categoryMeta[categoryId] 
     ? categoryMeta[categoryId]
     : {
-        title: "Akagami Research - SNSマーケティング・生成AI資料保管庫",
+        title: "Akagami.net - SNSマーケティング・生成AI資料保管庫",
         description: "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。",
         keywords: "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長",
         name: null as string | null
@@ -6120,11 +5588,10 @@ app.get('/', (c) => {
       <header class="bg-primary shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity" aria-label="Akagami Research ホームページ">
+            <a href="/" class="hover:opacity-80 transition-opacity" aria-label="Akagami.net ホームページ">
               <h1 class="text-xl font-bold text-white tracking-wide">
-                Akagami Research
+                Akagami.net
               </h1>
-              <p class="text-white text-xs mt-0.5 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
             </a>
             {/* Mobile Menu Button */}
             <button 
@@ -6204,8 +5671,16 @@ app.get('/', (c) => {
                 {/* This will be populated by auth.js */}
               </div>
 
-              {/* SNS Calendar Link */}
+              {/* Navigation Links */}
               <div class="mb-6 pb-6 border-b-2 border-gray-200">
+                <a
+                  href="/categories"
+                  class="w-full px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors font-medium border-2 border-indigo-200 flex items-center justify-center gap-2 mb-3"
+                  aria-label="資料一覧を開く"
+                >
+                  <i class="fas fa-folder-open"></i>
+                  <span>資料一覧</span>
+                </a>
                 <a
                   href="/calendar/1"
                   class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2 mb-3"
@@ -6216,11 +5691,27 @@ app.get('/', (c) => {
                 </a>
                 <a
                   href="/news"
-                  class="w-full px-4 py-3 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-lg transition-colors font-medium border-2 border-yellow-200 flex items-center justify-center gap-2"
+                  class="w-full px-4 py-3 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-lg transition-colors font-medium border-2 border-yellow-200 flex items-center justify-center gap-2 mb-3"
                   aria-label="最新ニュースを開く"
                 >
                   <i class="fas fa-newspaper"></i>
                   <span>最新ニュース</span>
+                </a>
+                <a
+                  href="/question-finder"
+                  class="w-full px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors font-medium border-2 border-blue-200 flex items-center justify-center gap-2 mb-3"
+                  aria-label="キーワードチェックを開く"
+                >
+                  <i class="fas fa-search"></i>
+                  <span>キーワードチェック</span>
+                </a>
+                <a
+                  href="/sns-faq"
+                  class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
+                  aria-label="よくある質問を開く"
+                >
+                  <i class="fas fa-question-circle"></i>
+                  <span>よくある質問</span>
                 </a>
               </div>
 
@@ -6346,7 +5837,7 @@ app.get('/', (c) => {
             </a>
           </div>
           
-          <p class="text-sm text-gray-500 text-center">&copy; 2026 Akagami Research. All rights reserved.</p>
+          <p class="text-sm text-gray-500 text-center">&copy; 2026 Akagami.net. All rights reserved.</p>
           
           {/* Admin link - Desktop only, subtle */}
           <div class="hidden lg:block fixed bottom-4 right-4">
@@ -6534,7 +6025,7 @@ app.get('/news', async (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>最新ニュース - Akagami Research</title>
+        <title>最新ニュース - Akagami.net</title>
         <meta name="description" content="SNS、AI、テクノロジー、マーケティングに関する最新ニュースをお届けします。" />
         
         {/* Google Analytics */}
@@ -6588,93 +6079,58 @@ app.get('/news', async (c) => {
           `
         }} />
       </head>
-      <body class="bg-gray-50">
-        {/* Header */}
-        <header class="bg-primary shadow-lg">
-          <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-              <a href="/" class="hover:opacity-80 transition-opacity">
-                <h1 class="text-2xl font-bold text-white">Akagami Research</h1>
-                <p class="text-white text-xs mt-1 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-              </a>
-              <div class="flex items-center gap-2">
-                <a
-                  href="/"
-                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-                  aria-label="ホームに戻る"
-                >
-                  <i class="fas fa-home text-xl"></i>
-                </a>
-                <button 
-                  onclick="document.getElementById('news-menu').classList.toggle('hidden')"
-                  class="text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-                  aria-label="メニューを開く"
-                >
-                  <i class="fas fa-bars text-xl"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Hamburger Menu */}
-        <div id="news-menu" class="hidden bg-white shadow-lg border-b-2 border-gray-200">
-          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-            <nav class="flex flex-col gap-2">
-              <a href="/" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-home text-primary"></i>
-                <span class="font-medium text-gray-700">トップページ</span>
-              </a>
-              <a href="/categories" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-folder-open text-primary"></i>
-                <span class="font-medium text-gray-700">カテゴリ一覧</span>
-              </a>
-              <a href="/news" class="flex items-center gap-3 px-4 py-3 bg-gray-100 rounded-lg">
-                <i class="fas fa-newspaper text-primary"></i>
-                <span class="font-medium text-gray-700">最新ニュース</span>
-              </a>
-              <a href="/mypage" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors">
-                <i class="fas fa-user text-primary"></i>
-                <span class="font-medium text-gray-700">マイページ</span>
-              </a>
-            </nav>
-          </div>
-        </div>
+      <body class="bg-gray-50 flex flex-col min-h-screen">
+        <CommonHeader />
 
         {/* Main Content */}
-        <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-          {/* Page Title */}
-          <div class="mb-6">
-            <h2 class="text-lg font-normal text-gray-700">
-              NEWS
-            </h2>
-          </div>
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* News Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
+              <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                  <i class="fas fa-newspaper text-primary mr-2"></i>
+                  最新ニュース
+                </h2>
+                <p class="text-sm text-gray-600">SNS、AI、テクノロジー、マーケティングに関する最新情報</p>
+              </div>
 
-          {/* News List */}
-          <div id="news-list" class="space-y-6">
-            <div class="text-center py-12">
-              <i class="fas fa-spinner fa-spin text-4xl text-primary mb-4"></i>
-              <p class="text-gray-600">読み込み中...</p>
+              <div id="news-list" class="space-y-6">
+                <div class="text-center py-12">
+                  <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+                  <p class="text-gray-600">読み込み中...</p>
+                </div>
+              </div>
             </div>
+
+            {/* Sidebar */}
+            <CommonSidebar />
           </div>
         </main>
 
-        {/* Footer */}
-        <footer class="bg-gray-800 text-white py-6 mt-12">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2025 Akagami Research. All rights reserved.</p>
-          </div>
-        </footer>
-
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/utils.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/app.js"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
             let newsData = [];
+            let isAuthenticated = false;
 
-            // Load news articles
+            // Check authentication status
+            async function checkAuth() {
+              try {
+                const response = await axios.get('/api/user/me', { withCredentials: true });
+                isAuthenticated = response.data.authenticated;
+              } catch (error) {
+                isAuthenticated = false;
+              }
+            }
+
+            // Load news articles with likes
             async function loadNews() {
               try {
-                const response = await axios.get('/api/news');
+                const response = await axios.get('/api/news-with-likes', { withCredentials: true });
                 newsData = response.data;
                 renderNews();
               } catch (error) {
@@ -6687,6 +6143,34 @@ app.get('/news', async (c) => {
                 \`;
               }
             }
+
+            // Toggle like
+            // Toggle like function - make it globally accessible
+            window.toggleLike = async function(newsId, index) {
+              if (!isAuthenticated) {
+                showToast('いいねするにはログインが必要です', 'error');
+                openAuthModal();
+                return;
+              }
+
+              try {
+                const response = await axios.post(\`/api/news/\${newsId}/like\`, {}, { withCredentials: true });
+                
+                // Update local data
+                newsData[index].user_liked = response.data.liked ? 1 : 0;
+                newsData[index].likes_count = response.data.liked 
+                  ? parseInt(newsData[index].likes_count) + 1 
+                  : parseInt(newsData[index].likes_count) - 1;
+                
+                // Re-render just this news item
+                renderNews();
+                
+                showToast(response.data.liked ? 'いいねしました！' : 'いいねを取り消しました', 'success');
+              } catch (error) {
+                console.error('Failed to toggle like:', error);
+                showToast('エラーが発生しました', 'error');
+              }
+            };
 
             // Render news list
             function renderNews() {
@@ -6705,31 +6189,114 @@ app.get('/news', async (c) => {
               newsListEl.innerHTML = newsData.map((news, index) => {
                 const date = new Date(news.published_at);
                 const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+                const likesCount = parseInt(news.likes_count) || 0;
+                const userLiked = news.user_liked === 1;
+                const likeButtonClass = userLiked 
+                  ? 'text-red-500 hover:text-red-600' 
+                  : 'text-gray-400 hover:text-red-500';
+                const likeIconClass = userLiked ? 'fas fa-heart' : 'far fa-heart';
                 
                 return \`
-                  <article class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showNewsDetail(\${index})">
-                    <div class="flex items-center gap-2 mb-2">
-                      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
-                        \${news.category}
-                      </span>
-                      <span class="text-sm text-gray-500">\${dateStr}</span>
+                  <article class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <!-- Mobile: Clickable card -->
+                    <div class="md:hidden p-6">
+                      <div class="flex items-center justify-between gap-2 mb-2">
+                        <div class="flex items-center gap-2">
+                          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
+                            \${news.category}
+                          </span>
+                          <span class="text-sm text-gray-500">\${dateStr}</span>
+                        </div>
+                        <button 
+                          onclick="event.stopPropagation(); toggleLike(\${news.id}, \${index})"
+                          class="\${likeButtonClass} transition-colors flex items-center gap-1"
+                          title="\${userLiked ? 'いいねを取り消す' : 'いいね'}"
+                        >
+                          <i class="\${likeIconClass}"></i>
+                          <span class="text-sm">\${likesCount}</span>
+                        </button>
+                      </div>
+                      <div class="cursor-pointer" onclick="showNewsDetail(\${index})">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
+                        <p class="text-gray-600 line-clamp-4">\${escapeHtml(news.summary)}</p>
+                      </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
-                    <p class="text-gray-600 mb-4 md:line-clamp-none line-clamp-4">\${escapeHtml(news.summary)}</p>
-                    <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="hidden md:inline-flex items-center gap-2 text-primary font-semibold hover:underline" onclick="event.stopPropagation()">
-                      <i class="fas fa-external-link-alt"></i>
-                      元記事を読む（外部サイト）
-                    </a>
+                    
+                    <!-- Desktop: Accordion style -->
+                    <div class="hidden md:block p-6">
+                      <div class="flex items-center justify-between gap-2 mb-2">
+                        <div class="flex items-center gap-2">
+                          <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary text-white">
+                            \${news.category}
+                          </span>
+                          <span class="text-sm text-gray-500">\${dateStr}</span>
+                        </div>
+                        <button 
+                          onclick="toggleLike(\${news.id}, \${index})"
+                          class="\${likeButtonClass} transition-colors flex items-center gap-2 text-lg"
+                          title="\${userLiked ? 'いいねを取り消す' : 'いいね'}"
+                        >
+                          <i class="\${likeIconClass}"></i>
+                          <span class="text-sm">\${likesCount}</span>
+                        </button>
+                      </div>
+                      <h3 class="text-xl font-bold text-gray-800 mb-2">\${escapeHtml(news.title)}</h3>
+                      
+                      <!-- Summary: 2 lines with read more -->
+                      <div class="mb-4">
+                        <p id="summary-\${index}" class="text-gray-600 line-clamp-2">\${escapeHtml(news.summary)}</p>
+                        <button 
+                          id="toggle-\${index}" 
+                          onclick="toggleSummary(\${index})"
+                          class="text-primary text-sm font-semibold mt-2 hover:underline flex items-center gap-1"
+                        >
+                          <span id="toggle-text-\${index}">続きを読む</span>
+                          <i id="toggle-icon-\${index}" class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                      </div>
+                      
+                      <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                        <i class="fas fa-external-link-alt"></i>
+                        元記事を読む（外部サイト）
+                      </a>
+                    </div>
                   </article>
                 \`;
               }).join('');
             }
+            
+            // Toggle summary expansion
+            // Toggle summary expansion - make it globally accessible
+            window.toggleSummary = function(index) {
+              const summaryEl = document.getElementById(\`summary-\${index}\`);
+              const toggleTextEl = document.getElementById(\`toggle-text-\${index}\`);
+              const toggleIconEl = document.getElementById(\`toggle-icon-\${index}\`);
+              
+              if (summaryEl.classList.contains('line-clamp-2')) {
+                summaryEl.classList.remove('line-clamp-2');
+                toggleTextEl.textContent = '閉じる';
+                toggleIconEl.classList.remove('fa-chevron-down');
+                toggleIconEl.classList.add('fa-chevron-up');
+              } else {
+                summaryEl.classList.add('line-clamp-2');
+                toggleTextEl.textContent = '続きを読む';
+                toggleIconEl.classList.remove('fa-chevron-up');
+                toggleIconEl.classList.add('fa-chevron-down');
+              }
+            }
 
             // Show news detail modal (for mobile)
-            function showNewsDetail(index) {
+            // Show news detail modal - make it globally accessible
+            window.showNewsDetail = function(index) {
               const news = newsData[index];
               const date = new Date(news.published_at);
               const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+              const likesCount = parseInt(news.likes_count) || 0;
+              const userLiked = news.user_liked === 1;
+              const likeButtonClass = userLiked 
+                ? 'text-red-500' 
+                : 'text-gray-400';
+              const likeIconClass = userLiked ? 'fas fa-heart' : 'far fa-heart';
               
               // Create modal
               const modal = document.createElement('div');
@@ -6756,6 +6323,16 @@ app.get('/news', async (c) => {
                   <h2 class="text-2xl font-bold text-gray-800 mb-4">\${escapeHtml(news.title)}</h2>
                   <p class="text-gray-600 mb-6 whitespace-pre-wrap">\${escapeHtml(news.summary)}</p>
                   
+                  <div class="flex items-center gap-3 mb-4">
+                    <button 
+                      onclick="toggleLike(\${news.id}, \${index}); closeNewsDetail();"
+                      class="\${likeButtonClass} transition-colors flex items-center gap-2 text-lg px-4 py-2 border-2 border-gray-200 rounded-lg hover:border-red-300"
+                    >
+                      <i class="\${likeIconClass}"></i>
+                      <span class="text-sm font-semibold">\${likesCount}</span>
+                    </button>
+                  </div>
+                  
                   <a href="\${news.url}" target="_blank" rel="noopener noreferrer" class="block w-full bg-primary text-white text-center py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
                     <i class="fas fa-external-link-alt mr-2"></i>
                     元記事を読む（外部サイト）
@@ -6768,7 +6345,8 @@ app.get('/news', async (c) => {
             }
 
             // Close news detail modal
-            function closeNewsDetail() {
+            // Close news detail modal - make it globally accessible
+            window.closeNewsDetail = function() {
               const modal = document.getElementById('news-detail-modal');
               if (modal) {
                 modal.remove();
@@ -6782,9 +6360,25 @@ app.get('/news', async (c) => {
               div.textContent = text;
               return div.innerHTML;
             }
+            
+            // Toggle mobile menu (for hamburger menu)
+            function toggleMobileMenu() {
+              const sidebar = document.getElementById('sidebar');
+              const overlay = document.getElementById('sidebar-overlay');
+              
+              if (sidebar && overlay) {
+                sidebar.classList.toggle('translate-x-full');
+                overlay.classList.toggle('hidden');
+              }
+            }
 
             // Initialize
-            loadNews();
+            async function init() {
+              await checkAuth();
+              await loadNews();
+            }
+            
+            init();
           `
         }} />
       </body>
@@ -6799,7 +6393,7 @@ app.get('/mypage', (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>マイページ - Akagami Research</title>
+        <title>マイページ - Akagami.net</title>
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
@@ -6818,38 +6412,32 @@ app.get('/mypage', (c) => {
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
       </head>
-      <body class="bg-gray-50 min-h-screen">
-        {/* Header */}
-        <header class="bg-primary shadow-lg">
-          <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-              <a href="/" class="hover:opacity-80 transition-opacity">
-                <h1 class="text-lg font-bold text-white tracking-wide">
-                  Akagami Research
-                </h1>
-                <p class="text-white text-xs mt-0.5 opacity-90">♡ 赤髪の資料保管庫 ♡</p>
-              </a>
-              <a href="/" class="text-white hover:text-gray-200 flex items-center" aria-label="トップに戻る">
-                <i class="fas fa-home text-xl"></i>
-              </a>
-            </div>
-          </div>
-        </header>
+      <body class="bg-gray-50 min-h-screen flex flex-col">
+        <CommonHeader />
 
         {/* Main Content */}
-        <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-          <div id="mypage-content" class="space-y-6">
-            {/* Loading */}
-            <div class="text-center py-12">
-              <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
-              <p class="text-gray-600">読み込み中...</p>
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Main Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
+              <div id="mypage-content" class="space-y-6">
+                {/* Loading */}
+                <div class="text-center py-12">
+                  <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+                  <p class="text-gray-600">読み込み中...</p>
+                </div>
+              </div>
             </div>
+
+            {/* Sidebar */}
+            <CommonSidebar />
           </div>
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
+        <script src="/static/app.js"></script>
         <script src="/static/mypage.js"></script>
       </body>
     </html>
@@ -6863,7 +6451,7 @@ app.get('/question-finder', (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>キーワードチェック - Akagami Research</title>
+        <title>キーワードチェック - Akagami.net</title>
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
@@ -6899,8 +6487,219 @@ app.get('/question-finder', (c) => {
           `
         }} />
       </head>
-      <body>
-        <div id="question-finder-app">
+      <body class="bg-gray-50 flex flex-col min-h-screen">
+        <CommonHeader />
+        
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Main Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
+              <div id="question-finder-app">
+                <div class="min-h-screen flex items-center justify-center bg-gray-100">
+                  <div class="text-center">
+                    <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+                    <p class="text-gray-600">読み込み中...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <CommonSidebar />
+          </div>
+        </main>
+        
+        {/* Auth Modal */}
+        <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+          <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+              {/* Modal Header */}
+              <div class="flex items-center justify-between mb-6">
+                <h2 id="auth-modal-title" class="text-2xl font-bold text-gray-800">ログイン</h2>
+                <button 
+                  onclick="closeAuthModal()"
+                  class="text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="閉じる"
+                >
+                  <i class="fas fa-times text-2xl"></i>
+                </button>
+              </div>
+
+              {/* Password Login Form */}
+              <form id="password-login-form" onsubmit="handlePasswordLogin(event)">
+                <div class="space-y-4 mb-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                    <input 
+                      type="email" 
+                      id="login-email"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="your@email.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">パスワード</label>
+                    <input 
+                      type="password" 
+                      id="login-password"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                <div id="login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+                {/* Submit Button */}
+                <button 
+                  type="submit"
+                  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+                >
+                  <i class="fas fa-sign-in-alt mr-2"></i>ログイン
+                </button>
+
+                {/* Magic Link Option */}
+                <button 
+                  type="button"
+                  onclick="switchToMagicLink()"
+                  class="w-full text-primary hover:underline text-sm mb-4"
+                >
+                  パスワードを使わずにログイン（マジックリンク）
+                </button>
+              </form>
+
+              {/* Magic Link Form */}
+              <form id="magic-link-form" class="hidden" onsubmit="handleMagicLinkRequest(event)">
+                <div class="mb-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                  <input 
+                    type="email" 
+                    id="magic-link-email"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="your@email.com"
+                    required
+                  />
+                  <p class="text-xs text-gray-500 mt-2">ログインリンクをメールでお送りします</p>
+                </div>
+
+                {/* Error Message */}
+                <div id="magic-link-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+                {/* Success Message */}
+                <div id="magic-link-success" class="hidden mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm"></div>
+
+                {/* Submit Button */}
+                <button 
+                  type="submit"
+                  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+                >
+                  <i class="fas fa-envelope mr-2"></i>ログインリンクを送信
+                </button>
+
+                {/* Back to Password Login */}
+                <button 
+                  type="button"
+                  onclick="switchToPasswordLogin()"
+                  class="w-full text-primary hover:underline text-sm mb-4"
+                >
+                  パスワードでログイン
+                </button>
+              </form>
+
+              {/* Register Form */}
+              <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+                <div class="space-y-4 mb-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                    <input 
+                      type="email" 
+                      id="register-email"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="your@email.com"
+                      required
+                    />
+                    <p class="mt-1 text-xs text-gray-500">
+                      <i class="fas fa-info-circle mr-1"></i>
+                      メールアドレスだけで簡単登録！名前や詳細情報は後からマイページで入力できます。
+                    </p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">パスワード（6文字以上・任意）</label>
+                    <input 
+                      type="password" 
+                      id="register-password"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="••••••••"
+                      minlength="6"
+                    />
+                    <p class="mt-1 text-xs text-gray-500">
+                      パスワードを設定しない場合、ログイン時にメールでマジックリンクが送信されます。
+                    </p>
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                <div id="register-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+                {/* Submit Button */}
+                <button 
+                  type="submit"
+                  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+                >
+                  <i class="fas fa-user-plus mr-2"></i>会員登録（無料）
+                </button>
+              </form>
+
+              {/* Switch Mode */}
+              <div id="switch-auth-mode" class="text-center text-sm text-gray-600">
+                アカウントをお持ちでない方は <button type="button" onclick="switchToRegister()" class="text-primary hover:underline">こちら</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script defer src="/static/utils.js"></script>
+        <script defer src="/static/auth.js"></script>
+        <script defer src="/static/app.js"></script>
+        <script defer src="/static/question-finder.js?v=2026011410"></script>
+      </body>
+    </html>
+  )
+})
+
+// Instagram FAQ Page
+app.get('/instagram-faq', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Instagram運用 よくある質問 - Akagami.net</title>
+        <meta name="description" content="Instagram運用でよくある質問に赤髪が回答。フォロワーの増やし方、投稿のコツ、収益化まで現場のリアルな答えをまとめました。" />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gray-50">
+        <div id="faq-app">
           <div class="min-h-screen flex items-center justify-center bg-gray-100">
             <div class="text-center">
               <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
@@ -6909,10 +6708,508 @@ app.get('/question-finder', (c) => {
           </div>
         </div>
         
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/question-finder.js?v=2026011407"></script>
+        <script src="/static/instagram-faq.js?v=2026011402"></script>
+      </body>
+    </html>
+  )
+})
+
+// TikTok FAQ Page
+app.get('/tiktok-faq', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>TikTok運用 よくある質問 - Akagami.net</title>
+        <meta name="description" content="TikTok運用でよくある質問に赤髪が回答。動画の作り方、バズらせ方、収益化まで現場のリアルな答えをまとめました。" />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gray-50">
+        <div id="faq-app">
+          <div class="min-h-screen flex items-center justify-center bg-gray-100">
+            <div class="text-center">
+              <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+              <p class="text-gray-600">読み込み中...</p>
+            </div>
+          </div>
+        </div>
+        
+        <script src="/static/utils.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/instagram-faq.js?v=2026011402"></script>
+      </body>
+    </html>
+  )
+})
+
+// Unified SNS FAQ Page
+app.get('/sns-faq', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SNS運用 よくある質問 - Akagami.net</title>
+        <meta name="description" content="Instagram・TikTok・YouTube・Threadsなど、SNS運用でよくある質問に赤髪が回答。現場のリアルな答えをまとめました。" />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gray-50 flex flex-col min-h-screen">
+        <CommonHeader />
+
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar */}
+            <CommonSidebar />
+
+            {/* FAQ Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
+              <div id="faq-app">
+                <div class="min-h-screen flex items-center justify-center bg-gray-100">
+                  <div class="text-center">
+                    <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+                    <p class="text-gray-600">読み込み中...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Auth Modal */}
+        <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+          <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+              {/* Modal Header */}
+              <div class="flex items-center justify-between mb-6">
+                <h2 id="auth-modal-title" class="text-2xl font-bold text-gray-800">ログイン</h2>
+                <button 
+                  onclick="closeAuthModal()"
+                  class="text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="閉じる"
+                >
+                  <i class="fas fa-times text-2xl"></i>
+                </button>
+              </div>
+
+              {/* Password Login Form */}
+              <form id="password-login-form" onsubmit="handlePasswordLogin(event)">
+                <div class="space-y-4 mb-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                    <input 
+                      type="email" 
+                      id="login-email"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="your@email.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">パスワード</label>
+                    <input 
+                      type="password" 
+                      id="login-password"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                <div id="login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+                {/* Submit Button */}
+                <button 
+                  type="submit"
+                  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+                >
+                  <i class="fas fa-sign-in-alt mr-2"></i>ログイン
+                </button>
+
+                {/* Magic Link Option */}
+                <button 
+                  type="button"
+                  onclick="switchToMagicLink()"
+                  class="w-full text-primary hover:underline text-sm mb-4"
+                >
+                  パスワードを使わずにログイン（マジックリンク）
+                </button>
+              </form>
+
+              {/* Magic Link Form */}
+              <form id="magic-link-form" class="hidden" onsubmit="handleMagicLinkRequest(event)">
+                <div class="mb-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                  <input 
+                    type="email" 
+                    id="magic-link-email"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder="your@email.com"
+                    required
+                  />
+                  <p class="text-xs text-gray-500 mt-2">ログインリンクをメールでお送りします</p>
+                </div>
+
+                {/* Error Message */}
+                <div id="magic-link-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+                {/* Success Message */}
+                <div id="magic-link-success" class="hidden mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm"></div>
+
+                {/* Submit Button */}
+                <button 
+                  type="submit"
+                  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+                >
+                  <i class="fas fa-envelope mr-2"></i>ログインリンクを送信
+                </button>
+
+                {/* Back to Password Login */}
+                <button 
+                  type="button"
+                  onclick="switchToPasswordLogin()"
+                  class="w-full text-primary hover:underline text-sm mb-4"
+                >
+                  パスワードでログイン
+                </button>
+              </form>
+
+              {/* Register Form */}
+              <form id="register-form" class="hidden" onsubmit="handleRegister(event)">
+                <div class="space-y-4 mb-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">メールアドレス</label>
+                    <input 
+                      type="email" 
+                      id="register-email"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="your@email.com"
+                      required
+                    />
+                    <p class="mt-1 text-xs text-gray-500">
+                      <i class="fas fa-info-circle mr-1"></i>
+                      メールアドレスだけで簡単登録！名前や詳細情報は後からマイページで入力できます。
+                    </p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">パスワード（6文字以上・任意）</label>
+                    <input 
+                      type="password" 
+                      id="register-password"
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="••••••••"
+                      minlength="6"
+                    />
+                    <p class="mt-1 text-xs text-gray-500">
+                      パスワードを設定しない場合、ログイン時にメールでマジックリンクが送信されます。
+                    </p>
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                <div id="register-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"></div>
+
+                {/* Submit Button */}
+                <button 
+                  type="submit"
+                  class="w-full bg-primary text-white py-3 rounded-lg hover:bg-red-600 transition-colors font-semibold mb-4"
+                >
+                  <i class="fas fa-user-plus mr-2"></i>会員登録（無料）
+                </button>
+              </form>
+
+              {/* Switch Mode */}
+              <div id="switch-auth-mode" class="text-center text-sm text-gray-600">
+                アカウントをお持ちでない方は <button type="button" onclick="switchToRegister()" class="text-primary hover:underline">こちら</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <script defer src="/static/utils.js"></script>
+        <script defer src="/static/auth.js"></script>
+        <script defer src="/static/app.js"></script>
+        <script defer src="/static/sns-faq.js?v=2026011410"></script>
+      </body>
+    </html>
+  )
+})
+
+// Instagram FAQ Admin Page
+app.get('/admin/instagram-faq', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SNS FAQ 管理 - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+        <link href="/static/admin-dark.css" rel="stylesheet" />
+      </head>
+      <body class="admin-dark bg-darker">
+        {/* Header */}
+        <header style="background-color: #2d2d2d; border-bottom: 2px solid #4b5563;">
+          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+              <div>
+                <h1 class="text-xl font-bold flex items-center" style="color: #f3f4f6;">
+                  <i class="fas fa-comments mr-2" style="color: #e75556;"></i>
+                  SNS FAQ 管理
+                </h1>
+                <p class="text-xs mt-0.5" style="color: #d1d5db;">よくある質問の追加・編集・削除</p>
+              </div>
+              <div class="flex gap-2">
+                <a href="/admin" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #e75556; color: white;" aria-label="管理画面へ戻る">
+                  <i class="fas fa-arrow-left mr-1" aria-hidden="true"></i><span class="hidden sm:inline">管理画面へ戻る</span><span class="sm:hidden">戻る</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+          {/* Category Filter */}
+          <div class="mb-4 flex flex-wrap gap-2">
+            <button 
+              data-category="all"
+              onclick="filterByCategory('all')"
+              class="px-4 py-2 rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #4b5563; color: #f3f4f6;"
+            >
+              <i class="fas fa-th-large mr-2"></i>全て
+            </button>
+            <button 
+              data-category="instagram"
+              onclick="filterByCategory('instagram')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #E4405F;"
+            >
+              <i class="fab fa-instagram mr-2"></i>Instagram
+            </button>
+            <button 
+              data-category="tiktok"
+              onclick="filterByCategory('tiktok')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #000000;"
+            >
+              <i class="fab fa-tiktok mr-2"></i>TikTok
+            </button>
+            <button 
+              data-category="youtube"
+              onclick="filterByCategory('youtube')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #FF0000;"
+            >
+              <i class="fab fa-youtube mr-2"></i>YouTube
+            </button>
+            <button 
+              data-category="threads"
+              onclick="filterByCategory('threads')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #000000;"
+            >
+              <i class="fas fa-at mr-2"></i>Threads
+            </button>
+            <button 
+              data-category="twitter"
+              onclick="filterByCategory('twitter')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #000000;"
+            >
+              <i class="fab fa-x-twitter mr-2"></i>Twitter(X)
+            </button>
+            <button 
+              data-category="line"
+              onclick="filterByCategory('line')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #16a34a;"
+            >
+              <i class="fab fa-line mr-2"></i>LINE公式
+            </button>
+            <button 
+              data-category="flame"
+              onclick="filterByCategory('flame')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #dc2626;"
+            >
+              <i class="fas fa-fire-extinguisher mr-2"></i>炎上対応
+            </button>
+            <button 
+              data-category="anti"
+              onclick="filterByCategory('anti')"
+              class="px-4 py-2 text-white rounded-lg transition-all duration-300 shadow-lg font-semibold text-sm"
+              style="background-color: #8b5cf6;"
+            >
+              <i class="fas fa-shield-alt mr-2"></i>アンチ対応
+            </button>
+          </div>
+
+          {/* Add Button */}
+          <div class="mb-6">
+            <button 
+              onclick="showFAQForm()"
+              class="w-full sm:w-auto px-6 py-3 text-white font-bold rounded-lg transition-all duration-300 shadow-lg"
+              style="background-color: #e75556;"
+            >
+              <i class="fas fa-plus mr-2"></i>新規FAQ追加
+            </button>
+          </div>
+
+          {/* FAQ List */}
+          <div id="faq-list" class="space-y-4">
+            <div class="text-center py-12" style="color: #9ca3af;">
+              <i class="fas fa-spinner fa-spin text-5xl mb-4" style="color: #e75556;"></i>
+              <p>読み込み中...</p>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ Form Modal */}
+        <div id="faq-form-modal" class="hidden fixed inset-0 bg-black/70 z-50 items-center justify-center p-4">
+          <div class="rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" style="background-color: #2d2d2d; border: 2px solid #4b5563;">
+            <div class="sticky top-0 border-b p-4 sm:p-6 flex items-center justify-between" style="background-color: #3a3a3a; border-color: #4b5563;">
+              <h2 id="form-title" class="text-xl font-bold" style="color: #f3f4f6;">新規FAQ追加</h2>
+              <button onclick="hideFAQForm()" class="transition-colors" style="color: #9ca3af;" onmouseover="this.style.color='#e75556'" onmouseout="this.style.color='#9ca3af'">
+                <i class="fas fa-times text-2xl"></i>
+              </button>
+            </div>
+            
+            <div class="p-4 sm:p-6 space-y-4">
+              <div>
+                <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">質問</label>
+                <textarea 
+                  id="faq-question"
+                  rows="2"
+                  class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:outline-none transition-all"
+                  style="background-color: #1a1a1a; border: 2px solid #4b5563; color: #f3f4f6;"
+                  placeholder="例: 投稿は毎日したほうがいいですか？"
+                ></textarea>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">回答</label>
+                <textarea 
+                  id="faq-answer"
+                  rows="4"
+                  class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:outline-none transition-all"
+                  style="background-color: #1a1a1a; border: 2px solid #4b5563; color: #f3f4f6;"
+                  placeholder="赤髪の回答を入力..."
+                ></textarea>
+              </div>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">SNSカテゴリ</label>
+                  <select 
+                    id="faq-sns-category"
+                    class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:outline-none transition-all"
+                    style="background-color: #1a1a1a; border: 2px solid #4b5563; color: #f3f4f6;"
+                  >
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="threads">Threads</option>
+                    <option value="twitter">Twitter(X)</option>
+                    <option value="line">LINE公式</option>
+                    <option value="flame">炎上対応</option>
+                    <option value="anti">アンチ対応</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">表示順序</label>
+                  <input 
+                    type="number"
+                    id="faq-sort-order"
+                    min="0"
+                    class="w-full px-4 py-2 rounded-lg focus:ring-2 focus:outline-none transition-all"
+                    style="background-color: #1a1a1a; border: 2px solid #4b5563; color: #f3f4f6;"
+                    placeholder="0"
+                  />
+                </div>
+                
+                <div class="flex items-end">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="checkbox"
+                      id="faq-is-published"
+                      checked
+                      class="w-5 h-5 rounded focus:ring-2 transition-all"
+                      style="accent-color: #e75556;"
+                    />
+                    <span class="text-sm font-semibold" style="color: #f3f4f6;">公開する</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sticky bottom-0 p-4 sm:p-6 flex gap-3 border-t" style="background-color: #3a3a3a; border-color: #4b5563;">
+              <button onclick="hideFAQForm()" class="flex-1 px-6 py-3 font-semibold rounded-lg transition-all duration-300 shadow-md" style="background-color: #4b5563; color: #f3f4f6;">
+                キャンセル
+              </button>
+              <button onclick="saveFAQ()" class="flex-1 px-6 py-3 text-white font-semibold rounded-lg transition-all duration-300 shadow-md" style="background-color: #e75556;">
+                保存
+              </button>
+            </div>
+          </div>
+        </div>
+        <script src="/static/utils.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/faq-admin.js?v=2026011501"></script>
       </body>
     </html>
   )
@@ -6989,7 +7286,7 @@ app.get('/admin', (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Akagami Research - 管理画面</title>
+        <title>Akagami.net - 管理画面</title>
         
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
@@ -7047,7 +7344,7 @@ app.get('/admin/news', (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>ニュース管理 - Akagami Research</title>
+        <title>ニュース管理 - Akagami.net</title>
         
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
@@ -7105,7 +7402,7 @@ app.notFound((c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>404 Not Found - Akagami Research</title>
+        <title>404 Not Found - Akagami.net</title>
         
         {/* Performance Optimization */}
         <link rel="preconnect" href="https://cdn.tailwindcss.com" />
@@ -7232,7 +7529,7 @@ app.notFound((c) => {
           
           {/* Footer */}
           <div class="mt-8 text-sm text-gray-500">
-            <p>&copy; 2026 Akagami Research. All rights reserved.</p>
+            <p>&copy; 2026 Akagami.net. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -7292,7 +7589,7 @@ export default {
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px;">
             <div style="background: linear-gradient(135deg, #e75556 0%, #ff6b6b 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
               <h1 style="margin: 0; font-size: 28px;">📊 新規会員登録レポート</h1>
-              <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Akagami Research</p>
+              <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Akagami.net</p>
             </div>
             
             <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb; border-top: none;">
@@ -7325,7 +7622,7 @@ export default {
               
               <p style="margin-top: 30px; font-size: 14px; color: #6b7280; text-align: center;">
                 このメールは毎日自動的に送信されます。<br>
-                © 2026 Akagami Research. All rights reserved.
+                © 2026 Akagami.net. All rights reserved.
               </p>
             </div>
           </body>
@@ -7333,7 +7630,7 @@ export default {
         `
         
         const text = `
-【新規会員登録レポート - Akagami Research】
+【新規会員登録レポート - Akagami.net】
 
 過去24時間で ${newUsers.length} 名の新規会員が登録されました！
 
@@ -7359,12 +7656,12 @@ ${index + 1}. 会員番号: ${user.id}
 
 ---
 このメールは毎日自動的に送信されます。
-© 2026 Akagami Research. All rights reserved.
+© 2026 Akagami.net. All rights reserved.
         `
         
         await sendEmail({
           to: 'akagami.syatyo@gmail.com',
-          subject: `[Akagami Research] 新規会員登録レポート (${newUsers.length}名)`,
+          subject: `[Akagami.net] 新規会員登録レポート (${newUsers.length}名)`,
           html,
           text
         }, env)

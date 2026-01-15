@@ -284,8 +284,6 @@ async function loadMyPage() {
     const favorites = await favoritesRes.json()
     
     // Debug: Log data structure
-    console.log('Downloads sample:', downloads[0])
-    console.log('Favorites sample:', favorites[0])
     
     // Render my page
     renderMyPage(downloads, favorites)
@@ -293,7 +291,6 @@ async function loadMyPage() {
     // Load random quote after page render
     loadRandomQuote()
   } catch (error) {
-    console.error('Failed to load my page:', error)
     document.getElementById('mypage-content').innerHTML = `
       <div class="text-center py-12 text-red-600">
         <i class="fas fa-exclamation-triangle text-5xl mb-4"></i>
@@ -311,13 +308,6 @@ function renderMyPage(downloads, favorites) {
   const content = document.getElementById('mypage-content')
   
   content.innerHTML = `
-    <!-- Page Title -->
-    <div class="text-center mb-6">
-      <h2 class="font-normal" style="font-size: 1.05rem; color: #E75556;">
-        MY PAGE
-      </h2>
-    </div>
-
     <!-- User Info Card - Compact -->
     <div class="bg-white rounded-lg shadow-md border-2 border-gray-200 p-4 mb-6">
       <div class="flex items-center gap-4">
@@ -353,17 +343,17 @@ function renderMyPage(downloads, favorites) {
           
           <p class="text-sm text-gray-600 truncate mt-1"><i class="fas fa-envelope mr-1"></i>${escapeHtml(userData.email)}</p>
           
-          <div class="mt-2 space-y-1">
+          <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
             ${userData.location ? `
-              <p class="text-sm text-gray-600"><i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>${escapeHtml(userData.location)}</p>
+              <p class="text-gray-600"><i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>${escapeHtml(userData.location)}</p>
             ` : `
-              <p class="text-sm text-gray-400 italic"><i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>居住地未設定</p>
+              <p class="text-gray-400 italic"><i class="fas fa-map-marker-alt mr-1 w-4 text-center"></i>居住地未設定</p>
             `}
             
             ${userData.birthday ? `
-              <p class="text-sm text-gray-600"><i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>${userData.birthday}</p>
+              <p class="text-gray-600"><i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>${formatBirthday(userData.birthday)}</p>
             ` : `
-              <p class="text-sm text-gray-400 italic"><i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>誕生日未設定</p>
+              <p class="text-gray-400 italic"><i class="fas fa-birthday-cake mr-1 w-4 text-center"></i>誕生日未設定</p>
             `}
           </div>
           
@@ -374,11 +364,6 @@ function renderMyPage(downloads, favorites) {
                 <i class="fas fa-calendar mr-1"></i>登録日: ${formatDate(userData.createdAt)}
               </span>
             </p>
-            ${userData.lastLogin ? `
-              <p class="text-xs text-gray-500 mt-1">
-                <i class="fas fa-sign-in-alt mr-1"></i>最終ログイン: ${formatDate(userData.lastLogin)}
-              </p>
-            ` : ''}
           </div>
         </div>
       </div>
@@ -403,6 +388,16 @@ function renderMyPage(downloads, favorites) {
       <div>
         <h3 class="text-lg font-bold text-gray-800 mb-1">キーワードチェック</h3>
         <p class="text-sm text-gray-600">Google検索データからSNS投稿ネタを発見</p>
+      </div>
+    </a>
+
+    <!-- SNS FAQ Link (Unified) -->
+    <a href="/sns-faq" class="block bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl shadow-lg p-6 mb-6 border-2 border-indigo-400 hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
+      <div>
+        <h3 class="text-lg font-bold text-gray-800 mb-1">
+          <i class="fas fa-comments text-indigo-500 mr-2"></i>SNS運用 FAQ
+        </h3>
+        <p class="text-sm text-gray-600">Instagram・TikTok・YouTubeなど よくある質問と回答集</p>
       </div>
     </a>
 
@@ -720,6 +715,14 @@ function renderMyPage(downloads, favorites) {
         アカウント管理
       </h3>
       
+      ${userData.lastLogin ? `
+        <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+          <p class="text-sm text-gray-600">
+            <i class="fas fa-sign-in-alt mr-2 text-primary"></i>最終ログイン: ${formatDate(userData.lastLogin)}
+          </p>
+        </div>
+      ` : ''}
+      
       <div class="space-y-3">
         <button onclick="if(confirm('ログアウトしますか?')) handleLogout()"
           class="w-full px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium">
@@ -791,7 +794,6 @@ async function uploadProfilePhoto(event) {
     }
     reader.readAsDataURL(file)
   } catch (error) {
-    console.error('Failed to upload profile photo:', error)
     alert('プロフィール写真のアップロードに失敗しました')
   }
 }
@@ -831,12 +833,6 @@ async function saveProfileInfo() {
       body: JSON.stringify(profileData)
     })
     
-    console.log('Profile update response:', {
-      status: res.status,
-      ok: res.ok,
-      statusText: res.statusText
-    })
-    
     if (res.status === 401) {
       alert('セッションが切れています。再度ログインしてください。')
       window.location.href = '/'
@@ -845,7 +841,6 @@ async function saveProfileInfo() {
     
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}))
-      console.error('Profile update failed:', errorData)
       throw new Error(errorData.error || 'Failed to save')
     }
     
@@ -868,7 +863,6 @@ async function saveProfileInfo() {
       button.disabled = false
     }, 2000)
   } catch (error) {
-    console.error('Failed to save profile info:', error)
     
     // Check if it's an authentication error
     if (error.message.includes('401') || error.message.includes('Unauthorized')) {
@@ -905,12 +899,6 @@ async function saveSnsInfo() {
       body: JSON.stringify(snsData)
     })
     
-    console.log('SNS info update response:', {
-      status: res.status,
-      ok: res.ok,
-      statusText: res.statusText
-    })
-    
     if (res.status === 401) {
       alert('セッションが切れています。再度ログインしてください。')
       window.location.href = '/'
@@ -919,7 +907,6 @@ async function saveSnsInfo() {
     
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}))
-      console.error('SNS info update failed:', errorData)
       throw new Error(errorData.error || 'Failed to save')
     }
     
@@ -940,7 +927,6 @@ async function saveSnsInfo() {
       button.disabled = false
     }, 2000)
   } catch (error) {
-    console.error('Failed to save SNS info:', error)
     
     // Check if it's an authentication error
     if (error.message.includes('401') || error.message.includes('Unauthorized')) {
@@ -994,7 +980,6 @@ async function saveNotificationSettings() {
       button.disabled = false
     }, 2000)
   } catch (error) {
-    console.error('Failed to save notification settings:', error)
     alert('通知設定の保存に失敗しました')
     button.innerHTML = originalHtml
     button.disabled = false
@@ -1034,7 +1019,6 @@ function updateUserInfoCard() {
   const userInfoCard = document.querySelector('.bg-white.rounded-lg.shadow-md.border-2.border-gray-200.p-4.mb-6')
   
   if (!userInfoCard) {
-    console.warn('User info card not found')
     return
   }
   
@@ -1079,6 +1063,17 @@ function updateUserInfoCard() {
   setTimeout(() => {
     userInfoCard.style.boxShadow = ''
   }, 1000)
+}
+
+// Toggle mobile menu (for hamburger menu)
+function toggleMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  if (sidebar && overlay) {
+    sidebar.classList.toggle('translate-x-full');
+    overlay.classList.toggle('hidden');
+  }
 }
 
 // Initialize page on load

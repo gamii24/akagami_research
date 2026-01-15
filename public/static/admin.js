@@ -185,6 +185,9 @@ function renderAdminPage() {
           <a href="/admin/news" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #f59e0b; color: white;" aria-label="ニュース管理">
             <i class="fas fa-newspaper mr-1" aria-hidden="true"></i>ニュース管理
           </a>
+          <a href="/admin/instagram-faq" class="px-4 py-2 text-sm rounded-lg transition-all duration-300 shadow-lg font-semibold" style="background-color: #8b5cf6; color: white;" aria-label="Instagram FAQ管理">
+            <i class="fab fa-instagram mr-1" aria-hidden="true"></i>FAQ管理
+          </a>
         </div>
 
         <!-- PDF List -->

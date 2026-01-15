@@ -74,6 +74,25 @@ function formatDate(dateString) {
   }
 }
 
+// Format birthday as "YYYY年MM月DD日"
+function formatBirthday(dateString) {
+  if (!dateString) return '誕生日未設定'
+  
+  try {
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return '誕生日未設定'
+    
+    return date.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  } catch (e) {
+    console.error('Birthday format error:', e)
+    return '誕生日未設定'
+  }
+}
+
 /**
  * カテゴリアイコンを取得
  */

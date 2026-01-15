@@ -36,7 +36,7 @@ export async function sendEmail(options: EmailOptions, env?: EmailEnvironment): 
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Akagami Research <noreply@akagami.net>',
+        from: 'Akagami.net <noreply@akagami.net>',
         to: options.to,
         subject: options.subject,
         html: options.html,
@@ -114,11 +114,11 @@ export function getWelcomeEmailHtml(name: string): string {
     </head>
     <body>
       <div class="header">
-        <h1 style="margin: 0;">Akagami Research へようこそ！</h1>
+        <h1 style="margin: 0;">Akagami.net へようこそ！</h1>
       </div>
       <div class="content">
         <p>こんにちは、${name}さん</p>
-        <p>Akagami Research の会員登録が完了しました！🎉</p>
+        <p>Akagami.net の会員登録が完了しました！🎉</p>
         <p>これからは以下の機能をご利用いただけます：</p>
         <ul>
           <li>デバイス間でのダウンロード履歴とお気に入りの同期</li>
@@ -129,10 +129,10 @@ export function getWelcomeEmailHtml(name: string): string {
           <a href="https://akagami.net/" class="button">サイトにアクセス</a>
         </div>
         <p>素敵な学びの時間をお過ごしください！</p>
-        <p>Akagami Research チーム</p>
+        <p>Akagami.net チーム</p>
       </div>
       <div class="footer">
-        <p>© 2026 Akagami Research. All rights reserved.</p>
+        <p>© 2026 Akagami.net. All rights reserved.</p>
       </div>
     </body>
     </html>
@@ -201,7 +201,7 @@ export function getMagicLinkEmailHtml(name: string, magicLink: string): string {
       </div>
       <div class="content">
         <p>こんにちは、${name}さん</p>
-        <p>Akagami Research にログインするためのマジックリンクです。</p>
+        <p>Akagami.net にログインするためのマジックリンクです。</p>
         <div style="text-align: center;">
           <a href="${magicLink}" class="button">ログインする</a>
         </div>
@@ -214,10 +214,10 @@ export function getMagicLinkEmailHtml(name: string, magicLink: string): string {
           </ul>
         </div>
         <p>このメールに心当たりがない場合は、無視してください。</p>
-        <p>Akagami Research チーム</p>
+        <p>Akagami.net チーム</p>
       </div>
       <div class="footer">
-        <p>© 2026 Akagami Research. All rights reserved.</p>
+        <p>© 2026 Akagami.net. All rights reserved.</p>
       </div>
     </body>
     </html>
@@ -305,11 +305,11 @@ export function getNewPdfNotificationEmailHtml(userName: string, pdfTitle: strin
         
         <p>通知設定を変更したい場合は、<a href="https://akagami.net/my-page/notifications">マイページ</a>からいつでも変更できます。</p>
         
-        <p>Akagami Research チーム</p>
+        <p>Akagami.net チーム</p>
       </div>
       <div class="footer">
         <p>このメールは通知設定に基づいて送信されています。</p>
-        <p>© 2026 Akagami Research. All rights reserved.</p>
+        <p>© 2026 Akagami.net. All rights reserved.</p>
       </div>
     </body>
     </html>
@@ -390,7 +390,7 @@ export function getAdminNewUserNotificationHtml(userName: string, userEmail: str
         <h1 style="margin: 0;">🎉 新規会員登録通知</h1>
       </div>
       <div class="content">
-        <p>Akagami Research に新しい会員が登録されました！</p>
+        <p>Akagami.net に新しい会員が登録されました！</p>
         
         <div class="user-card">
           <h2 style="margin: 0 0 15px 0; color: #4caf50;">会員情報</h2>
@@ -421,7 +421,7 @@ export function getAdminNewUserNotificationHtml(userName: string, userEmail: str
         </p>
       </div>
       <div class="footer">
-        <p>© 2026 Akagami Research. All rights reserved.</p>
+        <p>© 2026 Akagami.net. All rights reserved.</p>
       </div>
     </body>
     </html>

@@ -24,7 +24,6 @@ let state = {
 function trackGAEvent(eventName, params = {}) {
   if (typeof gtag !== 'undefined') {
     gtag('event', eventName, params)
-    console.log('GA Event:', eventName, params)
   }
 }
 
@@ -46,7 +45,6 @@ function loadDownloadedPdfs() {
       state.downloadedPdfs = new Set(JSON.parse(downloaded))
     }
   } catch (error) {
-    console.error('Failed to load downloaded PDFs:', error)
   }
   
   // Load favorite PDFs
@@ -56,7 +54,6 @@ function loadDownloadedPdfs() {
       state.favoritePdfs = new Set(JSON.parse(favorites))
     }
   } catch (error) {
-    console.error('Failed to load favorite PDFs:', error)
   }
   
   // Load sort preference
@@ -66,7 +63,6 @@ function loadDownloadedPdfs() {
       state.sortBy = sortBy
     }
   } catch (error) {
-    console.error('Failed to load sort preference:', error)
   }
   
   // Load view mode preference
@@ -76,7 +72,6 @@ function loadDownloadedPdfs() {
       state.viewMode = viewMode
     }
   } catch (error) {
-    console.error('Failed to load view mode:', error)
   }
   
   // Load dark mode preference
@@ -87,7 +82,6 @@ function loadDownloadedPdfs() {
       applyDarkMode()
     }
   } catch (error) {
-    console.error('Failed to load dark mode:', error)
   }
 }
 
@@ -97,7 +91,6 @@ function markAsDownloaded(pdfId) {
   try {
     localStorage.setItem('downloaded_pdfs', JSON.stringify([...state.downloadedPdfs]))
   } catch (error) {
-    console.error('Failed to save downloaded PDF:', error)
   }
 }
 
@@ -285,7 +278,6 @@ function toggleFavorite(event, pdfId) {
   try {
     localStorage.setItem('favorite_pdfs', JSON.stringify([...state.favoritePdfs]))
   } catch (error) {
-    console.error('Failed to save favorite PDFs:', error)
   }
   
   // Update just this card's favorite button
@@ -336,7 +328,6 @@ function sharePDF(event, pdfId, title, url) {
     navigator.share(shareData)
       .then(() => console.log('Share successful'))
       .catch((error) => {
-        console.log('Share failed:', error)
         // Fallback to copy to clipboard
         copyToClipboard(url, title)
       })
@@ -486,7 +477,6 @@ async function loadAllPdfsOnce() {
     // Set initial PDFs for display
     applyFiltersFromAllPdfs()
   } catch (error) {
-    console.error('Failed to load all PDFs:', error)
   }
 }
 
@@ -538,7 +528,6 @@ async function loadCategories() {
     const response = await fetch('/api/categories')
     state.categories = await response.json()
   } catch (error) {
-    console.error('Failed to load categories:', error)
   }
 }
 
@@ -547,7 +536,6 @@ async function loadTags() {
     const response = await fetch('/api/tags')
     state.tags = await response.json()
   } catch (error) {
-    console.error('Failed to load tags:', error)
   }
 }
 
@@ -583,7 +571,6 @@ function changeSortBy(sortOption) {
   try {
     localStorage.setItem('sort_by', sortOption)
   } catch (error) {
-    console.error('Failed to save sort option:', error)
   }
   
   // Re-sort and re-render
@@ -599,7 +586,6 @@ function changeViewMode(mode) {
   try {
     localStorage.setItem('view_mode', mode)
   } catch (error) {
-    console.error('Failed to save view mode:', error)
   }
   
   // Re-render
@@ -639,19 +625,20 @@ function renderCategoryFilter() {
         </a>
         ${sortedCategories.map(cat => {
           const count = state.categoryCounts[cat.id] || 0
+          const isCurrentPage = window.location.pathname === '/categories' || window.location.pathname === '/'
           return `
-            <button 
-              onclick="filterByCategory(${cat.id})" 
-              class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-sm"
-              aria-label="${escapeHtml(cat.name)}カテゴリでフィルター ${count > 0 ? count + '件' : ''}"
-              aria-pressed="${state.selectedCategory === cat.id}"
-              role="button"
+            <a 
+              href="/categories?category=${cat.id}"
+              ${isCurrentPage ? `onclick="event.preventDefault(); filterByCategory(${cat.id}); return false;"` : ''}
+              class="category-btn ${state.selectedCategory === cat.id ? 'active' : ''} w-full text-left px-3 py-2 rounded-lg flex items-center justify-between text-sm block hover:no-underline"
+              aria-label="${escapeHtml(cat.name)}カテゴリを表示 ${count > 0 ? count + '件' : ''}"
+              role="link"
             >
               <span>
                 <i class="fas fa-folder mr-2 text-xs" aria-hidden="true"></i>${escapeHtml(cat.name)}
               </span>
               ${count > 0 ? `<span class="badge bg-gray-500 text-white px-1.5 py-0.5 rounded-full text-xs font-medium">${count}</span>` : ''}
-            </button>
+            </a>
           `
         }).join('')}
       </div>
@@ -1310,7 +1297,6 @@ async function confirmDownload(pdfId, url) {
       pdf.download_count = (pdf.download_count || 0) + 1
     }
   } catch (error) {
-    console.error('Failed to increment download count:', error)
   }
   
   // Close download confirmation modal
@@ -1429,7 +1415,6 @@ async function confirmBulkDownload() {
         pdf.download_count = (pdf.download_count || 0) + 1
       })
     } catch (error) {
-      console.error('Failed to increment download counts:', error)
     }
     
     // Re-render to update counts and colors BEFORE opening URL
@@ -1449,7 +1434,6 @@ async function confirmBulkDownload() {
       pdf.download_count = (pdf.download_count || 0) + 1
     })
   } catch (error) {
-    console.error('Failed to increment download counts:', error)
   }
   
   // Re-render to update counts and colors BEFORE opening URLs
@@ -1549,8 +1533,8 @@ function closeMobileMenu() {
   const sidebar = document.getElementById('sidebar')
   const overlay = document.getElementById('sidebar-overlay')
   if (sidebar && overlay) {
-    sidebar.classList.remove('show-mobile')
-    overlay.classList.remove('show')
+    sidebar.classList.add('translate-x-full')
+    overlay.classList.add('hidden')
   }
 }
 
@@ -1630,8 +1614,8 @@ function toggleMobileMenu() {
   const sidebar = document.getElementById('sidebar')
   const overlay = document.getElementById('sidebar-overlay')
   if (sidebar && overlay) {
-    sidebar.classList.toggle('show-mobile')
-    overlay.classList.toggle('show')
+    sidebar.classList.toggle('translate-x-full')
+    overlay.classList.toggle('hidden')
   }
 }
 
@@ -1733,7 +1717,6 @@ function toggleDarkMode() {
   try {
     localStorage.setItem('dark_mode', state.darkMode.toString())
   } catch (error) {
-    console.error('Failed to save dark mode:', error)
   }
   
   // Apply dark mode
