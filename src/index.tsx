@@ -6733,6 +6733,158 @@ app.get('/news', async (c) => {
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
         <script defer src="/static/app.js"></script>
+        
+        {/* Auth Modal */}
+        <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+          <div class="bg-white rounded-2xl w-full max-w-md p-6 md:p-8 relative animate-slide-up max-h-[90vh] overflow-y-auto">
+            <button 
+              onclick="closeAuthModal()"
+              class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="閉じる"
+            >
+              <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <h2 id="auth-modal-title" class="text-2xl font-bold text-gray-800 mb-6">ログイン</h2>
+            
+            {/* Password Login Form */}
+            <form id="password-login-form" onsubmit="handlePasswordLogin(event); return false;" class="space-y-4">
+              <div>
+                <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">
+                  メールアドレス
+                </label>
+                <input
+                  type="email"
+                  id="login-email"
+                  name="email"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <div>
+                <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">
+                  パスワード
+                </label>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="••••••••"
+                />
+              </div>
+              
+              <div id="login-error" class="hidden text-sm text-red-600 bg-red-50 p-3 rounded-lg"></div>
+              
+              <button
+                type="submit"
+                class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+              >
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                ログイン
+              </button>
+              
+              <button
+                type="button"
+                onclick="switchToMagicLink()"
+                class="w-full text-primary text-sm hover:underline"
+              >
+                パスワードなしでログイン（メールリンク）
+              </button>
+            </form>
+            
+            {/* Magic Link Form */}
+            <form id="magic-link-form" onsubmit="handleMagicLinkRequest(event); return false;" class="space-y-4 hidden">
+              <div>
+                <label for="magic-link-email" class="block text-sm font-medium text-gray-700 mb-1">
+                  メールアドレス
+                </label>
+                <input
+                  type="email"
+                  id="magic-link-email"
+                  name="email"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <div id="magic-link-error" class="hidden text-sm text-red-600 bg-red-50 p-3 rounded-lg"></div>
+              <div id="magic-link-success" class="hidden text-sm text-green-600 bg-green-50 p-3 rounded-lg"></div>
+              
+              <button
+                type="submit"
+                class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+              >
+                <i class="fas fa-paper-plane mr-2"></i>
+                ログインリンクを送信
+              </button>
+              
+              <button
+                type="button"
+                onclick="switchToPasswordLogin()"
+                class="w-full text-primary text-sm hover:underline"
+              >
+                パスワードでログイン
+              </button>
+            </form>
+            
+            {/* Register Form */}
+            <form id="register-form" onsubmit="handleRegister(event); return false;" class="space-y-4 hidden">
+              <div>
+                <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">
+                  メールアドレス
+                </label>
+                <input
+                  type="email"
+                  id="register-email"
+                  name="email"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <div>
+                <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">
+                  パスワード（8文字以上）
+                </label>
+                <input
+                  type="password"
+                  id="register-password"
+                  name="password"
+                  required
+                  minlength="8"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="••••••••"
+                />
+              </div>
+              
+              <div id="register-error" class="hidden text-sm text-red-600 bg-red-50 p-3 rounded-lg"></div>
+              
+              <button
+                type="submit"
+                class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+              >
+                <i class="fas fa-user-plus mr-2"></i>
+                会員登録（無料）
+              </button>
+            </form>
+            
+            <div id="switch-auth-mode" class="mt-6 text-center text-sm text-gray-600">
+              <span>アカウントをお持ちでないですか？</span>
+              <button 
+                onclick="switchToRegister()"
+                class="text-primary font-semibold hover:underline ml-1"
+              >
+                会員登録
+              </button>
+            </div>
+          </div>
+        </div>
       </body>
     </html>
   )
