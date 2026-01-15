@@ -1543,19 +1543,45 @@ app.delete('/api/tags/:id', requireAuth, async (c) => {
 // API Routes - PDFs
 // ============================================
 
-// Get all PDFs with filters (Optimized - Single Query with GROUP_CONCAT)
+// Get all PDFs with filters (Optimized - Single Query with GROUP_CONCAT + Infographic Articles)
 app.get('/api/pdfs', async (c) => {
   const category = c.req.query('category')
   const tag = c.req.query('tag')
   const search = c.req.query('search')
   
-  // Optimized query: Get PDFs with tags in a single query using GROUP_CONCAT
-  // Only select necessary fields to reduce response size
-  let query = `
+  // Build WHERE conditions for both PDFs and infographic articles
+  const pdfConditions = []
+  const infographicConditions = ['ia.published = 1'] // Only show published infographic articles
+  const bindings: any[] = []
+  
+  if (category) {
+    pdfConditions.push('p.category_id = ?')
+    infographicConditions.push('ia.category_id = ?')
+    bindings.push(category, category) // Need to bind twice for UNION
+  }
+  
+  if (tag) {
+    pdfConditions.push('pt.tag_id = ?')
+    bindings.push(tag)
+  }
+  
+  if (search) {
+    pdfConditions.push('(p.title LIKE ? OR p.description LIKE ?)')
+    infographicConditions.push('(ia.title LIKE ? OR ia.summary LIKE ?)')
+    const searchPattern = `%${search}%`
+    bindings.push(searchPattern, searchPattern, searchPattern, searchPattern)
+  }
+  
+  // Query for PDFs
+  let pdfQuery = `
     SELECT 
+      'pdf' as source_type,
       p.id, 
       p.title, 
       p.google_drive_url,
+      NULL as slug,
+      NULL as thumbnail_url,
+      NULL as summary,
       p.category_id,
       p.download_count,
       p.created_at,
@@ -1567,43 +1593,58 @@ app.get('/api/pdfs', async (c) => {
     LEFT JOIN tags t ON pt.tag_id = t.id
   `
   
-  const conditions = []
-  const bindings = []
-  
-  if (category) {
-    conditions.push('p.category_id = ?')
-    bindings.push(category)
+  if (pdfConditions.length > 0) {
+    pdfQuery += ' WHERE ' + pdfConditions.join(' AND ')
   }
   
-  if (tag) {
-    conditions.push('pt.tag_id = ?')
-    bindings.push(tag)
+  pdfQuery += ' GROUP BY p.id'
+  
+  // Query for Infographic Articles
+  let infographicQuery = `
+    SELECT 
+      'infographic' as source_type,
+      ia.id,
+      ia.title,
+      NULL as google_drive_url,
+      ia.slug,
+      ia.thumbnail_url,
+      ia.summary,
+      ia.category_id,
+      0 as download_count,
+      ia.created_at,
+      c.name as category_name,
+      NULL as tags_concat
+    FROM infographic_articles ia
+    LEFT JOIN categories c ON ia.category_id = c.id
+  `
+  
+  if (infographicConditions.length > 0) {
+    infographicQuery += ' WHERE ' + infographicConditions.join(' AND ')
   }
   
-  if (search) {
-    conditions.push('(p.title LIKE ? OR p.description LIKE ?)')
-    bindings.push(`%${search}%`, `%${search}%`)
-  }
+  // Combine both queries with UNION ALL and wrap for sorting
+  const finalQuery = `
+    SELECT * FROM (
+      ${pdfQuery}
+      UNION ALL
+      ${infographicQuery}
+    ) AS combined
+    ORDER BY combined.created_at DESC
+  `
   
-  if (conditions.length > 0) {
-    query += ' WHERE ' + conditions.join(' AND ')
-  }
+  const { results } = await c.env.DB.prepare(finalQuery).bind(...bindings).all()
   
-  query += ' GROUP BY p.id ORDER BY p.created_at DESC'
-  
-  const { results } = await c.env.DB.prepare(query).bind(...bindings).all()
-  
-  // Parse tags from concatenated string
-  for (const pdf of results as any[]) {
-    if (pdf.tags_concat) {
-      pdf.tags = pdf.tags_concat.split('||').map((tagStr: string) => {
+  // Parse tags from concatenated string for PDFs
+  for (const item of results as any[]) {
+    if (item.tags_concat) {
+      item.tags = item.tags_concat.split('||').map((tagStr: string) => {
         const [id, name] = tagStr.split(':')
         return { id: parseInt(id), name }
       })
+      delete item.tags_concat
     } else {
-      pdf.tags = []
+      item.tags = []
     }
-    delete pdf.tags_concat // Remove temporary field
   }
   
   return c.json(results)
