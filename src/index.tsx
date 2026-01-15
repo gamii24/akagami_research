@@ -7727,6 +7727,28 @@ app.get('/article/:slug', async (c) => {
             `
           }} />
           
+          {/* Tailwind CSS CDN for article styling */}
+          <script src="https://cdn.tailwindcss.com"></script>
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              tailwind.config = {
+                theme: {
+                  extend: {
+                    colors: {
+                      primary: '#e75556',
+                    }
+                  }
+                }
+              }
+            `
+          }} />
+          
+          {/* Font Awesome */}
+          <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+          
+          {/* Google Fonts - Noto Sans JP */}
+          <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+          
           <link rel="stylesheet" href="/static/style.css" />
         </head>
         <body class="bg-gray-50">
