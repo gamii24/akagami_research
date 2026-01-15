@@ -6716,7 +6716,7 @@ app.get('/infographics', async (c) => {
     const { results: articles } = await c.env.DB.prepare(`
       SELECT 
         ia.id, ia.title, ia.slug, ia.category_id, ia.thumbnail_url,
-        ia.summary, ia.created_at, ia.updated_at,
+        ia.summary, ia.sort_order, ia.created_at, ia.updated_at,
         cat.name as category_name
       FROM infographic_articles ia
       LEFT JOIN categories cat ON ia.category_id = cat.id
