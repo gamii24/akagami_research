@@ -140,14 +140,14 @@ function CommonSidebar() {
             <i class="fas fa-search"></i>
             <span>キーワードチェック</span>
           </a>
-          <button
-            onclick="showInfographics()"
+          <a
+            href="/infographics"
             class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-300 flex items-center justify-center gap-2 mb-3"
-            aria-label="インフォグラフィック記事を表示"
+            aria-label="インフォグラフィック記事一覧を開く"
           >
             <i class="fas fa-chart-bar"></i>
             <span>インフォグラフィック</span>
-          </button>
+          </a>
           <a
             href="/sns-faq"
             class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
@@ -5978,14 +5978,14 @@ app.get('/', (c) => {
                   <i class="fas fa-search"></i>
                   <span>キーワードチェック</span>
                 </a>
-                <button
-                  onclick="showInfographics()"
+                <a
+                  href="/infographics"
                   class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-300 flex items-center justify-center gap-2 mb-3"
-                  aria-label="インフォグラフィック記事を表示"
+                  aria-label="インフォグラフィック記事一覧を開く"
                 >
                   <i class="fas fa-chart-bar"></i>
                   <span>インフォグラフィック</span>
-                </button>
+                </a>
                 <a
                   href="/sns-faq"
                   class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
@@ -6707,6 +6707,130 @@ app.get('/news', async (c) => {
       </body>
     </html>
   )
+})
+
+// Infographic Articles List Page
+app.get('/infographics', async (c) => {
+  try {
+    // Fetch all published infographic articles
+    const { results: articles } = await c.env.DB.prepare(`
+      SELECT 
+        ia.id, ia.title, ia.slug, ia.category_id, ia.thumbnail_url,
+        ia.summary, ia.created_at, ia.updated_at,
+        cat.name as category_name
+      FROM infographic_articles ia
+      LEFT JOIN categories cat ON ia.category_id = cat.id
+      WHERE ia.published = 1
+      ORDER BY ia.sort_order ASC, ia.created_at DESC
+    `).all()
+
+    return c.render(
+      <div class="min-h-screen bg-white flex flex-col">
+        <CommonHeader />
+
+        {/* Main Content */}
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
+              {/* Page Header */}
+              <div class="mb-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2 flex items-center">
+                  <i class="fas fa-chart-bar mr-3 text-pink-600"></i>
+                  インフォグラフィック記事
+                </h1>
+                <p class="text-gray-600">
+                  データで見るSNSマーケティング・生成AIの記事一覧（全{articles.length}件）
+                </p>
+              </div>
+
+              {/* Articles Grid */}
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {articles.length > 0 ? (
+                  articles.map((article: any) => (
+                    <a
+                      href={`/article/${article.slug}`}
+                      class="infographic-card bg-white hover:bg-pink-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 overflow-hidden border-2 border-pink-400 group"
+                    >
+                      {/* Thumbnail */}
+                      {article.thumbnail_url ? (
+                        <div class="aspect-video w-full overflow-hidden bg-gray-100">
+                          <img
+                            src={article.thumbnail_url}
+                            alt={article.title}
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : (
+                        <div class="aspect-video w-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
+                          <i class="fas fa-chart-bar text-6xl text-pink-400"></i>
+                        </div>
+                      )}
+
+                      {/* Content */}
+                      <div class="p-4">
+                        {/* Badge */}
+                        <div class="mb-2">
+                          <span class="inline-block px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-pink-500 to-pink-600 rounded-full">
+                            <i class="fas fa-chart-bar mr-1"></i>
+                            infographic
+                          </span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-pink-600 transition-colors">
+                          {article.title}
+                        </h3>
+
+                        {/* Summary */}
+                        {article.summary && (
+                          <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                            {article.summary}
+                          </p>
+                        )}
+
+                        {/* Meta */}
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                          <span>
+                            <i class="fas fa-calendar-alt mr-1"></i>
+                            {new Date(article.created_at).toLocaleDateString('ja-JP')}
+                          </span>
+                          {article.category_name && (
+                            <span class="px-2 py-1 bg-gray-100 rounded-full">
+                              {article.category_name}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </a>
+                  ))
+                ) : (
+                  <div class="col-span-full text-center py-12">
+                    <i class="fas fa-chart-bar text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-600 text-lg">まだインフォグラフィック記事がありません</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <CommonSidebar />
+          </div>
+        </main>
+
+        <CommonFooter />
+      </div>,
+      {
+        title: 'インフォグラフィック記事一覧 - Akagami.net',
+        description: 'データで見るSNSマーケティング・生成AIのインフォグラフィック記事一覧。視覚的にわかりやすく情報をお届けします。',
+        keywords: 'インフォグラフィック,SNSマーケティング,データ分析,生成AI,視覚化,赤髪社長'
+      }
+    )
+  } catch (error) {
+    console.error('Failed to fetch infographic articles:', error)
+    return c.text('Internal Server Error', 500)
+  }
 })
 
 // My Page - User dashboard
