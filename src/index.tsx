@@ -7744,6 +7744,8 @@ app.get('/admin/articles', (c) => {
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
         <link href="/static/admin-dark.css" rel="stylesheet" />
+        {/* Quill Editor */}
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
         {/* Monaco Editor */}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.main.css" />
       </head>
@@ -7756,8 +7758,9 @@ app.get('/admin/articles', (c) => {
         </div>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
+        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
-        <script src="/static/articles-admin.js?v=2026011501"></script>
+        <script src="/static/articles-admin.js?v=2026011502"></script>
       </body>
     </html>
   )
