@@ -1,25 +1,29 @@
-// State management
-let state = {
-  pdfs: [],
-  articles: [], // Infographic articles
-  categories: [],
-  tags: [],
-  selectedCategory: null,
-  selectedTags: [],
-  searchQuery: '',
-  downloadedPdfs: new Set(),
-  allPdfs: [], // Store all PDFs for counting
-  categoryCounts: {}, // Store category counts
-  sortBy: 'newest', // Sort option: 'newest', 'oldest', 'popular'
-  favoritePdfs: new Set(), // Favorite PDFs
-  showOnlyFavorites: false, // Filter to show only favorites
-  showDownloadHistory: false, // Filter to show only downloaded PDFs
-  multiSelectMode: false, // Multi-select mode
-  selectedPdfs: new Set(), // Selected PDFs in multi-select mode
-  showAllMobile: false, // Show all cards on mobile (default: false, show 15)
-  viewMode: 'grid', // View mode: 'grid' or 'list'
-  darkMode: false // Dark mode
+// State management - use window object to avoid redeclaration
+if (!window.state) {
+  window.state = {
+    pdfs: [],
+    articles: [], // Infographic articles
+    categories: [],
+    tags: [],
+    selectedCategory: null,
+    selectedTags: [],
+    searchQuery: '',
+    downloadedPdfs: new Set(),
+    allPdfs: [], // Store all PDFs for counting
+    categoryCounts: {}, // Store category counts
+    sortBy: 'newest', // Sort option: 'newest', 'oldest', 'popular'
+    favoritePdfs: new Set(), // Favorite PDFs
+    showOnlyFavorites: false, // Filter to show only favorites
+    showDownloadHistory: false, // Filter to show only downloaded PDFs
+    multiSelectMode: false, // Multi-select mode
+    selectedPdfs: new Set(), // Selected PDFs in multi-select mode
+    showAllMobile: false, // Show all cards on mobile (default: false, show 15)
+    viewMode: 'grid', // View mode: 'grid' or 'list'
+    darkMode: false // Dark mode
+  }
 }
+// Reference state from window (no const/let/var to avoid redeclaration)
+var state = window.state;
 
 // Google Analytics Event Tracking
 function trackGAEvent(eventName, params = {}) {
@@ -119,11 +123,11 @@ function checkDownloadMilestone(url) {
 }
 
 // Store pending download URL
-let pendingDownloadUrl = null
+window.pendingDownloadUrl = window.pendingDownloadUrl || null
 
 // Show first download message (simple and clean)
 function showFirstDownloadMessage(url) {
-  pendingDownloadUrl = url
+  window.pendingDownloadUrl = url
   const modalHtml = `
     <div class="first-download-modal" id="first-download-modal">
       <div class="first-download-content" onclick="event.stopPropagation()">
@@ -163,9 +167,9 @@ function proceedToDownload() {
   if (modal) {
     modal.remove()
   }
-  if (pendingDownloadUrl) {
-    window.open(pendingDownloadUrl, '_blank')
-    pendingDownloadUrl = null
+  if (window.pendingDownloadUrl) {
+    window.open(window.pendingDownloadUrl, '_blank')
+    window.pendingDownloadUrl = null
   }
 }
 
@@ -181,7 +185,7 @@ function checkFirstVisit() {
 
 // Show celebration modal
 function showCelebration(url) {
-  pendingDownloadUrl = url
+  window.pendingDownloadUrl = url
   const modalHtml = `
     <div class="celebration-modal" id="celebration-modal">
       <div class="celebration-content" onclick="event.stopPropagation()">
@@ -237,9 +241,9 @@ function proceedToCelebrationDownload() {
   if (modal) {
     modal.remove()
   }
-  if (pendingDownloadUrl) {
-    window.open(pendingDownloadUrl, '_blank')
-    pendingDownloadUrl = null
+  if (window.pendingDownloadUrl) {
+    window.open(window.pendingDownloadUrl, '_blank')
+    window.pendingDownloadUrl = null
   }
 }
 
@@ -1791,13 +1795,13 @@ function isWithin7Days(dateString) {
 }
 
 // Long press detection for multi-select
-let longPressTimer = null
-let longPressTriggered = false
+window.window.longPressTimer = window.window.longPressTimer || null
+window.window.longPressTriggered = window.window.longPressTriggered || false
 
 function handleTouchStart(event, pdfId) {
-  longPressTriggered = false
-  longPressTimer = setTimeout(() => {
-    longPressTriggered = true
+  window.longPressTriggered = false
+  window.longPressTimer = setTimeout(() => {
+    window.longPressTriggered = true
     // Haptic feedback if available
     if (navigator.vibrate) {
       navigator.vibrate(50)
@@ -1808,10 +1812,10 @@ function handleTouchStart(event, pdfId) {
 }
 
 function handleTouchEnd(event) {
-  if (longPressTimer) {
-    clearTimeout(longPressTimer)
+  if (window.longPressTimer) {
+    clearTimeout(window.longPressTimer)
   }
-  if (longPressTriggered) {
+  if (window.longPressTriggered) {
     event.preventDefault()
     event.stopPropagation()
   }

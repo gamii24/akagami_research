@@ -2,8 +2,8 @@
 // User Authentication Module
 // ============================================
 
-// Auth module internal state - completely separate from other modules
-const authState = {
+// Use window object to avoid redeclaration errors
+window.authState = window.authState || {
   isAuthenticated: false,
   user: null
 }
@@ -20,8 +20,8 @@ async function checkAuthStatus() {
       
       if (data.authenticated && data.user) {
         // Update auth module state
-        authState.isAuthenticated = true
-        authState.user = data.user
+        window.authState.isAuthenticated = true
+        window.authState.user = data.user
         
         // Also update external state if it exists (for backwards compatibility)
         if (typeof state !== 'undefined') {
@@ -47,8 +47,8 @@ async function checkAuthStatus() {
     }
     
     // Update auth module state
-    authState.isAuthenticated = false
-    authState.user = null
+    window.authState.isAuthenticated = false
+    window.authState.user = null
     
     // Also update external state if it exists
     if (typeof state !== 'undefined') {
@@ -58,8 +58,8 @@ async function checkAuthStatus() {
     updateAuthUI()
     return false
   } catch (error) {
-    authState.isAuthenticated = false
-    authState.user = null
+    window.authState.isAuthenticated = false
+    window.authState.user = null
     
     if (typeof state !== 'undefined') {
       state.isAuthenticated = false
@@ -144,8 +144,8 @@ function updateAuthUI() {
   
   if (!userAccountSection) return
   
-  // Use auth module state
-  if (authState.isAuthenticated && authState.user) {
+  // Use window.authState
+  if (window.authState.isAuthenticated && window.authState.user) {
     // Show user menu - only MyPage button with double height
     userAccountSection.innerHTML = `
       <div class="mb-4">
@@ -153,8 +153,8 @@ function updateAuthUI() {
           onclick="showMyPage()"
           class="w-full px-4 py-5 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors text-base flex items-center justify-center gap-3 border border-gray-200 shadow-sm"
         >
-          ${authState.user.profilePhotoUrl ? `
-            <img src="${escapeHtml(authState.user.profilePhotoUrl)}" 
+          ${window.authState.user.profilePhotoUrl ? `
+            <img src="${escapeHtml(window.authState.user.profilePhotoUrl)}" 
               alt="Profile" 
               class="w-7 h-7 rounded-full object-cover"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
