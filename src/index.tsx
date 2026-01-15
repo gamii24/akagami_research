@@ -6317,7 +6317,6 @@ app.get('/news', async (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/app.js"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
             let newsData = [];
