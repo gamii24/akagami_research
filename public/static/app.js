@@ -1741,46 +1741,22 @@ function renderInfographicCard(article) {
       style="position: relative;"
       data-article-id="${article.id}"
     >
-      ${isNew ? `
-        <div class="absolute top-2 left-2 z-10 px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300">
-          NEW
-        </div>
-      ` : ''}
-      
-      <!-- Article Badge with Pink Theme -->
-      <div class="absolute top-2 right-2 z-10 px-2 py-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-xs font-bold rounded shadow-md flex items-center gap-1">
-        <i class="fas fa-newspaper"></i>
-        <span>記事</span>
-      </div>
-      
-      ${article.thumbnail_url ? `
-        <div class="aspect-video overflow-hidden bg-gray-100">
-          <img 
-            src="${article.thumbnail_url}" 
-            alt="${escapeHtml(article.title)}"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
-        </div>
-      ` : `
-        <div class="aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
-          <i class="fas fa-newspaper text-6xl text-pink-300"></i>
-        </div>
-      `}
-      
       <div class="p-4">
-        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
-          ${escapeHtml(article.title)}
-        </h3>
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <h3 class="text-sm font-bold text-gray-800 leading-snug break-words flex-1">
+            ${escapeHtml(article.title)}
+          </h3>
+          ${isNew ? '<span class="inline-block px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded border border-yellow-300 flex-shrink-0">NEW</span>' : ''}
+        </div>
         
-        ${article.summary ? `
-          <p class="text-xs text-gray-600 line-clamp-2 mb-3">
-            ${escapeHtml(article.summary)}
-          </p>
-        ` : ''}
+        <!-- Article Badge with Pink Theme -->
+        <div class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white text-xs font-bold rounded shadow-md mb-2">
+          <i class="fas fa-newspaper"></i>
+          <span>記事</span>
+        </div>
         
-        <div class="flex items-center justify-between text-xs text-gray-500">
-          <div class="flex items-center gap-2">
+        <div class="flex items-center justify-between text-xs text-gray-500 mt-3">
+          <div class="flex items-center gap-2 flex-wrap">
             <span><i class="fas fa-calendar mr-1"></i>${formatDate(article.created_at)}</span>
             ${categoryName ? `<span><i class="fas fa-folder mr-1"></i>${escapeHtml(categoryName)}</span>` : ''}
           </div>
