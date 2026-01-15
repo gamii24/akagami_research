@@ -2009,40 +2009,57 @@ app.get('/api/news/:id/likes', async (c) => {
 
 // Get all news with likes count and user's like status
 app.get('/api/news-with-likes', async (c) => {
-  const { category } = c.req.query()
-  
-  // Get current user if authenticated
-  const currentUser = await getCurrentUser(c, getJWTSecret(c))
-  const userId = currentUser?.userId || null
-  
-  let query = `
-    SELECT 
-      n.*,
-      COUNT(DISTINCT nl.id) as likes_count,
-      ${userId ? `MAX(CASE WHEN nl.user_id = ? THEN 1 ELSE 0 END) as user_liked` : '0 as user_liked'}
-    FROM news_articles n
-    LEFT JOIN news_likes nl ON n.id = nl.news_id
-  `
-  
-  const params: any[] = []
-  if (userId) {
-    params.push(userId)
+  try {
+    // Check if DB is available
+    if (!c.env?.DB) {
+      console.error('[NEWS API] D1 database binding not found!')
+      return c.json({ 
+        error: 'Database not configured. Please add D1 binding in Cloudflare Dashboard.',
+        instructions: 'Go to Cloudflare Dashboard → Pages → akagami-research → Settings → Functions → D1 database bindings → Add binding (Variable name: DB, D1 database: akagami-research-production)'
+      }, 500)
+    }
+    
+    const { category } = c.req.query()
+    
+    // Get current user if authenticated
+    const currentUser = await getCurrentUser(c, getJWTSecret(c))
+    const userId = currentUser?.userId || null
+    
+    let query = `
+      SELECT 
+        n.*,
+        COUNT(DISTINCT nl.id) as likes_count,
+        ${userId ? `MAX(CASE WHEN nl.user_id = ? THEN 1 ELSE 0 END) as user_liked` : '0 as user_liked'}
+      FROM news_articles n
+      LEFT JOIN news_likes nl ON n.id = nl.news_id
+    `
+    
+    const params: any[] = []
+    if (userId) {
+      params.push(userId)
+    }
+    
+    if (category && category !== 'all') {
+      query += ' WHERE n.category = ?'
+      params.push(category)
+    }
+    
+    query += ' GROUP BY n.id ORDER BY n.published_at DESC LIMIT 50'
+    
+    const stmt = c.env.DB.prepare(query)
+    if (params.length > 0) {
+      stmt.bind(...params)
+    }
+    
+    const { results } = await stmt.all()
+    return c.json(results)
+  } catch (error) {
+    console.error('[NEWS API] Error:', error)
+    return c.json({ 
+      error: 'Failed to load news',
+      message: error instanceof Error ? error.message : String(error)
+    }, 500)
   }
-  
-  if (category && category !== 'all') {
-    query += ' WHERE n.category = ?'
-    params.push(category)
-  }
-  
-  query += ' GROUP BY n.id ORDER BY n.published_at DESC LIMIT 50'
-  
-  const stmt = c.env.DB.prepare(query)
-  if (params.length > 0) {
-    stmt.bind(...params)
-  }
-  
-  const { results } = await stmt.all()
-  return c.json(results)
 })
 
 // Toggle like for a news article (requires authentication)

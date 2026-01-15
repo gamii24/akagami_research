@@ -1,0 +1,7 @@
+name = "akagami-research"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "akagami-research-production"
+database_id = "c5d4dce7-e94e-489a-880f-36e6056f74c6"
