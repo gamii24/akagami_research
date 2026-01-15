@@ -181,15 +181,19 @@ app.use('*', secureHeaders({
     defaultSrc: ["'self'"],
     scriptSrc: [
       "'self'",
-      "'unsafe-inline'", // Required for inline scripts and Google Analytics
+      "'unsafe-inline'", // Required for Tailwind CDN and inline scripts
+      "https://cdn.tailwindcss.com",
+      "https://cdn.jsdelivr.net",
       "https://www.googletagmanager.com",
       "https://www.google-analytics.com",
-      "https://static.cloudflareinsights.com", // Cloudflare Analytics
-      "https://cloudflareinsights.com" // Cloudflare Analytics (alternative domain)
+      "https://static.cloudflareinsights.com",
+      "https://cloudflareinsights.com"
     ],
     styleSrc: [
       "'self'",
-      "'unsafe-inline'" // Required for inline styles
+      "'unsafe-inline'", // Required for Tailwind and inline styles
+      "https://cdn.tailwindcss.com",
+      "https://cdn.jsdelivr.net"
     ],
     imgSrc: [
       "'self'",
@@ -199,10 +203,12 @@ app.use('*', secureHeaders({
     ],
     fontSrc: [
       "'self'",
+      "https://cdn.jsdelivr.net",
       "data:"
     ],
     connectSrc: [
       "'self'",
+      "https://cdn.jsdelivr.net",
       "https://www.google-analytics.com",
       "https://www.googletagmanager.com",
       "https://static.cloudflareinsights.com", // Cloudflare Analytics

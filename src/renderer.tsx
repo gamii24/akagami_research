@@ -84,8 +84,12 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
-        {/* Performance Optimization - Preconnect to analytics only */}
+        {/* Performance Optimization - Preconnect to external domains */}
+        <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         
         {/* Basic Meta Tags */}
@@ -169,9 +173,34 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
           }} />
         ))}
         
-        {/* Custom CSS - replaces Tailwind CDN for performance */}
+        {/* Tailwind CSS - using CDN temporarily, will optimize later */}
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    secondary: '#e75556',
+                    accent: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                    light: '#ffffff',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        
+        {/* Font Awesome - restored for proper icon rendering */}
+        <link 
+          href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" 
+          rel="stylesheet"
+        />
+        {/* Custom CSS */}
         <link href="/static/style.css" rel="stylesheet" />
-        <link href="/static/icons.css" rel="stylesheet" />
         {/* Eruda - Mobile Debug Console (Development only) */}
         {/* Eruda is disabled in production for security. To enable for debugging:
             Add ?debug=true to URL, or set localStorage.debug_mode = 'true' */}
