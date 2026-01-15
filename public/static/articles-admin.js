@@ -389,7 +389,7 @@ function showArticleForm(articleId = null) {
               <input 
                 type="checkbox" 
                 name="published" 
-                ${article && article.published ? 'checked' : ''}
+                ${article ? (article.published ? 'checked' : '') : 'checked'}
                 class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-2"
               />
               <span class="text-sm text-gray-300">
