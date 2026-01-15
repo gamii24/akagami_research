@@ -154,7 +154,9 @@
 }
 
 /* PDF Card Styles */
-.pdf-card {
+.pdf-card,
+.infographic-card,
+.article-card {
   background: white;
   border: 2px solid #f0f0f0;
   transition: all 0.3s ease;
@@ -165,25 +167,33 @@
   color: inherit;
 }
 
-.pdf-card:hover {
+.pdf-card:hover,
+.infographic-card:hover,
+.article-card:hover {
   border-color: var(--primary);
   box-shadow: 0 8px 24px rgba(231, 85, 86, 0.15);
   transform: translateY(-4px);
   text-decoration: none;
 }
 
-.pdf-card:active {
+.pdf-card:active,
+.infographic-card:active,
+.article-card:active {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(231, 85, 86, 0.2);
 }
 
-.pdf-card > div {
+.pdf-card > div,
+.infographic-card > div,
+.article-card > div {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.pdf-card a {
+.pdf-card a,
+.infographic-card a,
+.article-card a {
   margin-top: auto;
 }
 
