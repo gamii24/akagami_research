@@ -7703,7 +7703,7 @@ app.get('/admin/news', (c) => {
 })
 
 // Article Management Page
-app.get('/admin/articles', (c) => {
+app.get('/admin/articles', requireAuth, (c) => {
   return c.html(
     <html lang="ja">
       <head>

@@ -36,6 +36,15 @@ async function loadArticles() {
   } catch (error) {
     console.error('Failed to load articles:', error)
     
+    // Check if it's an authentication error
+    if (error.response && error.response.status === 401) {
+      showToast('ログインが必要です。ログインページにリダイレクトします...', 'error')
+      setTimeout(() => {
+        window.location.href = '/admin'
+      }, 2000)
+      return
+    }
+    
     // Show error and render empty list
     articlesState.articles = []
     renderArticleList()
