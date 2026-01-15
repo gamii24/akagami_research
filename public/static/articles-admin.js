@@ -5,8 +5,6 @@ let articlesState = {
   categories: [],
   editingArticle: null,
   editor: null,
-  quillEditor: null,
-  editorMode: 'visual', // 'visual' or 'code'
   viewMode: 'grid' // 'grid' or 'list'
 }
 
@@ -416,43 +414,15 @@ function showArticleForm(articleId = null) {
         
         <!-- Right Column - Content Editor -->
         <div class="lg:col-span-1">
-          <div class="flex items-center justify-between mb-2">
-            <label class="text-sm font-medium text-gray-300">
-              <i class="fas fa-edit text-primary mr-2"></i>記事コンテンツ <span class="text-red-500">*</span>
-            </label>
-            <div class="flex gap-2">
-              <button 
-                type="button"
-                onclick="switchEditorMode('visual')"
-                class="px-3 py-1 text-xs rounded transition-colors ${articlesState.editorMode === 'visual' ? 'bg-primary text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
-                id="visual-mode-btn"
-              >
-                <i class="fas fa-eye mr-1"></i>ビジュアル
-              </button>
-              <button 
-                type="button"
-                onclick="switchEditorMode('code')"
-                class="px-3 py-1 text-xs rounded transition-colors ${articlesState.editorMode === 'code' ? 'bg-primary text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}"
-                id="code-mode-btn"
-              >
-                <i class="fas fa-code mr-1"></i>コード
-              </button>
-            </div>
-          </div>
-          
-          <!-- Quill Editor (Visual Mode) -->
-          <div id="visual-editor-container" class="border-2 border-gray-600 rounded-lg overflow-hidden" style="height: 500px; ${articlesState.editorMode === 'visual' ? '' : 'display: none;'}">
-            <div id="quill-editor" style="height: 100%; background: white;"></div>
-          </div>
-          
-          <!-- Monaco Editor (Code Mode) -->
-          <div id="code-editor-container" class="border-2 border-gray-600 rounded-lg overflow-hidden" style="height: 500px; ${articlesState.editorMode === 'code' ? '' : 'display: none;'}">
+          <label class="block text-sm font-medium text-gray-300 mb-2">
+            <i class="fas fa-code text-primary mr-2"></i>記事コンテンツ（HTML） <span class="text-red-500">*</span>
+          </label>
+          <div class="border-2 border-gray-600 rounded-lg overflow-hidden" style="height: 500px;">
             <div id="monaco-editor" style="width: 100%; height: 100%;"></div>
           </div>
-          
           <p class="text-xs text-gray-400 mt-2">
             <i class="fas fa-info-circle mr-1"></i>
-            ビジュアルモード: リッチテキストエディタで直感的に編集 | コードモード: HTMLコードを直接編集
+            HTMLコードで記事を作成します。Chart.jsやTailwind CSSが使用可能です。
           </p>
         </div>
       </div>
@@ -472,129 +442,14 @@ function showArticleForm(articleId = null) {
   modal.querySelector('.bg-gray-800').innerHTML = modalContent
   modal.classList.remove('hidden')
   
-  // Initialize editors with longer delay to ensure DOM is ready
+  // Initialize Monaco Editor
   setTimeout(() => {
     initArticleEditor(article ? article.content : '')
-  }, 300)
-}
-
-// Switch between visual and code editor modes
-function switchEditorMode(mode) {
-  if (articlesState.editorMode === mode) return
-  
-  // Save current content before switching
-  let currentContent = ''
-  if (articlesState.editorMode === 'visual' && articlesState.quillEditor) {
-    currentContent = articlesState.quillEditor.root.innerHTML
-  } else if (articlesState.editorMode === 'code' && articlesState.editor) {
-    currentContent = articlesState.editor.getValue()
-  }
-  
-  // Switch mode
-  articlesState.editorMode = mode
-  
-  // Update visibility and button styles
-  const visualContainer = document.getElementById('visual-editor-container')
-  const codeContainer = document.getElementById('code-editor-container')
-  const visualBtn = document.getElementById('visual-mode-btn')
-  const codeBtn = document.getElementById('code-mode-btn')
-  
-  if (mode === 'visual') {
-    // Show visual editor, hide code editor
-    if (visualContainer) visualContainer.style.display = ''
-    if (codeContainer) codeContainer.style.display = 'none'
-    
-    // Update button styles
-    if (visualBtn) {
-      visualBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-primary text-white'
-    }
-    if (codeBtn) {
-      codeBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-gray-700 text-gray-300 hover:bg-gray-600'
-    }
-    
-    // Update Quill content
-    if (articlesState.quillEditor) {
-      articlesState.quillEditor.root.innerHTML = currentContent
-    }
-  } else {
-    // Show code editor, hide visual editor
-    if (visualContainer) visualContainer.style.display = 'none'
-    if (codeContainer) codeContainer.style.display = ''
-    
-    // Update button styles
-    if (visualBtn) {
-      visualBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-gray-700 text-gray-300 hover:bg-gray-600'
-    }
-    if (codeBtn) {
-      codeBtn.className = 'px-3 py-1 text-xs rounded transition-colors bg-primary text-white'
-    }
-    
-    // Update Monaco content
-    if (articlesState.editor) {
-      articlesState.editor.setValue(currentContent)
-    }
-  }
+  }, 100)
 }
 
 // Initialize Monaco Editor for article content
 function initArticleEditor(content) {
-  // Check if Quill is loaded
-  if (typeof Quill === 'undefined') {
-    console.error('Quill is not loaded!')
-    setTimeout(() => initArticleEditor(content), 500)
-    return
-  }
-  
-  // Initialize Quill Editor (Visual Mode)
-  const quillContainer = document.getElementById('quill-editor')
-  if (quillContainer) {
-    console.log('Initializing Quill editor...', { content })
-    
-    try {
-      articlesState.quillEditor = new Quill('#quill-editor', {
-        theme: 'snow',
-        modules: {
-          toolbar: [
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'align': [] }],
-            ['blockquote', 'code-block'],
-            ['link', 'image'],
-            ['clean']
-          ]
-        },
-        placeholder: '記事の内容を入力してください...'
-      })
-      
-      // Ensure editor is enabled
-      articlesState.quillEditor.enable(true)
-      console.log('Quill editor initialized successfully:', {
-        isEnabled: !articlesState.quillEditor.isEnabled || articlesState.quillEditor.isEnabled(),
-        editor: articlesState.quillEditor
-      })
-      
-      // Set initial content
-      if (content) {
-        articlesState.quillEditor.root.innerHTML = content
-      }
-      
-      // Focus the editor
-      setTimeout(() => {
-        if (articlesState.quillEditor) {
-          articlesState.quillEditor.focus()
-        }
-      }, 100)
-    } catch (error) {
-      console.error('Failed to initialize Quill:', error)
-    }
-  } else {
-    console.error('Quill editor container not found!')
-  }
-  
-  // Initialize Monaco Editor (Code Mode)
   require(['vs/editor/editor.main'], function() {
     const container = document.getElementById('monaco-editor')
     if (!container) return
@@ -619,16 +474,6 @@ function editArticle(articleId) {
   showArticleForm(articleId)
 }
 
-// Get content from current active editor
-function getEditorContent() {
-  if (articlesState.editorMode === 'visual' && articlesState.quillEditor) {
-    return articlesState.quillEditor.root.innerHTML
-  } else if (articlesState.editorMode === 'code' && articlesState.editor) {
-    return articlesState.editor.getValue()
-  }
-  return ''
-}
-
 // Save article (create or update)
 async function saveArticle(event) {
   event.preventDefault()
@@ -641,7 +486,7 @@ async function saveArticle(event) {
     slug: formData.get('slug'),
     category_id: formData.get('category_id') ? parseInt(formData.get('category_id')) : null,
     thumbnail_url: formData.get('thumbnail_url') || null,
-    content: getEditorContent(),
+    content: articlesState.editor ? articlesState.editor.getValue() : '',
     summary: formData.get('summary') || null,
     published: formData.has('published'),
     sort_order: parseInt(formData.get('sort_order')) || 0
