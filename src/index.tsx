@@ -208,6 +208,7 @@ app.use('*', secureHeaders({
     ],
     connectSrc: [
       "'self'",
+      "https://cdn.jsdelivr.net", // For axios and other CDN resources
       "https://www.google-analytics.com",
       "https://www.googletagmanager.com",
       "https://static.cloudflareinsights.com", // Cloudflare Analytics
