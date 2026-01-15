@@ -1737,7 +1737,7 @@ function renderInfographicCard(article) {
   return `
     <a 
       href="/article/${article.slug}"
-      class="pdf-card bg-white hover:bg-pink-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-pink-400 cursor-pointer block"
+      class="infographic-card bg-white hover:bg-pink-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-pink-400 cursor-pointer block"
       style="position: relative;"
       data-article-id="${article.id}"
     >
@@ -1797,7 +1797,7 @@ function renderArticleCard(article) {
   return `
     <a 
       href="/article/${article.slug}"
-      class="pdf-card bg-white hover:bg-pink-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-pink-400 cursor-pointer block"
+      class="article-card bg-white hover:bg-pink-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-pink-400 cursor-pointer block"
       style="position: relative;"
       data-article-id="${article.id}"
     >
