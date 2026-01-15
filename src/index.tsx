@@ -6728,6 +6728,47 @@ app.get('/infographics', async (c) => {
       <div class="min-h-screen bg-white flex flex-col">
         <CommonHeader />
 
+        {/* Structured Data for Infographics Collection */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "インフォグラフィック記事一覧",
+            "description": "データで見るSNSマーケティング・生成AIのインフォグラフィック記事一覧。視覚的にわかりやすく情報をお届けします。",
+            "url": "https://akagami.net/infographics",
+            "mainEntity": {
+              "@type": "ItemList",
+              "numberOfItems": articles.length,
+              "itemListElement": articles.map((article: any, index: number) => ({
+                "@type": "Article",
+                "position": index + 1,
+                "name": article.title,
+                "description": article.summary || article.title,
+                "url": `https://akagami.net/article/${article.slug}`,
+                "datePublished": article.created_at,
+                "dateModified": article.updated_at || article.created_at
+              }))
+            },
+            "breadcrumb": {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "ホーム",
+                  "item": "https://akagami.net/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "インフォグラフィック",
+                  "item": "https://akagami.net/infographics"
+                }
+              ]
+            }
+          })
+        }} />
+
         {/* Main Content */}
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -6866,6 +6907,74 @@ app.get('/mypage', (c) => {
       </body>
     </html>
   )
+})
+
+// Sitemap XML - Dynamic sitemap generation
+app.get('/sitemap.xml', async (c) => {
+  try {
+    const baseUrl = 'https://akagami.net'
+    
+    // Fetch all published articles
+    const { results: articles } = await c.env.DB.prepare(`
+      SELECT slug, created_at
+      FROM infographic_articles
+      WHERE published = 1
+      ORDER BY created_at DESC
+    `).all()
+    
+    // Fetch all categories
+    const { results: categories } = await c.env.DB.prepare(`
+      SELECT id
+      FROM categories
+      ORDER BY id
+    `).all()
+    
+    // Static pages
+    const staticPages = [
+      { url: '/', priority: '1.0', changefreq: 'daily' },
+      { url: '/categories', priority: '0.9', changefreq: 'daily' },
+      { url: '/infographics', priority: '0.9', changefreq: 'daily' },
+      { url: '/news', priority: '0.8', changefreq: 'daily' },
+      { url: '/sns-faq', priority: '0.8', changefreq: 'weekly' },
+      { url: '/question-finder', priority: '0.7', changefreq: 'monthly' },
+      { url: '/calendar/1', priority: '0.7', changefreq: 'weekly' },
+    ]
+    
+    // Generate XML
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${staticPages.map(page => `  <url>
+    <loc>${baseUrl}${page.url}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join('\n')}
+${articles.map((article: any) => `  <url>
+    <loc>${baseUrl}/article/${article.slug}</loc>
+    <lastmod>${new Date(article.created_at).toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join('\n')}
+${categories.map((category: any) => `  <url>
+    <loc>${baseUrl}/?category=${category.id}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`).join('\n')}
+</urlset>`
+    
+    return c.body(xml, 200, {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600'
+    })
+  } catch (error) {
+    console.error('Failed to generate sitemap:', error)
+    return c.text('Failed to generate sitemap', 500)
+  }
 })
 
 // Question Finder - SNS運用ネタ向け質問生成ツール
@@ -7922,6 +8031,67 @@ app.get('/article/:slug', async (c) => {
           <meta name="twitter:title" content={article.title} />
           <meta name="twitter:description" content={article.summary || article.title} />
           
+          {/* Structured Data (JSON-LD) for SEO and AI */}
+          <script type="application/ld+json" dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": article.title,
+              "description": article.summary || article.title,
+              "author": {
+                "@type": "Person",
+                "name": "Akagami",
+                "url": "https://www.instagram.com/akagami_sns/"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Akagami.net",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://akagami.net/favicon-512.png"
+                }
+              },
+              "datePublished": article.created_at,
+              "dateModified": article.updated_at || article.created_at,
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": `https://akagami.net/article/${slug}`
+              },
+              "articleSection": article.category_name || "SNSマーケティング",
+              "keywords": `${article.category_name || "SNS"},マーケティング,インフォグラフィック,データ分析`,
+              "inLanguage": "ja-JP",
+              "isAccessibleForFree": true
+            })
+          }} />
+          
+          {/* Breadcrumb Structured Data */}
+          <script type="application/ld+json" dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "ホーム",
+                  "item": "https://akagami.net/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "インフォグラフィック",
+                  "item": "https://akagami.net/infographics"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": article.title,
+                  "item": `https://akagami.net/article/${slug}`
+                }
+              ]
+            })
+          }} />
+
           {/* Google Analytics */}
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
           <script dangerouslySetInnerHTML={{
