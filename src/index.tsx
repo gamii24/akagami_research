@@ -6130,11 +6130,13 @@ app.get('/news', async (c) => {
             // Load news articles with likes
             async function loadNews() {
               try {
+                console.log('[NEWS] Loading news from API...');
                 const response = await axios.get('/api/news-with-likes', { withCredentials: true });
+                console.log('[NEWS] API response:', response.data.length, 'items');
                 newsData = response.data;
                 renderNews();
               } catch (error) {
-                console.error('Failed to load news:', error);
+                console.error('[NEWS] Failed to load news:', error);
                 document.getElementById('news-list').innerHTML = \`
                   <div class="text-center py-12">
                     <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
@@ -6174,9 +6176,16 @@ app.get('/news', async (c) => {
 
             // Render news list
             function renderNews() {
+              console.log('[NEWS] Rendering news...', newsData.length, 'items');
               const newsListEl = document.getElementById('news-list');
               
+              if (!newsListEl) {
+                console.error('[NEWS] news-list element not found!');
+                return;
+              }
+              
               if (newsData.length === 0) {
+                console.log('[NEWS] No news data to render');
                 newsListEl.innerHTML = \`
                   <div class="text-center py-12">
                     <i class="fas fa-inbox text-4xl text-gray-400 mb-4"></i>
@@ -6186,6 +6195,7 @@ app.get('/news', async (c) => {
                 return;
               }
               
+              console.log('[NEWS] Generating HTML for', newsData.length, 'items');
               newsListEl.innerHTML = newsData.map((news, index) => {
                 const date = new Date(news.published_at);
                 const dateStr = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -6263,6 +6273,7 @@ app.get('/news', async (c) => {
                   </article>
                 \`;
               }).join('');
+              console.log('[NEWS] Render complete!');
             }
             
             // Toggle summary expansion
@@ -6354,13 +6365,7 @@ app.get('/news', async (c) => {
               }
             }
 
-            // Escape HTML
-            function escapeHtml(text) {
-              const div = document.createElement('div');
-              div.textContent = text;
-              return div.innerHTML;
-            }
-            
+            // toggleMobileMenu is already defined in utils.js or will be defined globally
             // Toggle mobile menu (for hamburger menu)
             function toggleMobileMenu() {
               const sidebar = document.getElementById('sidebar');
@@ -6374,11 +6379,18 @@ app.get('/news', async (c) => {
 
             // Initialize
             async function init() {
+              console.log('[NEWS] Initializing news page...');
               await checkAuth();
               await loadNews();
             }
             
-            init();
+            // Wait for DOM and all scripts to be ready
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', init);
+            } else {
+              // DOM already loaded, but wait a bit for other scripts
+              setTimeout(init, 100);
+            }
           `
         }} />
       </body>
