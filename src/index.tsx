@@ -2074,26 +2074,55 @@ app.get('/api/news-with-likes', async (c) => {
     const currentUser = await getCurrentUser(c, getJWTSecret(c))
     const userId = currentUser?.userId || null
     
-    let query = `
-      SELECT 
-        n.*,
-        COUNT(DISTINCT nl.id) as likes_count,
-        ${userId ? `MAX(CASE WHEN nl.user_id = ? THEN 1 ELSE 0 END) as user_liked` : '0 as user_liked'}
-      FROM news_articles n
-      LEFT JOIN news_likes nl ON n.id = nl.news_id
-    `
-    
-    const params: any[] = []
-    if (userId) {
-      params.push(userId)
+    // First, check if news_likes table exists
+    let hasLikesTable = false
+    try {
+      await c.env.DB.prepare('SELECT 1 FROM news_likes LIMIT 1').all()
+      hasLikesTable = true
+    } catch (e) {
+      console.warn('[NEWS API] news_likes table does not exist, falling back to simple query')
     }
     
-    if (category && category !== 'all') {
-      query += ' WHERE n.category = ?'
-      params.push(category)
-    }
+    let query: string
+    let params: any[] = []
     
-    query += ' GROUP BY n.id ORDER BY n.published_at DESC LIMIT 50'
+    if (hasLikesTable) {
+      // Use full query with likes if table exists
+      query = `
+        SELECT 
+          n.*,
+          COUNT(DISTINCT nl.id) as likes_count,
+          ${userId ? `MAX(CASE WHEN nl.user_id = ? THEN 1 ELSE 0 END) as user_liked` : '0 as user_liked'}
+        FROM news_articles n
+        LEFT JOIN news_likes nl ON n.id = nl.news_id
+      `
+      if (userId) {
+        params.push(userId)
+      }
+      
+      if (category && category !== 'all') {
+        query += ' WHERE n.category = ?'
+        params.push(category)
+      }
+      
+      query += ' GROUP BY n.id ORDER BY n.published_at DESC LIMIT 50'
+    } else {
+      // Fallback query without likes
+      query = `
+        SELECT 
+          n.*,
+          0 as likes_count,
+          0 as user_liked
+        FROM news_articles n
+      `
+      
+      if (category && category !== 'all') {
+        query += ' WHERE n.category = ?'
+        params.push(category)
+      }
+      
+      query += ' ORDER BY n.published_at DESC LIMIT 50'
+    }
     
     const stmt = c.env.DB.prepare(query)
     if (params.length > 0) {
