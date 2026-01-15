@@ -6753,49 +6753,41 @@ app.get('/infographics', async (c) => {
                   articles.map((article: any) => (
                     <a
                       href={`/article/${article.slug}`}
-                      class="infographic-card bg-white hover:bg-pink-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 overflow-hidden border-2 border-pink-400 group"
+                      class="infographic-card bg-white hover:bg-pink-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 border-2 border-pink-400 group p-6 flex flex-col min-h-[280px]"
                     >
-                      {/* Icon Header - No Thumbnail */}
-                      <div class="aspect-video w-full bg-gradient-to-br from-pink-100 via-pink-200 to-pink-300 flex items-center justify-center">
-                        <i class="fas fa-chart-bar text-7xl text-pink-500 group-hover:scale-110 transition-transform duration-300"></i>
+                      {/* Badge with Icon */}
+                      <div class="mb-4">
+                        <span class="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-pink-500 via-pink-600 to-pink-700 rounded-full shadow-md">
+                          <i class="fas fa-chart-bar text-lg mr-2"></i>
+                          INFOGRAPHIC
+                        </span>
                       </div>
 
-                      {/* Content */}
-                      <div class="p-5">
-                        {/* Badge */}
-                        <div class="mb-3">
-                          <span class="inline-block px-3 py-1 text-xs font-bold text-white bg-gradient-to-r from-pink-500 via-pink-600 to-pink-700 rounded-full shadow-sm">
-                            <i class="fas fa-chart-line mr-1"></i>
-                            INFOGRAPHIC
+                      {/* Title */}
+                      <h3 class="text-2xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-pink-600 transition-colors leading-tight">
+                        {article.title}
+                      </h3>
+
+                      {/* Summary */}
+                      {article.summary && (
+                        <p class="text-base text-gray-600 mb-5 line-clamp-3 leading-relaxed">
+                          {article.summary}
+                        </p>
+                      )}
+
+                      {/* Meta */}
+                      <div class="flex items-center justify-between text-sm text-gray-500 pt-4 border-t-2 border-gray-100 mt-auto">
+                        <span class="flex items-center font-medium">
+                          <i class="fas fa-calendar-alt mr-2 text-pink-500"></i>
+                          {new Date(article.created_at).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                        </span>
+                        {article.category_name && (
+                          <span class="px-3 py-1.5 bg-pink-50 text-pink-600 rounded-full font-bold text-xs">
+                            {article.category_name}
                           </span>
-                        </div>
-
-                        {/* Title */}
-                        <h3 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-pink-600 transition-colors leading-snug">
-                          {article.title}
-                        </h3>
-
-                        {/* Summary */}
-                        {article.summary && (
-                          <p class="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                            {article.summary}
-                          </p>
                         )}
-
-                        {/* Meta */}
-                        <div class="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-100">
-                          <span class="flex items-center">
-                            <i class="fas fa-calendar-alt mr-1.5 text-pink-500"></i>
-                            {new Date(article.created_at).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })}
-                          </span>
-                          {article.category_name && (
-                            <span class="px-2.5 py-1 bg-pink-50 text-pink-600 rounded-full font-semibold">
-                              {article.category_name}
-                            </span>
-                          )}
-                        </div>
                       </div>
-                    </a>
+                      </a>
                   ))
                 ) : (
                   <div class="col-span-full text-center py-16">
