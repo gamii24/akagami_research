@@ -241,10 +241,8 @@ async function deleteFAQ(id) {
 document.addEventListener('DOMContentLoaded', async () => {
   await checkAuthStatus()
   
-  if (!state.isAuthenticated) {
-    location.href = '/'
-    return
-  }
+  // Note: Authentication is required, but redirect is handled by backend
+  // If not authenticated, API calls will fail with 401
   
   await loadFAQList()
 })
