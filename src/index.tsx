@@ -6321,6 +6321,14 @@ app.get('/news', async (c) => {
           __html: `
             let newsData = [];
             let isAuthenticated = false;
+            
+            // Escape HTML to prevent XSS
+            function escapeHtml(text) {
+              if (!text) return '';
+              const div = document.createElement('div');
+              div.textContent = text;
+              return div.innerHTML;
+            }
 
             // Check authentication status
             async function checkAuth() {
