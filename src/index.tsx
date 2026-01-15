@@ -6753,18 +6753,10 @@ app.get('/infographics', async (c) => {
                   articles.map((article: any) => (
                     <a
                       href={`/article/${article.slug}`}
-                      class="infographic-card bg-white hover:bg-pink-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 border-2 border-pink-400 group p-6 flex flex-col min-h-[280px]"
+                      class="infographic-card bg-white hover:bg-pink-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-200 border-2 border-pink-400 group p-6 flex flex-col min-h-[240px]"
                     >
-                      {/* Badge with Icon */}
-                      <div class="mb-4">
-                        <span class="inline-flex items-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-pink-500 via-pink-600 to-pink-700 rounded-full shadow-md">
-                          <i class="fas fa-chart-bar text-lg mr-2"></i>
-                          INFOGRAPHIC
-                        </span>
-                      </div>
-
                       {/* Title */}
-                      <h3 class="text-2xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-pink-600 transition-colors leading-tight">
+                      <h3 class="text-2xl font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-pink-600 transition-colors leading-tight">
                         {article.title}
                       </h3>
 
