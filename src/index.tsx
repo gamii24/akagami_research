@@ -107,7 +107,7 @@ function CommonSidebar() {
         </div>
 
         {/* Navigation Links */}
-        <div class="mb-6 pb-6 border-b-2 border-gray-200">
+        <div class="mb-6">
           <a
             href="/categories"
             class="w-full px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors font-medium border-2 border-indigo-200 flex items-center justify-center gap-2 mb-3"
