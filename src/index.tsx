@@ -159,7 +159,7 @@ function CommonSidebar() {
         </div>
 
         {/* Logout Button Section */}
-        <div id="logout-section" class="mt-6 pt-6 border-t-2 border-gray-200">
+        <div id="logout-section" class="mt-6">
           {/* This will be populated by auth.js when user is logged in */}
         </div>
       </div>
