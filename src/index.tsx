@@ -158,9 +158,6 @@ function CommonSidebar() {
           </a>
         </div>
 
-        {/* Category Filter - Will be populated by app.js */}
-        <div id="category-filter"></div>
-
         {/* Logout Button Section */}
         <div id="logout-section" class="mt-6 pt-6 border-t-2 border-gray-200">
           {/* This will be populated by auth.js when user is logged in */}
@@ -6048,9 +6045,6 @@ app.get('/', (c) => {
                   </button>
                 </div>
               </div>
-
-              {/* Category Filter */}
-              <div id="category-filter"></div>
 
               {/* Tag Filter */}
               <div id="tag-filter"></div>
