@@ -7695,99 +7695,111 @@ app.get('/sns-faq', (c) => {
 // About Page - 自己紹介ページ
 app.get('/about', (c) => {
   return c.render(
-    <>
-      {/* メインコンテンツ */}
-      <div class="max-w-4xl mx-auto">
-        {/* ページタイトル */}
-        <div class="mb-8">
-          <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
-            <i class="fas fa-user-circle text-primary mr-3"></i>
-            自己紹介
-          </h1>
-          <p class="text-gray-600">Akagami.net について</p>
-        </div>
+    <div class="min-h-screen bg-white flex flex-col">
+      <CommonHeader />
 
-        {/* コンテンツ */}
-        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6">
-          <div class="prose prose-lg max-w-none">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-              <i class="fas fa-info-circle text-primary mr-2"></i>
-              Akagami.net とは
-            </h2>
-            <p class="text-gray-700 leading-relaxed mb-6">
-              Akagami.netは、SNSマーケティングと生成AIに関する資料やデータを提供するウェブサイトです。
-              最新のトレンドやノウハウを共有し、SNS運用に役立つ情報をお届けしています。
-            </p>
+      {/* Main Content */}
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Content Area */}
+          <div class="lg:col-span-3 order-1 lg:order-2">
+            {/* ページタイトル */}
+            <div class="mb-8">
+              <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-user-circle text-primary mr-3"></i>
+                自己紹介
+              </h1>
+              <p class="text-gray-600">Akagami.net について</p>
+            </div>
 
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 mt-8 flex items-center">
-              <i class="fas fa-bullseye text-primary mr-2"></i>
-              目的
-            </h2>
-            <p class="text-gray-700 leading-relaxed mb-6">
-              SNSマーケティングの最新情報やデータを整理し、誰でも簡単にアクセスできる形で提供することを目的としています。
-            </p>
+            {/* コンテンツ */}
+            <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6">
+              <div class="prose prose-lg max-w-none">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                  <i class="fas fa-info-circle text-primary mr-2"></i>
+                  Akagami.net とは
+                </h2>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                  Akagami.netは、SNSマーケティングと生成AIに関する資料やデータを提供するウェブサイトです。
+                  最新のトレンドやノウハウを共有し、SNS運用に役立つ情報をお届けしています。
+                </p>
 
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 mt-8 flex items-center">
-              <i class="fas fa-envelope text-primary mr-2"></i>
-              お問い合わせ
-            </h2>
-            <p class="text-gray-700 leading-relaxed mb-4">
-              ご質問やご要望がございましたら、以下のSNSからお気軽にお問い合わせください。
-            </p>
-            
-            <div class="flex flex-wrap gap-4 mt-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 mt-8 flex items-center">
+                  <i class="fas fa-bullseye text-primary mr-2"></i>
+                  目的
+                </h2>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                  SNSマーケティングの最新情報やデータを整理し、誰でも簡単にアクセスできる形で提供することを目的としています。
+                </p>
+
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 mt-8 flex items-center">
+                  <i class="fas fa-envelope text-primary mr-2"></i>
+                  お問い合わせ
+                </h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                  ご質問やご要望がございましたら、以下のSNSからお気軽にお問い合わせください。
+                </p>
+                
+                <div class="flex flex-wrap gap-4 mt-6">
+                  <a 
+                    href="https://note.com/akagami_sns" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                  >
+                    <i class="fas fa-sticky-note"></i>
+                    <span>note</span>
+                  </a>
+                  <a 
+                    href="https://www.threads.com/@akagami0124" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                  >
+                    <span>♡</span>
+                    <span>Threads</span>
+                  </a>
+                  <a 
+                    href="https://www.youtube.com/@akagami_sns" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                  >
+                    <i class="fab fa-youtube"></i>
+                    <span>YouTube</span>
+                  </a>
+                  <a 
+                    href="https://www.instagram.com/akagami_sns/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                  >
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* トップに戻るボタン */}
+            <div class="text-center mt-8">
               <a 
-                href="https://note.com/akagami_sns" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                href="/" 
+                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors"
               >
-                <i class="fas fa-sticky-note"></i>
-                <span>note</span>
-              </a>
-              <a 
-                href="https://www.threads.com/@akagami0124" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
-              >
-                <span>♡</span>
-                <span>Threads</span>
-              </a>
-              <a 
-                href="https://www.youtube.com/@akagami_sns" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
-              >
-                <i class="fab fa-youtube"></i>
-                <span>YouTube</span>
-              </a>
-              <a 
-                href="https://www.instagram.com/akagami_sns/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
-              >
-                <i class="fab fa-instagram"></i>
-                <span>Instagram</span>
+                <i class="fas fa-home"></i>
+                <span>トップページに戻る</span>
               </a>
             </div>
           </div>
-        </div>
 
-        {/* トップに戻るボタン */}
-        <div class="text-center mt-8">
-          <a 
-            href="/" 
-            class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors"
-          >
-            <i class="fas fa-home"></i>
-            <span>トップページに戻る</span>
-          </a>
+          {/* Sidebar */}
+          <aside class="lg:col-span-1 order-2 lg:order-1">
+            <CommonSidebar />
+          </aside>
         </div>
-      </div>
-    </>,
+      </main>
+    </div>,
     {
       title: '自己紹介 - Akagami.net',
       description: 'Akagami.netの運営者自己紹介ページです。'
