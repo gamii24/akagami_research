@@ -7715,6 +7715,24 @@ app.get('/about', (c) => {
             {/* コンテンツ */}
             <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-6">
               <div class="prose prose-lg max-w-none">
+                {/* プロフィール写真と名前 */}
+                <div class="flex flex-col items-center mb-8">
+                  <img 
+                    src="/akagami-profile.jpg" 
+                    alt="赤髪社長プロフィール写真" 
+                    class="w-48 h-48 rounded-full object-cover shadow-lg mb-4"
+                  />
+                  <h2 class="text-3xl font-bold text-gray-800">赤髪社長</h2>
+                  <p class="text-lg text-gray-600">SNS戦略家</p>
+                </div>
+
+                {/* プロフィール */}
+                <div class="bg-gradient-to-r from-pink-50 to-red-50 p-6 rounded-lg mb-8">
+                  <p class="text-gray-700 leading-relaxed">
+                    SNS戦略家として活動を始めて12年。日本とフィリピンに拠点を置き、年間8割を海外で過ごしつつ、プライム市場上場企業やフォロワー1000万超のTikToker、K-POPアイドル、K-1、TOKYO FM、BizmatesのSNS運用を手がけ、累計1500社以上を支援。2022年より、SNSを活用した集客・ビジネス構築を学ぶ「SNS ACADEMY」を主宰し、累計生徒数は796名にのぼる。ビジネス領域を中心に、成長意欲の高いSNSマーケターへ、再現性のある戦略と実務に落とし込んだSNS運用をわかりやすく指南。世界を巡りながらYouTubeなど各種プラットフォームで、SNSマーケ情報をどこよりも正しく発信中。
+                  </p>
+                </div>
+
                 <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
                   <i class="fas fa-info-circle text-primary mr-2"></i>
                   Akagami.net とは
