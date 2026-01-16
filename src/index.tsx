@@ -7719,10 +7719,10 @@ app.get('/about', (c) => {
                 <div class="flex flex-col items-center mb-8">
                   <img 
                     src="/akagami-profile.jpg" 
-                    alt="赤髪社長プロフィール写真" 
-                    class="w-48 h-48 rounded-full object-cover shadow-lg mb-4"
+                    alt="赤髪プロフィール写真" 
+                    class="w-full max-w-md rounded-lg shadow-lg mb-4"
                   />
-                  <h2 class="text-3xl font-bold text-gray-800">赤髪社長</h2>
+                  <h2 class="text-3xl font-bold text-gray-800">赤髪</h2>
                   <p class="text-lg text-gray-600">SNS戦略家</p>
                 </div>
 
