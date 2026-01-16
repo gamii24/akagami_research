@@ -466,8 +466,8 @@ async function generateKeywordsForKeyword(keyword) {
   const sortedKeywords = keywordsWithScores.sort((a, b) => b.score - a.score)
   
   // SNS投稿向け（スコア55以上）と参考用に分類
-  const snsKeywords = sortedKeywords.filter(k => k.score >= 55).slice(0, 20)
-  const referenceKeywords = sortedKeywords.filter(k => k.score < 55).slice(0, 10)
+  const snsKeywords = sortedKeywords.filter(k => k.score >= 55).slice(0, 50)
+  const referenceKeywords = sortedKeywords.filter(k => k.score < 55).slice(0, 50)
   
   return {
     snsKeywords: snsKeywords,
