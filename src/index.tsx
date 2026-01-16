@@ -7817,6 +7817,78 @@ app.get('/about', (c) => {
           </aside>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* SNS Links */}
+          <div class="flex flex-wrap justify-center items-center gap-4 md:gap-6 mb-4">
+            <a 
+              href="https://note.com/akagami_sns" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+              title="note"
+            >
+              <i class="fas fa-sticky-note text-xl"></i>
+              <span class="text-sm font-medium">note</span>
+            </a>
+            <a 
+              href="https://www.threads.com/@akagami0124" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+              title="Threads"
+            >
+              <span class="text-xl">♡</span>
+              <span class="text-sm font-medium">Threads</span>
+            </a>
+            <a 
+              href="https://www.youtube.com/@akagami_sns" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+              title="YouTube"
+            >
+              <i class="fab fa-youtube text-xl"></i>
+              <span class="text-sm font-medium">YouTube</span>
+            </a>
+            <a 
+              href="https://www.instagram.com/akagami_sns/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+              title="Instagram"
+            >
+              <i class="fab fa-instagram text-xl"></i>
+              <span class="text-sm font-medium">Instagram</span>
+            </a>
+          </div>
+          
+          {/* About Link */}
+          <div class="flex justify-center mb-4">
+            <a 
+              href="/about" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              自己紹介
+            </a>
+          </div>
+          
+          <p class="text-sm text-gray-500 text-center">&copy; 2026 Akagami.net. All rights reserved.</p>
+          
+          {/* Admin link - Desktop only, subtle */}
+          <div class="hidden lg:block fixed bottom-4 right-4">
+            <a 
+              href="/admin" 
+              class="text-xs text-gray-300 hover:text-gray-400 transition-colors opacity-30 hover:opacity-50"
+              style="font-size: 10px;"
+            >
+              管理画面
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>,
     {
       title: '自己紹介 - Akagami.net',
