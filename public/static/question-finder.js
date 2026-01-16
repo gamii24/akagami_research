@@ -520,95 +520,27 @@ function renderResults() {
     return `
     <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 border border-gray-100" id="keyword-section-${index}">
       <!-- キーワードヘッダー -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 pb-4 border-b border-gray-200 gap-3">
-        <h2 class="text-base sm:text-xl font-bold text-gray-800 flex flex-col sm:flex-row sm:items-center gap-2">
-          <span class="bg-gradient-to-r from-primary to-pink-500 text-white rounded-lg px-3 py-1.5 text-sm sm:text-base inline-block">
-            ${escapeHtml(item.keyword)}
-          </span>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs sm:text-sm text-gray-500">全 ${totalCount} 件</span>
-            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-              <i class="fas fa-check-circle mr-1"></i>Google検索データ
-            </span>
-          </div>
+      <div class="mb-4 pb-4 border-b border-gray-200">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-800">
+          関連キーワード一覧
         </h2>
-        <div class="flex flex-wrap gap-2">
-          <button 
-            onclick="copyAllKeywords(${index})"
-            class="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors">
-            <i class="fas fa-copy mr-1 sm:mr-2"></i><span class="hidden sm:inline">全て</span>コピー
-          </button>
-          <button 
-            onclick="exportToText(${index})"
-            class="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-green-500 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors">
-            <i class="fas fa-file-download mr-1 sm:mr-2"></i>TXT
-          </button>
-          <button 
-            onclick="exportToCSV(${index})"
-            class="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-purple-500 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-purple-600 transition-colors">
-            <i class="fas fa-file-csv mr-1 sm:mr-2"></i>CSV
-          </button>
-        </div>
       </div>
       
-      <!-- SNS投稿ネタセクション -->
-      ${snsCount > 0 ? `
-      <div class="mb-4 sm:mb-6">
-        <div class="flex flex-col sm:flex-row sm:items-center mb-3 gap-2">
-          <div class="flex items-center bg-gradient-to-r from-pink-500 to-primary text-white px-3 py-1.5 rounded-lg text-sm">
-            <i class="fas fa-fire mr-2"></i>
-            <span class="font-bold">SNS投稿ネタ候補</span>
+      <!-- キーワードリスト -->
+      <div class="grid grid-cols-1 gap-2">
+        ${item.keywords.snsKeywords.map((k, kIndex) => `
+          <div class="flex items-center p-2.5 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <span class="text-xs sm:text-sm font-semibold text-gray-400 mr-2 sm:mr-3 flex-shrink-0">${kIndex + 1}.</span>
+            <span class="flex-1 text-sm sm:text-base text-gray-800 break-all">${escapeHtml(k.text)}</span>
           </div>
-          <span class="text-xs sm:text-sm text-gray-600">${snsCount}件（投稿で反応が得やすいキーワード）</span>
-        </div>
-        <div class="grid grid-cols-1 gap-2 sm:gap-3 bg-gradient-to-r from-pink-50 to-red-50 p-3 sm:p-4 rounded-lg">
-          ${item.keywords.snsKeywords.map((k, kIndex) => `
-            <div class="flex items-center p-2.5 sm:p-3 bg-white rounded-lg hover:shadow-md transition-all group">
-              <span class="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-pink-500 to-primary text-white rounded-full text-xs font-bold mr-2 sm:mr-3 flex-shrink-0">
-                ${kIndex + 1}
-              </span>
-              <span class="flex-1 text-sm sm:text-base text-gray-800 font-medium break-all">${escapeHtml(k.text)}</span>
-              <div class="flex items-center gap-1.5 sm:gap-2 ml-2 sm:ml-3 flex-shrink-0">
-                <span class="text-xs bg-yellow-100 text-yellow-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full font-semibold whitespace-nowrap">
-                  ${k.score}点
-                </span>
-                <button 
-                  onclick="copyKeyword('${escapeHtml(k.text)}')"
-                  class="px-2 sm:px-3 py-1 text-xs bg-primary text-white rounded hover:bg-red-600 transition-colors flex-shrink-0">
-                  <i class="fas fa-copy"></i>
-                </button>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-      ` : ''}
-      
-      <!-- 参考用セクション -->
-      ${refCount > 0 ? `
-      <div>
-        <div class="flex flex-col sm:flex-row sm:items-center mb-3 gap-2">
-          <div class="flex items-center bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm">
-            <i class="fas fa-book mr-2"></i>
-            <span class="font-bold">参考用キーワード</span>
+        `).join('')}
+        ${item.keywords.referenceKeywords.map((k, kIndex) => `
+          <div class="flex items-center p-2.5 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <span class="text-xs sm:text-sm font-semibold text-gray-400 mr-2 sm:mr-3 flex-shrink-0">${snsCount + kIndex + 1}.</span>
+            <span class="flex-1 text-sm sm:text-base text-gray-800 break-all">${escapeHtml(k.text)}</span>
           </div>
-          <span class="text-xs sm:text-sm text-gray-500">${refCount}件（基礎情報・地域限定など）</span>
-        </div>
-        <div class="grid grid-cols-1 gap-2">
-          ${item.keywords.referenceKeywords.map((k, kIndex) => `
-            <div class="flex items-center p-2.5 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors group">
-              <span class="text-xs sm:text-sm font-semibold text-gray-400 mr-2 sm:mr-3 flex-shrink-0">${snsCount + kIndex + 1}.</span>
-              <span class="flex-1 text-sm sm:text-base text-gray-600 break-all">${escapeHtml(k.text)}</span>
-              <button 
-                onclick="copyKeyword('${escapeHtml(k.text)}')"
-                class="ml-2 sm:ml-3 px-2 sm:px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors flex-shrink-0">
-                <i class="fas fa-copy"></i>
-              </button>
-            </div>
-          `).join('')}
-        </div>
+        `).join('')}
       </div>
-      ` : ''}
     </div>
     `
   }).join('')
