@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => ({
             '/og-image-dark.webp',
             '/og-image-square-dark.png',
             '/og-image-square-dark.webp',
+            '/akagami-profile.jpg',
             '/robots.txt',
             '/humans.txt',
             '/.well-known/*',
