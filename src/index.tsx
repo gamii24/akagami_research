@@ -91,7 +91,7 @@ function CommonSidebar() {
       id="sidebar"
       class="lg:col-span-1 order-1 lg:order-1 fixed lg:static inset-y-0 right-0 lg:left-auto transform translate-x-full lg:translate-x-0 lg:transform-none transition-transform duration-300 ease-in-out lg:transition-none z-50 lg:z-auto w-80 lg:w-auto"
     >
-      <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 border-2 border-primary h-full lg:h-auto overflow-y-auto">
+      <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 h-full lg:h-auto overflow-y-auto">
         {/* Close button for mobile */}
         <button 
           onclick="toggleMobileMenu()"
@@ -5955,7 +5955,7 @@ app.get('/', (c) => {
             id="sidebar"
             class="lg:col-span-1 order-2 lg:order-1 fixed lg:static inset-y-0 right-0 transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-50 lg:z-auto w-80 lg:w-auto"
           >
-            <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 border-2 border-primary h-full lg:h-auto overflow-y-auto">
+            <div class="bg-white rounded-xl shadow-lg p-6 lg:sticky lg:top-8 h-full lg:h-auto overflow-y-auto">
               {/* Close button for mobile */}
               <button 
                 onclick="toggleMobileMenu()"
