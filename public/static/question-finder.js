@@ -528,16 +528,15 @@ function renderResults() {
       
       <!-- キーワードリスト -->
       <div class="grid grid-cols-1 gap-2">
-        ${item.keywords.snsKeywords.map((k, kIndex) => `
+        ${item.keywords.allKeywords.map((k, kIndex) => `
           <div class="flex items-center p-2.5 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors">
             <span class="text-xs sm:text-sm font-semibold text-gray-400 mr-2 sm:mr-3 flex-shrink-0">${kIndex + 1}.</span>
             <span class="flex-1 text-sm sm:text-base text-gray-800 break-all">${escapeHtml(k.text)}</span>
-          </div>
-        `).join('')}
-        ${item.keywords.referenceKeywords.map((k, kIndex) => `
-          <div class="flex items-center p-2.5 sm:p-3 rounded-lg hover:bg-gray-50 transition-colors">
-            <span class="text-xs sm:text-sm font-semibold text-gray-400 mr-2 sm:mr-3 flex-shrink-0">${snsCount + kIndex + 1}.</span>
-            <span class="flex-1 text-sm sm:text-base text-gray-800 break-all">${escapeHtml(k.text)}</span>
+            <button 
+              onclick="copyKeyword('${escapeHtml(k.text)}')"
+              class="ml-2 sm:ml-3 px-2 sm:px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors flex-shrink-0">
+              <i class="fas fa-copy"></i>
+            </button>
           </div>
         `).join('')}
       </div>
