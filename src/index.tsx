@@ -7376,7 +7376,7 @@ app.get('/question-finder', (c) => {
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
         <script defer src="/static/app.js?v=2026011610"></script>
-        <script defer src="/static/question-finder.js?v=2026011410"></script>
+        <script defer src="/static/question-finder.js?v=2026011610"></script>
       </body>
     </html>
   )
@@ -7421,7 +7421,7 @@ app.get('/instagram-faq', (c) => {
         
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/instagram-faq.js?v=2026011402"></script>
+        <script src="/static/instagram-faq.js?v=2026011610"></script>
       </body>
     </html>
   )
@@ -7466,7 +7466,7 @@ app.get('/tiktok-faq', (c) => {
         
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/instagram-faq.js?v=2026011402"></script>
+        <script src="/static/instagram-faq.js?v=2026011610"></script>
       </body>
     </html>
   )
@@ -7676,7 +7676,7 @@ app.get('/sns-faq', (c) => {
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
         <script defer src="/static/app.js?v=2026011610"></script>
-        <script defer src="/static/sns-faq.js?v=2026011410"></script>
+        <script defer src="/static/sns-faq.js?v=2026011610"></script>
       </body>
     </html>
   )
@@ -7920,7 +7920,7 @@ app.get('/admin/instagram-faq', (c) => {
         </div>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/faq-admin.js?v=2026011501"></script>
+        <script src="/static/faq-admin.js?v=2026011610"></script>
       </body>
     </html>
   )
@@ -8100,7 +8100,7 @@ app.get('/admin/news', (c) => {
         </div>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
         <script src="/static/utils.js" defer></script>
-        <script src="/static/news-admin.js?v=2026011402" defer></script>
+        <script src="/static/news-admin.js?v=2026011610" defer></script>
       </body>
     </html>
   )
@@ -8161,7 +8161,7 @@ app.get('/admin/articles', requireAuth, (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
-        <script src="/static/articles-admin.js?v=2026011503"></script>
+        <script src="/static/articles-admin.js?v=2026011610"></script>
       </body>
     </html>
   )
