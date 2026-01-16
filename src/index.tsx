@@ -6046,6 +6046,9 @@ app.get('/', (c) => {
                 </div>
               </div>
 
+              {/* Category Filter */}
+              <div id="category-filter"></div>
+
               {/* Tag Filter */}
               <div id="tag-filter"></div>
               
