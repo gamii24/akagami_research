@@ -6418,7 +6418,7 @@ app.get('/news', async (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/app.js"></script>
+        <script src="/static/app.js?v=2026011610"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
             let newsData = [];
@@ -6729,7 +6729,7 @@ app.get('/news', async (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js"></script>
+        <script defer src="/static/app.js?v=2026011610"></script>
         
         {/* Auth Modal */}
         <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
@@ -7080,7 +7080,7 @@ app.get('/mypage', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/app.js"></script>
+        <script src="/static/app.js?v=2026011610"></script>
         <script src="/static/mypage.js"></script>
       </body>
     </html>
@@ -7375,7 +7375,7 @@ app.get('/question-finder', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js"></script>
+        <script defer src="/static/app.js?v=2026011610"></script>
         <script defer src="/static/question-finder.js?v=2026011410"></script>
       </body>
     </html>
@@ -7675,7 +7675,7 @@ app.get('/sns-faq', (c) => {
         
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js"></script>
+        <script defer src="/static/app.js?v=2026011610"></script>
         <script defer src="/static/sns-faq.js?v=2026011410"></script>
       </body>
     </html>
@@ -8355,7 +8355,7 @@ app.get('/article/:slug', async (c) => {
           
           <script src="/static/utils.js"></script>
           <script src="/static/auth.js"></script>
-          <script src="/static/app.js"></script>
+          <script src="/static/app.js?v=2026011610"></script>
         </body>
       </html>
     )
