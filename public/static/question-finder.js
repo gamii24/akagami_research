@@ -476,17 +476,32 @@ async function generateKeywordsForKeyword(keyword) {
   }
 }
 
-// Google Suggestから関連キーワードを取得
+// Google Suggestから関連キーワードを取得（複数サフィックスで50件以上取得）
 async function fetchGoogleSuggestions(keyword) {
   try {
-    const response = await fetch(`/api/suggest?q=${encodeURIComponent(keyword)}`)
-    const data = await response.json()
+    // 複数のサフィックスを使って多くのキーワードを取得
+    const suffixes = ['', ' あ', ' い', ' う', ' え', ' お', ' か', ' き', ' く', ' け', ' こ', 
+                      ' と', ' は', ' 方法', ' 使い方', ' おすすめ', ' 比較', ' 違い', ' 料金', ' 無料']
     
-    if (data.suggestions && Array.isArray(data.suggestions)) {
-      return data.suggestions
-    }
+    const allSuggestions = new Set()
     
-    return []
+    // 並列でAPIを呼び出し
+    const promises = suffixes.map(async (suffix) => {
+      try {
+        const response = await fetch(`/api/suggest?q=${encodeURIComponent(keyword + suffix)}`)
+        const data = await response.json()
+        
+        if (data.suggestions && Array.isArray(data.suggestions)) {
+          data.suggestions.forEach(s => allSuggestions.add(s))
+        }
+      } catch (error) {
+        // エラーは無視して続行
+      }
+    })
+    
+    await Promise.all(promises)
+    
+    return Array.from(allSuggestions)
   } catch (error) {
     return []
   }
