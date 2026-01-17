@@ -1095,10 +1095,10 @@ function renderPDFList() {
     const isSelected = state.selectedPdfs.has(pdf.id)
     const bgColor = isSelected ? 'bg-blue-50 border-blue-500' : (downloaded ? 'bg-[#f4eee0]' : 'bg-white')
     
-    // Card click handler
+    // Card click handler - Direct download without confirmation
     const cardClick = state.multiSelectMode 
       ? `togglePdfSelection(event, ${pdf.id})`
-      : (downloadUrl ? `showDownloadConfirmation(${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`)
+      : (downloadUrl ? `confirmDownload(${pdf.id}, '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`)
     
     // List view
     if (state.viewMode === 'list') {
