@@ -2,10 +2,11 @@ import build from '@hono/vite-build/cloudflare-pages'
 import devServer from '@hono/vite-dev-server'
 import adapter from '@hono/vite-dev-server/cloudflare'
 import { defineConfig } from 'vite'
-import { writeFileSync } from 'fs'
+import { writeFileSync, cpSync } from 'fs'
 import { join } from 'path'
 
 export default defineConfig(({ mode }) => ({
+  publicDir: 'public',
   plugins: [
     build({
       outputDir: './dist',
@@ -17,6 +18,13 @@ export default defineConfig(({ mode }) => ({
       adapter,
       entry: 'src/index.tsx'
     }),
+    {
+      name: 'copy-public-files',
+      closeBundle() {
+        // Copy public directory contents to dist
+        cpSync('public', 'dist', { recursive: true })
+      }
+    },
     {
       name: 'generate-routes',
       closeBundle() {
