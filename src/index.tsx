@@ -8397,7 +8397,7 @@ app.get('/admin', (c) => {
         </div>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
         <script src="/static/utils.js" defer></script>
-        <script src="/static/admin.js" defer></script>
+        <script src="/static/admin.js?v=202601181036" defer></script>
       </body>
     </html>
   )
