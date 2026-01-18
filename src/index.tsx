@@ -8650,7 +8650,7 @@ app.get('/admin/users', requireAuth, (c) => {
         </div>
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
-        <script src="/static/users-admin.js"></script>
+        <script src="/static/users-admin.js?v=202601181221"></script>
       </body>
     </html>
   )
