@@ -3,6 +3,8 @@
 let articlesState = {
   articles: [],
   categories: [],
+  tags: [],
+  selectedTags: new Set(),
   editingArticle: null,
   editor: null,
   viewMode: 'grid' // 'grid' or 'list'
@@ -11,6 +13,7 @@ let articlesState = {
 // Initialize
 async function init() {
   await loadCategories()
+  await loadTags()
   await loadArticles()
   initMonaco()
 }
@@ -22,6 +25,16 @@ async function loadCategories() {
     articlesState.categories = response.data
   } catch (error) {
     console.error('Failed to load categories:', error)
+  }
+}
+
+// Load tags
+async function loadTags() {
+  try {
+    const response = await axios.get('/api/tags')
+    articlesState.tags = response.data
+  } catch (error) {
+    console.error('Failed to load tags:', error)
   }
 }
 
@@ -292,6 +305,12 @@ function showArticleForm(articleId = null) {
   const article = articleId ? articlesState.articles.find(a => a.id === articleId) : null
   articlesState.editingArticle = article
   
+  // Initialize selected tags
+  articlesState.selectedTags = new Set()
+  if (article && article.tags) {
+    article.tags.forEach(tag => articlesState.selectedTags.add(tag))
+  }
+  
   const modal = document.getElementById('article-modal')
   const isEdit = article !== null
   
@@ -384,6 +403,51 @@ function showArticleForm(articleId = null) {
             />
           </div>
           
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              <i class="fas fa-tags text-primary mr-2"></i>タグ（複数選択可）
+            </label>
+            <div class="space-y-2">
+              <!-- New tag input -->
+              <div class="flex gap-2">
+                <input 
+                  type="text" 
+                  id="new-tag-input"
+                  class="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-primary"
+                  placeholder="新しいタグを入力..."
+                  onkeypress="if(event.key==='Enter'){event.preventDefault();addNewTag()}"
+                />
+                <button 
+                  type="button"
+                  onclick="addNewTag()"
+                  class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
+                >
+                  <i class="fas fa-plus mr-1"></i>追加
+                </button>
+              </div>
+              
+              <!-- Selected tags -->
+              <div id="selected-tags" class="flex flex-wrap gap-2 p-3 bg-gray-800 rounded-lg min-h-[80px] border border-gray-600"></div>
+              
+              <!-- Available tags (quick select) -->
+              <div class="max-h-40 overflow-y-auto p-2 bg-gray-800 rounded-lg border border-gray-600">
+                <div class="text-xs text-gray-400 mb-2">クリックで選択:</div>
+                <div class="flex flex-wrap gap-2" id="available-tags">
+                  ${articlesState.tags.map(tag => `
+                    <button 
+                      type="button"
+                      onclick="toggleTag('${escapeHtml(tag.name)}')"
+                      class="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-full text-xs transition-colors"
+                      data-tag="${escapeHtml(tag.name)}"
+                    >
+                      ${escapeHtml(tag.name)}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <div class="flex items-center gap-6">
             <label class="flex items-center gap-2 cursor-pointer">
               <input 
@@ -445,6 +509,7 @@ function showArticleForm(articleId = null) {
   // Initialize Monaco Editor
   setTimeout(() => {
     initArticleEditor(article ? article.content : '')
+    renderSelectedTags()
   }, 100)
 }
 
@@ -489,7 +554,8 @@ async function saveArticle(event) {
     content: articlesState.editor ? articlesState.editor.getValue() : '',
     summary: formData.get('summary') || null,
     published: formData.has('published'),
-    sort_order: parseInt(formData.get('sort_order')) || 0
+    sort_order: parseInt(formData.get('sort_order')) || 0,
+    tags: Array.from(articlesState.selectedTags)
   }
   
   // Validation
@@ -573,6 +639,66 @@ function closeModal() {
 // Close delete modal
 function closeDeleteModal() {
   document.getElementById('delete-modal').classList.add('hidden')
+}
+
+// Toggle tag selection
+function toggleTag(tagName) {
+  if (articlesState.selectedTags.has(tagName)) {
+    articlesState.selectedTags.delete(tagName)
+  } else {
+    articlesState.selectedTags.add(tagName)
+  }
+  renderSelectedTags()
+}
+
+// Add new tag
+function addNewTag() {
+  const input = document.getElementById('new-tag-input')
+  const tagName = input.value.trim()
+  
+  if (!tagName) {
+    return
+  }
+  
+  // Add to selected tags
+  articlesState.selectedTags.add(tagName)
+  
+  // Clear input
+  input.value = ''
+  
+  // Render
+  renderSelectedTags()
+}
+
+// Remove tag from selection
+function removeTag(tagName) {
+  articlesState.selectedTags.delete(tagName)
+  renderSelectedTags()
+}
+
+// Render selected tags
+function renderSelectedTags() {
+  const container = document.getElementById('selected-tags')
+  if (!container) return
+  
+  if (articlesState.selectedTags.size === 0) {
+    container.innerHTML = '<div class="text-sm text-gray-400 w-full text-center py-4">タグが選択されていません</div>'
+    return
+  }
+  
+  container.innerHTML = Array.from(articlesState.selectedTags).map(tag => `
+    <span class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary text-white rounded-full text-sm">
+      <i class="fas fa-tag"></i>
+      ${escapeHtml(tag)}
+      <button 
+        type="button"
+        onclick="removeTag('${escapeHtml(tag)}')"
+        class="hover:bg-red-700 rounded-full p-0.5 transition-colors"
+      >
+        <i class="fas fa-times text-xs"></i>
+      </button>
+    </span>
+  `).join('')
 }
 
 // Show toast notification

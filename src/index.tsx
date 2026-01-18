@@ -2383,6 +2383,23 @@ app.get('/api/admin/articles', requireAuth, async (c) => {
       ORDER BY ia.sort_order ASC, ia.created_at DESC
     `).all()
     
+    // Fetch tags for each article
+    for (const article of results) {
+      try {
+        const { results: tags } = await c.env.DB.prepare(`
+          SELECT t.name 
+          FROM tags t
+          INNER JOIN article_tags at ON t.id = at.tag_id
+          WHERE at.article_id = ?
+        `).bind(article.id).all()
+        
+        article.tags = tags.map((t: any) => t.name)
+      } catch (error) {
+        // If article_tags table doesn't exist yet, set empty array
+        article.tags = []
+      }
+    }
+    
     return c.json(results)
   } catch (error) {
     console.error('Failed to fetch articles:', error)
@@ -2413,7 +2430,7 @@ app.get('/api/admin/articles/:id', requireAuth, async (c) => {
 // Create new article
 app.post('/api/admin/articles', requireAuth, async (c) => {
   try {
-    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order } = await c.req.json()
+    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order, tags } = await c.req.json()
     
     if (!title || !slug || !content) {
       return c.json({ error: 'Title, slug, and content are required' }, 400)
@@ -2434,9 +2451,47 @@ app.post('/api/admin/articles', requireAuth, async (c) => {
       sort_order || 0
     ).run()
     
+    const articleId = result.meta.last_row_id
+    
+    // Handle tags if provided
+    if (tags && Array.isArray(tags) && tags.length > 0) {
+      // Create article_tags table if not exists
+      await c.env.DB.prepare(`
+        CREATE TABLE IF NOT EXISTS article_tags (
+          article_id INTEGER NOT NULL,
+          tag_id INTEGER NOT NULL,
+          PRIMARY KEY (article_id, tag_id),
+          FOREIGN KEY (article_id) REFERENCES infographic_articles(id) ON DELETE CASCADE,
+          FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+        )
+      `).run()
+      
+      for (const tagName of tags) {
+        // Get or create tag
+        let tagResult = await c.env.DB.prepare(
+          'SELECT id FROM tags WHERE name = ?'
+        ).bind(tagName).first()
+        
+        let tagId
+        if (!tagResult) {
+          const newTag = await c.env.DB.prepare(
+            'INSERT INTO tags (name) VALUES (?)'
+          ).bind(tagName).run()
+          tagId = newTag.meta.last_row_id
+        } else {
+          tagId = tagResult.id
+        }
+        
+        // Link article and tag
+        await c.env.DB.prepare(
+          'INSERT OR IGNORE INTO article_tags (article_id, tag_id) VALUES (?, ?)'
+        ).bind(articleId, tagId).run()
+      }
+    }
+    
     return c.json({ 
       success: true,
-      id: result.meta.last_row_id,
+      id: articleId,
       message: 'Article created successfully'
     })
   } catch (error) {
@@ -2454,7 +2509,7 @@ app.post('/api/admin/articles', requireAuth, async (c) => {
 app.put('/api/admin/articles/:id', requireAuth, async (c) => {
   try {
     const id = c.req.param('id')
-    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order } = await c.req.json()
+    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order, tags } = await c.req.json()
     
     if (!title || !slug || !content) {
       return c.json({ error: 'Title, slug, and content are required' }, 400)
@@ -2477,6 +2532,48 @@ app.put('/api/admin/articles/:id', requireAuth, async (c) => {
       sort_order || 0,
       id
     ).run()
+    
+    // Handle tags if provided
+    if (tags && Array.isArray(tags)) {
+      // Create article_tags table if not exists
+      await c.env.DB.prepare(`
+        CREATE TABLE IF NOT EXISTS article_tags (
+          article_id INTEGER NOT NULL,
+          tag_id INTEGER NOT NULL,
+          PRIMARY KEY (article_id, tag_id),
+          FOREIGN KEY (article_id) REFERENCES infographic_articles(id) ON DELETE CASCADE,
+          FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+        )
+      `).run()
+      
+      // Delete existing tags for this article
+      await c.env.DB.prepare(
+        'DELETE FROM article_tags WHERE article_id = ?'
+      ).bind(id).run()
+      
+      // Add new tags
+      for (const tagName of tags) {
+        // Get or create tag
+        let tagResult = await c.env.DB.prepare(
+          'SELECT id FROM tags WHERE name = ?'
+        ).bind(tagName).first()
+        
+        let tagId
+        if (!tagResult) {
+          const newTag = await c.env.DB.prepare(
+            'INSERT INTO tags (name) VALUES (?)'
+          ).bind(tagName).run()
+          tagId = newTag.meta.last_row_id
+        } else {
+          tagId = tagResult.id
+        }
+        
+        // Link article and tag
+        await c.env.DB.prepare(
+          'INSERT OR IGNORE INTO article_tags (article_id, tag_id) VALUES (?, ?)'
+        ).bind(id, tagId).run()
+      }
+    }
     
     return c.json({ 
       success: true,
