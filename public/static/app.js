@@ -103,13 +103,13 @@ function markAsDownloaded(pdfId) {
 function checkDownloadMilestone(url) {
   const downloadCount = state.downloadedPdfs.size
   
-  // Check if first download
-  const firstDownloadShown = localStorage.getItem('first_download_shown')
-  if (downloadCount === 1 && !firstDownloadShown) {
-    showFirstDownloadMessage(url)
-    localStorage.setItem('first_download_shown', 'true')
-    return true // Milestone shown
-  }
+  // First download popup disabled - go directly to download
+  // const firstDownloadShown = localStorage.getItem('first_download_shown')
+  // if (downloadCount === 1 && !firstDownloadShown) {
+  //   showFirstDownloadMessage(url)
+  //   localStorage.setItem('first_download_shown', 'true')
+  //   return true // Milestone shown
+  // }
   
   // Check if reached 5 downloads milestone
   const celebrationShown = localStorage.getItem('celebration_5_shown')
