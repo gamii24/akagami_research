@@ -2470,6 +2470,30 @@ app.get('/api/admin/articles/:id', requireAuth, async (c) => {
   }
 })
 
+// Get all users (admin only)
+app.get('/api/admin/users', requireAuth, async (c) => {
+  try {
+    const { results } = await c.env.DB.prepare(`
+      SELECT 
+        id, 
+        name, 
+        email, 
+        birthday, 
+        location,
+        created_at,
+        last_login,
+        email_verified
+      FROM users 
+      ORDER BY id ASC
+    `).all()
+    
+    return c.json({ data: results || [] })
+  } catch (error) {
+    console.error('Failed to fetch users:', error)
+    return c.json({ error: 'Failed to fetch users' }, 500)
+  }
+})
+
 // Create new article
 app.post('/api/admin/articles', requireAuth, async (c) => {
   try {
@@ -8569,6 +8593,64 @@ app.get('/admin/articles', requireAuth, (c) => {
         <script src="/static/utils.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
         <script src="/static/articles-admin.js?v=2026011610"></script>
+      </body>
+    </html>
+  )
+})
+
+// Admin Users Management Page
+app.get('/admin/users', requireAuth, (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>登録者一覧 - Akagami.net</title>
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPMZ82RMGG"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JPMZ82RMGG');
+          `
+        }} />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    secondary: '#e75556',
+                    accent: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                    light: '#ffffff',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+        <link href="/static/admin-dark.css" rel="stylesheet" />
+      </head>
+      <body class="admin-dark bg-darker">
+        <div id="users-admin-app">
+          <div class="text-center py-12 text-gray-300">
+            <i class="fas fa-spinner fa-spin text-4xl mb-4 text-primary"></i>
+            <p>読み込み中...</p>
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/utils.js"></script>
+        <script src="/static/users-admin.js"></script>
       </body>
     </html>
   )
