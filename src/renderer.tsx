@@ -404,7 +404,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         </div>
         
         <script src="/static/utils.js?v=202601181036" defer></script>
-        <script src="/static/app.js?v=202601181244" defer></script>
+        <script src="/static/app.js?v=202601182324" defer></script>
         <script src="/static/auth.js?v=202601181036" defer></script>
       </body>
     </html>
