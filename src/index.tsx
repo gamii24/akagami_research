@@ -1874,6 +1874,49 @@ app.put('/api/pdfs/:id', requireAuth, async (c) => {
   return c.json({ success: true })
 })
 
+// Update PDF tags only (easier endpoint for tag management)
+app.put('/api/pdfs/:id/tags', requireAuth, async (c) => {
+  const id = c.req.param('id')
+  const { tags } = await c.req.json()
+  
+  try {
+    // Delete existing tags
+    await c.env.DB.prepare(
+      'DELETE FROM pdf_tags WHERE pdf_id = ?'
+    ).bind(id).run()
+    
+    // Add new tags
+    if (tags && Array.isArray(tags) && tags.length > 0) {
+      for (const tagName of tags) {
+        // Get or create tag
+        let tagResult = await c.env.DB.prepare(
+          'SELECT id FROM tags WHERE name = ?'
+        ).bind(tagName).first()
+        
+        let tagId
+        if (!tagResult) {
+          const newTag = await c.env.DB.prepare(
+            'INSERT INTO tags (name) VALUES (?)'
+          ).bind(tagName).run()
+          tagId = newTag.meta.last_row_id
+        } else {
+          tagId = tagResult.id
+        }
+        
+        // Link PDF and tag
+        await c.env.DB.prepare(
+          'INSERT OR IGNORE INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
+        ).bind(id, tagId).run()
+      }
+    }
+    
+    return c.json({ success: true })
+  } catch (error) {
+    console.error('Failed to update PDF tags:', error)
+    return c.json({ error: 'Failed to update tags' }, 500)
+  }
+})
+
 // Delete PDF (protected)
 app.delete('/api/pdfs/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
