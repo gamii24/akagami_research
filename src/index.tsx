@@ -7272,7 +7272,7 @@ app.get('/mypage', (c) => {
             /* Mobile: Subtle (default) */
             @media (max-width: 1023px) {
               .falling-heart {
-                opacity: 0.15;
+                opacity: 0.45;
               }
             }
             
