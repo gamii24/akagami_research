@@ -6590,9 +6590,7 @@ app.get('/news', async (c) => {
         </main>
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-        <script src="/static/utils.js"></script>
-        <script src="/static/auth.js"></script>
-        <script src="/static/app.js?v=202601182324"></script>
+        <script src="/static/news.js"></script>
         <script dangerouslySetInnerHTML={{
           __html: `
             let newsData = [];
@@ -6899,11 +6897,7 @@ app.get('/news', async (c) => {
           `
         }} />
         
-        {/* External Scripts */}
-        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-        <script defer src="/static/utils.js"></script>
-        <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js?v=202601182324"></script>
+        {/* External Scripts - Removed duplicate scripts */}
         
         {/* Auth Modal */}
         <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
