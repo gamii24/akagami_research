@@ -293,6 +293,14 @@ function renderAdminPdfList() {
                 <i class="fas fa-tag mr-1"></i>${escapeHtml(tag.name)}
               </span>
             `).join('') : ''}
+            <button 
+              onclick="showAdminTagEditor(${pdf.id})" 
+              class="text-xs px-2 py-0.5 rounded-full hover:opacity-80 transition-opacity"
+              style="background-color: #3b82f6; color: white;"
+              title="タグを編集"
+            >
+              <i class="fas fa-tags mr-1"></i>タグ編集
+            </button>
           </div>
         </div>
         <div class="flex gap-1.5 ml-4">
@@ -1569,3 +1577,251 @@ async function quickChangeCategory(pdfId, newCategoryId, newCategoryName) {
 // Initialize admin app on page load
 document.addEventListener('DOMContentLoaded', initAdminApp)
 
+
+// Admin Tag Editor State
+let adminTagEditorState = {
+  pdfId: null,
+  selectedTags: new Set(),
+  allTags: []
+}
+
+// Show admin tag editor
+async function showAdminTagEditor(pdfId) {
+  const pdf = adminState.pdfs.find(p => p.id === pdfId)
+  if (!pdf) {
+    showToast('PDFが見つかりません', 'error')
+    return
+  }
+  
+  adminTagEditorState.pdfId = pdfId
+  
+  // Load all tags
+  try {
+    const response = await axios.get('/api/tags')
+    adminTagEditorState.allTags = response.data
+  } catch (error) {
+    console.error('Failed to load tags:', error)
+    adminTagEditorState.allTags = []
+  }
+  
+  // Load PDF's current tags
+  try {
+    const response = await axios.get(`/api/pdfs/${pdfId}`)
+    adminTagEditorState.selectedTags = new Set(response.data.tags || [])
+  } catch (error) {
+    console.error('Failed to load PDF tags:', error)
+    adminTagEditorState.selectedTags = new Set()
+  }
+  
+  // Show modal
+  renderAdminTagEditorModal(pdf)
+}
+
+// Render admin tag editor modal
+function renderAdminTagEditorModal(pdf) {
+  const modalHtml = `
+    <div class="fixed inset-0 modal-overlay flex items-center justify-center z-50" onclick="closeAdminTagEditor(event)">
+      <div class="rounded-2xl shadow-2xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto" style="background-color: #2d2d2d;" onclick="event.stopPropagation()">
+        <div class="p-6 border-b" style="border-color: #4b5563;">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold" style="color: #f3f4f6;">
+              <i class="fas fa-tags mr-2" style="color: #e75556;"></i>タグを編集
+            </h2>
+            <button onclick="closeAdminTagEditor()" class="transition-colors" style="color: #9ca3af;" onmouseover="this.style.color='#f3f4f6'" onmouseout="this.style.color='#9ca3af'">
+              <i class="fas fa-times text-2xl"></i>
+            </button>
+          </div>
+          <p class="text-sm mt-2" style="color: #9ca3af;">${escapeHtml(pdf.title)}</p>
+        </div>
+        
+        <div class="p-6 space-y-6">
+          <!-- New tag input -->
+          <div>
+            <label class="block text-sm font-semibold mb-2" style="color: #d1d5db;">
+              <i class="fas fa-plus-circle mr-1" style="color: #e75556;"></i>新しいタグを追加
+            </label>
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                id="admin-tag-input"
+                class="flex-1 px-4 py-3 rounded-lg text-base focus:outline-none"
+                style="background-color: #3a3a3a; border: 2px solid #4b5563; color: #f3f4f6;"
+                placeholder="タグ名を入力..."
+                onkeypress="if(event.key==='Enter'){event.preventDefault();addAdminTag()}"
+                onfocus="this.style.borderColor='#e75556'"
+                onblur="this.style.borderColor='#4b5563'"
+              />
+              <button 
+                onclick="addAdminTag()"
+                class="px-6 py-3 rounded-lg transition-colors font-semibold"
+                style="background-color: #10b981; color: white;"
+                onmouseover="this.style.backgroundColor='#059669'"
+                onmouseout="this.style.backgroundColor='#10b981'"
+              >
+                <i class="fas fa-plus mr-1"></i>追加
+              </button>
+            </div>
+          </div>
+          
+          <!-- Selected tags -->
+          <div>
+            <label class="block text-sm font-semibold mb-2" style="color: #d1d5db;">
+              <i class="fas fa-check-circle mr-1" style="color: #10b981;"></i>選択中のタグ
+            </label>
+            <div id="admin-tag-selected" class="flex flex-wrap gap-2 p-4 rounded-lg min-h-[80px]" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <!-- Tags will be rendered here -->
+            </div>
+          </div>
+          
+          <!-- Available tags -->
+          <div>
+            <label class="block text-sm font-semibold mb-2" style="color: #d1d5db;">
+              <i class="fas fa-list mr-1" style="color: #3b82f6;"></i>利用可能なタグ（クリックで選択）
+            </label>
+            <div class="max-h-60 overflow-y-auto p-4 rounded-lg" style="background-color: #3a3a3a; border: 2px solid #4b5563;">
+              <div class="flex flex-wrap gap-2" id="admin-tag-available">
+                <!-- Tags will be rendered here -->
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-6 border-t flex justify-end gap-3" style="border-color: #4b5563;">
+          <button 
+            onclick="closeAdminTagEditor()" 
+            class="px-6 py-3 rounded-lg transition-colors font-semibold"
+            style="background-color: #4b5563; color: #d1d5db;"
+            onmouseover="this.style.backgroundColor='#6b7280'"
+            onmouseout="this.style.backgroundColor='#4b5563'"
+          >
+            <i class="fas fa-times mr-2"></i>キャンセル
+          </button>
+          <button 
+            onclick="saveAdminTags()" 
+            class="px-6 py-3 rounded-lg transition-colors font-semibold"
+            style="background-color: #e75556; color: white;"
+            onmouseover="this.style.backgroundColor='#dc2626'"
+            onmouseout="this.style.backgroundColor='#e75556'"
+          >
+            <i class="fas fa-save mr-2"></i>保存
+          </button>
+        </div>
+      </div>
+    </div>
+  `
+  
+  document.getElementById('modal-container').innerHTML = modalHtml
+  renderAdminTagEditorTags()
+  
+  setTimeout(() => {
+    document.getElementById('admin-tag-input')?.focus()
+  }, 100)
+}
+
+// Toggle tag in admin editor
+function toggleAdminTag(tagName) {
+  if (adminTagEditorState.selectedTags.has(tagName)) {
+    adminTagEditorState.selectedTags.delete(tagName)
+  } else {
+    adminTagEditorState.selectedTags.add(tagName)
+  }
+  renderAdminTagEditorTags()
+}
+
+// Add tag from admin editor
+function addAdminTag() {
+  const input = document.getElementById('admin-tag-input')
+  const tagName = input.value.trim()
+  
+  if (!tagName) {
+    return
+  }
+  
+  adminTagEditorState.selectedTags.add(tagName)
+  input.value = ''
+  renderAdminTagEditorTags()
+}
+
+// Remove tag from admin editor
+function removeAdminTag(tagName) {
+  adminTagEditorState.selectedTags.delete(tagName)
+  renderAdminTagEditorTags()
+}
+
+// Render tags in admin editor
+function renderAdminTagEditorTags() {
+  const selectedContainer = document.getElementById('admin-tag-selected')
+  if (selectedContainer) {
+    if (adminTagEditorState.selectedTags.size === 0) {
+      selectedContainer.innerHTML = '<div class="text-sm w-full text-center py-4" style="color: #9ca3af;">タグが選択されていません</div>'
+    } else {
+      selectedContainer.innerHTML = Array.from(adminTagEditorState.selectedTags).map(tag => `
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold shadow-sm" style="background-color: #e75556; color: white;">
+          <i class="fas fa-tag"></i>
+          ${escapeHtml(tag)}
+          <button 
+            onclick="removeAdminTag('${escapeHtml(tag)}')"
+            class="rounded-full p-1 transition-colors"
+            style="background-color: transparent;"
+            onmouseover="this.style.backgroundColor='rgba(0,0,0,0.2)'"
+            onmouseout="this.style.backgroundColor='transparent'"
+          >
+            <i class="fas fa-times text-xs"></i>
+          </button>
+        </span>
+      `).join('')
+    }
+  }
+  
+  const availableContainer = document.getElementById('admin-tag-available')
+  if (availableContainer) {
+    if (adminTagEditorState.allTags.length === 0) {
+      availableContainer.innerHTML = '<div class="text-sm w-full text-center py-4" style="color: #9ca3af;">タグがありません</div>'
+    } else {
+      availableContainer.innerHTML = adminTagEditorState.allTags.map(tag => {
+        const isSelected = adminTagEditorState.selectedTags.has(tag.name)
+        return `
+          <button 
+            onclick="toggleAdminTag('${escapeHtml(tag.name)}')"
+            class="px-4 py-2 rounded-full text-sm font-medium transition-all"
+            style="${isSelected ? 'background-color: #e75556; color: white;' : 'background-color: #4b5563; color: #d1d5db;'}"
+            onmouseover="this.style.opacity='0.8'"
+            onmouseout="this.style.opacity='1'"
+          >
+            ${isSelected ? '<i class="fas fa-check mr-1"></i>' : '<i class="fas fa-plus mr-1"></i>'}
+            ${escapeHtml(tag.name)}
+          </button>
+        `
+      }).join('')
+    }
+  }
+}
+
+// Save tags from admin editor
+async function saveAdminTags() {
+  try {
+    await axios.put(`/api/pdfs/${adminTagEditorState.pdfId}/tags`, {
+      tags: Array.from(adminTagEditorState.selectedTags)
+    }, { withCredentials: true })
+    
+    showToast('タグを保存しました', 'success')
+    closeAdminTagEditor()
+    
+    // Reload PDFs
+    await loadPdfs()
+  } catch (error) {
+    console.error('Failed to save tags:', error)
+    showToast('タグの保存に失敗しました', 'error')
+  }
+}
+
+// Close admin tag editor
+function closeAdminTagEditor(event) {
+  if (event && event.target !== event.currentTarget) {
+    return
+  }
+  
+  document.getElementById('modal-container').innerHTML = ''
+  adminTagEditorState.pdfId = null
+  adminTagEditorState.selectedTags = new Set()
+}
