@@ -508,7 +508,7 @@ function renderMyPage(downloads, favorites) {
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
       <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
         <i class="fas fa-bell text-primary mr-3"></i>
-        メール通知設定
+        メール通知設定（準備中）
       </h3>
       <p class="text-gray-600 mb-6 text-sm">
         興味のあるSNSカテゴリを選択してください。チェックを入れたカテゴリの新着資料を毎週月曜日にメールでお知らせします。
