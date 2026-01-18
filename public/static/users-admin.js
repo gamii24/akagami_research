@@ -8,7 +8,9 @@ const usersState = {
   filteredUsers: [],
   searchQuery: '',
   sortBy: 'id', // id, name, email, birthday, location, created_at
-  sortOrder: 'asc'
+  sortOrder: 'asc',
+  birthdayMonth: '', // 1-12 or empty for all
+  birthdayDay: '' // 1-31 or empty for all
 };
 
 // Initialize
@@ -123,6 +125,74 @@ function renderUsersPage() {
           </div>
         </div>
 
+        <!-- Birthday Filter -->
+        <div class="mb-6 p-4 rounded-lg border" style="background-color: #2d2d2d; border-color: #404040;">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-birthday-cake text-primary"></i>
+              <h3 class="text-white font-semibold">誕生日で絞り込み</h3>
+            </div>
+            ${(usersState.birthdayMonth || usersState.birthdayDay) ? `
+              <button
+                onclick="clearBirthdayFilter()"
+                class="px-3 py-1 text-sm rounded-lg hover:bg-gray-700 transition-colors text-gray-400 hover:text-white"
+              >
+                <i class="fas fa-times mr-1"></i>クリア
+              </button>
+            ` : ''}
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <!-- Month Filter -->
+            <div class="flex-1">
+              <label class="block text-sm text-gray-400 mb-1">月で絞り込み</label>
+              <select
+                id="birthday-month"
+                onchange="handleBirthdayMonthChange()"
+                class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
+                style="background-color: #333333; border-color: #404040; color: #ffffff;"
+              >
+                <option value="">すべての月</option>
+                <option value="1" ${usersState.birthdayMonth === '1' ? 'selected' : ''}>1月</option>
+                <option value="2" ${usersState.birthdayMonth === '2' ? 'selected' : ''}>2月</option>
+                <option value="3" ${usersState.birthdayMonth === '3' ? 'selected' : ''}>3月</option>
+                <option value="4" ${usersState.birthdayMonth === '4' ? 'selected' : ''}>4月</option>
+                <option value="5" ${usersState.birthdayMonth === '5' ? 'selected' : ''}>5月</option>
+                <option value="6" ${usersState.birthdayMonth === '6' ? 'selected' : ''}>6月</option>
+                <option value="7" ${usersState.birthdayMonth === '7' ? 'selected' : ''}>7月</option>
+                <option value="8" ${usersState.birthdayMonth === '8' ? 'selected' : ''}>8月</option>
+                <option value="9" ${usersState.birthdayMonth === '9' ? 'selected' : ''}>9月</option>
+                <option value="10" ${usersState.birthdayMonth === '10' ? 'selected' : ''}>10月</option>
+                <option value="11" ${usersState.birthdayMonth === '11' ? 'selected' : ''}>11月</option>
+                <option value="12" ${usersState.birthdayMonth === '12' ? 'selected' : ''}>12月</option>
+              </select>
+            </div>
+            
+            <!-- Day Filter -->
+            <div class="flex-1">
+              <label class="block text-sm text-gray-400 mb-1">日で絞り込み</label>
+              <select
+                id="birthday-day"
+                onchange="handleBirthdayDayChange()"
+                class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
+                style="background-color: #333333; border-color: #404040; color: #ffffff;"
+              >
+                <option value="">すべての日</option>
+                ${Array.from({ length: 31 }, (_, i) => i + 1).map(day => 
+                  `<option value="${day}" ${usersState.birthdayDay === String(day) ? 'selected' : ''}>${day}日</option>`
+                ).join('')}
+              </select>
+            </div>
+
+            <!-- Birthday Stats -->
+            <div class="flex items-end">
+              <div class="px-4 py-2 rounded-lg text-sm" style="background-color: #333333;">
+                <div class="text-gray-400">該当者</div>
+                <div class="text-white font-bold text-lg">${usersState.filteredUsers.length}名</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Users Table -->
         <div class="overflow-x-auto rounded-lg border" style="background-color: #2d2d2d; border-color: #404040;">
           <table class="min-w-full divide-y" style="border-color: #404040;">
@@ -233,11 +303,38 @@ function toggleSortOrder() {
   renderUsersPage();
 }
 
+// Handle birthday month change
+function handleBirthdayMonthChange() {
+  const select = document.getElementById('birthday-month');
+  usersState.birthdayMonth = select.value;
+  filterAndSortUsers();
+  renderUsersPage();
+}
+
+// Handle birthday day change
+function handleBirthdayDayChange() {
+  const select = document.getElementById('birthday-day');
+  usersState.birthdayDay = select.value;
+  filterAndSortUsers();
+  renderUsersPage();
+}
+
+// Clear birthday filter
+function clearBirthdayFilter() {
+  usersState.birthdayMonth = '';
+  usersState.birthdayDay = '';
+  filterAndSortUsers();
+  renderUsersPage();
+}
+
 // Filter and sort users
 function filterAndSortUsers() {
-  // Filter
+  // Start with all users
+  usersState.filteredUsers = [...usersState.users];
+  
+  // Filter by search query
   if (usersState.searchQuery) {
-    usersState.filteredUsers = usersState.users.filter(user => {
+    usersState.filteredUsers = usersState.filteredUsers.filter(user => {
       const name = (user.name || '').toLowerCase();
       const email = (user.email || '').toLowerCase();
       const location = (user.location || '').toLowerCase();
@@ -247,8 +344,33 @@ function filterAndSortUsers() {
              email.includes(query) || 
              location.includes(query);
     });
-  } else {
-    usersState.filteredUsers = [...usersState.users];
+  }
+  
+  // Filter by birthday month and day
+  if (usersState.birthdayMonth || usersState.birthdayDay) {
+    usersState.filteredUsers = usersState.filteredUsers.filter(user => {
+      if (!user.birthday) return false;
+      
+      const birthday = new Date(user.birthday);
+      const month = birthday.getMonth() + 1; // JavaScript months are 0-indexed
+      const day = birthday.getDate();
+      
+      // Check month filter
+      if (usersState.birthdayMonth) {
+        if (month !== parseInt(usersState.birthdayMonth)) {
+          return false;
+        }
+      }
+      
+      // Check day filter
+      if (usersState.birthdayDay) {
+        if (day !== parseInt(usersState.birthdayDay)) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
   }
   
   // Sort
