@@ -7232,6 +7232,58 @@ app.get('/mypage', (c) => {
         <script src="/static/auth.js"></script>
         <script src="/static/app.js?v=2026011610"></script>
         <script src="/static/mypage.js"></script>
+        
+        {/* Subtle Falling Hearts Animation */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .falling-heart {
+              position: fixed;
+              top: -50px;
+              font-size: 20px;
+              opacity: 0.15;
+              pointer-events: none;
+              z-index: 1;
+              animation: fall linear forwards;
+            }
+            
+            @keyframes fall {
+              to {
+                top: 100vh;
+                transform: translateX(var(--drift)) rotate(360deg);
+                opacity: 0;
+              }
+            }
+          `
+        }} />
+        
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Create subtle falling hearts on mypage
+            function createFallingHeart() {
+              const heart = document.createElement('div');
+              heart.className = 'falling-heart';
+              heart.innerHTML = '❤️';
+              heart.style.left = Math.random() * 100 + '%';
+              heart.style.setProperty('--drift', (Math.random() - 0.5) * 100 + 'px');
+              heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+              document.body.appendChild(heart);
+              
+              setTimeout(() => heart.remove(), 8000);
+            }
+            
+            // Start hearts animation (very subtle - one heart every 3-5 seconds)
+            function startHeartsAnimation() {
+              createFallingHeart();
+              const nextDelay = Math.random() * 2000 + 3000; // 3-5 seconds
+              setTimeout(startHeartsAnimation, nextDelay);
+            }
+            
+            // Start after page loads
+            window.addEventListener('load', () => {
+              setTimeout(startHeartsAnimation, 1000);
+            });
+          `
+        }} />
       </body>
     </html>
   )
