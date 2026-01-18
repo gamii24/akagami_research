@@ -7257,17 +7257,31 @@ app.get('/mypage', (c) => {
         <script src="/static/app.js?v=2026011610"></script>
         <script src="/static/mypage.js"></script>
         
-        {/* Subtle Falling Hearts Animation */}
+        {/* Falling Hearts Animation - Different settings for mobile and PC */}
         <style dangerouslySetInnerHTML={{
           __html: `
             .falling-heart {
               position: fixed;
               top: -50px;
               font-size: 20px;
-              opacity: 0.15;
               pointer-events: none;
               z-index: 1;
               animation: fall linear forwards;
+            }
+            
+            /* Mobile: Subtle (default) */
+            @media (max-width: 1023px) {
+              .falling-heart {
+                opacity: 0.15;
+              }
+            }
+            
+            /* PC: More visible */
+            @media (min-width: 1024px) {
+              .falling-heart {
+                opacity: 0.4;
+                font-size: 24px;
+              }
             }
             
             @keyframes fall {
@@ -7282,7 +7296,7 @@ app.get('/mypage', (c) => {
         
         <script dangerouslySetInnerHTML={{
           __html: `
-            // Create subtle falling hearts on mypage
+            // Create falling hearts on mypage
             function createFallingHeart() {
               const heart = document.createElement('div');
               heart.className = 'falling-heart';
@@ -7295,10 +7309,21 @@ app.get('/mypage', (c) => {
               setTimeout(() => heart.remove(), 8000);
             }
             
-            // Start hearts animation (very subtle - one heart every 3-5 seconds)
+            // Detect if device is PC (screen width >= 1024px)
+            function isPCDevice() {
+              return window.innerWidth >= 1024;
+            }
+            
+            // Start hearts animation with different frequency for mobile/PC
             function startHeartsAnimation() {
               createFallingHeart();
-              const nextDelay = Math.random() * 2000 + 3000; // 3-5 seconds
+              
+              // PC: More hearts (1.5-2.5 seconds interval)
+              // Mobile: Fewer hearts (3-5 seconds interval)
+              const nextDelay = isPCDevice() 
+                ? Math.random() * 1000 + 1500  // PC: 1.5-2.5s
+                : Math.random() * 2000 + 3000; // Mobile: 3-5s
+              
               setTimeout(startHeartsAnimation, nextDelay);
             }
             
