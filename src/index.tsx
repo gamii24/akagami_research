@@ -7255,7 +7255,7 @@ app.get('/mypage', (c) => {
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
         <script src="/static/app.js?v=2026011610"></script>
-        <script src="/static/mypage.js"></script>
+        <script src="/static/mypage.js?v=202601181337"></script>
         
         {/* Falling Hearts Animation - Different settings for mobile and PC */}
         <style dangerouslySetInnerHTML={{
