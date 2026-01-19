@@ -401,6 +401,25 @@ function renderMyPage(downloads, favorites) {
       </div>
     </a>
 
+    <!-- Upcoming Events Section -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
+      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-calendar-alt text-primary mr-3"></i>
+        直近のイベント
+      </h3>
+      <div class="space-y-3">
+        <a href="/calendar/1" class="block p-4 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors border-2 border-pink-200">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-medium text-pink-700 mb-1">SNS運用カレンダー</h4>
+              <p class="text-sm text-pink-600">投稿におすすめの日付・イベント情報</p>
+            </div>
+            <i class="fas fa-arrow-right text-pink-600"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+
     <!-- Favorites Section -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
       <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
@@ -438,31 +457,6 @@ function renderMyPage(downloads, favorites) {
           まだお気に入りがありません
         </p>
       `}
-    </div>
-
-    <!-- Upcoming Events Section -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-gray-200">
-      <h3 class="text-base font-normal text-gray-800 mb-4 flex items-center">
-        <i class="fas fa-calendar-alt text-primary mr-3"></i>
-        直近のイベント
-      </h3>
-      <div class="space-y-3">
-        ${getUpcomingEvents().map(event => `
-          <div class="flex items-center justify-between p-4 ${event.color} rounded-lg border border-gray-200">
-            <div class="flex items-center gap-3">
-              <div class="text-3xl">${event.icon}</div>
-              <div>
-                <h4 class="font-semibold text-sm text-gray-800">${event.name}</h4>
-                <p class="text-xs text-gray-600">${event.description}</p>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-sm font-semibold text-gray-800">${event.dateStr}</p>
-              <p class="text-xs text-gray-500">あと${event.daysUntil}日</p>
-            </div>
-          </div>
-        `).join('')}
-      </div>
     </div>
 
     <!-- Download History Section -->
