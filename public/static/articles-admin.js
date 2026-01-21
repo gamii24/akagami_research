@@ -175,10 +175,12 @@ function renderArticleCard(article) {
     '<span class="px-2 py-1 bg-green-600 text-white text-xs rounded font-medium">公開中</span>' :
     '<span class="px-2 py-1 bg-gray-600 text-white text-xs rounded font-medium">下書き</span>'
   
-  const createdDate = new Date(article.created_at).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })
+  // Use published_at if available, otherwise fall back to created_at
+  const displayDate = article.published_at || article.created_at
+  const createdDate = new Date(displayDate).toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' })
   
   // Check if article is new (within 7 days)
-  const isNew = isWithin7Days(article.created_at)
+  const isNew = isWithin7Days(displayDate)
   
   if (articlesState.viewMode === 'grid') {
     return `
@@ -474,6 +476,23 @@ function showArticleForm(articleId = null) {
               />
             </div>
           </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              <i class="fas fa-calendar-alt text-primary mr-2"></i>公開日時（任意）
+            </label>
+            <input 
+              type="datetime-local" 
+              name="published_at" 
+              value="${article && article.published_at ? new Date(article.published_at).toISOString().slice(0, 16) : ''}"
+              class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary"
+              placeholder="未設定の場合は作成日時を使用"
+            />
+            <p class="text-xs text-gray-400 mt-1">
+              <i class="fas fa-info-circle mr-1"></i>
+              空欄の場合、記事作成時の日時が自動で設定されます
+            </p>
+          </div>
         </div>
         
         <!-- Right Column - Content Editor -->
@@ -546,6 +565,8 @@ async function saveArticle(event) {
   const form = event.target
   const formData = new FormData(form)
   
+  const publishedAt = formData.get('published_at')
+  
   const articleData = {
     title: formData.get('title'),
     slug: formData.get('slug'),
@@ -555,6 +576,7 @@ async function saveArticle(event) {
     summary: formData.get('summary') || null,
     published: formData.has('published'),
     sort_order: parseInt(formData.get('sort_order')) || 0,
+    published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
     tags: Array.from(articlesState.selectedTags)
   }
   

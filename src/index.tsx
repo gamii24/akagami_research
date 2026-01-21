@@ -2419,7 +2419,7 @@ app.get('/api/admin/articles', requireAuth, async (c) => {
     const { results } = await c.env.DB.prepare(`
       SELECT 
         ia.id, ia.title, ia.slug, ia.category_id, ia.thumbnail_url,
-        ia.summary, ia.published, ia.sort_order, ia.created_at, ia.updated_at,
+        ia.summary, ia.published, ia.sort_order, ia.created_at, ia.updated_at, ia.published_at,
         cat.name as category_name
       FROM infographic_articles ia
       LEFT JOIN categories cat ON ia.category_id = cat.id
@@ -2497,16 +2497,19 @@ app.get('/api/admin/users', requireAuth, async (c) => {
 // Create new article
 app.post('/api/admin/articles', requireAuth, async (c) => {
   try {
-    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order, tags } = await c.req.json()
+    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order, published_at, tags } = await c.req.json()
     
     if (!title || !slug || !content) {
       return c.json({ error: 'Title, slug, and content are required' }, 400)
     }
     
+    // If published_at is provided, use it; otherwise use CURRENT_TIMESTAMP
+    const publishedAtValue = published_at || new Date().toISOString()
+    
     const result = await c.env.DB.prepare(`
       INSERT INTO infographic_articles 
-      (title, slug, category_id, thumbnail_url, content, summary, published, sort_order)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      (title, slug, category_id, thumbnail_url, content, summary, published, sort_order, published_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
       title,
       slug,
@@ -2515,7 +2518,8 @@ app.post('/api/admin/articles', requireAuth, async (c) => {
       content,
       summary || '',
       published !== undefined ? (published ? 1 : 0) : 0,
-      sort_order || 0
+      sort_order || 0,
+      publishedAtValue
     ).run()
     
     const articleId = result.meta.last_row_id
@@ -2576,19 +2580,18 @@ app.post('/api/admin/articles', requireAuth, async (c) => {
 app.put('/api/admin/articles/:id', requireAuth, async (c) => {
   try {
     const id = c.req.param('id')
-    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order, tags } = await c.req.json()
+    const { title, slug, category_id, thumbnail_url, content, summary, published, sort_order, published_at, tags } = await c.req.json()
     
     if (!title || !slug || !content) {
       return c.json({ error: 'Title, slug, and content are required' }, 400)
     }
     
-    await c.env.DB.prepare(`
-      UPDATE infographic_articles 
-      SET title = ?, slug = ?, category_id = ?, thumbnail_url = ?, 
-          content = ?, summary = ?, published = ?, sort_order = ?,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `).bind(
+    // Build update query - only update published_at if it's explicitly provided
+    const updateFields = [
+      'title = ?', 'slug = ?', 'category_id = ?', 'thumbnail_url = ?',
+      'content = ?', 'summary = ?', 'published = ?', 'sort_order = ?'
+    ]
+    const updateValues = [
       title,
       slug,
       category_id || null,
@@ -2596,9 +2599,23 @@ app.put('/api/admin/articles/:id', requireAuth, async (c) => {
       content,
       summary || '',
       published !== undefined ? (published ? 1 : 0) : 0,
-      sort_order || 0,
-      id
-    ).run()
+      sort_order || 0
+    ]
+    
+    // Add published_at if provided
+    if (published_at) {
+      updateFields.push('published_at = ?')
+      updateValues.push(published_at)
+    }
+    
+    updateFields.push('updated_at = CURRENT_TIMESTAMP')
+    updateValues.push(id)
+    
+    await c.env.DB.prepare(`
+      UPDATE infographic_articles 
+      SET ${updateFields.join(', ')}
+      WHERE id = ?
+    `).bind(...updateValues).run()
     
     // Handle tags if provided
     if (tags && Array.isArray(tags)) {
