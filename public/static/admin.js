@@ -625,6 +625,20 @@ function showPdfModal() {
           </div>
           
           <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">サムネイル画像URL（任意）</label>
+            <input 
+              type="url" 
+              id="pdf-thumbnail"
+              value="${escapeHtml(pdf.thumbnail_url || '')}"
+              placeholder="https://drive.google.com/uc?id=..."
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p class="mt-1 text-xs text-gray-500">
+              <i class="fas fa-info-circle mr-1"></i>推奨サイズ: 1080×1350px（4:5比率）。Google Driveの画像URLを貼り付けてください
+            </p>
+          </div>
+          
+          <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">カテゴリ</label>
             <select 
                 id="pdf-category"
@@ -688,6 +702,7 @@ async function savePdf(event) {
   
   const title = document.getElementById('pdf-title').value
   const google_drive_url = document.getElementById('pdf-url').value
+  const thumbnail_url = document.getElementById('pdf-thumbnail').value || null
   const category_id = document.getElementById('pdf-category').value || null
   
   const tagCheckboxes = document.querySelectorAll('input[name="pdf-tags"]:checked')
@@ -696,6 +711,7 @@ async function savePdf(event) {
   const data = {
     title,
     google_drive_url,
+    thumbnail_url,
     category_id,
     tag_ids
   }

@@ -1154,13 +1154,13 @@ function renderPDFList() {
     `
     }
     
-    // Grid view (default)
+    // Grid view (default) - 4:5 ratio with thumbnail
     return `
     <div 
       onclick="${cardClick}"
       ontouchstart="handleTouchStart(event, ${pdf.id})"
       ontouchend="handleTouchEnd(event)"
-      class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
+      class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer flex flex-col"
       style="position: relative;"
       data-pdf-id="${pdf.id}"
     >
@@ -1169,16 +1169,38 @@ function renderPDFList() {
           <i class="fas fa-check text-lg"></i>
         </div>
       ` : ''}
-      <div class="p-4">
-        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2">
+      
+      <!-- Thumbnail (4:5 ratio) -->
+      <div class="relative w-full" style="padding-bottom: 125%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        ${pdf.thumbnail_url ? `
+          <img 
+            src="${pdf.thumbnail_url}" 
+            alt="${escapeHtml(pdf.title)}"
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+        ` : `
+          <div class="absolute inset-0 flex items-center justify-center">
+            <i class="fas fa-file-pdf text-white text-6xl opacity-30"></i>
+          </div>
+        `}
+        ${downloaded ? `
+          <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+            <i class="fas fa-check-circle mr-1"></i>DL済
+          </div>
+        ` : ''}
+      </div>
+      
+      <!-- Content -->
+      <div class="p-4 flex-1 flex flex-col">
+        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2 line-clamp-2 flex-1">
           ${escapeHtml(pdf.title)}
         </h3>
         
-        <div class="flex items-center justify-between text-xs text-gray-500 mt-3">
+        <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
           <div class="flex items-center gap-2 flex-wrap">
-            <span>${formatDate(pdf.created_at)}</span>
-            <span>総DL数: ${pdf.download_count || 0}件</span>
-            ${downloaded ? '<span class="text-primary font-semibold"><i class="fas fa-check-circle mr-1"></i>ダウンロード済み</span>' : ''}
+            <span class="text-xs">${formatDate(pdf.created_at)}</span>
+            <span class="text-xs">DL: ${pdf.download_count || 0}</span>
           </div>
           <div class="flex items-center gap-2">
             <button 

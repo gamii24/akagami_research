@@ -1740,7 +1740,8 @@ async function createOrGetTag(db: D1Database, tagName: string): Promise<number |
 app.post('/api/pdfs', requireAuth, async (c) => {
   const { 
     title, 
-    google_drive_url, 
+    google_drive_url,
+    thumbnail_url,
     category_id, 
     tag_ids 
   } = await c.req.json()
@@ -1748,12 +1749,14 @@ app.post('/api/pdfs', requireAuth, async (c) => {
   const result = await c.env.DB.prepare(`
     INSERT INTO pdfs (
       title, 
-      google_drive_url, 
+      google_drive_url,
+      thumbnail_url,
       category_id
-    ) VALUES (?, ?, ?)
+    ) VALUES (?, ?, ?, ?)
   `).bind(
     title, 
-    google_drive_url, 
+    google_drive_url,
+    thumbnail_url || null,
     category_id
   ).run()
   
@@ -1839,7 +1842,8 @@ app.put('/api/pdfs/:id', requireAuth, async (c) => {
   const id = c.req.param('id')
   const { 
     title, 
-    google_drive_url, 
+    google_drive_url,
+    thumbnail_url,
     category_id,
     tag_ids 
   } = await c.req.json()
@@ -1848,12 +1852,14 @@ app.put('/api/pdfs/:id', requireAuth, async (c) => {
     UPDATE pdfs 
     SET 
       title = ?, 
-      google_drive_url = ?, 
+      google_drive_url = ?,
+      thumbnail_url = ?,
       category_id = ?
     WHERE id = ?
   `).bind(
     title, 
-    google_drive_url, 
+    google_drive_url,
+    thumbnail_url || null,
     category_id,
     id
   ).run()
