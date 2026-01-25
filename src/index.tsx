@@ -110,7 +110,7 @@ function CommonSidebar() {
         <div class="mb-6">
           <a
             href="/categories"
-            class="w-full px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors font-medium border-2 border-indigo-200 flex items-center justify-center gap-2 mb-3"
+            class="w-full px-4 py-3 bg-indigo-50 dark:bg-indigo-900 hover:bg-indigo-100 dark:hover:bg-indigo-800 text-indigo-700 dark:text-indigo-100 rounded-lg transition-colors font-medium border-2 border-indigo-200 dark:border-indigo-700 flex items-center justify-center gap-2 mb-3"
             aria-label="資料一覧を開く"
           >
             <i class="fas fa-folder-open"></i>
@@ -118,7 +118,7 @@ function CommonSidebar() {
           </a>
           <a
             href="/calendar/1"
-            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2 mb-3"
+            class="w-full px-4 py-3 bg-pink-50 dark:bg-pink-900 hover:bg-pink-100 dark:hover:bg-pink-800 text-pink-700 dark:text-pink-100 rounded-lg transition-colors font-medium border-2 border-pink-200 dark:border-pink-700 flex items-center justify-center gap-2 mb-3"
             aria-label="SNS運用カレンダーを開く"
           >
             <i class="fas fa-calendar-alt"></i>
@@ -126,7 +126,7 @@ function CommonSidebar() {
           </a>
           <a
             href="/news"
-            class="w-full px-4 py-3 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-lg transition-colors font-medium border-2 border-yellow-200 flex items-center justify-center gap-2 mb-3"
+            class="w-full px-4 py-3 bg-yellow-50 dark:bg-yellow-900 hover:bg-yellow-100 dark:hover:bg-yellow-800 text-yellow-700 dark:text-yellow-100 rounded-lg transition-colors font-medium border-2 border-yellow-200 dark:border-yellow-700 flex items-center justify-center gap-2 mb-3"
             aria-label="最新ニュースを開く"
           >
             <i class="fas fa-newspaper"></i>
@@ -134,7 +134,7 @@ function CommonSidebar() {
           </a>
           <a
             href="/question-finder"
-            class="w-full px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors font-medium border-2 border-blue-200 flex items-center justify-center gap-2 mb-3"
+            class="w-full px-4 py-3 bg-blue-50 dark:bg-blue-900 hover:bg-blue-100 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-100 rounded-lg transition-colors font-medium border-2 border-blue-200 dark:border-blue-700 flex items-center justify-center gap-2 mb-3"
             aria-label="キーワードチェックを開く"
           >
             <i class="fas fa-search"></i>
@@ -142,7 +142,7 @@ function CommonSidebar() {
           </a>
           <a
             href="/infographics"
-            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-lg transition-colors font-medium border-2 border-pink-300 flex items-center justify-center gap-2 mb-3"
+            class="w-full px-4 py-3 bg-pink-50 dark:bg-pink-900 hover:bg-pink-100 dark:hover:bg-pink-800 text-pink-700 dark:text-pink-100 rounded-lg transition-colors font-medium border-2 border-pink-300 dark:border-pink-700 flex items-center justify-center gap-2 mb-3"
             aria-label="インフォグラフィック記事一覧を開く"
           >
             <i class="fas fa-chart-bar"></i>
@@ -150,7 +150,7 @@ function CommonSidebar() {
           </a>
           <a
             href="/sns-faq"
-            class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
+            class="w-full px-4 py-3 bg-purple-50 dark:bg-purple-900 hover:bg-purple-100 dark:hover:bg-purple-800 text-purple-700 dark:text-purple-100 rounded-lg transition-colors font-medium border-2 border-purple-200 dark:border-purple-700 flex items-center justify-center gap-2"
             aria-label="よくある質問を開く"
           >
             <i class="fas fa-question-circle"></i>
