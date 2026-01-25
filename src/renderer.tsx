@@ -178,6 +178,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
+              darkMode: 'class',
               theme: {
                 extend: {
                   colors: {
