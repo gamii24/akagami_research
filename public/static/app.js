@@ -1275,7 +1275,7 @@ function renderPDFList() {
             </div>
           ` : ''}
           <!-- Download count overlay on image (bottom-left) -->
-          <div class="absolute bottom-2 left-2 text-white text-sm font-bold drop-shadow-lg">
+          <div class="absolute bottom-2 left-2 text-white drop-shadow-lg" style="font-size: 0.7rem;">
             DL数：${pdf.download_count || 0}
           </div>
           <!-- Action buttons overlay on image (bottom-right) -->
