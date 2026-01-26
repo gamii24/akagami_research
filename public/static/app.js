@@ -382,6 +382,52 @@ function sharePDF(event, pdfId, title, url) {
   }
 }
 
+// Download PDF function
+function downloadPDF(event, pdfId, url) {
+  event.stopPropagation() // Prevent triggering the card click
+  
+  if (!url) {
+    alert('このPDFのURLが設定されていません')
+    return
+  }
+  
+  // Track download event
+  const pdf = state.allPdfs.find(p => p.id === pdfId)
+  trackGAEvent('download', {
+    pdf_id: pdfId,
+    pdf_title: pdf ? pdf.title : 'Unknown',
+    category: pdf && pdf.category_name ? pdf.category_name : 'Unknown'
+  })
+  
+  // Record download
+  fetch(`/api/pdfs/${pdfId}/download`, {
+    method: 'POST',
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Add to downloaded PDFs in localStorage
+    const downloadedPdfs = JSON.parse(localStorage.getItem('downloadedPdfs') || '[]')
+    if (!downloadedPdfs.includes(pdfId)) {
+      downloadedPdfs.push(pdfId)
+      localStorage.setItem('downloadedPdfs', JSON.stringify(downloadedPdfs))
+    }
+    
+    // Update state
+    state.downloadedPdfs.add(pdfId)
+    
+    // Open PDF in new tab
+    window.open(url, '_blank')
+    
+    // Refresh the PDF list to update download count
+    loadAllPdfsOnce()
+  })
+  .catch(error => {
+    console.error('Error recording download:', error)
+    // Still open the PDF even if recording fails
+    window.open(url, '_blank')
+  })
+}
+
 // Copy URL to clipboard
 function copyToClipboard(url, title) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1228,26 +1274,39 @@ function renderPDFList() {
               <i class="fas fa-check-circle mr-1"></i>DL済
             </div>
           ` : ''}
-          <!-- Action buttons overlay on image -->
+          <!-- Download count overlay on image (bottom-left) -->
+          <div class="absolute bottom-2 left-2 text-white text-sm font-bold drop-shadow-lg">
+            <i class="fas fa-download mr-1"></i>${pdf.download_count || 0}
+          </div>
+          <!-- Action buttons overlay on image (bottom-right) -->
           <div class="absolute bottom-2 right-2 flex items-center gap-2">
             <button 
+              onclick="downloadPDF(event, ${pdf.id}, '${downloadUrl}')"
+              class="w-8 h-8 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white flex items-center justify-center transition-all duration-200"
+              title="保存"
+              style="flex-shrink: 0;"
+              aria-label="${escapeHtml(pdf.title)}を保存"
+            >
+              <i class="fas fa-download text-sm" aria-hidden="true"></i>
+            </button>
+            <button 
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
-              class="share-btn-small bg-white bg-opacity-90 hover:bg-opacity-100"
+              class="w-8 h-8 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white flex items-center justify-center transition-all duration-200"
               title="シェア"
               style="flex-shrink: 0;"
               aria-label="${escapeHtml(pdf.title)}をシェア"
             >
-              <i class="fas fa-paper-plane" aria-hidden="true"></i>
+              <i class="fas fa-paper-plane text-sm" aria-hidden="true"></i>
             </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
-              class="favorite-btn-small ${favorite ? 'active' : ''} bg-white bg-opacity-90 hover:bg-opacity-100"
+              class="w-8 h-8 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white flex items-center justify-center transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               style="flex-shrink: 0;"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
-              <i class="fas fa-heart" aria-hidden="true"></i>
+              <i class="fas fa-heart text-sm" aria-hidden="true"></i>
             </button>
           </div>
         </div>
