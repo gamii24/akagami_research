@@ -1281,15 +1281,6 @@ function renderPDFList() {
           <!-- Action buttons overlay on image (bottom-right) -->
           <div class="absolute bottom-2 right-2 flex items-center gap-2">
             <button 
-              onclick="downloadPDF(event, ${pdf.id}, '${downloadUrl}')"
-              class="text-white hover:text-gray-200 transition-all duration-200"
-              title="保存"
-              style="flex-shrink: 0;"
-              aria-label="${escapeHtml(pdf.title)}を保存"
-            >
-              <i class="far fa-bookmark" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
-            </button>
-            <button 
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
               class="text-white hover:text-gray-200 transition-all duration-200"
               title="リンクをコピー"
