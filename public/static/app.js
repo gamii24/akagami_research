@@ -1275,7 +1275,7 @@ function renderPDFList() {
             </div>
           ` : ''}
           <!-- Download count overlay on image (bottom-left) -->
-          <div class="absolute bottom-2 left-2 text-white drop-shadow-lg" style="font-size: 0.7rem;">
+          <div class="absolute bottom-2 left-2 text-white" style="font-size: 0.7rem;">
             DL数：${pdf.download_count || 0}
           </div>
           <!-- Action buttons overlay on image (bottom-right) -->
@@ -1284,7 +1284,7 @@ function renderPDFList() {
               onclick="downloadPDF(event, ${pdf.id}, '${downloadUrl}')"
               class="text-white hover:text-gray-200 transition-all duration-200"
               title="保存"
-              style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
+              style="flex-shrink: 0;"
               aria-label="${escapeHtml(pdf.title)}を保存"
             >
               <i class="far fa-bookmark" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
@@ -1293,7 +1293,7 @@ function renderPDFList() {
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
               class="text-white hover:text-gray-200 transition-all duration-200"
               title="リンクをコピー"
-              style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
+              style="flex-shrink: 0;"
               aria-label="${escapeHtml(pdf.title)}のリンクをコピー"
             >
               <i class="far fa-copy" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
@@ -1302,7 +1302,7 @@ function renderPDFList() {
               onclick="toggleFavorite(event, ${pdf.id})"
               class="text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
-              style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
+              style="flex-shrink: 0;"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
