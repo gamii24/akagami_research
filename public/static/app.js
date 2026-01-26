@@ -1214,11 +1214,11 @@ function renderPDFList() {
       
       ${pdf.thumbnail_url ? `
         <!-- Thumbnail only (4:5 ratio) - No title/date -->
-        <div class="relative w-full" style="padding-bottom: 125%;">
+        <div class="relative w-full bg-white" style="padding-bottom: 125%;">
           <img 
             src="${convertGoogleDriveUrl(pdf.thumbnail_url)}" 
             alt="${escapeHtml(pdf.title)}"
-            class="absolute inset-0 w-full h-full object-cover"
+            class="absolute inset-0 w-full h-full object-contain"
             loading="lazy"
             onerror="console.error('Failed to load image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}', this.src); this.style.display='none'; this.parentElement.innerHTML='<div class=\\'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600\\'><i class=\\'fas fa-file-pdf text-white text-6xl opacity-30\\'></i></div>'"
             onload="console.log('Successfully loaded image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}')"
