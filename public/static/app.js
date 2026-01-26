@@ -1279,34 +1279,34 @@ function renderPDFList() {
             DL数：${pdf.download_count || 0}
           </div>
           <!-- Action buttons overlay on image (bottom-right) -->
-          <div class="absolute bottom-2 right-2 flex items-center gap-2">
+          <div class="absolute bottom-2 right-2 flex items-center gap-1">
             <button 
               onclick="downloadPDF(event, ${pdf.id}, '${downloadUrl}')"
-              class="w-8 h-8 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white flex items-center justify-center transition-all duration-200"
+              class="text-white hover:text-gray-200 transition-all duration-200"
               title="保存"
-              style="flex-shrink: 0;"
+              style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
               aria-label="${escapeHtml(pdf.title)}を保存"
             >
-              <i class="fas fa-download text-sm" aria-hidden="true"></i>
+              <i class="fas fa-download" style="font-size: 0.6rem;" aria-hidden="true"></i>
             </button>
             <button 
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
-              class="w-8 h-8 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white flex items-center justify-center transition-all duration-200"
+              class="text-white hover:text-gray-200 transition-all duration-200"
               title="シェア"
-              style="flex-shrink: 0;"
+              style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
               aria-label="${escapeHtml(pdf.title)}をシェア"
             >
-              <i class="fas fa-paper-plane text-sm" aria-hidden="true"></i>
+              <i class="fas fa-paper-plane" style="font-size: 0.6rem;" aria-hidden="true"></i>
             </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
-              class="w-8 h-8 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white flex items-center justify-center transition-all duration-200 ${favorite ? 'active' : ''}"
+              class="text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
-              style="flex-shrink: 0;"
+              style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
-              <i class="fas fa-heart text-sm" aria-hidden="true"></i>
+              <i class="fas fa-heart" style="font-size: 0.6rem;" aria-hidden="true"></i>
             </button>
           </div>
         </div>
