@@ -1252,20 +1252,13 @@ function renderPDFList() {
           </div>
         </div>
       ` : `
-        <!-- No thumbnail - Show title and date (4:5 ratio) -->
-        <div class="relative w-full" style="padding-bottom: 125%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-          <div class="absolute inset-0 flex items-center justify-center">
-            <i class="fas fa-file-pdf text-white text-6xl opacity-30"></i>
-          </div>
+        <!-- No thumbnail - Show title and date -->
+        <div class="p-4 flex-1 flex flex-col">
           ${downloaded ? `
-            <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+            <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg z-10">
               <i class="fas fa-check-circle mr-1"></i>DL済
             </div>
           ` : ''}
-        </div>
-        
-        <!-- Content - Only shown when no thumbnail -->
-        <div class="p-4 flex-1 flex flex-col">
           <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2 line-clamp-2 flex-1">
             ${escapeHtml(pdf.title)}
           </h3>
