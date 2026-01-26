@@ -1296,7 +1296,7 @@ function renderPDFList() {
               style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
               aria-label="${escapeHtml(pdf.title)}のリンクをコピー"
             >
-              <i class="fas fa-link" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
+              <i class="far fa-copy" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
             </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
