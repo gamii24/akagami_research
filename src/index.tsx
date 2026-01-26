@@ -1752,146 +1752,156 @@ async function createOrGetTag(db: D1Database, tagName: string): Promise<number |
 
 // Create PDF (protected)
 app.post('/api/pdfs', requireAuth, async (c) => {
-  const { 
-    title, 
-    google_drive_url,
-    thumbnail_url,
-    category_id, 
-    tag_ids 
-  } = await c.req.json()
-  
-  const result = await c.env.DB.prepare(`
-    INSERT INTO pdfs (
+  try {
+    const { 
       title, 
       google_drive_url,
       thumbnail_url,
+      category_id, 
+      tag_ids 
+    } = await c.req.json()
+    
+    const result = await c.env.DB.prepare(`
+      INSERT INTO pdfs (
+        title, 
+        google_drive_url,
+        thumbnail_url,
+        category_id
+      ) VALUES (?, ?, ?, ?)
+    `).bind(
+      title, 
+      google_drive_url,
+      thumbnail_url || null,
       category_id
-    ) VALUES (?, ?, ?, ?)
-  `).bind(
-    title, 
-    google_drive_url,
-    thumbnail_url || null,
-    category_id
-  ).run()
-  
-  const pdf_id = result.meta.last_row_id
-  
-  // Auto-generate tags from title
-  const autoKeywords = extractKeywordsFromTitle(title)
-  const autoTagIds: number[] = []
-  
-  for (const keyword of autoKeywords) {
-    const tagId = await createOrGetTag(c.env.DB, keyword)
-    if (tagId !== null) {
-      autoTagIds.push(tagId)
+    ).run()
+    
+    const pdf_id = result.meta.last_row_id
+    
+    // Auto-generate tags from title
+    const autoKeywords = extractKeywordsFromTitle(title)
+    const autoTagIds: number[] = []
+    
+    for (const keyword of autoKeywords) {
+      const tagId = await createOrGetTag(c.env.DB, keyword)
+      if (tagId !== null) {
+        autoTagIds.push(tagId)
+      }
     }
-  }
-  
-  // Combine manual tags and auto tags
-  const allTagIds = new Set([...(tag_ids || []), ...autoTagIds])
-  
-  // Add tags
-  if (allTagIds.size > 0) {
-    for (const tag_id of allTagIds) {
-      await c.env.DB.prepare(
-        'INSERT OR IGNORE INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
-      ).bind(pdf_id, tag_id).run()
+    
+    // Combine manual tags and auto tags
+    const allTagIds = new Set([...(tag_ids || []), ...autoTagIds])
+    
+    // Add tags
+    if (allTagIds.size > 0) {
+      for (const tag_id of allTagIds) {
+        await c.env.DB.prepare(
+          'INSERT OR IGNORE INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
+        ).bind(pdf_id, tag_id).run()
+      }
     }
-  }
-  
-  // Send notification emails to subscribed users
-  try {
-    const { results: subscribers } = await c.env.DB.prepare(`
-      SELECT DISTINCT u.id, u.email, u.name, uns.frequency
-      FROM users u
-      JOIN user_notification_settings uns ON u.id = uns.user_id
-      JOIN categories c ON uns.category_id = c.id
-      WHERE uns.category_id = ? 
-        AND uns.notification_enabled = 1
-        AND uns.frequency = 'immediate'
-    `).bind(category_id).all()
     
-    // Get category name for email
-    const category = await c.env.DB.prepare(
-      'SELECT name FROM categories WHERE id = ?'
-    ).bind(category_id).first()
-    
-    const categoryName = category?.name || 'Unknown'
-    
-    // Send notification email to each subscriber
-    for (const subscriber of subscribers) {
-      await sendEmail({
-        to: subscriber.email,
-        subject: `[Akagami.net] ${categoryName}カテゴリに新しい資料が追加されました`,
-        html: getNewPdfNotificationEmailHtml(
-          subscriber.name,
-          title,
-          categoryName,
-          google_drive_url
-        ),
-        text: `こんにちは、${subscriber.name}さん。\n\n${categoryName}カテゴリに新しい資料「${title}」が追加されました。\n\n今すぐチェック: ${google_drive_url}`
-      }, c.env)
+    // Send notification emails to subscribed users
+    try {
+      const { results: subscribers } = await c.env.DB.prepare(`
+        SELECT DISTINCT u.id, u.email, u.name, uns.frequency
+        FROM users u
+        JOIN user_notification_settings uns ON u.id = uns.user_id
+        JOIN categories c ON uns.category_id = c.id
+        WHERE uns.category_id = ? 
+          AND uns.notification_enabled = 1
+          AND uns.frequency = 'immediate'
+      `).bind(category_id).all()
       
-      // Log email notification
-      await c.env.DB.prepare(`
-        INSERT INTO email_notifications (user_id, pdf_id, notification_type, status)
-        VALUES (?, ?, 'new_pdf', 'sent')
-      `).bind(subscriber.id, pdf_id).run()
+      // Get category name for email
+      const category = await c.env.DB.prepare(
+        'SELECT name FROM categories WHERE id = ?'
+      ).bind(category_id).first()
+      
+      const categoryName = category?.name || 'Unknown'
+      
+      // Send notification email to each subscriber
+      for (const subscriber of subscribers) {
+        await sendEmail({
+          to: subscriber.email,
+          subject: `[Akagami.net] ${categoryName}カテゴリに新しい資料が追加されました`,
+          html: getNewPdfNotificationEmailHtml(
+            subscriber.name,
+            title,
+            categoryName,
+            google_drive_url
+          ),
+          text: `こんにちは、${subscriber.name}さん。\n\n${categoryName}カテゴリに新しい資料「${title}」が追加されました。\n\n今すぐチェック: ${google_drive_url}`
+        }, c.env)
+        
+        // Log email notification
+        await c.env.DB.prepare(`
+          INSERT INTO email_notifications (user_id, pdf_id, notification_type, status)
+          VALUES (?, ?, 'new_pdf', 'sent')
+        `).bind(subscriber.id, pdf_id).run()
+      }
+    } catch (emailError: any) {
+      console.error('Failed to send notification emails:', emailError)
+      // Don't fail the PDF creation if email sending fails
     }
-  } catch (emailError: any) {
-    console.error('Failed to send notification emails:', emailError)
-    // Don't fail the PDF creation if email sending fails
+    
+    return c.json({ 
+      id: pdf_id, 
+      title, 
+      google_drive_url,
+      auto_tags: autoKeywords
+    })
+  } catch (error: any) {
+    console.error('Error creating PDF:', error)
+    return c.json({ error: error.message || 'Failed to create PDF' }, 500)
   }
-  
-  return c.json({ 
-    id: pdf_id, 
-    title, 
-    google_drive_url,
-    auto_tags: autoKeywords
-  })
 })
 
 // Update PDF (protected)
 app.put('/api/pdfs/:id', requireAuth, async (c) => {
-  const id = c.req.param('id')
-  const { 
-    title, 
-    google_drive_url,
-    thumbnail_url,
-    category_id,
-    tag_ids 
-  } = await c.req.json()
-  
-  await c.env.DB.prepare(`
-    UPDATE pdfs 
-    SET 
-      title = ?, 
-      google_drive_url = ?,
-      thumbnail_url = ?,
-      category_id = ?
-    WHERE id = ?
-  `).bind(
-    title, 
-    google_drive_url,
-    thumbnail_url || null,
-    category_id,
-    id
-  ).run()
-  
-  // Update tags
-  await c.env.DB.prepare(
-    'DELETE FROM pdf_tags WHERE pdf_id = ?'
-  ).bind(id).run()
-  
-  if (tag_ids && tag_ids.length > 0) {
-    for (const tag_id of tag_ids) {
-      await c.env.DB.prepare(
-        'INSERT INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
-      ).bind(id, tag_id).run()
+  try {
+    const id = c.req.param('id')
+    const { 
+      title, 
+      google_drive_url,
+      thumbnail_url,
+      category_id,
+      tag_ids 
+    } = await c.req.json()
+    
+    await c.env.DB.prepare(`
+      UPDATE pdfs 
+      SET 
+        title = ?, 
+        google_drive_url = ?,
+        thumbnail_url = ?,
+        category_id = ?
+      WHERE id = ?
+    `).bind(
+      title, 
+      google_drive_url,
+      thumbnail_url || null,
+      category_id,
+      id
+    ).run()
+    
+    // Update tags
+    await c.env.DB.prepare(
+      'DELETE FROM pdf_tags WHERE pdf_id = ?'
+    ).bind(id).run()
+    
+    if (tag_ids && tag_ids.length > 0) {
+      for (const tag_id of tag_ids) {
+        await c.env.DB.prepare(
+          'INSERT INTO pdf_tags (pdf_id, tag_id) VALUES (?, ?)'
+        ).bind(id, tag_id).run()
+      }
     }
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('Error updating PDF:', error)
+    return c.json({ error: error.message || 'Failed to update PDF' }, 500)
   }
-  
-  return c.json({ success: true })
 })
 
 // Update PDF tags only (easier endpoint for tag management)
