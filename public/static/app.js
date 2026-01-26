@@ -37,16 +37,18 @@ function convertGoogleDriveUrl(url) {
   // Extract file ID from various Google Drive URL formats
   let fileId = null
   
-  // Format: https://drive.google.com/file/d/{FILE_ID}/view
+  // Format: https://drive.google.com/file/d/{FILE_ID}/view?usp=sharing or /view
   const match1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
   if (match1) {
     fileId = match1[1]
   }
   
   // Format: https://drive.google.com/open?id={FILE_ID}
-  const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
-  if (match2) {
-    fileId = match2[1]
+  if (!fileId) {
+    const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+    if (match2) {
+      fileId = match2[1]
+    }
   }
   
   // If file ID found, convert to direct image URL
