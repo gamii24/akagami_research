@@ -1279,7 +1279,7 @@ function renderPDFList() {
             DL数：${pdf.download_count || 0}
           </div>
           <!-- Action buttons overlay on image (bottom-right) -->
-          <div class="absolute bottom-2 right-2 flex items-center gap-1.5">
+          <div class="absolute bottom-2 right-2 flex items-center gap-2">
             <button 
               onclick="downloadPDF(event, ${pdf.id}, '${downloadUrl}')"
               class="text-white hover:text-gray-200 transition-all duration-200"
@@ -1287,7 +1287,7 @@ function renderPDFList() {
               style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
               aria-label="${escapeHtml(pdf.title)}を保存"
             >
-              <i class="far fa-bookmark" style="font-size: 0.72rem;" aria-hidden="true"></i>
+              <i class="far fa-bookmark" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
             </button>
             <button 
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
@@ -1296,7 +1296,7 @@ function renderPDFList() {
               style="flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));"
               aria-label="${escapeHtml(pdf.title)}のリンクをコピー"
             >
-              <i class="fas fa-link" style="font-size: 0.72rem;" aria-hidden="true"></i>
+              <i class="fas fa-link" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
             </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
@@ -1306,7 +1306,7 @@ function renderPDFList() {
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
-              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.72rem;" aria-hidden="true"></i>
+              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
             </button>
           </div>
         </div>
