@@ -1344,7 +1344,7 @@ function renderPDFList() {
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
-              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.86502rem; font-weight: 300;" aria-hidden="true"></i>
+              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.86502rem;" aria-hidden="true"></i>
             </button>
           </div>
         </div>
