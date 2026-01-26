@@ -6143,7 +6143,7 @@ app.get('/', (c) => {
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* PDF List - Show first on mobile */}
           <div class="lg:col-span-3 order-1 lg:order-2">
-            <div id="pdf-list" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div id="pdf-list" class="grid grid-cols-2 lg:grid-cols-4 gap-4">
               <div class="col-span-full text-center py-12 text-gray-600">
                 <i class="fas fa-spinner fa-spin text-5xl mb-4 text-primary"></i>
                 <p class="text-lg">読み込み中...</p>
