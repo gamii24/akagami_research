@@ -1553,6 +1553,7 @@ app.get('/api/pdfs', async (c) => {
   const category = c.req.query('category')
   const tag = c.req.query('tag')
   const search = c.req.query('search')
+  const includeInfographics = c.req.query('include_infographics') === 'true' // Only include if explicitly requested
   
   // Build WHERE conditions for both PDFs and infographic articles
   const pdfConditions = []
@@ -1562,7 +1563,10 @@ app.get('/api/pdfs', async (c) => {
   if (category) {
     pdfConditions.push('p.category_id = ?')
     infographicConditions.push('ia.category_id = ?')
-    bindings.push(category, category) // Need to bind twice for UNION
+    bindings.push(category)
+    if (includeInfographics) {
+      bindings.push(category) // Need to bind twice for UNION
+    }
   }
   
   if (tag) {
@@ -1572,9 +1576,12 @@ app.get('/api/pdfs', async (c) => {
   
   if (search) {
     pdfConditions.push('(p.title LIKE ? OR p.description LIKE ?)')
-    infographicConditions.push('(ia.title LIKE ? OR ia.summary LIKE ?)')
     const searchPattern = `%${search}%`
-    bindings.push(searchPattern, searchPattern, searchPattern, searchPattern)
+    bindings.push(searchPattern, searchPattern)
+    if (includeInfographics) {
+      infographicConditions.push('(ia.title LIKE ? OR ia.summary LIKE ?)')
+      bindings.push(searchPattern, searchPattern)
+    }
   }
   
   // Query for PDFs
@@ -1584,12 +1591,12 @@ app.get('/api/pdfs', async (c) => {
       p.id, 
       p.title, 
       p.google_drive_url,
+      p.thumbnail_url,
       NULL as slug,
-      NULL as thumbnail_url,
       NULL as summary,
       p.category_id,
       p.download_count,
-      p.created_at,
+      p.created_at as created_at,
       c.name as category_name,
       GROUP_CONCAT(t.id || ':' || t.name, '||') as tags_concat
     FROM pdfs p
@@ -1604,38 +1611,45 @@ app.get('/api/pdfs', async (c) => {
   
   pdfQuery += ' GROUP BY p.id'
   
-  // Query for Infographic Articles
-  let infographicQuery = `
-    SELECT 
-      'infographic' as source_type,
-      ia.id,
-      ia.title,
-      NULL as google_drive_url,
-      ia.slug,
-      ia.thumbnail_url,
-      ia.summary,
-      ia.category_id,
-      0 as download_count,
-      ia.created_at,
-      c.name as category_name,
-      NULL as tags_concat
-    FROM infographic_articles ia
-    LEFT JOIN categories c ON ia.category_id = c.id
-  `
+  // Only include infographic articles if explicitly requested (for /infographics page)
+  let finalQuery = pdfQuery
   
-  if (infographicConditions.length > 0) {
-    infographicQuery += ' WHERE ' + infographicConditions.join(' AND ')
+  if (includeInfographics) {
+    // Query for Infographic Articles
+    let infographicQuery = `
+      SELECT 
+        'infographic' as source_type,
+        ia.id,
+        ia.title,
+        NULL as google_drive_url,
+        ia.thumbnail_url,
+        ia.slug,
+        ia.summary,
+        ia.category_id,
+        0 as download_count,
+        ia.created_at as created_at,
+        c.name as category_name,
+        NULL as tags_concat
+      FROM infographic_articles ia
+      LEFT JOIN categories c ON ia.category_id = c.id
+    `
+    
+    if (infographicConditions.length > 0) {
+      infographicQuery += ' WHERE ' + infographicConditions.join(' AND ')
+    }
+    
+    // Combine both queries with UNION ALL and wrap for sorting
+    finalQuery = `
+      SELECT * FROM (
+        ${pdfQuery}
+        UNION ALL
+        ${infographicQuery}
+      ) AS combined
+      ORDER BY combined.created_at DESC
+    `
+  } else {
+    finalQuery += ' ORDER BY created_at DESC'
   }
-  
-  // Combine both queries with UNION ALL and wrap for sorting
-  const finalQuery = `
-    SELECT * FROM (
-      ${pdfQuery}
-      UNION ALL
-      ${infographicQuery}
-    ) AS combined
-    ORDER BY combined.created_at DESC
-  `
   
   const { results } = await c.env.DB.prepare(finalQuery).bind(...bindings).all()
   
