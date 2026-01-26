@@ -1155,6 +1155,8 @@ function renderPDFList() {
     }
     
     // Grid view (default) - 4:5 ratio with thumbnail
+    // If thumbnail exists: show only image
+    // If no thumbnail: show title and date
     return `
     <div 
       onclick="${cardClick}"
@@ -1170,42 +1172,25 @@ function renderPDFList() {
         </div>
       ` : ''}
       
-      <!-- Thumbnail (4:5 ratio) -->
-      <div class="relative w-full" style="padding-bottom: 125%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-        ${pdf.thumbnail_url ? `
+      ${pdf.thumbnail_url ? `
+        <!-- Thumbnail only (4:5 ratio) - No title/date -->
+        <div class="relative w-full" style="padding-bottom: 125%;">
           <img 
             src="${pdf.thumbnail_url}" 
             alt="${escapeHtml(pdf.title)}"
             class="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
           />
-        ` : `
-          <div class="absolute inset-0 flex items-center justify-center">
-            <i class="fas fa-file-pdf text-white text-6xl opacity-30"></i>
-          </div>
-        `}
-        ${downloaded ? `
-          <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
-            <i class="fas fa-check-circle mr-1"></i>DL済
-          </div>
-        ` : ''}
-      </div>
-      
-      <!-- Content -->
-      <div class="p-4 flex-1 flex flex-col">
-        <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2 line-clamp-2 flex-1">
-          ${escapeHtml(pdf.title)}
-        </h3>
-        
-        <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs">${formatDate(pdf.created_at)}</span>
-            <span class="text-xs">DL: ${pdf.download_count || 0}</span>
-          </div>
-          <div class="flex items-center gap-2">
+          ${downloaded ? `
+            <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+              <i class="fas fa-check-circle mr-1"></i>DL済
+            </div>
+          ` : ''}
+          <!-- Action buttons overlay on image -->
+          <div class="absolute bottom-2 right-2 flex items-center gap-2">
             <button 
               onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
-              class="share-btn-small"
+              class="share-btn-small bg-white bg-opacity-90 hover:bg-opacity-100"
               title="シェア"
               style="flex-shrink: 0;"
               aria-label="${escapeHtml(pdf.title)}をシェア"
@@ -1214,7 +1199,7 @@ function renderPDFList() {
             </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
-              class="favorite-btn-small ${favorite ? 'active' : ''}"
+              class="favorite-btn-small ${favorite ? 'active' : ''} bg-white bg-opacity-90 hover:bg-opacity-100"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               style="flex-shrink: 0;"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
@@ -1224,7 +1209,54 @@ function renderPDFList() {
             </button>
           </div>
         </div>
-      </div>
+      ` : `
+        <!-- No thumbnail - Show title and date (4:5 ratio) -->
+        <div class="relative w-full" style="padding-bottom: 125%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <i class="fas fa-file-pdf text-white text-6xl opacity-30"></i>
+          </div>
+          ${downloaded ? `
+            <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+              <i class="fas fa-check-circle mr-1"></i>DL済
+            </div>
+          ` : ''}
+        </div>
+        
+        <!-- Content - Only shown when no thumbnail -->
+        <div class="p-4 flex-1 flex flex-col">
+          <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2 line-clamp-2 flex-1">
+            ${escapeHtml(pdf.title)}
+          </h3>
+          
+          <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs">${formatDate(pdf.created_at)}</span>
+              <span class="text-xs">DL: ${pdf.download_count || 0}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button 
+                onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
+                class="share-btn-small"
+                title="シェア"
+                style="flex-shrink: 0;"
+                aria-label="${escapeHtml(pdf.title)}をシェア"
+              >
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+              </button>
+              <button 
+                onclick="toggleFavorite(event, ${pdf.id})"
+                class="favorite-btn-small ${favorite ? 'active' : ''}"
+                title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
+                style="flex-shrink: 0;"
+                aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
+                aria-pressed="${favorite}"
+              >
+                <i class="fas fa-heart" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `}
     </div>
   `
   }).join('')
