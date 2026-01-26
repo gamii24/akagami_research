@@ -630,11 +630,15 @@ function showPdfModal() {
               type="url" 
               id="pdf-thumbnail"
               value="${escapeHtml(pdf.thumbnail_url || '')}"
-              placeholder="https://drive.google.com/uc?id=..."
+              placeholder="https://drive.google.com/file/d/xxxxx/view"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <p class="mt-1 text-xs text-gray-500">
-              <i class="fas fa-info-circle mr-1"></i>推奨サイズ: 1080×1350px（4:5比率）。Google Driveの画像URLを貼り付けてください
+              <i class="fas fa-info-circle mr-1"></i>推奨サイズ: 1080×1350px（4:5比率）<br>
+              <strong>Googleドライブの使い方:</strong><br>
+              1. Googleドライブで画像を右クリック → 「共有」→ 「リンクを知っている全員」に変更<br>
+              2. 「リンクをコピー」で取得したURL（https://drive.google.com/file/d/xxxxx/view）をそのまま貼り付けてください<br>
+              3. 保存時に自動で表示用URLに変換されます
             </p>
           </div>
           
@@ -702,8 +706,13 @@ async function savePdf(event) {
   
   const title = document.getElementById('pdf-title').value
   const google_drive_url = document.getElementById('pdf-url').value
-  const thumbnail_url = document.getElementById('pdf-thumbnail').value || null
+  let thumbnail_url = document.getElementById('pdf-thumbnail').value || null
   const category_id = document.getElementById('pdf-category').value || null
+  
+  // Convert Google Drive URL to direct image URL
+  if (thumbnail_url) {
+    thumbnail_url = convertGoogleDriveUrl(thumbnail_url)
+  }
   
   const tagCheckboxes = document.querySelectorAll('input[name="pdf-tags"]:checked')
   const tag_ids = Array.from(tagCheckboxes).map(cb => parseInt(cb.value))
@@ -729,6 +738,39 @@ async function savePdf(event) {
   } catch (error) {
     alert('保存に失敗しました: ' + (error.response?.data?.error || error.message))
   }
+}
+
+// Convert Google Drive sharing URL to direct image URL
+function convertGoogleDriveUrl(url) {
+  if (!url) return null
+  
+  // Already converted format
+  if (url.includes('drive.google.com/uc?')) {
+    return url
+  }
+  
+  // Extract file ID from various Google Drive URL formats
+  let fileId = null
+  
+  // Format: https://drive.google.com/file/d/{FILE_ID}/view
+  const match1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (match1) {
+    fileId = match1[1]
+  }
+  
+  // Format: https://drive.google.com/open?id={FILE_ID}
+  const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+  if (match2) {
+    fileId = match2[1]
+  }
+  
+  // If file ID found, convert to direct image URL
+  if (fileId) {
+    return `https://drive.google.com/uc?export=view&id=${fileId}`
+  }
+  
+  // Return original URL if no conversion needed
+  return url
 }
 
 async function deletePdf(id) {

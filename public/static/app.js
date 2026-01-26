@@ -25,6 +25,39 @@ if (!window.state) {
 // Reference state from window (no const/let/var to avoid redeclaration)
 var state = window.state;
 
+// Utility: Convert Google Drive URL to direct image URL
+function convertGoogleDriveUrl(url) {
+  if (!url) return null
+  
+  // Already converted format
+  if (url.includes('drive.google.com/uc?')) {
+    return url
+  }
+  
+  // Extract file ID from various Google Drive URL formats
+  let fileId = null
+  
+  // Format: https://drive.google.com/file/d/{FILE_ID}/view
+  const match1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (match1) {
+    fileId = match1[1]
+  }
+  
+  // Format: https://drive.google.com/open?id={FILE_ID}
+  const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+  if (match2) {
+    fileId = match2[1]
+  }
+  
+  // If file ID found, convert to direct image URL
+  if (fileId) {
+    return `https://drive.google.com/uc?export=view&id=${fileId}`
+  }
+  
+  // Return original URL if no conversion needed
+  return url
+}
+
 // Google Analytics Event Tracking
 function trackGAEvent(eventName, params = {}) {
   if (typeof gtag !== 'undefined') {
@@ -1176,10 +1209,11 @@ function renderPDFList() {
         <!-- Thumbnail only (4:5 ratio) - No title/date -->
         <div class="relative w-full" style="padding-bottom: 125%;">
           <img 
-            src="${pdf.thumbnail_url}" 
+            src="${convertGoogleDriveUrl(pdf.thumbnail_url)}" 
             alt="${escapeHtml(pdf.title)}"
             class="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
+            onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600\\'><i class=\\'fas fa-file-pdf text-white text-6xl opacity-30\\'></i></div>'"
           />
           ${downloaded ? `
             <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
