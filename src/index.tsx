@@ -151,10 +151,10 @@ function CommonSidebar() {
           <a
             href="/sns-faq"
             class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
-            aria-label="よくある質問を開く"
+            aria-label="SNSの疑問を開く"
           >
             <i class="fas fa-question-circle"></i>
-            <span>よくある質問</span>
+            <span>SNSの疑問</span>
           </a>
         </div>
 
@@ -6226,10 +6226,10 @@ app.get('/', (c) => {
                 <a
                   href="/sns-faq"
                   class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
-                  aria-label="よくある質問を開く"
+                  aria-label="SNSの疑問を開く"
                 >
                   <i class="fas fa-question-circle"></i>
-                  <span>よくある質問</span>
+                  <span>SNSの疑問</span>
                 </a>
               </div>
 
@@ -7295,7 +7295,7 @@ app.get('/mypage', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/app.js?v=202601260140"></script>
+        <script src="/static/app.js?v=202601260145"></script>
         <script src="/static/mypage.js?v=202601181337"></script>
         
         {/* Falling Hearts Animation - Different settings for mobile and PC */}
@@ -7667,7 +7667,7 @@ app.get('/question-finder', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js?v=202601260140"></script>
+        <script defer src="/static/app.js?v=202601260145"></script>
         <script defer src="/static/question-finder.js?v=2026011610"></script>
       </body>
     </html>
@@ -7681,8 +7681,8 @@ app.get('/instagram-faq', (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Instagram運用 よくある質問 - Akagami.net</title>
-        <meta name="description" content="Instagram運用でよくある質問に赤髪が回答。フォロワーの増やし方、投稿のコツ、収益化まで現場のリアルな答えをまとめました。" />
+        <title>Instagram運用 SNSの疑問 - Akagami.net</title>
+        <meta name="description" content="Instagram運用でSNSの疑問に赤髪が回答。フォロワーの増やし方、投稿のコツ、収益化まで現場のリアルな答えをまとめました。" />
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
@@ -7726,8 +7726,8 @@ app.get('/tiktok-faq', (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>TikTok運用 よくある質問 - Akagami.net</title>
-        <meta name="description" content="TikTok運用でよくある質問に赤髪が回答。動画の作り方、バズらせ方、収益化まで現場のリアルな答えをまとめました。" />
+        <title>TikTok運用 SNSの疑問 - Akagami.net</title>
+        <meta name="description" content="TikTok運用でSNSの疑問に赤髪が回答。動画の作り方、バズらせ方、収益化まで現場のリアルな答えをまとめました。" />
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
@@ -7771,8 +7771,8 @@ app.get('/sns-faq', (c) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SNS運用 よくある質問 - Akagami.net</title>
-        <meta name="description" content="Instagram・TikTok・YouTube・Threadsなど、SNS運用でよくある質問に赤髪が回答。現場のリアルな答えをまとめました。" />
+        <title>SNS運用 SNSの疑問 - Akagami.net</title>
+        <meta name="description" content="Instagram・TikTok・YouTube・Threadsなど、SNS運用でSNSの疑問に赤髪が回答。現場のリアルな答えをまとめました。" />
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
@@ -7967,7 +7967,7 @@ app.get('/sns-faq', (c) => {
         
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js?v=202601260140"></script>
+        <script defer src="/static/app.js?v=202601260145"></script>
         <script defer src="/static/sns-faq.js?v=2026011610"></script>
       </body>
     </html>
@@ -8218,7 +8218,7 @@ app.get('/admin/instagram-faq', (c) => {
                   <i class="fas fa-comments mr-2" style="color: #e75556;"></i>
                   SNS FAQ 管理
                 </h1>
-                <p class="text-xs mt-0.5" style="color: #d1d5db;">よくある質問の追加・編集・削除</p>
+                <p class="text-xs mt-0.5" style="color: #d1d5db;">SNSの疑問の追加・編集・削除</p>
               </div>
               <div class="flex gap-2">
                 <a href="/admin" class="px-3 py-1.5 text-sm rounded-lg transition-all duration-300 font-medium shadow-md" style="background-color: #e75556; color: white;" aria-label="管理画面へ戻る">
@@ -8910,7 +8910,7 @@ app.get('/article/:slug', async (c) => {
           
           <script src="/static/utils.js"></script>
           <script src="/static/auth.js"></script>
-          <script src="/static/app.js?v=202601260140"></script>
+          <script src="/static/app.js?v=202601260145"></script>
         </body>
       </html>
     )
