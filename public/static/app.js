@@ -1215,7 +1215,8 @@ function renderPDFList() {
             alt="${escapeHtml(pdf.title)}"
             class="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
-            onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600\\'><i class=\\'fas fa-file-pdf text-white text-6xl opacity-30\\'></i></div>'"
+            onerror="console.error('Failed to load image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}', this.src); this.style.display='none'; this.parentElement.innerHTML='<div class=\\'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600\\'><i class=\\'fas fa-file-pdf text-white text-6xl opacity-30\\'></i></div>'"
+            onload="console.log('Successfully loaded image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}')"
           />
           ${downloaded ? `
             <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
