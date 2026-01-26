@@ -328,12 +328,28 @@ function toggleFavorite(event, pdfId) {
   // Update just this card's favorite button
   const favoriteBtn = event.target.closest('.favorite-btn-small')
   if (favoriteBtn) {
+    const heartIcon = favoriteBtn.querySelector('i.fa-heart')
     if (state.favoritePdfs.has(pdfId)) {
       favoriteBtn.classList.add('active')
       favoriteBtn.title = 'お気に入りから削除'
+      // Change to solid heart (filled)
+      if (heartIcon) {
+        heartIcon.classList.remove('far')
+        heartIcon.classList.add('fas')
+      }
+      // Generate colorful particles
+      createColorfulParticles(favoriteBtn)
     } else {
       favoriteBtn.classList.remove('active')
       favoriteBtn.title = 'お気に入りに追加'
+      // Change to regular heart (outline)
+      if (heartIcon) {
+        heartIcon.classList.remove('fas')
+        heartIcon.classList.add('far')
+      }
+      // Remove particles
+      const existingParticles = favoriteBtn.querySelectorAll('.particle-dot')
+      existingParticles.forEach(p => p.remove())
     }
   }
   
@@ -341,6 +357,53 @@ function toggleFavorite(event, pdfId) {
   if (state.showOnlyFavorites) {
     applyFiltersFromAllPdfs()
     renderPDFList()
+  }
+}
+
+// Create colorful particles animation (like Threads)
+function createColorfulParticles(button) {
+  const colors = ['#FF6B6B', '#FFA94D', '#FFD93D', '#6BCF7F', '#4D96FF', '#9D4EDD', '#FF6EC7', '#FF8787']
+  const particleCount = 8
+  
+  // Remove existing particles first
+  const existingParticles = button.querySelectorAll('.particle-dot')
+  existingParticles.forEach(p => p.remove())
+  
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div')
+    particle.className = 'particle-dot'
+    particle.style.position = 'absolute'
+    particle.style.width = '5px'
+    particle.style.height = '5px'
+    particle.style.borderRadius = '50%'
+    particle.style.backgroundColor = colors[i % colors.length]
+    particle.style.pointerEvents = 'none'
+    particle.style.zIndex = '1'
+    
+    // Calculate angle for circular arrangement
+    const angle = (360 / particleCount) * i
+    const radian = (angle * Math.PI) / 180
+    const startDistance = 0 // Start from center
+    const finalDistance = 18 // Final distance from center
+    const x = Math.cos(radian) * finalDistance
+    const y = Math.sin(radian) * finalDistance
+    
+    // Start from center with 0 opacity
+    particle.style.left = '50%'
+    particle.style.top = '50%'
+    particle.style.transform = 'translate(-50%, -50%) scale(0)'
+    particle.style.opacity = '0'
+    particle.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+    
+    button.appendChild(particle)
+    
+    // Animate particle flying out and staying
+    setTimeout(() => {
+      particle.style.left = `calc(50% + ${x}px)`
+      particle.style.top = `calc(50% + ${y}px)`
+      particle.style.transform = 'translate(-50%, -50%) scale(1)'
+      particle.style.opacity = '1'
+    }, i * 30) // Stagger animation slightly
   }
 }
 
@@ -1218,21 +1281,14 @@ function renderPDFList() {
           
           <div class="flex items-center gap-2">
             <button 
-              onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
-              class="share-btn-small"
-              title="シェア"
-              aria-label="${escapeHtml(pdf.title)}をシェア"
-            >
-              <i class="fas fa-paper-plane" aria-hidden="true"></i>
-            </button>
-            <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
+              style="transform: translateY(6px);"
             >
-              <i class="fas fa-heart" aria-hidden="true"></i>
+              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.86502rem;" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -1281,23 +1337,14 @@ function renderPDFList() {
           <!-- Action buttons overlay on image (bottom-right) -->
           <div class="absolute bottom-2 right-2 flex items-center gap-2">
             <button 
-              onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
-              class="text-white hover:text-gray-200 transition-all duration-200"
-              title="リンクをコピー"
-              style="flex-shrink: 0;"
-              aria-label="${escapeHtml(pdf.title)}のリンクをコピー"
-            >
-              <i class="far fa-copy" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
-            </button>
-            <button 
               onclick="toggleFavorite(event, ${pdf.id})"
-              class="text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
+              class="favorite-btn-small text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
-              style="flex-shrink: 0;"
+              style="flex-shrink: 0; transform: translateY(9px);"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
-              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.792rem; font-weight: 300;" aria-hidden="true"></i>
+              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.86502rem; font-weight: 300;" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -1320,23 +1367,14 @@ function renderPDFList() {
             </div>
             <div class="flex items-center gap-2">
               <button 
-                onclick="sharePDF(event, ${pdf.id}, '${escapeHtml(pdf.title)}', '${downloadUrl}')"
-                class="share-btn-small"
-                title="シェア"
-                style="flex-shrink: 0;"
-                aria-label="${escapeHtml(pdf.title)}をシェア"
-              >
-                <i class="fas fa-paper-plane" aria-hidden="true"></i>
-              </button>
-              <button 
                 onclick="toggleFavorite(event, ${pdf.id})"
                 class="favorite-btn-small ${favorite ? 'active' : ''}"
                 title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
-                style="flex-shrink: 0;"
+                style="flex-shrink: 0; transform: translateY(6px);"
                 aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
                 aria-pressed="${favorite}"
               >
-                <i class="fas fa-heart" aria-hidden="true"></i>
+                <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.86502rem;" aria-hidden="true"></i>
               </button>
             </div>
           </div>
