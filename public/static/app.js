@@ -29,7 +29,12 @@ var state = window.state;
 function convertGoogleDriveUrl(url) {
   if (!url) return null
   
-  // Already converted format
+  // Already converted to googleusercontent format (best for CORS)
+  if (url.includes('googleusercontent.com')) {
+    return url
+  }
+  
+  // Already converted to uc format
   if (url.includes('drive.google.com/uc?')) {
     return url
   }
@@ -51,9 +56,9 @@ function convertGoogleDriveUrl(url) {
     }
   }
   
-  // If file ID found, convert to direct image URL
+  // If file ID found, convert to googleusercontent format (better CORS support)
   if (fileId) {
-    return `https://drive.google.com/uc?export=view&id=${fileId}`
+    return `https://lh3.googleusercontent.com/d/${fileId}`
   }
   
   // Return original URL if no conversion needed
