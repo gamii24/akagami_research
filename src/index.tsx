@@ -63,6 +63,9 @@ function CommonHeader() {
               <a href="/" class="text-white hover:text-red-100 transition-colors font-medium">
                 資料
               </a>
+              <a href="/services" class="text-white hover:text-red-100 transition-colors font-medium">
+                事業紹介
+              </a>
               <a href="/company" class="text-white hover:text-red-100 transition-colors font-medium">
                 会社概要
               </a>
@@ -178,6 +181,14 @@ function CommonSidebar() {
         {/* Company Information Section */}
         <div class="mb-6 pt-6 border-t border-gray-200">
           <h3 class="text-sm font-semibold text-gray-600 mb-3 px-2">会社情報</h3>
+          <a
+            href="/services"
+            class="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-gray-200 flex items-center justify-center gap-2 mb-2"
+            aria-label="事業紹介を開く"
+          >
+            <i class="fas fa-briefcase"></i>
+            <span>事業紹介</span>
+          </a>
           <a
             href="/company"
             class="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-gray-200 flex items-center justify-center gap-2 mb-2"
@@ -6411,6 +6422,13 @@ app.get('/', (c) => {
             </a>
             <span class="text-gray-400">|</span>
             <a 
+              href="/services" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              事業紹介
+            </a>
+            <span class="text-gray-400">|</span>
+            <a 
               href="/company" 
               class="text-sm text-gray-600 hover:text-primary transition-colors"
             >
@@ -8225,6 +8243,13 @@ app.get('/about', (c) => {
             </a>
             <span class="text-gray-400">|</span>
             <a 
+              href="/services" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              事業紹介
+            </a>
+            <span class="text-gray-400">|</span>
+            <a 
               href="/company" 
               class="text-sm text-gray-600 hover:text-primary transition-colors"
             >
@@ -8631,6 +8656,303 @@ app.get('/privacy', (c) => {
     {
       title: 'プライバシーポリシー - Akagami.net',
       description: 'Akagami.netのプライバシーポリシーページです。'
+    }
+  )
+})
+
+// Services Page
+app.get('/services', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>事業紹介 - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <div class="flex min-h-screen">
+          <main class="flex-1 p-6 lg:ml-0">
+            <div class="max-w-5xl mx-auto">
+              {/* Page Header */}
+              <div class="mb-8">
+                <h1 class="text-3xl font-bold text-dark mb-2">
+                  <i class="fas fa-briefcase mr-3" style="color: #e75556;"></i>
+                  事業紹介
+                </h1>
+                <p class="text-gray-600">Our Services</p>
+              </div>
+
+              {/* Introduction */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+                <h2 class="text-2xl font-bold text-dark mb-4">弊社の事業紹介</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                  合同会社ジースリーは、SNSマーケティングと生成AI活用を軸に、企業や個人の成長を支援しています。
+                </p>
+                <div class="grid md:grid-cols-3 gap-4">
+                  <div class="bg-beige p-4 rounded-lg text-center">
+                    <i class="fas fa-chart-line text-3xl text-primary mb-2"></i>
+                    <h3 class="font-semibold text-dark">戦略設計コンサルティング</h3>
+                  </div>
+                  <div class="bg-beige p-4 rounded-lg text-center">
+                    <i class="fas fa-hands-helping text-3xl text-primary mb-2"></i>
+                    <h3 class="font-semibold text-dark">運用支援・伴走支援</h3>
+                  </div>
+                  <div class="bg-beige p-4 rounded-lg text-center">
+                    <i class="fas fa-graduation-cap text-3xl text-primary mb-2"></i>
+                    <h3 class="font-semibold text-dark">教育事業・講座</h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service 1 */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+                <div class="flex items-center mb-4">
+                  <span class="bg-primary text-white px-4 py-1 rounded-full text-sm font-semibold mr-3">01</span>
+                  <h2 class="text-2xl font-bold text-dark">SNS戦略設計コンサルティング</h2>
+                </div>
+                
+                <p class="text-gray-700 leading-relaxed mb-6 text-lg">
+                  SNSを頑張る前に、勝てる設計図を作ります。フォロワー数を増やすだけで終わらず、集客、売上、採用、ブランド作りまでを目的から逆算して設計します。
+                </p>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-user-check mr-2 text-primary"></i>
+                    こんな方におすすめ
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>発信しているのに問い合わせや売上につながらない</li>
+                    <li>何を投稿すればいいか毎回迷う</li>
+                    <li>SNSを頑張っているのに再現性がない</li>
+                    <li>スタッフやチームで運用したいが方針がバラバラ</li>
+                    <li>これからSNSを強化したいが、最短ルートで進めたい</li>
+                  </ul>
+                </div>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-clipboard-list mr-2 text-primary"></i>
+                    提供内容
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>目的設計とKPI設計（集客、採用、認知など）</li>
+                    <li>ターゲットと提供価値の言語化</li>
+                    <li>媒体選定（Instagram、YouTube、TikTok、Threadsなど）</li>
+                    <li>発信テーマ設計、投稿フォーマット設計</li>
+                    <li>プロフィール、導線、オファー設計</li>
+                    <li>投稿改善の基準づくり（何を見て何を直すか）</li>
+                  </ul>
+                </div>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-route mr-2 text-primary"></i>
+                    進め方
+                  </h3>
+                  <p class="text-gray-700 leading-relaxed">
+                    ヒアリングで現状と目的を整理し、戦略を設計します。作って終わりではなく、実行できる形に落とし込み、運用に移せる状態まで整えます。
+                  </p>
+                </div>
+
+                <div class="bg-beige p-6 rounded-lg">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-star mr-2 text-primary"></i>
+                    得られる成果
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>投稿の迷いが減り、発信が継続できる</li>
+                    <li>運用の判断基準ができ、ブレなくなる</li>
+                    <li>集客や売上につながる導線が整う</li>
+                    <li>チームで運用しても成果が再現しやすくなる</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Service 2 */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+                <div class="flex items-center mb-4">
+                  <span class="bg-primary text-white px-4 py-1 rounded-full text-sm font-semibold mr-3">02</span>
+                  <h2 class="text-2xl font-bold text-dark">SNS運用支援、伴走支援</h2>
+                </div>
+                
+                <p class="text-gray-700 leading-relaxed mb-6 text-lg">
+                  設計した戦略を、現場で回し切るための伴走支援です。投稿を増やすことが目的ではなく、検証と改善を繰り返して成果につなげます。外注丸投げではなく、クライアント側に運用力が残る形を重視します。
+                </p>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-user-check mr-2 text-primary"></i>
+                    こんな方におすすめ
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>戦略はあるが、実行と改善が止まりがち</li>
+                    <li>運用の相談相手がいなくて不安</li>
+                    <li>数字が伸びても、次に何をすればいいか分からない</li>
+                    <li>社内運用を強化したいが、育成の時間がない</li>
+                    <li>品質を落とさず、発信を仕組み化したい</li>
+                  </ul>
+                </div>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-clipboard-list mr-2 text-primary"></i>
+                    提供内容
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>月次、週次の運用設計とレビュー</li>
+                    <li>投稿企画の壁打ち、テーマ調整</li>
+                    <li>数値分析と改善提案（伸びた理由、伸びない理由の特定）</li>
+                    <li>プロフィール、導線の継続改善</li>
+                    <li>制作フロー整備（撮影、編集、投稿のルール化）</li>
+                    <li>チーム運用の役割分担設計、内製化支援</li>
+                  </ul>
+                </div>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-route mr-2 text-primary"></i>
+                    進め方
+                  </h3>
+                  <p class="text-gray-700 leading-relaxed">
+                    定期ミーティングとチャットで伴走し、運用の意思決定を早くします。感覚ではなく、目的とデータを見て改善する運用に変えていきます。
+                  </p>
+                </div>
+
+                <div class="bg-beige p-6 rounded-lg">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-star mr-2 text-primary"></i>
+                    得られる成果
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>投稿が止まらず、改善が回り続ける</li>
+                    <li>数字の上がり下がりに振り回されなくなる</li>
+                    <li>運用が属人化せず、チームで回せる</li>
+                    <li>発信が資産として積み上がる</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Service 3 */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+                <div class="flex items-center mb-4">
+                  <span class="bg-primary text-white px-4 py-1 rounded-full text-sm font-semibold mr-3">03</span>
+                  <h2 class="text-2xl font-bold text-dark">教育事業、アカデミー、講座</h2>
+                </div>
+                
+                <p class="text-gray-700 leading-relaxed mb-6 text-lg">
+                  SNSを仕事につなげたい方に向けて、基礎から実践までを体系化して学べる教育事業です。ネットが苦手な方でも理解できるように、やることをシンプルに分解し、行動に落とし込みます。
+                </p>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-user-check mr-2 text-primary"></i>
+                    こんな方におすすめ
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>SNSで集客したいが、自己流で伸びない</li>
+                    <li>何をどう学べばいいか分からない</li>
+                    <li>投稿の型や考え方を身につけたい</li>
+                    <li>モチベーションではなく、仕組みで継続したい</li>
+                    <li>将来的にSNSを収益化したい</li>
+                  </ul>
+                </div>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-clipboard-list mr-2 text-primary"></i>
+                    提供内容
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>SNSの基礎設計（ターゲット、強み、発信テーマ）</li>
+                    <li>投稿づくりの型（構成、企画、言語化）</li>
+                    <li>プロフィール、導線設計</li>
+                    <li>伸びた投稿の分析方法と改善手順</li>
+                    <li>ライブ講義、添削、グループサポート（形式は講座により変動）</li>
+                    <li>受講後も迷わない運用ルール作り</li>
+                  </ul>
+                </div>
+
+                <div class="mb-6">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-route mr-2 text-primary"></i>
+                    進め方
+                  </h3>
+                  <p class="text-gray-700 leading-relaxed">
+                    学んで終わりではなく、アウトプット前提で進めます。課題とフィードバックを通して、再現性のある運用力を身につけます。
+                  </p>
+                </div>
+
+                <div class="bg-beige p-6 rounded-lg">
+                  <h3 class="text-xl font-semibold text-dark mb-3 flex items-center">
+                    <i class="fas fa-star mr-2 text-primary"></i>
+                    得られる成果
+                  </h3>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>投稿の作り方が分かり、継続できる</li>
+                    <li>フォロワーが増えるだけでなく、信頼が積み上がる</li>
+                    <li>集客や仕事につながる発信ができる</li>
+                    <li>SNSを自分の武器として使えるようになる</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* CTA Section */}
+              <div class="bg-gradient-to-r from-primary to-red-400 rounded-lg shadow-lg p-8 text-center text-white mb-6">
+                <h2 class="text-2xl font-bold mb-4">まずはお気軽にご相談ください</h2>
+                <p class="mb-6 text-lg">
+                  貴社の課題や目標をお聞かせください。最適なプランをご提案いたします。
+                </p>
+                <a 
+                  href="/contact" 
+                  class="inline-block bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                >
+                  <i class="fas fa-envelope mr-2"></i>
+                  お問い合わせはこちら
+                </a>
+              </div>
+
+              {/* Back to Top Link */}
+              <div class="text-center mt-8">
+                <a href="/" class="inline-flex items-center text-primary hover:underline">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  トップページへ戻る
+                </a>
+              </div>
+            </div>
+          </main>
+          
+          {CommonSidebar()}
+        </div>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202601260520"></script>
+      </body>
+    </html>,
+    {
+      title: '事業紹介 - Akagami.net',
+      description: '合同会社ジースリーの事業紹介ページです。SNS戦略設計コンサルティング、運用支援、教育事業を提供しています。'
     }
   )
 })
