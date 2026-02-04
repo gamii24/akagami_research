@@ -1,30 +1,48 @@
-# Akagami Research
+# Akagami.net - SNSマーケティング・生成AI資料保管庫
 
 PDF資料をGoogleドライブのリンクで管理できる、シンプルで美しいデザインの資料管理システムです。
+**合同会社ジースリー**が運営する公式企業サイトとしても機能しています。
 
 **🎉 新機能: 会員制度実装！ログイン・履歴同期・メール通知機能を追加**
 
+## 🏢 会社情報
+
+- **会社名**: 合同会社ジースリー
+- **代表者**: 橋元幸菜
+- **資本金**: 100万円
+- **所在地**: 〒150-0013 東京都渋谷区恵比寿１－８－１４ 大黒ビル５１５
+- **メールアドレス**: mail@akagami.oops.jp
+- **事業内容**:
+  - SNSマーケティング支援
+  - 生成AI活用コンサルティング
+  - SNS運用代行サービス
+  - マーケティング教育・研修事業
+
 ## 🌐 公開URL
 
-- **本番環境**: https://d9c48023.akagami-research.pages.dev
-- **管理画面**: https://d9c48023.akagami-research.pages.dev/admin
-- **マイページ**: https://d9c48023.akagami-research.pages.dev/mypage
-- **カテゴリ一覧**: https://d9c48023.akagami-research.pages.dev/categories
+- **本番環境**: https://akagami.net
+- **会社概要**: https://akagami.net/company
+- **お問い合わせ**: https://akagami.net/contact
+- **プライバシーポリシー**: https://akagami.net/privacy
+- **管理画面**: https://akagami.net/admin
+- **マイページ**: https://akagami.net/mypage
+- **カテゴリ一覧**: https://akagami.net/categories
 - **📅 SNS運用カレンダー（全12ヶ月）**:
-  - [1月](https://d9c48023.akagami-research.pages.dev/calendar/1) | [2月](https://d9c48023.akagami-research.pages.dev/calendar/2) | [3月](https://d9c48023.akagami-research.pages.dev/calendar/3) | [4月](https://d9c48023.akagami-research.pages.dev/calendar/4) | [5月](https://d9c48023.akagami-research.pages.dev/calendar/5) | [6月](https://d9c48023.akagami-research.pages.dev/calendar/6)
-  - [7月](https://d9c48023.akagami-research.pages.dev/calendar/7) | [8月](https://d9c48023.akagami-research.pages.dev/calendar/8) | [9月](https://d9c48023.akagami-research.pages.dev/calendar/9) | [10月](https://d9c48023.akagami-research.pages.dev/calendar/10) | [11月](https://d9c48023.akagami-research.pages.dev/calendar/11) | [12月](https://d9c48023.akagami-research.pages.dev/calendar/12)
+  - [1月](https://akagami.net/calendar/1) | [2月](https://akagami.net/calendar/2) | [3月](https://akagami.net/calendar/3) | [4月](https://akagami.net/calendar/4) | [5月](https://akagami.net/calendar/5) | [6月](https://akagami.net/calendar/6)
+  - [7月](https://akagami.net/calendar/7) | [8月](https://akagami.net/calendar/8) | [9月](https://akagami.net/calendar/9) | [10月](https://akagami.net/calendar/10) | [11月](https://akagami.net/calendar/11) | [12月](https://akagami.net/calendar/12)
 - **GitHub**: https://github.com/gamii24/akagami_research
-- **プロジェクト名**: akagami-research
+- **プロジェクト名**: akagami-net
 - **プラットフォーム**: Cloudflare Pages
-- **デプロイ状態**: ✅ Active (2026-01-14 11:56 UTC)
-- **最終更新**: 2026-01-14 - 🎨 ハンバーガーメニューUI改善（ユーザー情報ヘッダー削除）
+- **デプロイ状態**: ✅ Active
+- **最終更新**: 2026-01-26 - 🏢 会社情報ページ追加（/company, /contact, /privacy）
 
 ## 🎯 プロジェクト概要
 
-- **サイト名**: Akagami Research
+- **サイト名**: Akagami.net
 - **目的**: SNSマーケティング・生成AI関連のPDF資料を整理して管理
 - **デザイン**: 白と赤（#e75556）の2色デザイン
 - **技術スタック**: Hono + TypeScript + Cloudflare D1 + TailwindCSS + Google Analytics
+- **運営**: 合同会社ジースリー
 
 ## 📅 SNS運用カレンダー（NEW！2026-01-14）
 
@@ -646,6 +664,11 @@ SNSシェアの最適化：
   - Google Analyticsダッシュボードへの直接リンク
 
 ### 公開ページ（`/`）
+- ✅ **会社情報ページ**
+  - `/company` - 会社概要（会社名、代表者、資本金、所在地、事業内容）
+  - `/contact` - お問い合わせ（メール、所在地、営業時間）
+  - `/privacy` - プライバシーポリシー（個人情報保護方針）
+  - ヘッダーナビゲーション、サイドバー、フッターからアクセス可能
 - ✅ シンプルで美しい2色デザイン
 - ✅ **ダークモード対応**（フッター上・ハンバーガーメニューから切り替え可能）
 - ✅ カテゴリでフィルタリング（11カテゴリ、PDF数の多い順に自動ソート）
