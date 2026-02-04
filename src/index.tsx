@@ -57,6 +57,23 @@ function CommonHeader() {
                 Akagami.net
               </h1>
             </a>
+            
+            {/* Desktop Navigation */}
+            <nav class="hidden lg:flex items-center gap-6">
+              <a href="/" class="text-white hover:text-red-100 transition-colors font-medium">
+                資料
+              </a>
+              <a href="/company" class="text-white hover:text-red-100 transition-colors font-medium">
+                会社概要
+              </a>
+              <a href="/contact" class="text-white hover:text-red-100 transition-colors font-medium">
+                お問い合わせ
+              </a>
+              <a href="/privacy" class="text-white hover:text-red-100 transition-colors font-medium">
+                プライバシーポリシー
+              </a>
+            </nav>
+            
             {/* Mobile Menu Button */}
             <button 
               onclick="toggleMobileMenu()"
@@ -150,11 +167,40 @@ function CommonSidebar() {
           </a>
           <a
             href="/sns-faq"
-            class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2"
+            class="w-full px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-purple-200 flex items-center justify-center gap-2 mb-3"
             aria-label="SNSの疑問を開く"
           >
             <i class="fas fa-question-circle"></i>
             <span>SNSの疑問</span>
+          </a>
+        </div>
+
+        {/* Company Information Section */}
+        <div class="mb-6 pt-6 border-t border-gray-200">
+          <h3 class="text-sm font-semibold text-gray-600 mb-3 px-2">会社情報</h3>
+          <a
+            href="/company"
+            class="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-gray-200 flex items-center justify-center gap-2 mb-2"
+            aria-label="会社概要を開く"
+          >
+            <i class="fas fa-building"></i>
+            <span>会社概要</span>
+          </a>
+          <a
+            href="/contact"
+            class="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-gray-200 flex items-center justify-center gap-2 mb-2"
+            aria-label="お問い合わせを開く"
+          >
+            <i class="fas fa-envelope"></i>
+            <span>お問い合わせ</span>
+          </a>
+          <a
+            href="/privacy"
+            class="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-gray-200 flex items-center justify-center gap-2"
+            aria-label="プライバシーポリシーを開く"
+          >
+            <i class="fas fa-shield-alt"></i>
+            <span>プライバシーポリシー</span>
           </a>
         </div>
 
@@ -6355,17 +6401,39 @@ app.get('/', (c) => {
             </a>
           </div>
           
-          {/* About Link */}
-          <div class="flex justify-center mb-4">
+          {/* About and Company Links */}
+          <div class="flex justify-center gap-6 mb-4">
             <a 
               href="/about" 
               class="text-sm text-gray-600 hover:text-primary transition-colors"
             >
               自己紹介
             </a>
+            <span class="text-gray-400">|</span>
+            <a 
+              href="/company" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              会社概要
+            </a>
+            <span class="text-gray-400">|</span>
+            <a 
+              href="/contact" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              お問い合わせ
+            </a>
+            <span class="text-gray-400">|</span>
+            <a 
+              href="/privacy" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              プライバシーポリシー
+            </a>
           </div>
           
-          <p class="text-sm text-gray-500 text-center">&copy; 2026 Akagami.net. All rights reserved.</p>
+          <p class="text-sm text-gray-500 text-center mb-1">&copy; 2026 Akagami.net. All rights reserved.</p>
+          <p class="text-xs text-gray-400 text-center">運営：合同会社ジースリー</p>
           
           {/* Admin link - Desktop only, subtle */}
           <div class="hidden lg:block fixed bottom-4 right-4">
@@ -8147,17 +8215,39 @@ app.get('/about', (c) => {
             </a>
           </div>
           
-          {/* About Link */}
-          <div class="flex justify-center mb-4">
+          {/* About and Company Links */}
+          <div class="flex justify-center gap-6 mb-4">
             <a 
               href="/about" 
               class="text-sm text-gray-600 hover:text-primary transition-colors"
             >
               自己紹介
             </a>
+            <span class="text-gray-400">|</span>
+            <a 
+              href="/company" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              会社概要
+            </a>
+            <span class="text-gray-400">|</span>
+            <a 
+              href="/contact" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              お問い合わせ
+            </a>
+            <span class="text-gray-400">|</span>
+            <a 
+              href="/privacy" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              プライバシーポリシー
+            </a>
           </div>
           
-          <p class="text-sm text-gray-500 text-center">&copy; 2026 Akagami.net. All rights reserved.</p>
+          <p class="text-sm text-gray-500 text-center mb-1">&copy; 2026 Akagami.net. All rights reserved.</p>
+          <p class="text-xs text-gray-400 text-center">運営：合同会社ジースリー</p>
           
           {/* Admin link - Desktop only, subtle */}
           <div class="hidden lg:block fixed bottom-4 right-4">
@@ -8175,6 +8265,372 @@ app.get('/about', (c) => {
     {
       title: '自己紹介 - Akagami.net',
       description: 'Akagami.netの運営者自己紹介ページです。'
+    }
+  )
+})
+
+// Company Information Page
+app.get('/company', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>会社概要 - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <div class="flex min-h-screen">
+          <main class="flex-1 p-6 lg:ml-0">
+            <div class="max-w-4xl mx-auto">
+              {/* Page Header */}
+              <div class="mb-8">
+                <h1 class="text-3xl font-bold text-dark mb-2">
+                  <i class="fas fa-building mr-3" style="color: #e75556;"></i>
+                  会社概要
+                </h1>
+                <p class="text-gray-600">Company Information</p>
+              </div>
+
+              {/* Company Information Card */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+                <table class="w-full">
+                  <tbody>
+                    <tr class="border-b border-gray-200">
+                      <th class="text-left py-4 pr-6 text-gray-700 font-semibold w-1/4">会社名</th>
+                      <td class="py-4 text-gray-800">合同会社ジースリー</td>
+                    </tr>
+                    <tr class="border-b border-gray-200">
+                      <th class="text-left py-4 pr-6 text-gray-700 font-semibold">代表者</th>
+                      <td class="py-4 text-gray-800">橋元幸菜</td>
+                    </tr>
+                    <tr class="border-b border-gray-200">
+                      <th class="text-left py-4 pr-6 text-gray-700 font-semibold">資本金</th>
+                      <td class="py-4 text-gray-800">100万円</td>
+                    </tr>
+                    <tr class="border-b border-gray-200">
+                      <th class="text-left py-4 pr-6 text-gray-700 font-semibold">所在地</th>
+                      <td class="py-4 text-gray-800">
+                        〒150-0013<br />
+                        東京都渋谷区恵比寿１－８－１４ 大黒ビル５１５
+                      </td>
+                    </tr>
+                    <tr class="border-b border-gray-200">
+                      <th class="text-left py-4 pr-6 text-gray-700 font-semibold">メールアドレス</th>
+                      <td class="py-4 text-gray-800">
+                        <a href="mailto:mail@akagami.oops.jp" class="text-primary hover:underline">
+                          mail@akagami.oops.jp
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th class="text-left py-4 pr-6 text-gray-700 font-semibold align-top">事業内容</th>
+                      <td class="py-4 text-gray-800">
+                        <ul class="list-disc list-inside space-y-1">
+                          <li>SNSマーケティング支援</li>
+                          <li>生成AI活用コンサルティング</li>
+                          <li>SNS運用代行サービス</li>
+                          <li>マーケティング教育・研修事業</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Back to Top Link */}
+              <div class="text-center mt-8">
+                <a href="/" class="inline-flex items-center text-primary hover:underline">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  トップページへ戻る
+                </a>
+              </div>
+            </div>
+          </main>
+          
+          {CommonSidebar()}
+        </div>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202601260520"></script>
+      </body>
+    </html>,
+    {
+      title: '会社概要 - Akagami.net',
+      description: '合同会社ジースリーの会社概要ページです。'
+    }
+  )
+})
+
+// Contact Page
+app.get('/contact', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>お問い合わせ - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <div class="flex min-h-screen">
+          <main class="flex-1 p-6 lg:ml-0">
+            <div class="max-w-4xl mx-auto">
+              {/* Page Header */}
+              <div class="mb-8">
+                <h1 class="text-3xl font-bold text-dark mb-2">
+                  <i class="fas fa-envelope mr-3" style="color: #e75556;"></i>
+                  お問い合わせ
+                </h1>
+                <p class="text-gray-600">Contact Us</p>
+              </div>
+
+              {/* Contact Information Card */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+                <div class="mb-6">
+                  <h2 class="text-xl font-semibold text-dark mb-4">
+                    <i class="fas fa-phone mr-2 text-primary"></i>
+                    お問い合わせ方法
+                  </h2>
+                  <p class="text-gray-700 mb-4">
+                    サービスに関するご質問、ご相談など、お気軽にお問い合わせください。
+                  </p>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="flex items-start p-4 bg-beige rounded-lg">
+                    <i class="fas fa-envelope text-primary text-xl mr-4 mt-1"></i>
+                    <div>
+                      <h3 class="font-semibold text-dark mb-1">メールでのお問い合わせ</h3>
+                      <p class="text-gray-700 mb-2">
+                        以下のメールアドレスまでお問い合わせください。<br />
+                        担当者より2営業日以内にご返信いたします。
+                      </p>
+                      <a href="mailto:mail@akagami.oops.jp" class="text-primary hover:underline font-semibold">
+                        mail@akagami.oops.jp
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start p-4 bg-beige rounded-lg">
+                    <i class="fas fa-map-marker-alt text-primary text-xl mr-4 mt-1"></i>
+                    <div>
+                      <h3 class="font-semibold text-dark mb-1">所在地</h3>
+                      <p class="text-gray-700">
+                        〒150-0013<br />
+                        東京都渋谷区恵比寿１－８－１４ 大黒ビル５１５<br />
+                        合同会社ジースリー
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start p-4 bg-beige rounded-lg">
+                    <i class="fas fa-clock text-primary text-xl mr-4 mt-1"></i>
+                    <div>
+                      <h3 class="font-semibold text-dark mb-1">営業時間</h3>
+                      <p class="text-gray-700">
+                        平日 10:00 - 18:00<br />
+                        土日祝日は休業
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Back to Top Link */}
+              <div class="text-center mt-8">
+                <a href="/" class="inline-flex items-center text-primary hover:underline">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  トップページへ戻る
+                </a>
+              </div>
+            </div>
+          </main>
+          
+          {CommonSidebar()}
+        </div>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202601260520"></script>
+      </body>
+    </html>,
+    {
+      title: 'お問い合わせ - Akagami.net',
+      description: '合同会社ジースリーへのお問い合わせページです。'
+    }
+  )
+})
+
+// Privacy Policy Page
+app.get('/privacy', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>プライバシーポリシー - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <div class="flex min-h-screen">
+          <main class="flex-1 p-6 lg:ml-0">
+            <div class="max-w-4xl mx-auto">
+              {/* Page Header */}
+              <div class="mb-8">
+                <h1 class="text-3xl font-bold text-dark mb-2">
+                  <i class="fas fa-shield-alt mr-3" style="color: #e75556;"></i>
+                  プライバシーポリシー
+                </h1>
+                <p class="text-gray-600">Privacy Policy</p>
+              </div>
+
+              {/* Privacy Policy Content */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6 space-y-6">
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">1. 個人情報の収集</h2>
+                  <p class="text-gray-700">
+                    当社は、サービスの提供にあたり、お客様の氏名、メールアドレス、その他必要な個人情報を収集させていただく場合があります。
+                  </p>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">2. 個人情報の利用目的</h2>
+                  <p class="text-gray-700 mb-2">収集した個人情報は、以下の目的で利用いたします。</p>
+                  <ul class="list-disc list-inside text-gray-700 space-y-1 ml-4">
+                    <li>サービスの提供、運営、改善のため</li>
+                    <li>お客様からのお問い合わせへの対応のため</li>
+                    <li>サービスに関する重要なお知らせの配信のため</li>
+                    <li>利用規約違反の対応のため</li>
+                  </ul>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">3. 個人情報の第三者提供</h2>
+                  <p class="text-gray-700">
+                    当社は、お客様の同意を得ずに、個人情報を第三者に提供することはありません。ただし、法令に基づく場合を除きます。
+                  </p>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">4. 個人情報の管理</h2>
+                  <p class="text-gray-700">
+                    当社は、お客様の個人情報を適切に管理し、不正アクセス、紛失、破損、改ざん、漏洩などを防止するため、必要な措置を講じます。
+                  </p>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">5. Cookieの使用</h2>
+                  <p class="text-gray-700">
+                    当サイトでは、サービスの利便性向上のためCookieを使用しています。Cookieの使用を希望されない場合は、ブラウザの設定で無効にすることができます。
+                  </p>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">6. プライバシーポリシーの変更</h2>
+                  <p class="text-gray-700">
+                    当社は、必要に応じて本プライバシーポリシーを変更することがあります。変更後のプライバシーポリシーは、当サイトに掲載した時点から効力を生じるものとします。
+                  </p>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">7. お問い合わせ</h2>
+                  <p class="text-gray-700 mb-2">
+                    個人情報の取り扱いに関するお問い合わせは、以下までご連絡ください。
+                  </p>
+                  <p class="text-gray-700">
+                    <strong>合同会社ジースリー</strong><br />
+                    メール: <a href="mailto:mail@akagami.oops.jp" class="text-primary hover:underline">mail@akagami.oops.jp</a>
+                  </p>
+                </section>
+
+                <div class="text-right text-gray-600 text-sm mt-8 pt-4 border-t border-gray-200">
+                  制定日：2026年1月26日
+                </div>
+              </div>
+
+              {/* Back to Top Link */}
+              <div class="text-center mt-8">
+                <a href="/" class="inline-flex items-center text-primary hover:underline">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  トップページへ戻る
+                </a>
+              </div>
+            </div>
+          </main>
+          
+          {CommonSidebar()}
+        </div>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202601260520"></script>
+      </body>
+    </html>,
+    {
+      title: 'プライバシーポリシー - Akagami.net',
+      description: 'Akagami.netのプライバシーポリシーページです。'
     }
   )
 })
