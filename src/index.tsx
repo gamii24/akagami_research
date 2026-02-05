@@ -6382,6 +6382,18 @@ app.get('/', (c) => {
                 <p class="text-lg">読み込み中...</p>
               </div>
             </div>
+            
+            {/* "View More" Button - Show only on desktop top page */}
+            <div class="hidden lg:flex justify-end mt-6">
+              <a 
+                href="/categories"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors font-semibold shadow-md hover:shadow-lg"
+                aria-label="ほかの資料をみる"
+              >
+                <span>ほかの資料をみる</span>
+                <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
           </div>
 
           {/* Sidebar - Show second on mobile (below cards) */}

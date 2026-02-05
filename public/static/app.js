@@ -1224,9 +1224,9 @@ function renderPDFList() {
     hasMore = true
   }
   
-  // On desktop top page, limit to 20 cards (4 columns × 5 rows) unless "show all" is clicked
-  if (!isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 20) {
-    itemsToShow = combinedItems.slice(0, 20)
+  // On desktop top page, limit to 24 cards (4 columns × 6 rows) unless "show all" is clicked
+  if (!isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 24) {
+    itemsToShow = combinedItems.slice(0, 24)
     hasMore = true
   }
   
