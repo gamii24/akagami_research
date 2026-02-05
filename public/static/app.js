@@ -1053,6 +1053,9 @@ function showSkeletonScreen() {
 }
 
 function renderPDFList() {
+  const timestamp = new Date().toISOString().split('T')[1].slice(0, 12)
+  console.log(`🔄 [${timestamp}] renderPDFList() called`)
+  
   const container = document.getElementById('pdf-list')
   if (!container) return
   
@@ -1495,6 +1498,9 @@ function renderPDFList() {
   }
   
   container.innerHTML = html
+  
+  const timestamp = new Date().toISOString().split('T')[1].slice(0, 12)
+  console.log(`✅ [${timestamp}] Rendered ${itemsToShow.length} cards (PDF list updated)`)
   
   // Re-observe images after rendering
   setTimeout(() => {
