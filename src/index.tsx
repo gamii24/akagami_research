@@ -8463,19 +8463,19 @@ app.get('/company', (c) => {
                 {/* Profile Photos - 3 images in a row */}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <img 
-                    src="https://drive.google.com/thumbnail?id=1wMF_jP4_ROQVLSQYIamUc19dQFC_Zp45&sz=w800"
+                    src="https://drive.google.com/thumbnail?id=1qerLZ60jIle-RHonzGMxYPWPfITjwZYG&sz=w800"
                     alt="赤髪プロフィール写真1"
                     class="w-full rounded-lg shadow-lg"
                     loading="lazy"
                   />
                   <img 
-                    src="https://drive.google.com/thumbnail?id=1-Fdj7WOoU_2zNv0ZI1PEOVr7Q8iIr6fC&sz=w800"
+                    src="https://drive.google.com/thumbnail?id=1qe_ucbXxqnBtYzSRmwJNYQobPM-nghu9&sz=w800"
                     alt="赤髪プロフィール写真2"
                     class="w-full rounded-lg shadow-lg"
                     loading="lazy"
                   />
                   <img 
-                    src="https://drive.google.com/thumbnail?id=1JygfZLmaN3ldZ7gEJLbfpbdTbkCMHSeS&sz=w800"
+                    src="https://drive.google.com/thumbnail?id=1mogQknhQ1abeoKGdbyu_PnmA1PmJX09z&sz=w800"
                     alt="赤髪プロフィール写真3"
                     class="w-full rounded-lg shadow-lg"
                     loading="lazy"
