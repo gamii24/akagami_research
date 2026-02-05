@@ -62,7 +62,7 @@ function CommonHeader() {
             {/* Desktop Navigation */}
             <nav class="hidden lg:flex items-center gap-6">
               <a href="/" class="text-white hover:text-red-100 transition-colors font-medium">
-                資料
+                TOP
               </a>
               <a href="/announcements" class="text-white hover:text-red-100 transition-colors font-medium">
                 お知らせ
