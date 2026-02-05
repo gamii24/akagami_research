@@ -256,6 +256,44 @@ function CommonSidebar() {
 }
 
 /**
+ * Company Pages Sub Navigation Component
+ * Horizontal scroll menu for company-related pages
+ */
+function CompanySubNav(currentPage: string) {
+  const pages = [
+    { path: '/announcements', label: 'お知らせ', icon: 'fas fa-bullhorn' },
+    { path: '/services', label: '事業紹介', icon: 'fas fa-briefcase' },
+    { path: '/speaking', label: '講演実績', icon: 'fas fa-microphone-alt' },
+    { path: '/company', label: '会社概要', icon: 'fas fa-building' },
+    { path: '/contact', label: 'お問い合わせ', icon: 'fas fa-envelope' }
+  ]
+  
+  return (
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 py-3">
+        <div class="overflow-x-auto scrollbar-hide">
+          <div class="flex gap-2 min-w-max">
+            {pages.map(page => (
+              <a
+                href={page.path}
+                class={`px-4 py-2 rounded-lg transition-colors font-medium text-sm whitespace-nowrap flex items-center gap-2 ${
+                  currentPage === page.path
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <i class={page.icon}></i>
+                <span>{page.label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
  * Common Footer Component
  */
 function CommonFooter() {
@@ -8688,6 +8726,7 @@ app.get('/company', (c) => {
       </head>
       <body class="bg-beige">
         {CommonHeader(c)}
+        {CompanySubNav('/company')}
         
         <main class="p-6">
           <div class="max-w-4xl mx-auto">
@@ -8942,6 +8981,7 @@ app.get('/contact', (c) => {
       </head>
       <body class="bg-beige">
         {CommonHeader(c)}
+        {CompanySubNav('/contact')}
         
         <main class="p-6">
           <div class="max-w-4xl mx-auto">
@@ -9394,6 +9434,7 @@ app.get('/services', (c) => {
       </head>
       <body class="bg-beige">
         {CommonHeader(c)}
+        {CompanySubNav('/services')}
         
         <main class="p-6">
           <div class="max-w-5xl mx-auto">
@@ -9689,6 +9730,7 @@ app.get('/speaking', (c) => {
       </head>
       <body class="bg-beige">
         {CommonHeader(c)}
+        {CompanySubNav('/speaking')}
         
         <main class="p-6">
           <div class="max-w-5xl mx-auto">
@@ -9908,6 +9950,7 @@ app.get('/announcements', async (c) => {
       </head>
       <body class="bg-beige">
         {CommonHeader(c)}
+        {CompanySubNav('/announcements')}
         
         <main class="p-6">
           <div class="max-w-4xl mx-auto">
