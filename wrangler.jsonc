@@ -12,12 +12,6 @@
       "database_name": "akagami-research-production",
       "database_id": "c5d4dce7-e94e-489a-880f-36e6056f74c6"
     }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "R2_IMAGES",
-      "bucket_name": "akagami-net-images"
-    }
   ]
   // Note: Environment variables (JWT_SECRET, ADMIN_PASSWORD, RESEND_API_KEY) are configured in:
   // - Local development: .dev.vars file

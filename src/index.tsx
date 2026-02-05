@@ -8984,31 +8984,17 @@ app.get('/announcements', async (c) => {
     ORDER BY announcement_date DESC, created_at DESC
   `).all();
 
-  // Helper function to process content with Twitter embeds and images
+  // Helper function to process content - convert URLs to clickable links
   function processContent(content: string) {
-    const twitterUrlPattern = /https?:\/\/(twitter\.com|x\.com)\/[^\s\/]+\/status\/\d+/g;
-    const imageUrlPattern = /https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)(?:\?[^\s]*)?/gi;
-    
+    // Convert all URLs to clickable links
+    const urlPattern = /https?:\/\/[^\s<]+/g;
     let processedContent = content;
     
-    // First, replace Twitter URLs with embed code
-    const twitterUrls = content.match(twitterUrlPattern);
-    if (twitterUrls) {
-      twitterUrls.forEach(url => {
-        const embedCode = `<blockquote class="twitter-tweet" data-width="550" data-dnt="true"><a href="${url}"></a></blockquote>`;
-        processedContent = processedContent.replace(url, embedCode);
-      });
-    }
-    
-    // Then, replace image URLs with img tags
-    const imageUrls = processedContent.match(imageUrlPattern);
-    if (imageUrls) {
-      imageUrls.forEach(url => {
-        // Skip if already inside an img tag or Twitter embed
-        if (!processedContent.includes(`src="${url}"`)) {
-          const imgTag = `<img src="${url}" alt="お知らせ画像" class="max-w-full h-auto rounded-lg shadow-md my-4" loading="lazy" />`;
-          processedContent = processedContent.replace(url, imgTag);
-        }
+    const urls = content.match(urlPattern);
+    if (urls) {
+      urls.forEach(url => {
+        const linkTag = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">${url}</a>`;
+        processedContent = processedContent.replace(url, linkTag);
       });
     }
     
@@ -9095,25 +9081,6 @@ app.get('/announcements', async (c) => {
           
           {CommonSidebar()}
         </div>
-
-        {/* Twitter Widget Script */}
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        
-        {/* Twitter Widget Loader */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            // Wait for Twitter widgets to load
-            if (window.twttr) {
-              window.twttr.widgets.load();
-            } else {
-              window.addEventListener('load', function() {
-                if (window.twttr && window.twttr.widgets) {
-                  window.twttr.widgets.load();
-                }
-              });
-            }
-          `
-        }} />
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
@@ -9300,35 +9267,14 @@ app.get('/admin/announcements', (c) => {
                     内容 <span style="color: #ef4444;">*</span>
                   </label>
                   <p class="text-xs mb-2" style="color: #9ca3af;">
-                    <i class="fab fa-twitter" style="color: #1da1f2;"></i> X/TwitterのURLを貼り付けると、投稿が埋め込まれて表示されます<br />
-                    <i class="fas fa-image" style="color: #10b981;"></i> 画像のURL（.jpg, .png, .gif, .webp）を貼り付けると、画像が表示されます
+                    <i class="fas fa-link" style="color: #3b82f6;"></i> URLを貼り付けると、クリック可能なリンクになります
                   </p>
-                  
-                  {/* Image Upload Section */}
-                  <div class="mb-3 p-3 rounded-lg" style="background-color: #2d2d2d; border: 1px solid #404040;">
-                    <div class="flex items-center gap-3">
-                      <input type="file" 
-                             id="image-upload-input" 
-                             accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
-                             class="flex-1 text-sm"
-                             style="color: #9ca3af;" />
-                      <button type="button"
-                              id="upload-image-btn"
-                              class="px-4 py-2 rounded-lg transition-colors"
-                              style="background-color: #10b981; color: white; font-weight: 500;">
-                        <i class="fas fa-upload"></i> アップロード
-                      </button>
-                    </div>
-                    <p class="text-xs mt-2" style="color: #6b7280;">
-                      <i class="fas fa-info-circle"></i> 画像をアップロードすると、URLが自動的に内容欄に追加されます（最大5MB）
-                    </p>
-                  </div>
                   
                   <textarea id="announcement-content" 
                             rows="8"
                             class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
                             style="background-color: #1a1a1a; border-color: #404040; color: #f3f4f6;"
-                            placeholder="お知らせの内容を入力&#10;&#10;例：新しいサービスを開始しました！&#10;https://x.com/username/status/123456789&#10;&#10;画像URL：https://example.com/image.jpg"
+                            placeholder="お知らせの内容を入力&#10;&#10;例：新しいサービスを開始しました！&#10;詳細はこちら：https://example.com&#10;&#10;画像はGoogleドライブにアップロードして、リンクを貼り付けてください。"
                             required></textarea>
                 </div>
 
@@ -9381,81 +9327,6 @@ app.get('/admin/announcements', (c) => {
       </body>
     </html>
   )
-})
-
-// API: Upload image to R2
-app.post('/api/announcements/upload-image', async (c) => {
-  const { env } = c;
-  
-  try {
-    const formData = await c.req.formData();
-    const file = formData.get('image') as File;
-    
-    if (!file) {
-      return c.json({ error: 'No file uploaded' }, 400);
-    }
-    
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
-    if (!allowedTypes.includes(file.type)) {
-      return c.json({ error: 'Invalid file type. Only JPG, PNG, GIF, WebP, and SVG are allowed.' }, 400);
-    }
-    
-    // Validate file size (max 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSize) {
-      return c.json({ error: 'File size too large. Maximum size is 5MB.' }, 400);
-    }
-    
-    // Generate unique filename
-    const timestamp = Date.now();
-    const randomStr = Math.random().toString(36).substring(2, 8);
-    const fileExtension = file.name.split('.').pop();
-    const fileName = `announcements/${timestamp}-${randomStr}.${fileExtension}`;
-    
-    // Upload to R2
-    const arrayBuffer = await file.arrayBuffer();
-    await env.R2_IMAGES.put(fileName, arrayBuffer, {
-      httpMetadata: {
-        contentType: file.type
-      }
-    });
-    
-    // Return public URL (served through our API)
-    const publicUrl = `https://akagami.net/api/images/${fileName}`;
-    
-    return c.json({ 
-      success: true, 
-      url: publicUrl,
-      fileName: fileName
-    });
-  } catch (error) {
-    console.error('Image upload error:', error);
-    return c.json({ error: 'Failed to upload image' }, 500);
-  }
-})
-
-// API: Serve image from R2
-app.get('/api/images/:path{.+}', async (c) => {
-  const { env } = c;
-  const path = c.req.param('path');
-  
-  try {
-    const object = await env.R2_IMAGES.get(path);
-    
-    if (!object) {
-      return c.notFound();
-    }
-    
-    // Set cache headers
-    c.header('Cache-Control', 'public, max-age=31536000, immutable');
-    c.header('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream');
-    
-    return c.body(object.body);
-  } catch (error) {
-    console.error('Image serve error:', error);
-    return c.json({ error: 'Failed to serve image' }, 500);
-  }
 })
 
 // Instagram FAQ Admin Page
