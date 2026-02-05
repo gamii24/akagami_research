@@ -9303,6 +9303,28 @@ app.get('/admin/announcements', (c) => {
                     <i class="fab fa-twitter" style="color: #1da1f2;"></i> X/TwitterのURLを貼り付けると、投稿が埋め込まれて表示されます<br />
                     <i class="fas fa-image" style="color: #10b981;"></i> 画像のURL（.jpg, .png, .gif, .webp）を貼り付けると、画像が表示されます
                   </p>
+                  
+                  {/* Image Upload Section */}
+                  <div class="mb-3 p-3 rounded-lg" style="background-color: #2d2d2d; border: 1px solid #404040;">
+                    <div class="flex items-center gap-3">
+                      <input type="file" 
+                             id="image-upload-input" 
+                             accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                             class="flex-1 text-sm"
+                             style="color: #9ca3af;" />
+                      <button type="button"
+                              id="upload-image-btn"
+                              onclick="uploadImage()"
+                              class="px-4 py-2 rounded-lg transition-colors"
+                              style="background-color: #10b981; color: white; font-weight: 500;">
+                        <i class="fas fa-upload"></i> アップロード
+                      </button>
+                    </div>
+                    <p class="text-xs mt-2" style="color: #6b7280;">
+                      <i class="fas fa-info-circle"></i> 画像をアップロードすると、URLが自動的に内容欄に追加されます（最大5MB）
+                    </p>
+                  </div>
+                  
                   <textarea id="announcement-content" 
                             rows="8"
                             class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
@@ -9360,6 +9382,81 @@ app.get('/admin/announcements', (c) => {
       </body>
     </html>
   )
+})
+
+// API: Upload image to R2
+app.post('/api/announcements/upload-image', async (c) => {
+  const { env } = c;
+  
+  try {
+    const formData = await c.req.formData();
+    const file = formData.get('image') as File;
+    
+    if (!file) {
+      return c.json({ error: 'No file uploaded' }, 400);
+    }
+    
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+    if (!allowedTypes.includes(file.type)) {
+      return c.json({ error: 'Invalid file type. Only JPG, PNG, GIF, WebP, and SVG are allowed.' }, 400);
+    }
+    
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      return c.json({ error: 'File size too large. Maximum size is 5MB.' }, 400);
+    }
+    
+    // Generate unique filename
+    const timestamp = Date.now();
+    const randomStr = Math.random().toString(36).substring(2, 8);
+    const fileExtension = file.name.split('.').pop();
+    const fileName = `announcements/${timestamp}-${randomStr}.${fileExtension}`;
+    
+    // Upload to R2
+    const arrayBuffer = await file.arrayBuffer();
+    await env.R2_IMAGES.put(fileName, arrayBuffer, {
+      httpMetadata: {
+        contentType: file.type
+      }
+    });
+    
+    // Return public URL (served through our API)
+    const publicUrl = `https://akagami.net/api/images/${fileName}`;
+    
+    return c.json({ 
+      success: true, 
+      url: publicUrl,
+      fileName: fileName
+    });
+  } catch (error) {
+    console.error('Image upload error:', error);
+    return c.json({ error: 'Failed to upload image' }, 500);
+  }
+})
+
+// API: Serve image from R2
+app.get('/api/images/:path{.+}', async (c) => {
+  const { env } = c;
+  const path = c.req.param('path');
+  
+  try {
+    const object = await env.R2_IMAGES.get(path);
+    
+    if (!object) {
+      return c.notFound();
+    }
+    
+    // Set cache headers
+    c.header('Cache-Control', 'public, max-age=31536000, immutable');
+    c.header('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream');
+    
+    return c.body(object.body);
+  } catch (error) {
+    console.error('Image serve error:', error);
+    return c.json({ error: 'Failed to serve image' }, 500);
+  }
 })
 
 // Instagram FAQ Admin Page

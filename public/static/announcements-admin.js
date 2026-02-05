@@ -174,6 +174,78 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+// Upload image
+async function uploadImage() {
+  const fileInput = document.getElementById('image-upload-input');
+  const file = fileInput.files[0];
+  
+  if (!file) {
+    alert('画像ファイルを選択してください');
+    return;
+  }
+  
+  // Validate file type
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+  if (!allowedTypes.includes(file.type)) {
+    alert('JPG, PNG, GIF, WebP, SVG形式のファイルのみアップロード可能です');
+    return;
+  }
+  
+  // Validate file size (max 5MB)
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) {
+    alert('ファイルサイズは5MB以下にしてください');
+    return;
+  }
+  
+  try {
+    // Show loading state
+    const uploadBtn = document.getElementById('upload-image-btn');
+    const originalText = uploadBtn.innerHTML;
+    uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> アップロード中...';
+    uploadBtn.disabled = true;
+    
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    const response = await fetch('/api/announcements/upload-image', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      // Insert image URL into content textarea
+      const contentTextarea = document.getElementById('announcement-content');
+      const currentContent = contentTextarea.value;
+      const imageUrl = data.url;
+      
+      // Add image URL with line breaks
+      contentTextarea.value = currentContent + (currentContent ? '\n\n' : '') + imageUrl;
+      
+      // Clear file input
+      fileInput.value = '';
+      
+      alert('画像をアップロードしました！URLが内容欄に追加されました。');
+    } else {
+      alert('アップロード失敗: ' + (data.error || '不明なエラー'));
+    }
+    
+    // Restore button state
+    uploadBtn.innerHTML = originalText;
+    uploadBtn.disabled = false;
+  } catch (error) {
+    console.error('アップロードエラー:', error);
+    alert('画像のアップロードに失敗しました');
+    
+    // Restore button state
+    const uploadBtn = document.getElementById('upload-image-btn');
+    uploadBtn.innerHTML = '<i class="fas fa-upload"></i> アップロード';
+    uploadBtn.disabled = false;
+  }
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   loadAnnouncements();
