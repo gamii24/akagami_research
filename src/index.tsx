@@ -8970,14 +8970,13 @@ app.get('/terms', (c) => {
       <body class="bg-beige">
         {CommonHeader(c)}
         
-        <div class="flex min-h-screen">
-          <main class="flex-1 p-6 lg:ml-0">
-            <div class="max-w-4xl mx-auto">
-              {/* Page Header */}
-              <div class="mb-8">
-                <h1 class="text-3xl font-bold text-dark mb-2">
-                  <i class="fas fa-file-contract mr-3" style="color: #e75556;"></i>
-                  利用規約
+        <main class="flex-1 p-6 lg:ml-0">
+          <div class="max-w-4xl mx-auto">
+            {/* Page Header */}
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-dark mb-2">
+                <i class="fas fa-file-contract mr-3" style="color: #e75556;"></i>
+                利用規約
                 </h1>
                 <p class="text-gray-600">Terms of Service</p>
               </div>
@@ -9131,14 +9130,11 @@ app.get('/terms', (c) => {
               </div>
             </div>
           </main>
-          
-          {CommonSidebar()}
-        </div>
 
-        <script src="/static/utils.js?v=202601181036"></script>
-        <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602050526"></script>
-      </body>
+          <script src="/static/utils.js?v=202601181036"></script>
+          <script src="/static/auth.js?v=202601181036"></script>
+          <script src="/static/app.js?v=202602050526"></script>
+        </body>
     </html>,
     {
       title: '利用規約 - Akagami.net',
