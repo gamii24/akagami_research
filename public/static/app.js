@@ -618,6 +618,10 @@ async function loadAllPdfsOnce() {
     // Set initial PDFs for display
     applyFiltersFromAllPdfs()
   } catch (error) {
+    console.error('Failed to load PDFs:', error)
+    // Ensure state.allPdfs and state.pdfs are arrays even on error
+    state.allPdfs = []
+    state.pdfs = []
   }
 }
 
@@ -1127,8 +1131,8 @@ function renderPDFList() {
   
   // Combine PDFs and articles into a unified list
   const combinedItems = [
-    ...state.pdfs.map(pdf => ({ type: 'pdf', data: pdf, created_at: pdf.created_at })),
-    ...state.articles
+    ...(state.pdfs || []).map(pdf => ({ type: 'pdf', data: pdf, created_at: pdf.created_at })),
+    ...(state.articles || [])
       .filter(article => article.published)
       .filter(article => {
         // Apply category filter
