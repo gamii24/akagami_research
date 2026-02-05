@@ -8977,6 +8977,27 @@ app.get('/announcements', async (c) => {
     ORDER BY announcement_date DESC, created_at DESC
   `).all();
 
+  // Helper function to process content with Twitter embeds
+  function processContent(content: string) {
+    const twitterUrlPattern = /https?:\/\/(twitter\.com|x\.com)\/[^\s\/]+\/status\/\d+/g;
+    const urls = content.match(twitterUrlPattern);
+    
+    if (!urls) {
+      // No Twitter URLs, just return with line breaks
+      return content.split('\n').join('<br>');
+    }
+    
+    // Replace URLs with Twitter embed code
+    let processedContent = content;
+    urls.forEach(url => {
+      const embedCode = `<blockquote class="twitter-tweet" data-width="550" data-dnt="true"><a href="${url}"></a></blockquote>`;
+      processedContent = processedContent.replace(url, embedCode);
+    });
+    
+    // Replace line breaks
+    return processedContent.split('\n').join('<br>');
+  }
+
   return c.html(
     <html lang="ja">
       <head>
@@ -9033,7 +9054,7 @@ app.get('/announcements', async (c) => {
                           })}
                         </span>
                       </div>
-                      <div class="text-gray-700 leading-relaxed whitespace-pre-wrap announcement-content" data-content={announcement.content}>{announcement.content}</div>
+                      <div class="text-gray-700 leading-relaxed announcement-content" dangerouslySetInnerHTML={{ __html: processContent(announcement.content) }}></div>
                     </div>
                   ))}
                 </div>
@@ -9060,85 +9081,18 @@ app.get('/announcements', async (c) => {
         {/* Twitter Widget Script */}
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         
-        {/* Twitter Embed Script */}
+        {/* Twitter Widget Loader */}
         <script dangerouslySetInnerHTML={{
           __html: `
-            // Twitter URL pattern (both twitter.com and x.com)
-            const twitterUrlPattern = /https?:\\/\\/(twitter\\.com|x\\.com)\\/[^\\s\\/]+\\/status\\/\\d+/gi;
-            
-            // Function to process announcements
-            function processAnnouncements() {
-              console.log('Processing announcements for Twitter embeds...');
-              const announcementContents = document.querySelectorAll('.announcement-content');
-              console.log('Found', announcementContents.length, 'announcement content elements');
-              
-              announcementContents.forEach(function(contentDiv) {
-                const content = contentDiv.getAttribute('data-content');
-                console.log('Processing content:', content);
-                
-                if (!content) {
-                  console.log('No data-content attribute found');
-                  return;
-                }
-                
-                // Find Twitter URLs
-                const urls = content.match(twitterUrlPattern);
-                console.log('Found Twitter URLs:', urls);
-                
-                if (!urls) {
-                  console.log('No Twitter URLs found');
-                  return;
-                }
-                
-                // Create HTML content with proper line breaks and embeds
-                let htmlContent = '';
-                let remainingContent = content;
-                
-                urls.forEach(function(url) {
-                  const index = remainingContent.indexOf(url);
-                  if (index !== -1) {
-                    // Add text before URL
-                    const textBefore = remainingContent.substring(0, index);
-                    htmlContent += textBefore.replace(/\\n/g, '<br>');
-                    
-                    // Add Twitter embed
-                    htmlContent += '<blockquote class="twitter-tweet" data-theme="light" data-width="550"><a href="' + url + '"></a></blockquote>';
-                    
-                    // Update remaining content
-                    remainingContent = remainingContent.substring(index + url.length);
-                  }
-                });
-                
-                // Add remaining text
-                htmlContent += remainingContent.replace(/\\n/g, '<br>');
-                
-                console.log('Setting innerHTML...');
-                contentDiv.innerHTML = htmlContent;
-                
-                // Load Twitter widgets
-                console.log('Loading Twitter widgets...');
+            // Wait for Twitter widgets to load
+            if (window.twttr) {
+              window.twttr.widgets.load();
+            } else {
+              window.addEventListener('load', function() {
                 if (window.twttr && window.twttr.widgets) {
-                  window.twttr.widgets.load(contentDiv);
-                } else {
-                  console.log('Twitter widgets not loaded yet, waiting...');
-                  // If Twitter script hasn't loaded yet, wait for it
-                  window.addEventListener('load', function() {
-                    setTimeout(function() {
-                      if (window.twttr && window.twttr.widgets) {
-                        console.log('Twitter widgets loaded, processing...');
-                        window.twttr.widgets.load(contentDiv);
-                      }
-                    }, 1000);
-                  });
+                  window.twttr.widgets.load();
                 }
               });
-            }
-            
-            // Run after DOM is ready
-            if (document.readyState === 'loading') {
-              document.addEventListener('DOMContentLoaded', processAnnouncements);
-            } else {
-              processAnnouncements();
             }
           `
         }} />
