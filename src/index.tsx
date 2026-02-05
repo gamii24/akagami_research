@@ -8424,6 +8424,10 @@ app.get('/company', (c) => {
                       <td class="py-4 text-gray-800">100万円</td>
                     </tr>
                     <tr class="border-b border-gray-200">
+                      <th class="text-left py-4 pr-6 text-gray-700 font-semibold">法人番号</th>
+                      <td class="py-4 text-gray-800">4011003009767</td>
+                    </tr>
+                    <tr class="border-b border-gray-200">
                       <th class="text-left py-4 pr-6 text-gray-700 font-semibold">所在地</th>
                       <td class="py-4 text-gray-800">
                         〒150-0013<br />
