@@ -8393,15 +8393,14 @@ app.get('/company', (c) => {
       <body class="bg-beige">
         {CommonHeader(c)}
         
-        <div class="flex min-h-screen">
-          <main class="flex-1 p-6 lg:ml-0">
-            <div class="max-w-4xl mx-auto">
-              {/* Page Header */}
-              <div class="mb-8">
-                <h1 class="text-3xl font-bold text-dark mb-2">
-                  <i class="fas fa-building mr-3" style="color: #e75556;"></i>
-                  会社概要
-                </h1>
+        <main class="p-6">
+          <div class="max-w-4xl mx-auto">
+            {/* Page Header */}
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-dark mb-2">
+                <i class="fas fa-building mr-3" style="color: #e75556;"></i>
+                会社概要
+              </h1>
                 <p class="text-gray-600">Company Information</p>
               </div>
 
@@ -8597,10 +8596,7 @@ app.get('/company', (c) => {
                 </a>
               </div>
             </div>
-          </main>
-          
-          {CommonSidebar()}
-        </div>
+        </main>
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
@@ -8645,15 +8641,14 @@ app.get('/contact', (c) => {
       <body class="bg-beige">
         {CommonHeader(c)}
         
-        <div class="flex min-h-screen">
-          <main class="flex-1 p-6 lg:ml-0">
-            <div class="max-w-4xl mx-auto">
-              {/* Page Header */}
-              <div class="mb-8">
-                <h1 class="text-3xl font-bold text-dark mb-2">
-                  <i class="fas fa-envelope mr-3" style="color: #e75556;"></i>
-                  お問い合わせ
-                </h1>
+        <main class="p-6">
+          <div class="max-w-4xl mx-auto">
+            {/* Page Header */}
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-dark mb-2">
+                <i class="fas fa-envelope mr-3" style="color: #e75556;"></i>
+                お問い合わせ
+              </h1>
                 <p class="text-gray-600">Contact Us</p>
               </div>
 
@@ -8717,10 +8712,7 @@ app.get('/contact', (c) => {
                 </a>
               </div>
             </div>
-          </main>
-          
-          {CommonSidebar()}
-        </div>
+        </main>
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
@@ -8897,9 +8889,8 @@ app.get('/services', (c) => {
       <body class="bg-beige">
         {CommonHeader(c)}
         
-        <div class="flex min-h-screen">
-          <main class="flex-1 p-6 lg:ml-0">
-            <div class="max-w-5xl mx-auto">
+        <main class="p-6">
+          <div class="max-w-5xl mx-auto">
               {/* Page Header */}
               <div class="mb-8">
                 <h1 class="text-3xl font-bold text-dark mb-2">
@@ -9146,10 +9137,7 @@ app.get('/services', (c) => {
                 </a>
               </div>
             </div>
-          </main>
-          
-          {CommonSidebar()}
-        </div>
+        </main>
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
@@ -9242,15 +9230,14 @@ app.get('/announcements', async (c) => {
       <body class="bg-beige">
         {CommonHeader(c)}
         
-        <div class="flex min-h-screen">
-          <main class="flex-1 p-6 lg:ml-0">
-            <div class="max-w-4xl mx-auto">
-              {/* Page Header */}
-              <div class="mb-8">
-                <h1 class="text-3xl font-bold text-dark mb-2">
-                  <i class="fas fa-bullhorn mr-3" style="color: #e75556;"></i>
-                  お知らせ
-                </h1>
+        <main class="p-6">
+          <div class="max-w-4xl mx-auto">
+            {/* Page Header */}
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-dark mb-2">
+                <i class="fas fa-bullhorn mr-3" style="color: #e75556;"></i>
+                お知らせ
+              </h1>
                 <p class="text-gray-600">Company Announcements</p>
               </div>
 
@@ -9288,10 +9275,7 @@ app.get('/announcements', async (c) => {
                 </a>
               </div>
             </div>
-          </main>
-          
-          {CommonSidebar()}
-        </div>
+        </main>
 
         {/* Image Modal */}
         <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); z-index: 10000;" onclick="window.closeImageModal()">
