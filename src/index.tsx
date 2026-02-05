@@ -9028,6 +9028,8 @@ app.get('/contact', (c) => {
             </div>
         </main>
 
+        <CommonFooter />
+
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
         <script src="/static/app.js?v=202602050526"></script>
@@ -10041,6 +10043,8 @@ app.get('/announcements', async (c) => {
             });
           `
         }} />
+
+        <CommonFooter />
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
