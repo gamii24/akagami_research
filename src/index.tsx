@@ -9014,8 +9014,9 @@ app.get('/announcements', async (c) => {
     // Replace Google Drive placeholders with image tags (single line, no line breaks)
     googleDriveMatches.forEach(({ url, fileId, placeholder }) => {
       const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-      const fullSizeUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-      const imgHtml = `<div class="block my-4 max-w-xs cursor-pointer" onclick="window.openImageModal('${fullSizeUrl}')"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow" loading="lazy" /></div>`;
+      // Use larger thumbnail instead of direct view URL for better compatibility
+      const fullSizeUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w2000`;
+      const imgHtml = `<div class="block my-4 max-w-xs cursor-pointer" onclick="window.openImageModal('${fullSizeUrl}', '${thumbnailUrl}')"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow" loading="lazy" onerror="this.onerror=null; console.error('Failed to load thumbnail:', this.src);" /></div>`;
       processedContent = processedContent.replace(placeholder, imgHtml);
     });
     
@@ -9124,7 +9125,7 @@ app.get('/announcements', async (c) => {
 
         <script dangerouslySetInnerHTML={{
           __html: `
-            window.openImageModal = function(imageUrl) {
+            window.openImageModal = function(imageUrl, fallbackUrl) {
               console.log('Opening modal with image:', imageUrl);
               const modal = document.getElementById('imageModal');
               const modalImage = document.getElementById('modalImage');
@@ -9132,14 +9133,23 @@ app.get('/announcements', async (c) => {
                 // 画像読み込み成功時のログ
                 modalImage.onload = function() {
                   console.log('Image loaded successfully');
+                  modal.style.display = 'flex';
+                  document.body.style.overflow = 'hidden';
                 };
-                // 画像読み込み失敗時のログ
+                // 画像読み込み失敗時のログとフォールバック処理
                 modalImage.onerror = function() {
                   console.error('Failed to load image:', imageUrl);
+                  // フォールバックURLがある場合は試す
+                  if (fallbackUrl && modalImage.src !== fallbackUrl) {
+                    console.log('Trying fallback URL:', fallbackUrl);
+                    modalImage.src = fallbackUrl;
+                  } else {
+                    // それでも失敗したら、エラーメッセージを表示
+                    alert('画像の読み込みに失敗しました。Google Driveの共有設定を確認してください。');
+                    window.closeImageModal();
+                  }
                 };
                 modalImage.src = imageUrl;
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
                 console.log('Modal opened, display:', modal.style.display);
               } else {
                 console.error('Modal or modalImage element not found');
