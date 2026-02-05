@@ -63,6 +63,9 @@ function CommonHeader() {
               <a href="/" class="text-white hover:text-red-100 transition-colors font-medium">
                 資料
               </a>
+              <a href="/announcements" class="text-white hover:text-red-100 transition-colors font-medium">
+                お知らせ
+              </a>
               <a href="/services" class="text-white hover:text-red-100 transition-colors font-medium">
                 事業紹介
               </a>
@@ -71,9 +74,6 @@ function CommonHeader() {
               </a>
               <a href="/contact" class="text-white hover:text-red-100 transition-colors font-medium">
                 お問い合わせ
-              </a>
-              <a href="/privacy" class="text-white hover:text-red-100 transition-colors font-medium">
-                プライバシーポリシー
               </a>
             </nav>
             
@@ -181,6 +181,14 @@ function CommonSidebar() {
         {/* Company Information Section */}
         <div class="mb-6 pt-6 border-t border-gray-200">
           <h3 class="text-sm font-semibold text-gray-600 mb-3 px-2">会社情報</h3>
+          <a
+            href="/announcements"
+            class="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-gray-200 flex items-center justify-center gap-2 mb-2"
+            aria-label="お知らせを開く"
+          >
+            <i class="fas fa-bullhorn"></i>
+            <span>お知らせ</span>
+          </a>
           <a
             href="/services"
             class="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-gray-200 flex items-center justify-center gap-2 mb-2"
@@ -8954,6 +8962,341 @@ app.get('/services', (c) => {
       title: '事業紹介 - Akagami.net',
       description: '合同会社ジースリーの事業紹介ページです。SNS戦略設計コンサルティング、運用支援、教育事業を提供しています。'
     }
+  )
+})
+
+// Company Announcements Page
+app.get('/announcements', async (c) => {
+  const { env } = c;
+  
+  // Fetch published announcements from database
+  const announcements = await env.DB.prepare(`
+    SELECT id, title, content, announcement_date, created_at
+    FROM company_announcements
+    WHERE is_published = 1
+    ORDER BY announcement_date DESC, created_at DESC
+  `).all();
+
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>お知らせ - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <div class="flex min-h-screen">
+          <main class="flex-1 p-6 lg:ml-0">
+            <div class="max-w-4xl mx-auto">
+              {/* Page Header */}
+              <div class="mb-8">
+                <h1 class="text-3xl font-bold text-dark mb-2">
+                  <i class="fas fa-bullhorn mr-3" style="color: #e75556;"></i>
+                  お知らせ
+                </h1>
+                <p class="text-gray-600">Company Announcements</p>
+              </div>
+
+              {/* Announcements List */}
+              {announcements.results && announcements.results.length > 0 ? (
+                <div class="space-y-4">
+                  {announcements.results.map((announcement: any) => (
+                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                      <div class="flex items-start justify-between mb-3">
+                        <h2 class="text-xl font-semibold text-dark flex-1">{announcement.title}</h2>
+                        <span class="text-sm text-gray-500 ml-4 whitespace-nowrap">
+                          {new Date(announcement.announcement_date).toLocaleDateString('ja-JP', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                      <div class="text-gray-700 leading-relaxed whitespace-pre-wrap">{announcement.content}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                  <i class="fas fa-inbox text-5xl text-gray-300 mb-4"></i>
+                  <p class="text-gray-500 text-lg">現在、お知らせはありません</p>
+                </div>
+              )}
+
+              {/* Back to Top Link */}
+              <div class="text-center mt-8">
+                <a href="/" class="inline-flex items-center text-primary hover:underline">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  トップページへ戻る
+                </a>
+              </div>
+            </div>
+          </main>
+          
+          {CommonSidebar()}
+        </div>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202601260520"></script>
+      </body>
+    </html>,
+    {
+      title: 'お知らせ - Akagami.net',
+      description: '合同会社ジースリーからのお知らせ・新着情報です。'
+    }
+  )
+})
+
+// API: Get all announcements (for admin)
+app.get('/api/announcements', async (c) => {
+  const { env } = c;
+  
+  const announcements = await env.DB.prepare(`
+    SELECT id, title, content, announcement_date, is_published, created_at, updated_at
+    FROM company_announcements
+    ORDER BY announcement_date DESC, created_at DESC
+  `).all();
+
+  return c.json({ success: true, announcements: announcements.results });
+})
+
+// API: Create announcement
+app.post('/api/announcements', async (c) => {
+  const { env } = c;
+  const { title, content, announcement_date, is_published } = await c.req.json();
+
+  if (!title || !content || !announcement_date) {
+    return c.json({ success: false, error: '必須項目を入力してください' }, 400);
+  }
+
+  const result = await env.DB.prepare(`
+    INSERT INTO company_announcements (title, content, announcement_date, is_published)
+    VALUES (?, ?, ?, ?)
+  `).bind(title, content, announcement_date, is_published ? 1 : 0).run();
+
+  return c.json({ success: true, id: result.meta.last_row_id });
+})
+
+// API: Update announcement
+app.put('/api/announcements/:id', async (c) => {
+  const { env } = c;
+  const id = c.req.param('id');
+  const { title, content, announcement_date, is_published } = await c.req.json();
+
+  if (!title || !content || !announcement_date) {
+    return c.json({ success: false, error: '必須項目を入力してください' }, 400);
+  }
+
+  await env.DB.prepare(`
+    UPDATE company_announcements
+    SET title = ?, content = ?, announcement_date = ?, is_published = ?, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `).bind(title, content, announcement_date, is_published ? 1 : 0, id).run();
+
+  return c.json({ success: true });
+})
+
+// API: Delete announcement
+app.delete('/api/announcements/:id', async (c) => {
+  const { env } = c;
+  const id = c.req.param('id');
+
+  await env.DB.prepare(`
+    DELETE FROM company_announcements WHERE id = ?
+  `).bind(id).run();
+
+  return c.json({ success: true });
+})
+
+// Admin: Announcements Management Page
+app.get('/admin/announcements', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>お知らせ管理 - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    dark: '#333333',
+                    darker: '#1a1a1a',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+        <link href="/static/admin-dark.css" rel="stylesheet" />
+      </head>
+      <body class="admin-dark bg-darker">
+        {/* Header */}
+        <header style="background-color: #2d2d2d; border-bottom: 2px solid #4b5563;">
+          <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+              <div>
+                <h1 class="text-xl font-bold flex items-center" style="color: #f3f4f6;">
+                  <i class="fas fa-bullhorn mr-2" style="color: #e75556;"></i>
+                  お知らせ管理
+                </h1>
+                <p class="text-xs mt-0.5" style="color: #d1d5db;">お知らせの追加・編集・削除</p>
+              </div>
+              <a href="/admin" 
+                 class="px-4 py-2 rounded-lg font-medium transition-colors"
+                 style="background-color: #374151; color: #f3f4f6;"
+                 onmouseover="this.style.backgroundColor='#4b5563'"
+                 onmouseout="this.style.backgroundColor='#374151'">
+                <i class="fas fa-arrow-left mr-2"></i>
+                管理画面に戻る
+              </a>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          {/* Action Buttons */}
+          <div class="mb-6 flex gap-4">
+            <button onclick="showAddModal()" 
+                    class="px-6 py-3 rounded-lg font-semibold transition-all duration-200"
+                    style="background-color: #e75556; color: white;"
+                    onmouseover="this.style.backgroundColor='#d94444'"
+                    onmouseout="this.style.backgroundColor='#e75556'">
+              <i class="fas fa-plus mr-2"></i>
+              新しいお知らせを追加
+            </button>
+            <a href="/announcements" 
+               target="_blank"
+               class="px-6 py-3 rounded-lg font-semibold transition-all duration-200"
+               style="background-color: #3b82f6; color: white; text-decoration: none; display: inline-block;"
+               onmouseover="this.style.backgroundColor='#2563eb'"
+               onmouseout="this.style.backgroundColor='#3b82f6'">
+              <i class="fas fa-external-link-alt mr-2"></i>
+              公開ページを確認
+            </a>
+          </div>
+
+          {/* Announcements List */}
+          <div id="announcements-list"></div>
+        </main>
+
+        {/* Modal */}
+        <div id="announcement-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+          <div class="rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" style="background-color: #2d2d2d;">
+            <div class="p-6">
+              {/* Modal Header */}
+              <div class="flex items-center justify-between mb-6">
+                <h2 id="modal-title" class="text-2xl font-bold" style="color: #f3f4f6;">新しいお知らせを追加</h2>
+                <button onclick="closeModal()" 
+                        class="text-gray-400 hover:text-gray-200 transition-colors">
+                  <i class="fas fa-times text-2xl"></i>
+                </button>
+              </div>
+
+              {/* Form */}
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">
+                    タイトル <span style="color: #ef4444;">*</span>
+                  </label>
+                  <input type="text" 
+                         id="announcement-title" 
+                         class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
+                         style="background-color: #1a1a1a; border-color: #404040; color: #f3f4f6;"
+                         placeholder="お知らせのタイトルを入力"
+                         required />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">
+                    内容 <span style="color: #ef4444;">*</span>
+                  </label>
+                  <textarea id="announcement-content" 
+                            rows="8"
+                            class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
+                            style="background-color: #1a1a1a; border-color: #404040; color: #f3f4f6;"
+                            placeholder="お知らせの内容を入力"
+                            required></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">
+                    日付 <span style="color: #ef4444;">*</span>
+                  </label>
+                  <input type="date" 
+                         id="announcement-date" 
+                         class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
+                         style="background-color: #1a1a1a; border-color: #404040; color: #f3f4f6;"
+                         required />
+                </div>
+
+                <div>
+                  <label class="flex items-center gap-2" style="color: #f3f4f6;">
+                    <input type="checkbox" 
+                           id="announcement-published" 
+                           checked
+                           class="w-4 h-4" />
+                    <span class="text-sm font-semibold">公開する</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Modal Actions */}
+              <div class="flex gap-3 mt-6">
+                <button onclick="saveAnnouncement()" 
+                        class="flex-1 px-6 py-3 rounded-lg font-semibold transition-colors"
+                        style="background-color: #e75556; color: white;"
+                        onmouseover="this.style.backgroundColor='#d94444'"
+                        onmouseout="this.style.backgroundColor='#e75556'">
+                  <i class="fas fa-save mr-2"></i>
+                  保存
+                </button>
+                <button onclick="closeModal()" 
+                        class="flex-1 px-6 py-3 rounded-lg font-semibold transition-colors"
+                        style="background-color: #374151; color: #f3f4f6;"
+                        onmouseover="this.style.backgroundColor='#4b5563'"
+                        onmouseout="this.style.backgroundColor='#374151'">
+                  <i class="fas fa-times mr-2"></i>
+                  キャンセル
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script src="/static/announcements-admin.js"></script>
+      </body>
+    </html>
   )
 })
 
