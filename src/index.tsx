@@ -346,19 +346,19 @@ function CommonFooter() {
         
         {/* About and Company Links - Desktop: inline, Mobile: card grid */}
         {/* Mobile: Card Grid - Only 自己紹介 and 会社概要 */}
-        <div class="grid grid-cols-2 gap-3 mb-6 lg:hidden">
+        {/* Mobile: Text Links */}
+        <div class="flex justify-center gap-6 mb-4 lg:hidden">
           <a 
             href="/about" 
-            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
+            class="text-sm text-gray-600 hover:text-primary transition-colors"
           >
-            <i class="fas fa-user text-lg mb-1 block"></i>
             自己紹介
           </a>
+          <span class="text-gray-400">|</span>
           <a 
             href="/company" 
-            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
+            class="text-sm text-gray-600 hover:text-primary transition-colors"
           >
-            <i class="fas fa-building text-lg mb-1 block"></i>
             会社概要
           </a>
         </div>
