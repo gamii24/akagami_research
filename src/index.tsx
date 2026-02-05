@@ -9063,38 +9063,83 @@ app.get('/announcements', async (c) => {
         {/* Twitter Embed Script */}
         <script dangerouslySetInnerHTML={{
           __html: `
-            // Twitter URL pattern
+            // Twitter URL pattern (both twitter.com and x.com)
             const twitterUrlPattern = /https?:\\/\\/(twitter\\.com|x\\.com)\\/[^\\s\\/]+\\/status\\/\\d+/gi;
             
-            // Process announcements after page load
-            window.addEventListener('DOMContentLoaded', function() {
+            // Function to process announcements
+            function processAnnouncements() {
+              console.log('Processing announcements for Twitter embeds...');
               const announcementContents = document.querySelectorAll('.announcement-content');
+              console.log('Found', announcementContents.length, 'announcement content elements');
               
               announcementContents.forEach(function(contentDiv) {
                 const content = contentDiv.getAttribute('data-content');
-                if (!content) return;
+                console.log('Processing content:', content);
+                
+                if (!content) {
+                  console.log('No data-content attribute found');
+                  return;
+                }
                 
                 // Find Twitter URLs
                 const urls = content.match(twitterUrlPattern);
-                if (!urls) return;
+                console.log('Found Twitter URLs:', urls);
                 
-                // Replace text content with HTML including tweet embeds
-                let htmlContent = content;
+                if (!urls) {
+                  console.log('No Twitter URLs found');
+                  return;
+                }
                 
-                // Replace URLs with blockquote embed code
+                // Create HTML content with proper line breaks and embeds
+                let htmlContent = '';
+                let remainingContent = content;
+                
                 urls.forEach(function(url) {
-                  const embedHtml = '<blockquote class="twitter-tweet" data-theme="light"><a href="' + url + '"></a></blockquote>';
-                  htmlContent = htmlContent.replace(url, embedHtml);
+                  const index = remainingContent.indexOf(url);
+                  if (index !== -1) {
+                    // Add text before URL
+                    const textBefore = remainingContent.substring(0, index);
+                    htmlContent += textBefore.replace(/\\n/g, '<br>');
+                    
+                    // Add Twitter embed
+                    htmlContent += '<blockquote class="twitter-tweet" data-theme="light" data-width="550"><a href="' + url + '"></a></blockquote>';
+                    
+                    // Update remaining content
+                    remainingContent = remainingContent.substring(index + url.length);
+                  }
                 });
                 
+                // Add remaining text
+                htmlContent += remainingContent.replace(/\\n/g, '<br>');
+                
+                console.log('Setting innerHTML...');
                 contentDiv.innerHTML = htmlContent;
                 
-                // Reload Twitter widgets
+                // Load Twitter widgets
+                console.log('Loading Twitter widgets...');
                 if (window.twttr && window.twttr.widgets) {
                   window.twttr.widgets.load(contentDiv);
+                } else {
+                  console.log('Twitter widgets not loaded yet, waiting...');
+                  // If Twitter script hasn't loaded yet, wait for it
+                  window.addEventListener('load', function() {
+                    setTimeout(function() {
+                      if (window.twttr && window.twttr.widgets) {
+                        console.log('Twitter widgets loaded, processing...');
+                        window.twttr.widgets.load(contentDiv);
+                      }
+                    }, 1000);
+                  });
                 }
               });
-            });
+            }
+            
+            // Run after DOM is ready
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', processAnnouncements);
+            } else {
+              processAnnouncements();
+            }
           `
         }} />
 
