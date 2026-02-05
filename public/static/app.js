@@ -779,7 +779,6 @@ async function loadTags() {
 }
 
 async function loadPDFs() {
-  console.log('🔄 loadPDFs() called (will call renderPDFList)')
   // Use cached data instead of API call (no skeleton for filtering)
   applyFiltersFromAllPdfs()
   renderPDFList()
@@ -1054,7 +1053,6 @@ function showSkeletonScreen() {
 }
 
 function renderPDFList() {
-  console.log('🔄 renderPDFList() called at', new Date().toISOString())
   const container = document.getElementById('pdf-list')
   if (!container) return
   
@@ -1268,17 +1266,13 @@ function renderPDFList() {
   if (isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 20) {
     itemsToShow = combinedItems.slice(0, 20)
     hasMore = true
-    console.log('📱 Mobile limit applied: showing', itemsToShow.length, 'of', combinedItems.length)
   }
   
   // On desktop top page, limit to 24 cards (4 columns × 6 rows) unless "show all" is clicked
   if (!isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 24) {
     itemsToShow = combinedItems.slice(0, 24)
     hasMore = true
-    console.log('💻 Desktop limit applied: showing', itemsToShow.length, 'of', combinedItems.length)
   }
-  
-  console.log('🎨 Rendering', itemsToShow.length, 'items (isMobile:', isMobile, 'isTopPage:', isTopPage, ')')
   
   html += itemsToShow.map((item, index) => {
     // Render article card (legacy - keep for compatibility)
@@ -1759,7 +1753,6 @@ function filterByCategory(categoryId) {
   state.selectedCategory = categoryId
   state.showDownloadHistory = false // Clear download history mode
   state.showAllMobile = false // Reset mobile "show all" state
-  console.log('⚠️ selectCategory called: resetting showAllMobile to false')
   updateURL()
   renderCategoryFilter()
   loadPDFs()
@@ -1780,7 +1773,6 @@ function clearAllFilters() {
   state.searchQuery = ''
   state.showDownloadHistory = false
   state.showAllMobile = false // Reset mobile "show all" state
-  console.log('⚠️ clearAllFilters called: resetting showAllMobile to false')
   
   // Update URL
   updateURL()
