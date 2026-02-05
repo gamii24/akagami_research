@@ -6359,6 +6359,17 @@ app.get('/', (c) => {
                 Akagami.net
               </h1>
             </a>
+            
+            {/* Desktop Navigation - Hidden on mobile */}
+            <nav class="hidden lg:flex items-center space-x-8" aria-label="メインナビゲーション">
+              <a href="https://resta24.jp/blog/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-red-100 transition-colors font-medium">
+                BLOG
+              </a>
+              <a href="https://akagami-prompt.pages.dev/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-red-100 transition-colors font-medium">
+                プロンプト
+              </a>
+            </nav>
+            
             {/* Mobile Menu Button */}
             <button 
               onclick="toggleMobileMenu()"
