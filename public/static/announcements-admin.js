@@ -74,6 +74,15 @@ function showAddModal() {
   document.getElementById('announcement-published').checked = true;
   document.getElementById('announcement-modal').classList.remove('hidden');
   document.getElementById('announcement-modal').classList.add('flex');
+  
+  // Attach uploadImage event listener when modal opens
+  setTimeout(() => {
+    const uploadBtn = document.getElementById('upload-image-btn');
+    if (uploadBtn && !uploadBtn.dataset.listenerAttached) {
+      uploadBtn.addEventListener('click', uploadImage);
+      uploadBtn.dataset.listenerAttached = 'true';
+    }
+  }, 100);
 }
 
 // Edit announcement
@@ -89,6 +98,15 @@ function editAnnouncement(id) {
   document.getElementById('announcement-published').checked = announcement.is_published === 1;
   document.getElementById('announcement-modal').classList.remove('hidden');
   document.getElementById('announcement-modal').classList.add('flex');
+  
+  // Attach uploadImage event listener when modal opens
+  setTimeout(() => {
+    const uploadBtn = document.getElementById('upload-image-btn');
+    if (uploadBtn && !uploadBtn.dataset.listenerAttached) {
+      uploadBtn.addEventListener('click', uploadImage);
+      uploadBtn.dataset.listenerAttached = 'true';
+    }
+  }, 100);
 }
 
 // Close modal
