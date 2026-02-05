@@ -286,7 +286,7 @@ function CommonFooter() {
         
         {/* About and Company Links - Desktop: inline, Mobile: card grid */}
         {/* Mobile: Card Grid */}
-        <div class="grid grid-cols-2 gap-3 mb-6 md:hidden">
+        <div class="grid grid-cols-2 gap-3 mb-6 lg:hidden">
           <a 
             href="/about" 
             class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
@@ -325,7 +325,7 @@ function CommonFooter() {
         </div>
         
         {/* Desktop: Inline Links */}
-        <div class="hidden md:flex justify-center gap-6 mb-4">
+        <div class="hidden lg:flex justify-center gap-6 mb-4">
           <a 
             href="/about" 
             class="text-sm text-gray-600 hover:text-primary transition-colors"
