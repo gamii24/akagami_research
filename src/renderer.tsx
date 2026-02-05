@@ -165,17 +165,15 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         }} />
         
         {/* Microsoft Clarity - Heatmap & Session Recording */}
-        {/* Setup: 1. Create project at https://clarity.microsoft.com/ 
-                   2. Copy Project ID
-                   3. Replace CLARITY_PROJECT_ID below with your actual ID
-                   Example: "abc123xyz" */}
+        {/* Project ID: vcncgbtqeh */}
+        {/* Dashboard: https://clarity.microsoft.com/ */}
         <script type="text/javascript" dangerouslySetInnerHTML={{
           __html: `
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "CLARITY_PROJECT_ID");
+            })(window, document, "clarity", "script", "vcncgbtqeh");
           `
         }} />
         
