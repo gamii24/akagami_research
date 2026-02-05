@@ -48,6 +48,7 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - ✅ **お知らせの公開・非公開切り替え**: 下書き保存と公開を管理
 - ✅ **日付指定**: お知らせの公開日を設定可能
 - ✅ **Twitter/X埋め込み対応**: お知らせ内容にツイートURLを含めると自動的に埋め込み表示
+- ✅ **画像表示対応**: 画像URL（.jpg, .png, .gif, .webp, .svg）を含めると自動的に画像表示
 - ✅ **管理画面からの簡単編集**: モーダル形式で追加・編集・削除
 - ✅ **カード型デザイン**: 美しいカードレイアウトで表示
 - ✅ **レスポンシブデザイン**: PC・スマートフォン完全対応
@@ -56,6 +57,12 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 お知らせの内容欄に以下の形式のURLを入力すると、自動的にツイートが埋め込まれて表示されます：
 - `https://twitter.com/username/status/1234567890`
 - `https://x.com/username/status/1234567890`
+
+### 画像表示機能（NEW！2026-02-05）
+お知らせの内容欄に画像URLを入力すると、自動的に画像が表示されます：
+- 対応形式: `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`, `.svg`
+- 画像URLの例: `https://example.com/image.jpg`
+- 自動的に角丸、シャドウ、レスポンシブ対応で表示されます
 
 **使い方**:
 1. 管理画面（https://akagami.net/admin/announcements）にログイン
@@ -69,9 +76,12 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - **カラム**: id, title, content, announcement_date, is_published, created_at, updated_at
 
 ### 技術的な実装
-- **サーバー側処理**: Twitter URLを検出して `<blockquote class="twitter-tweet">` に変換
+- **サーバー側処理**: 
+  - Twitter URLを検出して `<blockquote class="twitter-tweet">` に変換
+  - 画像URLを検出して `<img>` タグに変換（レスポンシブ、角丸、シャドウスタイル付き）
 - **クライアント側レンダリング**: Twitter Widget APIで実際のツイートカードを表示
 - **CSP設定**: グローバルContent Security Policyでtwitter.comドメインを許可
+- **対応形式**: Twitter/X埋め込み + 画像表示（JPG, PNG, GIF, WebP, SVG）
 
 ## 🎯 プロジェクト概要
 
