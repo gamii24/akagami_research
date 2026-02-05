@@ -8451,6 +8451,122 @@ app.get('/company', (c) => {
                 </table>
               </div>
 
+              {/* Representative Introduction */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+                <div class="mb-6">
+                  <h2 class="text-2xl font-bold text-dark mb-2 flex items-center">
+                    <i class="fas fa-user-circle mr-3 text-primary"></i>
+                    代表紹介
+                  </h2>
+                  <p class="text-lg font-semibold text-gray-800">赤髪（あかがみ）｜SNS戦略家</p>
+                </div>
+                
+                <div class="space-y-4 text-gray-700 leading-relaxed">
+                  <p class="font-semibold">合同会社ジースリー代表</p>
+                  
+                  <p>
+                    SNS運用歴は13年以上。これまで、上場企業、フォロワー1000万人規模のクリエイター、アスリート、アーティスト、小規模事業者まで、業種と規模を問わず1500社以上のSNS活用を支援してきました。単なる運用代行や投稿改善ではなく、事業成長に直結するSNS戦略設計と運用体制づくりを専門としています。
+                  </p>
+                  
+                  <p class="font-semibold text-dark">
+                    今のSNSは、投稿を増やすだけでは成果は出ません。<br />
+                    必要なのは、売上と信頼を生む導線設計です。
+                  </p>
+                  
+                  <p>
+                    現在は日本とフィリピンを拠点に、国内外の企業に対しオンラインを中心とした支援を行っています。
+                  </p>
+                  
+                  <div class="bg-beige rounded-lg p-6 my-6">
+                    <h3 class="text-xl font-bold text-dark mb-4">主な提供領域</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                        <span>事業戦略と連動したSNS戦略設計</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                        <span>Instagram、YouTube、TikTok、X、Threadsを横断した統合運用設計</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                        <span>ブランド価値と専門性を可視化するコンテンツ設計</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                        <span>リード獲得、採用、認知拡大を目的とした導線設計</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-check-circle text-primary mt-1 mr-3"></i>
+                        <span>社内運用体制構築および担当者育成、伴走支援</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <p>
+                    特徴は、<strong>バズを狙わないこと</strong>です。その代わりに、企業の強みが正しく伝わり、継続的に成果が積み上がる仕組みを設計します。
+                  </p>
+                  
+                  <p>
+                    また、教育事業として、SNSを活用した集客と発信力を育成するオンラインアカデミーを運営し、個人および小規模事業者の人材育成にも取り組んでいます。（生徒数約800名）
+                  </p>
+                  
+                  <div class="bg-gradient-to-r from-pink-50 to-red-50 rounded-lg p-6 my-6">
+                    <h3 class="text-xl font-bold text-dark mb-4">よくあるSNS支援との違い</h3>
+                    <ul class="space-y-3">
+                      <li class="flex items-start">
+                        <i class="fas fa-star text-primary mt-1 mr-3"></i>
+                        <span>フォロワー数よりも、事業成果と信頼設計を重視</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-star text-primary mt-1 mr-3"></i>
+                        <span>属人的なノウハウではなく、再現性のある運用モデルを構築</span>
+                      </li>
+                      <li class="flex items-start">
+                        <i class="fas fa-star text-primary mt-1 mr-3"></i>
+                        <span>短期施策ではなく、中長期で成果が残る設計を前提とする</span>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <p class="text-center font-semibold text-lg text-dark py-4">
+                    派手な施策はやりません。<br />
+                    炎上もしません。社内が疲弊する運用もしません。<br />
+                    その代わり、3年後も会社の資産として残るSNS基盤を一緒につくります。
+                  </p>
+                  
+                  <div class="border-t-2 border-gray-200 pt-6 mt-6">
+                    <h3 class="text-xl font-bold text-dark mb-4">発信メディア</h3>
+                    <div class="space-y-3">
+                      <a 
+                        href="https://www.instagram.com/akagami_sns/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg hover:shadow-md transition-shadow"
+                      >
+                        <i class="fab fa-instagram text-3xl text-pink-600"></i>
+                        <div>
+                          <p class="font-semibold text-dark">Instagram LIVE</p>
+                          <p class="text-sm text-gray-600">毎朝7時から配信</p>
+                        </div>
+                      </a>
+                      <a 
+                        href="https://www.youtube.com/@akagami_sns" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-3 p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg hover:shadow-md transition-shadow"
+                      >
+                        <i class="fab fa-youtube text-3xl text-red-600"></i>
+                        <div>
+                          <p class="font-semibold text-dark">YouTube</p>
+                          <p class="text-sm text-gray-600">SNSに関する情報を発信</p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Back to Top Link */}
               <div class="text-center mt-8">
                 <a href="/" class="inline-flex items-center text-primary hover:underline">
