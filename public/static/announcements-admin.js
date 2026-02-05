@@ -249,4 +249,12 @@ async function uploadImage() {
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   loadAnnouncements();
+  
+  // Expose functions to global scope for onclick handlers
+  window.showAddModal = showAddModal;
+  window.editAnnouncement = editAnnouncement;
+  window.closeModal = closeModal;
+  window.saveAnnouncement = saveAnnouncement;
+  window.deleteAnnouncement = deleteAnnouncement;
+  window.uploadImage = uploadImage;
 });
