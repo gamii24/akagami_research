@@ -9011,12 +9011,13 @@ app.get('/announcements', async (c) => {
     // Replace Google Drive placeholders with image tags
     googleDriveMatches.forEach(({ url, fileId, placeholder }) => {
       const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4">
+      const errorMsg = `画像を表示できません。<a href="${url}" target="_blank" class="text-blue-600 underline">こちらをクリック</a>してGoogleドライブで開いてください。`;
+      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4 max-w-2xl">
         <img src="${thumbnailUrl}" 
-             alt="画像" 
-             class="max-w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" 
+             alt="お知らせ画像" 
+             class="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" 
              loading="lazy"
-             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'border-2 border-gray-300 p-4 rounded-lg text-center\\'><p class=\\'text-gray-600\\'><i class=\\'fas fa-image\\'></i> 画像を表示できません。<a href=\\'${url}\\' target=\\'_blank\\' class=\\'text-blue-600 underline\\'>こちらをクリック</a>してGoogleドライブで開いてください。</p></div>';" />
+             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=&quot;border-2 border-gray-300 p-4 rounded-lg text-center&quot;><p class=&quot;text-gray-600&quot;><i class=&quot;fas fa-image&quot;></i> ${errorMsg}</p></div>';" />
       </a>`;
       processedContent = processedContent.replace(placeholder, imgHtml);
     });
