@@ -1280,6 +1280,8 @@ function renderPDFList() {
             alt="${escapeHtml(pdf.title)}"
             class="absolute inset-0 w-full h-full object-contain"
             loading="lazy"
+            referrerpolicy="no-referrer"
+            crossorigin="anonymous"
             onerror="console.error('Failed to load image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}', this.src); this.style.display='none'; this.parentElement.innerHTML='<div class=\\'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600\\'><i class=\\'fas fa-file-pdf text-white text-6xl opacity-30\\'></i></div>'"
             onload="console.log('Successfully loaded image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}')"
           />
@@ -1887,6 +1889,8 @@ function renderArticleCard(article) {
             alt="${escapeHtml(article.title)}"
             class="w-full h-full object-cover"
             loading="lazy"
+            referrerpolicy="no-referrer"
+            crossorigin="anonymous"
           />
         </div>
       ` : `
