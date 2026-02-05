@@ -8984,22 +8984,33 @@ app.get('/announcements', async (c) => {
     ORDER BY announcement_date DESC, created_at DESC
   `).all();
 
-  // Helper function to process content with Twitter embeds
+  // Helper function to process content with Twitter embeds and images
   function processContent(content: string) {
     const twitterUrlPattern = /https?:\/\/(twitter\.com|x\.com)\/[^\s\/]+\/status\/\d+/g;
-    const urls = content.match(twitterUrlPattern);
+    const imageUrlPattern = /https?:\/\/[^\s]+\.(?:jpg|jpeg|png|gif|webp|svg)(?:\?[^\s]*)?/gi;
     
-    if (!urls) {
-      // No Twitter URLs, just return with line breaks
-      return content.split('\n').join('<br>');
+    let processedContent = content;
+    
+    // First, replace Twitter URLs with embed code
+    const twitterUrls = content.match(twitterUrlPattern);
+    if (twitterUrls) {
+      twitterUrls.forEach(url => {
+        const embedCode = `<blockquote class="twitter-tweet" data-width="550" data-dnt="true"><a href="${url}"></a></blockquote>`;
+        processedContent = processedContent.replace(url, embedCode);
+      });
     }
     
-    // Replace URLs with Twitter embed code
-    let processedContent = content;
-    urls.forEach(url => {
-      const embedCode = `<blockquote class="twitter-tweet" data-width="550" data-dnt="true"><a href="${url}"></a></blockquote>`;
-      processedContent = processedContent.replace(url, embedCode);
-    });
+    // Then, replace image URLs with img tags
+    const imageUrls = processedContent.match(imageUrlPattern);
+    if (imageUrls) {
+      imageUrls.forEach(url => {
+        // Skip if already inside an img tag or Twitter embed
+        if (!processedContent.includes(`src="${url}"`)) {
+          const imgTag = `<img src="${url}" alt="お知らせ画像" class="max-w-full h-auto rounded-lg shadow-md my-4" loading="lazy" />`;
+          processedContent = processedContent.replace(url, imgTag);
+        }
+      });
+    }
     
     // Replace line breaks
     return processedContent.split('\n').join('<br>');
@@ -9289,13 +9300,14 @@ app.get('/admin/announcements', (c) => {
                     内容 <span style="color: #ef4444;">*</span>
                   </label>
                   <p class="text-xs mb-2" style="color: #9ca3af;">
-                    <i class="fab fa-twitter" style="color: #1da1f2;"></i> XのURLを貼り付けると、投稿が埋め込まれて表示されます
+                    <i class="fab fa-twitter" style="color: #1da1f2;"></i> X/TwitterのURLを貼り付けると、投稿が埋め込まれて表示されます<br>
+                    <i class="fas fa-image" style="color: #10b981;"></i> 画像のURL（.jpg, .png, .gif, .webp）を貼り付けると、画像が表示されます
                   </p>
                   <textarea id="announcement-content" 
                             rows="8"
                             class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
                             style="background-color: #1a1a1a; border-color: #404040; color: #f3f4f6;"
-                            placeholder="お知らせの内容を入力&#10;&#10;例：新しいサービスを開始しました！&#10;https://x.com/username/status/123456789"
+                            placeholder="お知らせの内容を入力&#10;&#10;例：新しいサービスを開始しました！&#10;https://x.com/username/status/123456789&#10;&#10;画像URL：https://example.com/image.jpg"
                             required></textarea>
                 </div>
 
