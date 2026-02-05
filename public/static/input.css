@@ -1154,7 +1154,7 @@ body.dark-mode .shadow-xl {
 
 /* Lazy image loading states */
 .lazy-image {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -1163,7 +1163,7 @@ body.dark-mode .shadow-xl {
 }
 
 .lazy-image.loading {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .lazy-image.error {
@@ -1189,11 +1189,11 @@ body.dark-mode .shadow-xl {
   display: none;
 }
 
-/* Progressive image loading blur effect */
-.lazy-image:not(.loaded) {
+/* Progressive image loading blur effect - Removed to prevent flickering */
+/* .lazy-image:not(.loaded) {
   filter: blur(10px);
   transform: scale(1.05);
-}
+} */
 
 .lazy-image.loaded {
   filter: blur(0);

@@ -116,7 +116,21 @@ function initImageObserver() {
 
 function loadImage(img) {
   const src = img.dataset.src
-  if (!src || imageCache.has(src)) return
+  if (!src) return
+  
+  // If image is already cached, load it immediately
+  if (imageCache.has(src)) {
+    img.src = src
+    img.classList.remove('loading')
+    img.classList.add('loaded')
+    
+    // Hide loading placeholder
+    const placeholder = img.parentElement?.querySelector('.loading-placeholder')
+    if (placeholder) {
+      placeholder.style.display = 'none'
+    }
+    return
+  }
   
   // Add loading class
   img.classList.add('loading')
@@ -1508,11 +1522,9 @@ function renderPDFList() {
   
   container.innerHTML = html
   
-  // Re-observe images after rendering
-  setTimeout(() => {
-    observeImages()
-    preloadViewportImages()
-  }, 100)
+  // Re-observe images after rendering - Execute immediately to prevent image flashing
+  observeImages()
+  preloadViewportImages()
 }
 
 // Show download confirmation modal
