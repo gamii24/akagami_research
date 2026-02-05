@@ -9014,7 +9014,8 @@ app.get('/announcements', async (c) => {
     // Replace Google Drive placeholders with image tags (single line, no line breaks)
     googleDriveMatches.forEach(({ url, fileId, placeholder }) => {
       const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4 max-w-2xl"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" loading="lazy" /></a>`;
+      const fullSizeUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+      const imgHtml = `<div class="block my-4 max-w-2xl cursor-pointer" onclick="openImageModal('${fullSizeUrl}')"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow" loading="lazy" /></div>`;
       processedContent = processedContent.replace(placeholder, imgHtml);
     });
     
@@ -9100,6 +9101,51 @@ app.get('/announcements', async (c) => {
           
           {CommonSidebar()}
         </div>
+
+        {/* Image Modal */}
+        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4" onclick="closeImageModal()">
+          <div class="relative max-w-7xl max-h-screen">
+            <button 
+              onclick="closeImageModal()" 
+              class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
+              aria-label="閉じる">
+              <i class="fas fa-times text-3xl"></i>
+            </button>
+            <img 
+              id="modalImage" 
+              src="" 
+              alt="拡大画像" 
+              class="max-w-full max-h-screen object-contain rounded-lg"
+              onclick="event.stopPropagation()" />
+          </div>
+        </div>
+
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            function openImageModal(imageUrl) {
+              const modal = document.getElementById('imageModal');
+              const modalImage = document.getElementById('modalImage');
+              modalImage.src = imageUrl;
+              modal.classList.remove('hidden');
+              modal.classList.add('flex');
+              document.body.style.overflow = 'hidden';
+            }
+            
+            function closeImageModal() {
+              const modal = document.getElementById('imageModal');
+              modal.classList.add('hidden');
+              modal.classList.remove('flex');
+              document.body.style.overflow = 'auto';
+            }
+            
+            // ESCキーでモーダルを閉じる
+            document.addEventListener('keydown', function(e) {
+              if (e.key === 'Escape') {
+                closeImageModal();
+              }
+            });
+          `
+        }} />
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
