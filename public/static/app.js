@@ -779,6 +779,7 @@ async function loadTags() {
 }
 
 async function loadPDFs() {
+  console.log('🔄 loadPDFs() called (will call renderPDFList)')
   // Use cached data instead of API call (no skeleton for filtering)
   applyFiltersFromAllPdfs()
   renderPDFList()
@@ -1758,6 +1759,7 @@ function filterByCategory(categoryId) {
   state.selectedCategory = categoryId
   state.showDownloadHistory = false // Clear download history mode
   state.showAllMobile = false // Reset mobile "show all" state
+  console.log('⚠️ selectCategory called: resetting showAllMobile to false')
   updateURL()
   renderCategoryFilter()
   loadPDFs()
@@ -1778,6 +1780,7 @@ function clearAllFilters() {
   state.searchQuery = ''
   state.showDownloadHistory = false
   state.showAllMobile = false // Reset mobile "show all" state
+  console.log('⚠️ clearAllFilters called: resetting showAllMobile to false')
   
   // Update URL
   updateURL()
