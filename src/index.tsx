@@ -70,6 +70,9 @@ function CommonHeader() {
               <a href="/services" class="text-white hover:text-red-100 transition-colors font-medium">
                 事業紹介
               </a>
+              <a href="/speaking" class="text-white hover:text-red-100 transition-colors font-medium">
+                講演実績
+              </a>
               <a href="/company" class="text-white hover:text-red-100 transition-colors font-medium">
                 会社概要
               </a>
