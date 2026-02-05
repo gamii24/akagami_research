@@ -78,9 +78,16 @@ function showAddModal() {
   // Attach uploadImage event listener when modal opens
   setTimeout(() => {
     const uploadBtn = document.getElementById('upload-image-btn');
-    if (uploadBtn && !uploadBtn.dataset.listenerAttached) {
-      uploadBtn.addEventListener('click', uploadImage);
-      uploadBtn.dataset.listenerAttached = 'true';
+    if (uploadBtn) {
+      // Remove any existing listener first
+      const newBtn = uploadBtn.cloneNode(true);
+      uploadBtn.parentNode.replaceChild(newBtn, uploadBtn);
+      // Add new listener
+      newBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        uploadImage();
+      });
+      console.log('Upload button listener attached');
     }
   }, 100);
 }
@@ -102,9 +109,16 @@ function editAnnouncement(id) {
   // Attach uploadImage event listener when modal opens
   setTimeout(() => {
     const uploadBtn = document.getElementById('upload-image-btn');
-    if (uploadBtn && !uploadBtn.dataset.listenerAttached) {
-      uploadBtn.addEventListener('click', uploadImage);
-      uploadBtn.dataset.listenerAttached = 'true';
+    if (uploadBtn) {
+      // Remove any existing listener first
+      const newBtn = uploadBtn.cloneNode(true);
+      uploadBtn.parentNode.replaceChild(newBtn, uploadBtn);
+      // Add new listener
+      newBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        uploadImage();
+      });
+      console.log('Upload button listener attached (edit mode)');
     }
   }, 100);
 }
@@ -194,8 +208,13 @@ function escapeHtml(text) {
 
 // Upload image
 async function uploadImage() {
+  console.log('uploadImage function called');
+  
   const fileInput = document.getElementById('image-upload-input');
   const file = fileInput.files[0];
+  
+  console.log('File input:', fileInput);
+  console.log('Selected file:', file);
   
   if (!file) {
     alert('画像ファイルを選択してください');

@@ -9314,7 +9314,6 @@ app.get('/admin/announcements', (c) => {
                              style="color: #9ca3af;" />
                       <button type="button"
                               id="upload-image-btn"
-                              onclick="uploadImage()"
                               class="px-4 py-2 rounded-lg transition-colors"
                               style="background-color: #10b981; color: white; font-weight: 500;">
                         <i class="fas fa-upload"></i> アップロード
