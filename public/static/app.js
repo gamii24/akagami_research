@@ -696,7 +696,6 @@ async function loadAllPdfsOnce() {
   try {
     const response = await fetch('/api/pdfs')
     state.allPdfs = await response.json()
-    console.log('✅ Loaded PDFs:', state.allPdfs.length, 'items')
     
     // Calculate category counts
     state.categoryCounts = {}
@@ -736,7 +735,6 @@ function applyFiltersFromAllPdfs() {
   
   // Start with all PDFs
   state.pdfs = [...state.allPdfs]
-  console.log('📊 Filtered PDFs:', state.pdfs.length, 'items (after filters)')
   
   // Apply category filter
   if (state.selectedCategory) {
@@ -1247,8 +1245,6 @@ function renderPDFList() {
       .map(article => ({ type: 'article', data: article, created_at: article.created_at }))
   ]
   
-  console.log('🎯 Combined items:', combinedItems.length, '(PDFs:', state.pdfs.length, '+ Articles:', state.articles.length, ')')
-  
   // Sort combined items by created_at
   combinedItems.sort((a, b) => {
     if (state.sortBy === 'newest') {
@@ -1270,14 +1266,12 @@ function renderPDFList() {
   if (isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 20) {
     itemsToShow = combinedItems.slice(0, 20)
     hasMore = true
-    console.log('📱 Mobile top page: Showing 20 of', combinedItems.length, 'items')
   }
   
   // On desktop top page, limit to 24 cards (4 columns × 6 rows) unless "show all" is clicked
   if (!isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 24) {
     itemsToShow = combinedItems.slice(0, 24)
     hasMore = true
-    console.log('💻 Desktop top page: Showing 24 of', combinedItems.length, 'items')
   }
   
   html += itemsToShow.map((item, index) => {
