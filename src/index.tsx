@@ -9151,6 +9151,175 @@ app.get('/services', (c) => {
   )
 })
 
+// Speaking Engagements Page
+app.get('/speaking', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>講演実績 - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <main class="p-6">
+          <div class="max-w-5xl mx-auto">
+            {/* Page Header */}
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-dark mb-2">
+                <i class="fas fa-microphone-alt mr-3" style="color: #e75556;"></i>
+                講演実績
+              </h1>
+              <p class="text-gray-600">Speaking Engagements</p>
+            </div>
+
+            {/* Speaking Engagements List */}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+              <h2 class="text-2xl font-bold text-dark mb-6">講演実績（一部）</h2>
+              
+              <div class="space-y-4">
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">PMU SUMMIT TOKYO 2023</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">マケブラリアルin大阪 2022</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">SNS首脳会談 2023 Spring</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">モデル事務所様主催：Instagram 解説セミナー</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">宮崎県みんなで取り組む子育て環境づくり支援事業『みんなで学ぶSNS』</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">AuDee, YouTube対談：[ゲスト] Instagram JAPAN 初代代表責任者 長瀬次英様</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">Clubhouse対談：[ゲスト] 元Facebook JAPAN 代表 長谷川晋様</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">SNSプロフィール添削・運用アドバイス in 松山</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">マーケティング首脳会談 2022 Winter</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">SNS首脳会談 2022 Spring</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">ビジネスバラエティ新春特番・七福神スペシャル</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">100人のホンマでっか！ノウハウ100連発！24時間スペシャル</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">「宮崎県都城市婚活支援事業」主催：婚活イベント</h3>
+                  </div>
+                </div>
+
+                <div class="flex items-start p-4 bg-beige rounded-lg hover:shadow-md transition-shadow">
+                  <i class="fas fa-star text-primary text-xl mr-4 mt-1"></i>
+                  <div>
+                    <h3 class="text-lg font-semibold text-dark">オンラインセミナー『Twitterの授業』</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Back to Top Link */}
+            <div class="text-center mt-8">
+              <a href="/" class="inline-flex items-center text-primary hover:underline">
+                <i class="fas fa-arrow-left mr-2"></i>
+                トップページへ戻る
+              </a>
+            </div>
+          </div>
+        </main>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202601260520"></script>
+      </body>
+    </html>,
+    {
+      title: '講演実績 - Akagami.net',
+      description: 'SNS戦略家 赤髪の講演実績をご紹介します。'
+    }
+  )
+})
+
 // Company Announcements Page
 app.get('/announcements', async (c) => {
   const { env } = c;
