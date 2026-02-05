@@ -8463,7 +8463,7 @@ app.get('/company', (c) => {
                 {/* Profile Photos - 3 images in a row */}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <img 
-                    src="https://drive.google.com/thumbnail?id=1qerLZ60jIle-RHonzGMxYPWPfITjwZYG&sz=w800"
+                    src="https://drive.google.com/thumbnail?id=1mogQknhQ1abeoKGdbyu_PnmA1PmJX09z&sz=w800"
                     alt="赤髪プロフィール写真1"
                     class="w-full rounded-lg shadow-lg"
                     loading="lazy"
@@ -8475,7 +8475,7 @@ app.get('/company', (c) => {
                     loading="lazy"
                   />
                   <img 
-                    src="https://drive.google.com/thumbnail?id=1mogQknhQ1abeoKGdbyu_PnmA1PmJX09z&sz=w800"
+                    src="https://drive.google.com/thumbnail?id=1qerLZ60jIle-RHonzGMxYPWPfITjwZYG&sz=w800"
                     alt="赤髪プロフィール写真3"
                     class="w-full rounded-lg shadow-lg"
                     loading="lazy"
