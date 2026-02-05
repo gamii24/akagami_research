@@ -1126,3 +1126,55 @@ body.dark-mode .shadow-xl {
 .overflow-x-auto {
   scroll-behavior: smooth;
 }
+
+/* ============================================ */
+/* Image Optimization Styles */
+/* ============================================ */
+
+/* Lazy image loading states */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
+}
+
+.lazy-image.loading {
+  opacity: 0.5;
+}
+
+.lazy-image.error {
+  opacity: 0;
+}
+
+/* Loading placeholder animation */
+.loading-placeholder {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Hide placeholder when image is loaded */
+.lazy-image.loaded + .loading-placeholder {
+  display: none;
+}
+
+/* Progressive image loading blur effect */
+.lazy-image:not(.loaded) {
+  filter: blur(10px);
+  transform: scale(1.05);
+}
+
+.lazy-image.loaded {
+  filter: blur(0);
+  transform: scale(1);
+}

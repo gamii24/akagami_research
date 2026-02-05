@@ -82,6 +82,91 @@ function trackPageView(pagePath, pageTitle) {
   }
 }
 
+// ============================================
+// Image Optimization Functions
+// ============================================
+
+// Image cache for loaded images
+const imageCache = new Set()
+
+// Intersection Observer for lazy loading images
+let imageObserver = null
+
+function initImageObserver() {
+  if (!('IntersectionObserver' in window)) {
+    return // Fallback to native lazy loading
+  }
+  
+  const options = {
+    root: null,
+    rootMargin: '50px', // Load images 50px before they enter viewport
+    threshold: 0.01
+  }
+  
+  imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target
+        loadImage(img)
+        observer.unobserve(img)
+      }
+    })
+  }, options)
+}
+
+function loadImage(img) {
+  const src = img.dataset.src
+  if (!src || imageCache.has(src)) return
+  
+  // Add loading class
+  img.classList.add('loading')
+  
+  // Create a new image to preload
+  const tempImg = new Image()
+  
+  tempImg.onload = () => {
+    img.src = src
+    img.classList.remove('loading')
+    img.classList.add('loaded')
+    imageCache.add(src)
+  }
+  
+  tempImg.onerror = () => {
+    img.classList.remove('loading')
+    img.classList.add('error')
+    // Show fallback icon
+    const fallback = document.createElement('div')
+    fallback.className = 'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600'
+    fallback.innerHTML = '<i class="fas fa-file-pdf text-white text-6xl opacity-30"></i>'
+    img.parentElement.appendChild(fallback)
+    img.style.display = 'none'
+  }
+  
+  tempImg.src = src
+}
+
+function observeImages() {
+  if (!imageObserver) return
+  
+  // Find all images with data-src attribute
+  const lazyImages = document.querySelectorAll('img[data-src]:not(.loaded):not(.loading)')
+  lazyImages.forEach(img => imageObserver.observe(img))
+}
+
+// Preload images in viewport
+function preloadViewportImages() {
+  const images = document.querySelectorAll('img[data-src]')
+  const viewportHeight = window.innerHeight
+  
+  images.forEach(img => {
+    const rect = img.getBoundingClientRect()
+    // If image is in viewport or within 200px below
+    if (rect.top < viewportHeight + 200) {
+      loadImage(img)
+    }
+  })
+}
+
 // Load downloaded PDFs from localStorage
 function loadDownloadedPdfs() {
   try {
@@ -533,6 +618,9 @@ function fallbackCopyToClipboard(text) {
 async function initApp() {
   loadDownloadedPdfs()
   
+  // Initialize image optimization
+  initImageObserver()
+  
   // Phase 1: Load categories first (very fast)
   await loadCategories()
   
@@ -557,6 +645,10 @@ async function initApp() {
   
   // Render PDF list (includes articles)
   renderPDFList()
+  
+  // Observe and load images
+  observeImages()
+  preloadViewportImages()
   
   // Show welcome message for first-time visitors (after everything is ready)
   checkFirstVisit()
@@ -1276,15 +1368,14 @@ function renderPDFList() {
         <!-- Thumbnail only (4:5 ratio) - No title/date -->
         <div class="relative w-full bg-white" style="padding-bottom: 125%;">
           <img 
-            src="${convertGoogleDriveUrl(pdf.thumbnail_url)}" 
+            data-src="${convertGoogleDriveUrl(pdf.thumbnail_url)}"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3C/svg%3E"
             alt="${escapeHtml(pdf.title)}"
-            class="absolute inset-0 w-full h-full object-contain"
-            loading="lazy"
+            class="absolute inset-0 w-full h-full object-contain lazy-image"
             referrerpolicy="no-referrer"
             crossorigin="anonymous"
-            onerror="console.error('Failed to load image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}', this.src); this.style.display='none'; this.parentElement.innerHTML='<div class=\\'absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-400 to-gray-600\\'><i class=\\'fas fa-file-pdf text-white text-6xl opacity-30\\'></i></div>'"
-            onload="console.log('Successfully loaded image for PDF ${pdf.id}: ${escapeHtml(pdf.title)}')"
           />
+          <div class="absolute inset-0 bg-gray-100 animate-pulse loading-placeholder"></div>
           ${downloaded ? `
             <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
               <i class="fas fa-check-circle mr-1"></i>DL済
@@ -1404,6 +1495,12 @@ function renderPDFList() {
   }
   
   container.innerHTML = html
+  
+  // Re-observe images after rendering
+  setTimeout(() => {
+    observeImages()
+    preloadViewportImages()
+  }, 100)
 }
 
 // Show download confirmation modal
@@ -1883,15 +1980,16 @@ function renderArticleCard(article) {
       </div>
       
       ${article.thumbnail_url ? `
-        <div class="aspect-video overflow-hidden bg-gray-100">
+        <div class="aspect-video overflow-hidden bg-gray-100 relative">
           <img 
-            src="${article.thumbnail_url}" 
+            data-src="${article.thumbnail_url}"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3C/svg%3E"
             alt="${escapeHtml(article.title)}"
-            class="w-full h-full object-cover"
-            loading="lazy"
+            class="w-full h-full object-cover lazy-image"
             referrerpolicy="no-referrer"
             crossorigin="anonymous"
           />
+          <div class="absolute inset-0 bg-gray-200 animate-pulse loading-placeholder"></div>
         </div>
       ` : `
         <div class="aspect-video bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center">
