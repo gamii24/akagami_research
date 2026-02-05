@@ -8984,17 +8984,38 @@ app.get('/announcements', async (c) => {
     ORDER BY announcement_date DESC, created_at DESC
   `).all();
 
-  // Helper function to process content - convert URLs to clickable links
+  // Helper function to process content - convert URLs to images or clickable links
   function processContent(content: string) {
-    // Convert all URLs to clickable links
-    const urlPattern = /https?:\/\/[^\s<]+/g;
     let processedContent = content;
     
-    const urls = content.match(urlPattern);
+    // Google Drive URL pattern: https://drive.google.com/file/d/{FILE_ID}/view
+    const googleDrivePattern = /https?:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/[^\s]*/g;
+    const googleDriveUrls = content.match(googleDrivePattern);
+    
+    if (googleDriveUrls) {
+      googleDriveUrls.forEach(url => {
+        // Extract file ID from Google Drive URL
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
+        if (match) {
+          const fileId = match[1];
+          // Convert to direct image URL
+          const directImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+          const imgTag = `<img src="${directImageUrl}" alt="画像" class="max-w-full h-auto rounded-lg shadow-md my-4" loading="lazy" />`;
+          processedContent = processedContent.replace(url, imgTag);
+        }
+      });
+    }
+    
+    // Convert remaining URLs to clickable links
+    const urlPattern = /https?:\/\/[^\s<]+/g;
+    const urls = processedContent.match(urlPattern);
     if (urls) {
       urls.forEach(url => {
-        const linkTag = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">${url}</a>`;
-        processedContent = processedContent.replace(url, linkTag);
+        // Skip if already processed (inside img tag)
+        if (!processedContent.includes(`src="${url}"`)) {
+          const linkTag = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">${url}</a>`;
+          processedContent = processedContent.replace(url, linkTag);
+        }
       });
     }
     
@@ -9267,14 +9288,15 @@ app.get('/admin/announcements', (c) => {
                     内容 <span style="color: #ef4444;">*</span>
                   </label>
                   <p class="text-xs mb-2" style="color: #9ca3af;">
-                    <i class="fas fa-link" style="color: #3b82f6;"></i> URLを貼り付けると、クリック可能なリンクになります
+                    <i class="fas fa-link" style="color: #3b82f6;"></i> URLを貼り付けると、クリック可能なリンクになります<br />
+                    <i class="fas fa-image" style="color: #10b981;"></i> Googleドライブの画像URLは自動的に画像として表示されます
                   </p>
                   
                   <textarea id="announcement-content" 
                             rows="8"
                             class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
                             style="background-color: #1a1a1a; border-color: #404040; color: #f3f4f6;"
-                            placeholder="お知らせの内容を入力&#10;&#10;例：新しいサービスを開始しました！&#10;詳細はこちら：https://example.com&#10;&#10;画像はGoogleドライブにアップロードして、リンクを貼り付けてください。"
+                            placeholder="お知らせの内容を入力&#10;&#10;例：新しいサービスを開始しました！&#10;詳細はこちら：https://example.com&#10;&#10;Googleドライブの画像URL（https://drive.google.com/file/d/xxxxx/view）を貼り付けると、画像として表示されます。"
                             required></textarea>
                 </div>
 
