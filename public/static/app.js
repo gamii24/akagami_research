@@ -17,7 +17,7 @@ if (!window.state) {
     showDownloadHistory: false, // Filter to show only downloaded PDFs
     multiSelectMode: false, // Multi-select mode
     selectedPdfs: new Set(), // Selected PDFs in multi-select mode
-    showAllMobile: false, // Show all cards on mobile (default: false, show 15)
+    showAllMobile: false, // Show all cards on mobile (default: false, show 20)
     viewMode: 'grid', // View mode: 'grid' or 'list'
     darkMode: false // Dark mode
   }
@@ -1262,9 +1262,9 @@ function renderPDFList() {
   let itemsToShow = combinedItems
   let hasMore = false
   
-  // On mobile top page, limit to 15 cards unless "show all" is clicked
-  if (isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 15) {
-    itemsToShow = combinedItems.slice(0, 15)
+  // On mobile top page, limit to 20 cards unless "show all" is clicked
+  if (isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 20) {
+    itemsToShow = combinedItems.slice(0, 20)
     hasMore = true
   }
   
