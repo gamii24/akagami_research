@@ -9015,7 +9015,7 @@ app.get('/announcements', async (c) => {
     googleDriveMatches.forEach(({ url, fileId, placeholder }) => {
       const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
       const fullSizeUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-      const imgHtml = `<div class="block my-4 max-w-2xl cursor-pointer" onclick="openImageModal('${fullSizeUrl}')"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow" loading="lazy" /></div>`;
+      const imgHtml = `<div class="block my-4 max-w-xs cursor-pointer" onclick="openImageModal('${fullSizeUrl}')"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md hover:shadow-xl transition-shadow" loading="lazy" /></div>`;
       processedContent = processedContent.replace(placeholder, imgHtml);
     });
     
@@ -9103,13 +9103,13 @@ app.get('/announcements', async (c) => {
         </div>
 
         {/* Image Modal */}
-        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4" onclick="closeImageModal()">
+        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-[9999] hidden items-center justify-center p-4" onclick="closeImageModal()">
           <div class="relative max-w-7xl max-h-screen">
             <button 
               onclick="closeImageModal()" 
-              class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
+              class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10 text-4xl"
               aria-label="閉じる">
-              <i class="fas fa-times text-3xl"></i>
+              <i class="fas fa-times"></i>
             </button>
             <img 
               id="modalImage" 
@@ -9122,26 +9122,32 @@ app.get('/announcements', async (c) => {
 
         <script dangerouslySetInnerHTML={{
           __html: `
-            function openImageModal(imageUrl) {
+            window.openImageModal = function(imageUrl) {
+              console.log('Opening modal with image:', imageUrl);
               const modal = document.getElementById('imageModal');
               const modalImage = document.getElementById('modalImage');
-              modalImage.src = imageUrl;
-              modal.classList.remove('hidden');
-              modal.classList.add('flex');
-              document.body.style.overflow = 'hidden';
+              if (modal && modalImage) {
+                modalImage.src = imageUrl;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+              }
             }
             
-            function closeImageModal() {
+            window.closeImageModal = function() {
+              console.log('Closing modal');
               const modal = document.getElementById('imageModal');
-              modal.classList.add('hidden');
-              modal.classList.remove('flex');
-              document.body.style.overflow = 'auto';
+              if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+              }
             }
             
             // ESCキーでモーダルを閉じる
             document.addEventListener('keydown', function(e) {
               if (e.key === 'Escape') {
-                closeImageModal();
+                window.closeImageModal();
               }
             });
           `
