@@ -129,6 +129,12 @@ function loadImage(img) {
     img.classList.remove('loading')
     img.classList.add('loaded')
     imageCache.add(src)
+    
+    // Hide loading placeholder
+    const placeholder = img.parentElement?.querySelector('.loading-placeholder')
+    if (placeholder) {
+      placeholder.style.display = 'none'
+    }
   }
   
   tempImg.onerror = () => {
@@ -140,6 +146,12 @@ function loadImage(img) {
     fallback.innerHTML = '<i class="fas fa-file-pdf text-white text-6xl opacity-30"></i>'
     img.parentElement.appendChild(fallback)
     img.style.display = 'none'
+    
+    // Hide loading placeholder
+    const placeholder = img.parentElement?.querySelector('.loading-placeholder')
+    if (placeholder) {
+      placeholder.style.display = 'none'
+    }
   }
   
   tempImg.src = src
@@ -1053,9 +1065,6 @@ function showSkeletonScreen() {
 }
 
 function renderPDFList() {
-  const timestamp = new Date().toISOString().split('T')[1].slice(0, 12)
-  console.log(`🔄 [${timestamp}] renderPDFList() called`)
-  
   const container = document.getElementById('pdf-list')
   if (!container) return
   
@@ -1498,8 +1507,6 @@ function renderPDFList() {
   }
   
   container.innerHTML = html
-  
-  console.log(`✅ [${timestamp}] Rendered ${itemsToShow.length} cards (PDF list updated)`)
   
   // Re-observe images after rendering
   setTimeout(() => {
