@@ -1330,8 +1330,6 @@ function renderPDFList() {
       return `
       <div 
         onclick="${cardClick}"
-        ontouchstart="handleTouchStart(event, ${pdf.id})"
-        ontouchend="handleTouchEnd(event)"
         class="col-span-full pdf-card-list ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
         style="position: relative;"
         data-pdf-id="${pdf.id}"
@@ -1378,8 +1376,6 @@ function renderPDFList() {
     return `
     <div 
       onclick="${cardClick}"
-      ontouchstart="handleTouchStart(event, ${pdf.id})"
-      ontouchend="handleTouchEnd(event)"
       class="pdf-card ${bgColor} rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border cursor-pointer flex flex-col"
       style="position: relative;"
       data-pdf-id="${pdf.id}"
