@@ -8998,13 +8998,24 @@ app.get('/announcements', async (c) => {
     return processedContent.split('\n').join('<br>');
   }
 
+  // Set CSP header to allow Twitter widgets
+  c.header('Content-Security-Policy', 
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://cloudflareinsights.com https://platform.twitter.com https://cdn.syndication.twimg.com; " +
+    "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://ton.twimg.com; " +
+    "font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; " +
+    "img-src 'self' data: https: blob:; " +
+    "media-src 'self' https: blob:; " +
+    "frame-src https://platform.twitter.com https://syndication.twitter.com; " +
+    "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://cloudflareinsights.com https://syndication.twitter.com"
+  );
+
   return c.html(
     <html lang="ja">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>お知らせ - Akagami.net</title>
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://cloudflareinsights.com https://platform.twitter.com https://cdn.syndication.twimg.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://ton.twimg.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: https: blob:; media-src 'self' https: blob:; frame-src https://platform.twitter.com https://syndication.twitter.com; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://cloudflareinsights.com https://syndication.twitter.com" />
         
         <script src="https://cdn.tailwindcss.com"></script>
         <script dangerouslySetInnerHTML={{
