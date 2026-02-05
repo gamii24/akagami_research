@@ -9033,7 +9033,7 @@ app.get('/announcements', async (c) => {
                           })}
                         </span>
                       </div>
-                      <div class="text-gray-700 leading-relaxed whitespace-pre-wrap">{announcement.content}</div>
+                      <div class="text-gray-700 leading-relaxed whitespace-pre-wrap announcement-content" data-content={announcement.content}>{announcement.content}</div>
                     </div>
                   ))}
                 </div>
@@ -9056,6 +9056,47 @@ app.get('/announcements', async (c) => {
           
           {CommonSidebar()}
         </div>
+
+        {/* Twitter Widget Script */}
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        
+        {/* Twitter Embed Script */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Twitter URL pattern
+            const twitterUrlPattern = /https?:\\/\\/(twitter\\.com|x\\.com)\\/[^\\s\\/]+\\/status\\/\\d+/gi;
+            
+            // Process announcements after page load
+            window.addEventListener('DOMContentLoaded', function() {
+              const announcementContents = document.querySelectorAll('.announcement-content');
+              
+              announcementContents.forEach(function(contentDiv) {
+                const content = contentDiv.getAttribute('data-content');
+                if (!content) return;
+                
+                // Find Twitter URLs
+                const urls = content.match(twitterUrlPattern);
+                if (!urls) return;
+                
+                // Replace text content with HTML including tweet embeds
+                let htmlContent = content;
+                
+                // Replace URLs with blockquote embed code
+                urls.forEach(function(url) {
+                  const embedHtml = '<blockquote class="twitter-tweet" data-theme="light"><a href="' + url + '"></a></blockquote>';
+                  htmlContent = htmlContent.replace(url, embedHtml);
+                });
+                
+                contentDiv.innerHTML = htmlContent;
+                
+                // Reload Twitter widgets
+                if (window.twttr && window.twttr.widgets) {
+                  window.twttr.widgets.load(contentDiv);
+                }
+              });
+            });
+          `
+        }} />
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
@@ -9241,11 +9282,14 @@ app.get('/admin/announcements', (c) => {
                   <label class="block text-sm font-semibold mb-2" style="color: #f3f4f6;">
                     内容 <span style="color: #ef4444;">*</span>
                   </label>
+                  <p class="text-xs mb-2" style="color: #9ca3af;">
+                    <i class="fab fa-twitter" style="color: #1da1f2;"></i> XのURLを貼り付けると、投稿が埋め込まれて表示されます
+                  </p>
                   <textarea id="announcement-content" 
                             rows="8"
                             class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
                             style="background-color: #1a1a1a; border-color: #404040; color: #f3f4f6;"
-                            placeholder="お知らせの内容を入力"
+                            placeholder="お知らせの内容を入力&#10;&#10;例：新しいサービスを開始しました！&#10;https://x.com/username/status/123456789"
                             required></textarea>
                 </div>
 
