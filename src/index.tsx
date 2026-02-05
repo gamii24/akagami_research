@@ -9300,7 +9300,7 @@ app.get('/admin/announcements', (c) => {
                     内容 <span style="color: #ef4444;">*</span>
                   </label>
                   <p class="text-xs mb-2" style="color: #9ca3af;">
-                    <i class="fab fa-twitter" style="color: #1da1f2;"></i> X/TwitterのURLを貼り付けると、投稿が埋め込まれて表示されます<br>
+                    <i class="fab fa-twitter" style="color: #1da1f2;"></i> X/TwitterのURLを貼り付けると、投稿が埋め込まれて表示されます<br />
                     <i class="fas fa-image" style="color: #10b981;"></i> 画像のURL（.jpg, .png, .gif, .webp）を貼り付けると、画像が表示されます
                   </p>
                   <textarea id="announcement-content" 
