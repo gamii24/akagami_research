@@ -21,10 +21,13 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 ## 🌐 公開URL
 
 - **本番環境**: https://akagami.net
+- **お知らせ**: https://akagami.net/announcements（NEW！2026-02-05）
+- **事業紹介**: https://akagami.net/services
 - **会社概要**: https://akagami.net/company
 - **お問い合わせ**: https://akagami.net/contact
 - **プライバシーポリシー**: https://akagami.net/privacy
 - **管理画面**: https://akagami.net/admin
+  - **お知らせ管理**: https://akagami.net/admin/announcements（NEW！2026-02-05）
 - **マイページ**: https://akagami.net/mypage
 - **カテゴリ一覧**: https://akagami.net/categories
 - **📅 SNS運用カレンダー（全12ヶ月）**:
@@ -34,7 +37,41 @@ PDF資料をGoogleドライブのリンクで管理できる、シンプルで�
 - **プロジェクト名**: akagami-net
 - **プラットフォーム**: Cloudflare Pages
 - **デプロイ状態**: ✅ Active
-- **最終更新**: 2026-01-26 - 🏢 会社情報ページ追加（/company, /contact, /privacy）
+- **最終更新**: 2026-02-05 - 📢 お知らせページ＋Twitter埋め込み機能追加（/announcements）
+
+## 📢 お知らせページ（NEW！2026-02-05）
+
+### 概要
+会社からのお知らせや新着情報を管理・公開できる**お知らせページ**を実装しました。管理画面から簡単に追加・編集・削除が可能です。
+
+### 主な機能
+- ✅ **お知らせの公開・非公開切り替え**: 下書き保存と公開を管理
+- ✅ **日付指定**: お知らせの公開日を設定可能
+- ✅ **Twitter/X埋め込み対応**: お知らせ内容にツイートURLを含めると自動的に埋め込み表示
+- ✅ **管理画面からの簡単編集**: モーダル形式で追加・編集・削除
+- ✅ **カード型デザイン**: 美しいカードレイアウトで表示
+- ✅ **レスポンシブデザイン**: PC・スマートフォン完全対応
+
+### Twitter/X埋め込み機能
+お知らせの内容欄に以下の形式のURLを入力すると、自動的にツイートが埋め込まれて表示されます：
+- `https://twitter.com/username/status/1234567890`
+- `https://x.com/username/status/1234567890`
+
+**使い方**:
+1. 管理画面（https://akagami.net/admin/announcements）にログイン
+2. 「新しいお知らせを追加」をクリック
+3. タイトル、内容、日付を入力（内容にTwitter URLを貼り付け）
+4. 「公開する」にチェックを入れて保存
+5. 公開ページ（https://akagami.net/announcements）で確認
+
+### データベース
+- **テーブル名**: `company_announcements`
+- **カラム**: id, title, content, announcement_date, is_published, created_at, updated_at
+
+### 技術的な実装
+- **サーバー側処理**: Twitter URLを検出して `<blockquote class="twitter-tweet">` に変換
+- **クライアント側レンダリング**: Twitter Widget APIで実際のツイートカードを表示
+- **CSP設定**: グローバルContent Security Policyでtwitter.comドメインを許可
 
 ## 🎯 プロジェクト概要
 
