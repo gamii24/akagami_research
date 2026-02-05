@@ -1442,10 +1442,10 @@ function renderPDFList() {
         <button 
           onclick="showAllMobileCards()"
           class="px-8 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl hover:from-red-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-2xl font-bold text-lg"
-          aria-label="もっと見る 残り${state.pdfs.length - 15}件"
+          aria-label="もっと見る 残り${state.pdfs.length - 20}件"
         >
           <i class="fas fa-chevron-down mr-2"></i>
-          もっと見る（残り${state.pdfs.length - 15}件）
+          もっと見る（残り${state.pdfs.length - 20}件）
         </button>
       </div>
     `
