@@ -974,6 +974,58 @@ function togglePdfSelection(event, pdfId) {
   updateMultiSelectToolbar()
 }
 
+// Long press handling for multi-select mode
+let longPressTimer = null
+let longPressTarget = null
+const LONG_PRESS_DURATION = 500 // 500ms for long press
+
+function handleLongPressStart(event, pdfId, downloadUrl) {
+  // Clear any existing timer
+  if (longPressTimer) {
+    clearTimeout(longPressTimer)
+  }
+  
+  longPressTarget = event.currentTarget
+  
+  // Start long press timer
+  longPressTimer = setTimeout(() => {
+    // Long press detected - enter multi-select mode
+    enterMultiSelectMode(pdfId)
+    longPressTimer = null
+    longPressTarget = null
+  }, LONG_PRESS_DURATION)
+}
+
+function handleLongPressEnd(event, pdfId, downloadUrl) {
+  // If timer is still running, it's a short press (normal click)
+  if (longPressTimer) {
+    clearTimeout(longPressTimer)
+    longPressTimer = null
+    longPressTarget = null
+    
+    // Handle normal click based on current mode
+    if (state.multiSelectMode) {
+      togglePdfSelection(event, pdfId)
+    } else {
+      // Normal download
+      if (downloadUrl) {
+        confirmDownload(pdfId, downloadUrl)
+      } else {
+        alert('このPDFのURLが設定されていません')
+      }
+    }
+  }
+}
+
+function handleLongPressCancel() {
+  // Cancel long press if user moves finger away
+  if (longPressTimer) {
+    clearTimeout(longPressTimer)
+    longPressTimer = null
+    longPressTarget = null
+  }
+}
+
 function openSelectedPdfs() {
   const selectedPdfData = state.allPdfs.filter(pdf => state.selectedPdfs.has(pdf.id))
   
@@ -1320,16 +1372,21 @@ function renderPDFList() {
     const isSelected = state.selectedPdfs.has(pdf.id)
     const bgColor = isSelected ? 'bg-blue-50 border-blue-500' : (downloaded ? 'bg-[#f4eee0]' : 'bg-white')
     
-    // Card click handler - Direct download without confirmation
-    const cardClick = state.multiSelectMode 
-      ? `togglePdfSelection(event, ${pdf.id})`
-      : (downloadUrl ? `confirmDownload(${pdf.id}, '${downloadUrl}')` : `alert('このPDFのURLが設定されていません')`)
+    // Card event handlers - Use long press for multi-select
+    const cardEvents = state.multiSelectMode 
+      ? `onclick="togglePdfSelection(event, ${pdf.id})"`
+      : `onmousedown="handleLongPressStart(event, ${pdf.id}, '${downloadUrl}')" 
+         onmouseup="handleLongPressEnd(event, ${pdf.id}, '${downloadUrl}')" 
+         onmouseleave="handleLongPressCancel()"
+         ontouchstart="handleLongPressStart(event, ${pdf.id}, '${downloadUrl}')" 
+         ontouchend="handleLongPressEnd(event, ${pdf.id}, '${downloadUrl}')" 
+         ontouchcancel="handleLongPressCancel()"`
     
     // List view
     if (state.viewMode === 'list') {
       return `
       <div 
-        onclick="${cardClick}"
+        ${cardEvents}
         class="col-span-full pdf-card-list ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer"
         style="position: relative;"
         data-pdf-id="${pdf.id}"
@@ -1375,7 +1432,7 @@ function renderPDFList() {
     // If no thumbnail: show title and date
     return `
     <div 
-      onclick="${cardClick}"
+      ${cardEvents}
       class="pdf-card ${bgColor} rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border cursor-pointer flex flex-col"
       style="position: relative;"
       data-pdf-id="${pdf.id}"
