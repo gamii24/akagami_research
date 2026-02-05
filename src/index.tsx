@@ -61,28 +61,6 @@ function CommonHeader() {
             
             {/* Desktop Navigation */}
             <nav class="hidden lg:flex items-center gap-6">
-              <a href="/" class="text-white hover:text-red-100 transition-colors font-medium">
-                TOP
-              </a>
-              <a href="/announcements" class="text-white hover:text-red-100 transition-colors font-medium">
-                お知らせ
-              </a>
-              <a href="/services" class="text-white hover:text-red-100 transition-colors font-medium">
-                事業紹介
-              </a>
-              <a href="/speaking" class="text-white hover:text-red-100 transition-colors font-medium">
-                講演実績
-              </a>
-              <a href="/company" class="text-white hover:text-red-100 transition-colors font-medium">
-                会社概要
-              </a>
-              <a href="/contact" class="text-white hover:text-red-100 transition-colors font-medium">
-                お問い合わせ
-              </a>
-              
-              {/* Separator */}
-              <span class="text-white opacity-30">|</span>
-              
               {/* External Links */}
               <a href="https://resta24.jp/blog/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-red-100 transition-colors font-medium flex items-center gap-1">
                 BLOG
