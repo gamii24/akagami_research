@@ -257,13 +257,16 @@ app.use('*', secureHeaders({
       "https://www.googletagmanager.com",
       "https://www.google-analytics.com",
       "https://static.cloudflareinsights.com",
-      "https://cloudflareinsights.com"
+      "https://cloudflareinsights.com",
+      "https://platform.twitter.com", // Twitter widget script
+      "https://cdn.syndication.twimg.com" // Twitter syndication
     ],
     styleSrc: [
       "'self'",
       "'unsafe-inline'", // Required for Tailwind and inline styles
       "https://cdn.tailwindcss.com",
-      "https://cdn.jsdelivr.net"
+      "https://cdn.jsdelivr.net",
+      "https://ton.twimg.com" // Twitter styles
     ],
     imgSrc: [
       "'self'",
@@ -282,9 +285,13 @@ app.use('*', secureHeaders({
       "https://www.google-analytics.com",
       "https://www.googletagmanager.com",
       "https://static.cloudflareinsights.com", // Cloudflare Analytics
-      "https://cloudflareinsights.com" // Cloudflare Analytics
+      "https://cloudflareinsights.com", // Cloudflare Analytics
+      "https://syndication.twitter.com" // Twitter API
     ],
-    frameSrc: ["'none'"],
+    frameSrc: [
+      "https://platform.twitter.com", // Twitter embeds
+      "https://syndication.twitter.com" // Twitter syndication
+    ],
     objectSrc: ["'none'"],
     baseUri: ["'self'"],
     formAction: ["'self'"],
@@ -8997,18 +9004,6 @@ app.get('/announcements', async (c) => {
     // Replace line breaks
     return processedContent.split('\n').join('<br>');
   }
-
-  // Set CSP header to allow Twitter widgets
-  c.header('Content-Security-Policy', 
-    "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://cloudflareinsights.com https://platform.twitter.com https://cdn.syndication.twimg.com; " +
-    "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://fonts.googleapis.com https://ton.twimg.com; " +
-    "font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; " +
-    "img-src 'self' data: https: blob:; " +
-    "media-src 'self' https: blob:; " +
-    "frame-src https://platform.twitter.com https://syndication.twitter.com; " +
-    "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://cloudflareinsights.com https://syndication.twitter.com"
-  );
 
   return c.html(
     <html lang="ja">
