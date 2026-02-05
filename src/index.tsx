@@ -452,7 +452,8 @@ app.use('*', secureHeaders({
       "https://static.cloudflareinsights.com",
       "https://cloudflareinsights.com",
       "https://platform.twitter.com", // Twitter widget script
-      "https://cdn.syndication.twimg.com" // Twitter syndication
+      "https://cdn.syndication.twimg.com", // Twitter syndication
+      "https://www.clarity.ms" // Microsoft Clarity
     ],
     styleSrc: [
       "'self'",
@@ -478,7 +479,9 @@ app.use('*', secureHeaders({
       "https://www.googletagmanager.com",
       "https://static.cloudflareinsights.com", // Cloudflare Analytics
       "https://cloudflareinsights.com", // Cloudflare Analytics
-      "https://syndication.twitter.com" // Twitter API
+      "https://syndication.twitter.com", // Twitter API
+      "https://www.clarity.ms", // Microsoft Clarity
+      "https://*.clarity.ms" // Microsoft Clarity subdomains
     ],
     frameSrc: [
       "https://platform.twitter.com", // Twitter embeds

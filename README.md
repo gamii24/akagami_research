@@ -337,6 +337,47 @@ npx wrangler d1 migrations apply akagami-research-production --remote
 
 リアルタイムのアクセス解析は [Google Analyticsダッシュボード](https://analytics.google.com/analytics/web/#/p13287130556/reports/intelligenthome) で確認できます。
 
+## 🔥 Microsoft Clarity ヒートマップ統合（NEW！）
+
+### 概要
+Microsoft Clarityは**完全無料**の強力なヒートマップ・セッションリプレイツールです。ユーザーの行動を可視化し、サイト改善に活用できます。
+
+### 主な機能
+- **🔥 ヒートマップ**: クリックマップ、スクロールマップ、ムーブメントマップ
+- **📹 セッションリプレイ**: ユーザーの実際の操作を動画で再生
+- **📈 インサイト**: ページのパフォーマンス分析、ユーザー行動の理解
+- **✅ 完全無料**: トラフィック制限なし、無制限のデータ保存
+
+### 導入ステータス
+- ✅ **Clarityスクリプト追加済み**
+- ✅ **CSP（Content Security Policy）設定済み**
+- ⚠️ **要設定**: Project IDを `src/renderer.tsx` に設定してください
+
+### セットアップ手順
+詳細なセットアップ手順は `CLARITY_SETUP.md` を参照してください：
+
+1. **Clarityプロジェクト作成**: https://clarity.microsoft.com/ でアカウント作成
+2. **Project ID取得**: プロジェクト作成後に表示される8-10文字のID
+3. **コードに設定**: `src/renderer.tsx` の `CLARITY_PROJECT_ID` を実際のIDに置換
+4. **デプロイ**: ビルド・デプロイ後、5-15分でダッシュボードにデータ表示
+
+### Clarityで得られる改善
+- ✅ クリックされていないボタンを発見 → UIを改善
+- ✅ スクロールされていないコンテンツを発見 → レイアウト変更
+- ✅ ユーザーがどこで離脱しているか → コンテンツ改善
+- ✅ エラーが発生している箇所 → バグ修正
+
+### プライバシー保護
+- ✅ メールアドレス、パスワード、クレジットカード番号を自動でマスキング
+- ✅ 個人情報を自動的に保護
+- ✅ GDPR・CCPA準拠
+
+### ダッシュボードアクセス
+- **URL**: https://clarity.microsoft.com/
+- セットアップ後、「Heatmaps」と「Recordings」でユーザー行動を分析
+
+---
+
 ## ♿ アクセシビリティ対応
 
 ### ARIA属性の実装
