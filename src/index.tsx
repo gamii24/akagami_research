@@ -345,7 +345,7 @@ function CommonFooter() {
         </div>
         
         {/* About and Company Links - Desktop: inline, Mobile: card grid */}
-        {/* Mobile: Card Grid */}
+        {/* Mobile: Card Grid - Only 自己紹介 and 会社概要 */}
         <div class="grid grid-cols-2 gap-3 mb-6 lg:hidden">
           <a 
             href="/about" 
@@ -355,39 +355,11 @@ function CommonFooter() {
             自己紹介
           </a>
           <a 
-            href="/services" 
-            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
-          >
-            <i class="fas fa-briefcase text-lg mb-1 block"></i>
-            事業紹介
-          </a>
-          <a 
             href="/company" 
             class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
           >
             <i class="fas fa-building text-lg mb-1 block"></i>
             会社概要
-          </a>
-          <a 
-            href="/contact" 
-            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
-          >
-            <i class="fas fa-envelope text-lg mb-1 block"></i>
-            お問い合わせ
-          </a>
-          <a 
-            href="/privacy" 
-            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
-          >
-            <i class="fas fa-shield-alt text-lg mb-1 block"></i>
-            プライバシーポリシー
-          </a>
-          <a 
-            href="/terms" 
-            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
-          >
-            <i class="fas fa-file-contract text-lg mb-1 block"></i>
-            利用規約
           </a>
         </div>
         
