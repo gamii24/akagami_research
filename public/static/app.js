@@ -4,6 +4,8 @@ if (!window.state) {
     pdfs: [],
     articles: [], // Infographic articles
     categories: [],
+    tags: [], // Available tags
+    selectedTags: [], // Selected tag IDs for filtering
     selectedCategory: null,
     searchQuery: '',
     downloadedPdfs: new Set(),
@@ -1383,7 +1385,7 @@ function renderPDFList() {
             <i class="fas fa-tags mr-2 text-primary"></i>タグ一覧
           </h2>
           <div class="flex flex-wrap gap-2">
-            ${state.tags.map(tag => `
+            ${(state.tags || []).map(tag => `
               <button 
                 onclick="toggleTag(${tag.id})" 
                 class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-3 py-2 rounded-full text-sm font-medium"
