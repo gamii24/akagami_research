@@ -2395,7 +2395,7 @@ app.get('/api/news-with-likes', async (c) => {
         params.push(category)
       }
       
-      query += ' GROUP BY n.id ORDER BY n.published_at DESC LIMIT 50'
+      query += ' GROUP BY n.id ORDER BY n.published_at DESC LIMIT 5'
     } else {
       // Fallback query without likes
       query = `
@@ -2411,7 +2411,7 @@ app.get('/api/news-with-likes', async (c) => {
         params.push(category)
       }
       
-      query += ' ORDER BY n.published_at DESC LIMIT 50'
+      query += ' ORDER BY n.published_at DESC LIMIT 5'
     }
     
     const stmt = c.env.DB.prepare(query)
