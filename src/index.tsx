@@ -8461,6 +8461,16 @@ app.get('/company', (c) => {
                   <p class="text-lg font-semibold text-gray-800">赤髪（あかがみ）｜SNS戦略家</p>
                 </div>
                 
+                {/* Profile Photo */}
+                <div class="flex justify-center mb-6">
+                  <img 
+                    src="https://drive.google.com/thumbnail?id=1wMF_jP4_ROQVLSQYIamUc19dQFC_Zp45&sz=w1000"
+                    alt="赤髪プロフィール写真"
+                    class="w-full max-w-md rounded-lg shadow-lg"
+                    loading="lazy"
+                  />
+                </div>
+                
                 <div class="space-y-4 text-gray-700 leading-relaxed">
                   <p class="font-semibold">合同会社ジースリー代表</p>
                   
