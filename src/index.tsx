@@ -353,10 +353,17 @@ function CommonFooter() {
           </a>
           <a 
             href="/privacy" 
-            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200 col-span-2"
+            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
           >
             <i class="fas fa-shield-alt text-lg mb-1 block"></i>
             プライバシーポリシー
+          </a>
+          <a 
+            href="/terms" 
+            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
+          >
+            <i class="fas fa-file-contract text-lg mb-1 block"></i>
+            利用規約
           </a>
         </div>
         
@@ -395,6 +402,13 @@ function CommonFooter() {
             class="text-sm text-gray-600 hover:text-primary transition-colors"
           >
             プライバシーポリシー
+          </a>
+          <span class="text-gray-400">|</span>
+          <a 
+            href="/terms" 
+            class="text-sm text-gray-600 hover:text-primary transition-colors"
+          >
+            利用規約
           </a>
         </div>
         
@@ -6667,6 +6681,13 @@ app.get('/', (c) => {
             >
               プライバシーポリシー
             </a>
+            <span class="text-gray-400">|</span>
+            <a 
+              href="/terms" 
+              class="text-sm text-gray-600 hover:text-primary transition-colors"
+            >
+              利用規約
+            </a>
           </div>
           
           <p class="text-sm text-gray-500 text-center mb-1">&copy; 2026 Akagami.net. All rights reserved.</p>
@@ -8914,6 +8935,214 @@ app.get('/privacy', (c) => {
     {
       title: 'プライバシーポリシー - Akagami.net',
       description: 'Akagami.netのプライバシーポリシーページです。'
+    }
+  )
+})
+
+// Terms of Service Page
+app.get('/terms', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>利用規約 - Akagami.net</title>
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <div class="flex min-h-screen">
+          <main class="flex-1 p-6 lg:ml-0">
+            <div class="max-w-4xl mx-auto">
+              {/* Page Header */}
+              <div class="mb-8">
+                <h1 class="text-3xl font-bold text-dark mb-2">
+                  <i class="fas fa-file-contract mr-3" style="color: #e75556;"></i>
+                  利用規約
+                </h1>
+                <p class="text-gray-600">Terms of Service</p>
+              </div>
+
+              {/* Terms of Service Content */}
+              <div class="bg-white rounded-lg shadow-md p-8 mb-6 space-y-6">
+                <section>
+                  <p class="text-gray-700 mb-4">
+                    この利用規約（以下「本規約」といいます）は、合同会社ジースリー（以下「当社」といいます）が運営する「Akagami.net」（以下「本サービス」といいます）の利用条件を定めるものです。
+                    本サービスをご利用される方は、本規約に同意したものとみなします。
+                  </p>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第1条（適用）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>本規約は、本サービスの利用に関する当社とユーザーとの間の権利義務関係を定めることを目的とし、ユーザーと当社との間の本サービスの利用に関わる一切の関係に適用されます。</li>
+                    <li>当社が本サービス上で掲載する本サービス利用に関するルール等は、本規約の一部を構成するものとします。</li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第2条（定義）</h2>
+                  <p class="text-gray-700 mb-2">本規約において使用する以下の用語は、各々以下に定める意味を有するものとします。</p>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>「本サービス」とは、当社が運営するウェブサイト「Akagami.net」及びこれに関連するサービスを意味します。</li>
+                    <li>「ユーザー」とは、本サービスを利用する全ての方を意味します。</li>
+                    <li>「登録ユーザー」とは、本サービスに会員登録を行ったユーザーを意味します。</li>
+                    <li>「コンテンツ」とは、本サービス上で提供される資料、記事、画像、動画等の情報を意味します。</li>
+                  </ul>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第3条（利用登録）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>登録を希望する方は、本規約に同意の上、当社所定の方法により利用登録を申請するものとします。</li>
+                    <li>当社は、第1項に基づき利用登録の申請を行った方が以下の各号のいずれかに該当する場合、利用登録を承認しないことがあります。
+                      <ul class="list-disc list-inside text-gray-700 space-y-1 ml-6 mt-2">
+                        <li>虚偽の情報を登録した場合</li>
+                        <li>過去に本規約に違反したことがある場合</li>
+                        <li>その他、当社が登録を適当でないと判断した場合</li>
+                      </ul>
+                    </li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第4条（アカウント情報の管理）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>登録ユーザーは、自己の責任において、本サービスに関するパスワード及びメールアドレス等のアカウント情報を適切に管理及び保管するものとします。</li>
+                    <li>登録ユーザーは、アカウント情報を第三者に利用させ、または貸与、譲渡、名義変更、売買等をしてはならないものとします。</li>
+                    <li>アカウント情報の管理不十分、使用上の過誤、第三者の使用等による損害の責任は登録ユーザーが負うものとします。</li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第5条（コンテンツの利用）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>本サービスで提供されるコンテンツの著作権及びその他の知的財産権は、当社または正当な権利者に帰属します。</li>
+                    <li>ユーザーは、本サービスのコンテンツを個人利用の範囲内で使用することができます。</li>
+                    <li>ユーザーは、当社の事前の書面による許可なく、本サービスのコンテンツを以下の行為に使用することはできません。
+                      <ul class="list-disc list-inside text-gray-700 space-y-1 ml-6 mt-2">
+                        <li>商業目的での使用</li>
+                        <li>第三者への再配布、販売、貸与</li>
+                        <li>改変、翻案、二次的著作物の作成</li>
+                        <li>その他、著作権法に違反する行為</li>
+                      </ul>
+                    </li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第6条（禁止事項）</h2>
+                  <p class="text-gray-700 mb-2">ユーザーは、本サービスの利用にあたり、以下の行為を行ってはならないものとします。</p>
+                  <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                    <li>法令または公序良俗に違反する行為</li>
+                    <li>犯罪行為に関連する行為</li>
+                    <li>当社、他のユーザー、またはその他の第三者の知的財産権、肖像権、プライバシーの権利、名誉、その他の権利または利益を侵害する行為</li>
+                    <li>本サービスのネットワークまたはシステム等に過度な負荷をかける行為</li>
+                    <li>本サービスの運営を妨害するおそれのある行為</li>
+                    <li>不正アクセスをし、またはこれを試みる行為</li>
+                    <li>逆アセンブル、逆コンパイル、リバースエンジニアリング等により、本サービスのソースコードを解析する行為</li>
+                    <li>本サービスを通じて入手した情報を商業的に利用する行為</li>
+                    <li>当社が承認していない自動化されたツールの使用</li>
+                    <li>その他、当社が不適切と判断する行為</li>
+                  </ul>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第7条（サービスの停止・中断）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>当社は、以下のいずれかに該当する場合には、ユーザーに事前に通知することなく、本サービスの全部または一部の提供を停止または中断することができるものとします。
+                      <ul class="list-disc list-inside text-gray-700 space-y-1 ml-6 mt-2">
+                        <li>本サービスに係るシステムの保守点検または更新を行う場合</li>
+                        <li>地震、落雷、火災、停電、天災等の不可抗力により本サービスの提供が困難となった場合</li>
+                        <li>その他、当社が本サービスの停止または中断が必要と判断した場合</li>
+                      </ul>
+                    </li>
+                    <li>当社は、本条に基づく本サービスの停止または中断により、ユーザーまたは第三者が被ったいかなる不利益または損害について、理由を問わず一切の責任を負わないものとします。</li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第8条（免責事項）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>当社は、本サービスに関して、その完全性、正確性、有用性、安全性等について、いかなる保証も行うものではありません。</li>
+                    <li>当社は、本サービスの利用によってユーザーに生じた損害について、一切の責任を負いません。</li>
+                    <li>本サービスに関連してユーザーと他のユーザーまたは第三者との間において生じた取引、連絡、紛争等については、ユーザーの責任において処理及び解決するものとし、当社はかかる事項について一切責任を負いません。</li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第9条（利用規約の変更）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>当社は、必要と判断した場合、ユーザーに通知することなくいつでも本規約を変更することができるものとします。</li>
+                    <li>変更後の本規約は、当社が別途定める場合を除き、本サービス上に表示した時点より効力を生じるものとします。</li>
+                    <li>ユーザーが変更後の本規約に同意できない場合、ユーザーは直ちに本サービスの利用を中止するものとします。変更後も本サービスを継続して利用した場合、変更後の本規約に同意したものとみなします。</li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第10条（準拠法及び管轄裁判所）</h2>
+                  <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                    <li>本規約の解釈にあたっては、日本法を準拠法とします。</li>
+                    <li>本サービスに関して紛争が生じた場合には、東京地方裁判所を第一審の専属的合意管轄裁判所とします。</li>
+                  </ol>
+                </section>
+
+                <section>
+                  <h2 class="text-xl font-semibold text-dark mb-3">第11条（お問い合わせ）</h2>
+                  <p class="text-gray-700 mb-2">
+                    本規約に関するお問い合わせは、以下までご連絡ください。
+                  </p>
+                  <p class="text-gray-700">
+                    <strong>合同会社ジースリー</strong><br />
+                    メール: <a href="mailto:mail@akagami.oops.jp" class="text-primary hover:underline">mail@akagami.oops.jp</a>
+                  </p>
+                </section>
+
+                <div class="text-right text-gray-600 text-sm mt-8 pt-4 border-t border-gray-200">
+                  制定日：2026年2月5日
+                </div>
+              </div>
+
+              {/* Back to Top Link */}
+              <div class="text-center mt-8">
+                <a href="/" class="inline-flex items-center text-primary hover:underline">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  トップページへ戻る
+                </a>
+              </div>
+            </div>
+          </main>
+          
+          {CommonSidebar()}
+        </div>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202602050526"></script>
+      </body>
+    </html>,
+    {
+      title: '利用規約 - Akagami.net',
+      description: 'Akagami.netの利用規約ページです。サービスのご利用にあたってご確認ください。'
     }
   )
 })
