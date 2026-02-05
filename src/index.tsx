@@ -9014,8 +9014,7 @@ app.get('/announcements', async (c) => {
     // Replace Google Drive placeholders with image tags (single line, no line breaks)
     googleDriveMatches.forEach(({ url, fileId, placeholder }) => {
       const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-      const errorMsg = `画像を表示できません。<a href="${url}" target="_blank" class="text-blue-600 underline">こちらをクリック</a>してGoogleドライブで開いてください。`;
-      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4 max-w-2xl"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=&quot;border-2 border-gray-300 p-4 rounded-lg text-center&quot;><p class=&quot;text-gray-600&quot;><i class=&quot;fas fa-image&quot;></i> ${errorMsg}</p></div>';" /></a>`;
+      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4 max-w-2xl"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" loading="lazy" /></a>`;
       processedContent = processedContent.replace(placeholder, imgHtml);
     });
     
@@ -9065,9 +9064,9 @@ app.get('/announcements', async (c) => {
 
               {/* Announcements List */}
               {announcements.results && announcements.results.length > 0 ? (
-                <div class="space-y-4">
+                <div class="space-y-6">
                   {announcements.results.map((announcement: any) => (
-                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow mb-6">
                       <div class="flex items-start justify-between mb-3">
                         <h2 class="text-xl font-semibold text-dark flex-1">{announcement.title}</h2>
                         <span class="text-sm text-gray-500 ml-4 whitespace-nowrap">
