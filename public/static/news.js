@@ -66,7 +66,8 @@ async function loadNews() {
     console.log('[NEWS] Loading news from API...');
     const response = await axios.get('/api/news-with-likes', { withCredentials: true });
     console.log('[NEWS] API response:', response.data.length, 'items');
-    newsData = response.data;
+    // Limit to 5 items per page
+    newsData = response.data.slice(0, 5);
     renderNews();
   } catch (error) {
     console.error('[NEWS] Failed to load news:', error);

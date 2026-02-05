@@ -6885,6 +6885,8 @@ app.get('/news', async (c) => {
           </div>
         </main>
 
+        <CommonFooter />
+
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/news.js"></script>
         <script dangerouslySetInnerHTML={{
