@@ -1053,6 +1053,7 @@ function showSkeletonScreen() {
 }
 
 function renderPDFList() {
+  console.log('🔄 renderPDFList() called at', new Date().toISOString())
   const container = document.getElementById('pdf-list')
   if (!container) return
   
@@ -1266,13 +1267,17 @@ function renderPDFList() {
   if (isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 20) {
     itemsToShow = combinedItems.slice(0, 20)
     hasMore = true
+    console.log('📱 Mobile limit applied: showing', itemsToShow.length, 'of', combinedItems.length)
   }
   
   // On desktop top page, limit to 24 cards (4 columns × 6 rows) unless "show all" is clicked
   if (!isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 24) {
     itemsToShow = combinedItems.slice(0, 24)
     hasMore = true
+    console.log('💻 Desktop limit applied: showing', itemsToShow.length, 'of', combinedItems.length)
   }
+  
+  console.log('🎨 Rendering', itemsToShow.length, 'items (isMobile:', isMobile, 'isTopPage:', isTopPage, ')')
   
   html += itemsToShow.map((item, index) => {
     // Render article card (legacy - keep for compatibility)
@@ -1366,7 +1371,7 @@ function renderPDFList() {
       
       ${pdf.thumbnail_url ? `
         <!-- Thumbnail only (4:5 ratio optimized for mobile) - No title/date -->
-        <div class="relative w-full bg-white" style="padding-bottom: 110%;">
+        <div class="relative w-full bg-white" style="padding-bottom: 125%;">
           <img 
             data-src="${convertGoogleDriveUrl(pdf.thumbnail_url)}"
             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3C/svg%3E"
