@@ -9104,10 +9104,10 @@ app.get('/announcements', async (c) => {
 
         {/* Image Modal */}
         <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-[9999] hidden items-center justify-center p-4" onclick="window.closeImageModal()">
-          <div class="relative max-w-7xl max-h-screen">
+          <div class="relative w-full h-full flex items-center justify-center">
             <button 
               onclick="event.stopPropagation(); window.closeImageModal();" 
-              class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10 text-4xl"
+              class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 text-4xl bg-black bg-opacity-50 rounded-full w-16 h-16 flex items-center justify-center"
               aria-label="閉じる">
               <i class="fas fa-times"></i>
             </button>
@@ -9115,7 +9115,7 @@ app.get('/announcements', async (c) => {
               id="modalImage" 
               src="" 
               alt="拡大画像" 
-              class="max-w-full max-h-screen object-contain rounded-lg"
+              class="max-w-full max-h-full object-contain"
               onclick="event.stopPropagation()" />
           </div>
         </div>
@@ -9127,10 +9127,21 @@ app.get('/announcements', async (c) => {
               const modal = document.getElementById('imageModal');
               const modalImage = document.getElementById('modalImage');
               if (modal && modalImage) {
+                // 画像読み込み成功時のログ
+                modalImage.onload = function() {
+                  console.log('Image loaded successfully');
+                };
+                // 画像読み込み失敗時のログ
+                modalImage.onerror = function() {
+                  console.error('Failed to load image:', imageUrl);
+                };
                 modalImage.src = imageUrl;
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
                 document.body.style.overflow = 'hidden';
+                console.log('Modal opened, display:', window.getComputedStyle(modal).display);
+              } else {
+                console.error('Modal or modalImage element not found');
               }
             }
             
