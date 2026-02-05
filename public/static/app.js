@@ -974,55 +974,20 @@ function togglePdfSelection(event, pdfId) {
   updateMultiSelectToolbar()
 }
 
-// Long press handling for multi-select mode
-let longPressTimer = null
-let longPressTarget = null
-const LONG_PRESS_DURATION = 500 // 500ms for long press
-
-function handleLongPressStart(event, pdfId, downloadUrl) {
-  // Clear any existing timer
-  if (longPressTimer) {
-    clearTimeout(longPressTimer)
-  }
+// Card click handler - simple click for download
+function handleCardClick(event, pdfId, downloadUrl) {
+  event.stopPropagation()
   
-  longPressTarget = event.currentTarget
-  
-  // Start long press timer
-  longPressTimer = setTimeout(() => {
-    // Long press detected - enter multi-select mode
-    enterMultiSelectMode(pdfId)
-    longPressTimer = null
-    longPressTarget = null
-  }, LONG_PRESS_DURATION)
-}
-
-function handleLongPressEnd(event, pdfId, downloadUrl) {
-  // If timer is still running, it's a short press (normal click)
-  if (longPressTimer) {
-    clearTimeout(longPressTimer)
-    longPressTimer = null
-    longPressTarget = null
-    
-    // Handle normal click based on current mode
-    if (state.multiSelectMode) {
-      togglePdfSelection(event, pdfId)
+  // Handle normal click based on current mode
+  if (state.multiSelectMode) {
+    togglePdfSelection(event, pdfId)
+  } else {
+    // Normal download
+    if (downloadUrl) {
+      confirmDownload(pdfId, downloadUrl)
     } else {
-      // Normal download
-      if (downloadUrl) {
-        confirmDownload(pdfId, downloadUrl)
-      } else {
-        alert('このPDFのURLが設定されていません')
-      }
+      alert('このPDFのURLが設定されていません')
     }
-  }
-}
-
-function handleLongPressCancel() {
-  // Cancel long press if user moves finger away
-  if (longPressTimer) {
-    clearTimeout(longPressTimer)
-    longPressTimer = null
-    longPressTarget = null
   }
 }
 
@@ -1372,15 +1337,10 @@ function renderPDFList() {
     const isSelected = state.selectedPdfs.has(pdf.id)
     const bgColor = isSelected ? 'bg-blue-50 border-blue-500' : (downloaded ? 'bg-[#f4eee0]' : 'bg-white')
     
-    // Card event handlers - Use long press for multi-select
+    // Card event handlers - Desktop only long press, mobile uses select button
     const cardEvents = state.multiSelectMode 
       ? `onclick="togglePdfSelection(event, ${pdf.id})"`
-      : `onmousedown="handleLongPressStart(event, ${pdf.id}, '${downloadUrl}')" 
-         onmouseup="handleLongPressEnd(event, ${pdf.id}, '${downloadUrl}')" 
-         onmouseleave="handleLongPressCancel()"
-         ontouchstart="handleLongPressStart(event, ${pdf.id}, '${downloadUrl}')" 
-         ontouchend="handleLongPressEnd(event, ${pdf.id}, '${downloadUrl}')" 
-         ontouchcancel="handleLongPressCancel()"`
+      : `onclick="handleCardClick(event, ${pdf.id}, '${downloadUrl}')"``
     
     // List view
     if (state.viewMode === 'list') {
@@ -1411,6 +1371,15 @@ function renderPDFList() {
           </div>
           
           <div class="flex items-center gap-2">
+            <button 
+              onclick="enterMultiSelectMode(${pdf.id})"
+              class="select-btn-small bg-gray-100 hover:bg-gray-200 text-gray-700 rounded px-2 py-1 transition-all duration-200"
+              title="選択モードに入る"
+              style="flex-shrink: 0; font-size: 0.7rem; font-weight: 600;"
+              aria-label="選択モードに入る"
+            >
+              選択
+            </button>
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small ${favorite ? 'active' : ''}"
@@ -1467,6 +1436,15 @@ function renderPDFList() {
           <!-- Action buttons overlay on image (bottom-right) -->
           <div class="absolute bottom-1 right-1 flex items-center gap-1">
             <button 
+              onclick="enterMultiSelectMode(${pdf.id})"
+              class="select-btn-small bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-700 rounded px-1.5 py-0.5 transition-all duration-200 shadow-sm"
+              title="選択モードに入る"
+              style="flex-shrink: 0; font-size: 0.65rem; font-weight: 600;"
+              aria-label="選択モードに入る"
+            >
+              選択
+            </button>
+            <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
@@ -1496,6 +1474,15 @@ function renderPDFList() {
               <span class="text-xs" style="font-size: 0.6rem;">DL: ${pdf.download_count || 0}</span>
             </div>
             <div class="flex items-center gap-2">
+              <button 
+                onclick="enterMultiSelectMode(${pdf.id})"
+                class="select-btn-small bg-gray-100 hover:bg-gray-200 text-gray-700 rounded px-2 py-1 transition-all duration-200"
+                title="選択モードに入る"
+                style="flex-shrink: 0; font-size: 0.7rem; font-weight: 600;"
+                aria-label="選択モードに入る"
+              >
+                選択
+              </button>
               <button 
                 onclick="toggleFavorite(event, ${pdf.id})"
                 class="favorite-btn-small ${favorite ? 'active' : ''}"
