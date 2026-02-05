@@ -284,8 +284,48 @@ function CommonFooter() {
           </a>
         </div>
         
-        {/* About and Company Links */}
-        <div class="flex justify-center gap-6 mb-4">
+        {/* About and Company Links - Desktop: inline, Mobile: card grid */}
+        {/* Mobile: Card Grid */}
+        <div class="grid grid-cols-2 gap-3 mb-6 md:hidden">
+          <a 
+            href="/about" 
+            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
+          >
+            <i class="fas fa-user text-lg mb-1 block"></i>
+            自己紹介
+          </a>
+          <a 
+            href="/services" 
+            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
+          >
+            <i class="fas fa-briefcase text-lg mb-1 block"></i>
+            事業紹介
+          </a>
+          <a 
+            href="/company" 
+            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
+          >
+            <i class="fas fa-building text-lg mb-1 block"></i>
+            会社概要
+          </a>
+          <a 
+            href="/contact" 
+            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200"
+          >
+            <i class="fas fa-envelope text-lg mb-1 block"></i>
+            お問い合わせ
+          </a>
+          <a 
+            href="/privacy" 
+            class="bg-white hover:bg-primary hover:text-white text-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all p-4 text-center font-medium border border-gray-200 col-span-2"
+          >
+            <i class="fas fa-shield-alt text-lg mb-1 block"></i>
+            プライバシーポリシー
+          </a>
+        </div>
+        
+        {/* Desktop: Inline Links */}
+        <div class="hidden md:flex justify-center gap-6 mb-4">
           <a 
             href="/about" 
             class="text-sm text-gray-600 hover:text-primary transition-colors"
