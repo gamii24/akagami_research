@@ -453,7 +453,8 @@ app.use('*', secureHeaders({
       "https://cloudflareinsights.com",
       "https://platform.twitter.com", // Twitter widget script
       "https://cdn.syndication.twimg.com", // Twitter syndication
-      "https://www.clarity.ms" // Microsoft Clarity
+      "https://www.clarity.ms", // Microsoft Clarity
+      "https://scripts.clarity.ms" // Microsoft Clarity scripts
     ],
     styleSrc: [
       "'self'",
