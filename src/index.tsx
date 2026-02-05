@@ -3422,6 +3422,7 @@ app.get('/calendar/2', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "2月のSNS運用カレンダー - Akagami.net",
@@ -3677,6 +3678,7 @@ app.get('/calendar/3', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "3月のSNS運用カレンダー - Akagami.net",
@@ -3925,6 +3927,7 @@ app.get('/calendar/4', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "4月🌸のSNS運用カレンダー - Akagami.net",
@@ -4180,6 +4183,7 @@ app.get('/calendar/5', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "5月🎏のSNS運用カレンダー - Akagami.net",
@@ -4434,6 +4438,7 @@ app.get('/calendar/6', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "6月☔のSNS運用カレンダー - Akagami.net",
@@ -4703,6 +4708,7 @@ app.get('/calendar/7', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "7月🍉のSNS運用カレンダー - Akagami.net",
@@ -4950,6 +4956,7 @@ app.get('/calendar/8', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "8月🏄️のSNS運用カレンダー - Akagami.net",
@@ -5193,6 +5200,7 @@ app.get('/calendar/9', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "9月🍂のSNS運用カレンダー - Akagami.net",
@@ -5436,6 +5444,7 @@ app.get('/calendar/10', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "10月📖のSNS運用カレンダー - Akagami.net",
@@ -5679,6 +5688,7 @@ app.get('/calendar/11', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "11月🍁のSNS運用カレンダー - Akagami.net",
@@ -5918,6 +5928,7 @@ app.get('/calendar/12', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "12月🧣のSNS運用カレンダー - Akagami.net",
@@ -6162,6 +6173,7 @@ app.get('/calendar/1', (c) => {
           </div>
         </div>
       </main>
+      <CommonFooter />
     </div>,
     {
       title: "1月のSNS運用カレンダー - Akagami.net",
@@ -6317,6 +6329,7 @@ app.get('/categories', async (c) => {
             <CommonSidebar />
           </div>
         </main>
+        <CommonFooter />
         
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
@@ -6372,47 +6385,7 @@ app.get('/', (c) => {
   
   return c.render(
     <div class="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header class="bg-primary shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between">
-            <a href="/" class="hover:opacity-80 transition-opacity" aria-label="Akagami.net ホームページ">
-              <h1 class="text-xl font-bold text-white tracking-wide">
-                Akagami.net
-              </h1>
-            </a>
-            
-            {/* Desktop Navigation - Hidden on mobile */}
-            <nav class="hidden lg:flex items-center space-x-8" aria-label="メインナビゲーション">
-              <a href="https://resta24.jp/blog/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-red-100 transition-colors font-medium">
-                BLOG
-              </a>
-              <a href="https://akagami-prompt.pages.dev/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-red-100 transition-colors font-medium">
-                プロンプト
-              </a>
-            </nav>
-            
-            {/* Mobile Menu Button */}
-            <button 
-              onclick="toggleMobileMenu()"
-              class="lg:hidden text-white p-2 hover:bg-red-600 rounded-lg transition-colors"
-              aria-label="メニューを開く"
-              aria-expanded="false"
-            >
-              <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Sidebar Overlay for Mobile */}
-      <div 
-        id="sidebar-overlay" 
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"
-        onclick="toggleMobileMenu()"
-        aria-label="メニューを閉じる"
-        role="button"
-      ></div>
+      {CommonHeader(c)}
 
       {/* Mobile Search Bar - Show only on mobile */}
       <div class="lg:hidden bg-white border-b-2 border-gray-100 sticky top-0 z-30">
@@ -6606,113 +6579,7 @@ app.get('/', (c) => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* SNS Links */}
-          <div class="flex flex-wrap justify-center items-center gap-4 md:gap-6 mb-4">
-            <a 
-              href="https://note.com/akagami_sns" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
-              title="note"
-            >
-              <i class="fas fa-sticky-note text-xl"></i>
-              <span class="text-sm font-medium">note</span>
-            </a>
-            <a 
-              href="https://www.threads.com/@akagami0124" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
-              title="Threads"
-            >
-              <span class="text-xl">♡</span>
-              <span class="text-sm font-medium">Threads</span>
-            </a>
-            <a 
-              href="https://www.youtube.com/@akagami_sns" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
-              title="YouTube"
-            >
-              <i class="fab fa-youtube text-xl"></i>
-              <span class="text-sm font-medium">YouTube</span>
-            </a>
-            <a 
-              href="https://www.instagram.com/akagami_sns/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
-              title="Instagram"
-            >
-              <i class="fab fa-instagram text-xl"></i>
-              <span class="text-sm font-medium">Instagram</span>
-            </a>
-          </div>
-          
-          {/* About and Company Links */}
-          <div class="flex justify-center gap-6 mb-4">
-            <a 
-              href="/about" 
-              class="text-sm text-gray-600 hover:text-primary transition-colors"
-            >
-              自己紹介
-            </a>
-            <span class="text-gray-400">|</span>
-            <a 
-              href="/services" 
-              class="text-sm text-gray-600 hover:text-primary transition-colors"
-            >
-              事業紹介
-            </a>
-            <span class="text-gray-400">|</span>
-            <a 
-              href="/company" 
-              class="text-sm text-gray-600 hover:text-primary transition-colors"
-            >
-              会社概要
-            </a>
-            <span class="text-gray-400">|</span>
-            <a 
-              href="/contact" 
-              class="text-sm text-gray-600 hover:text-primary transition-colors"
-            >
-              お問い合わせ
-            </a>
-            <span class="text-gray-400">|</span>
-            <a 
-              href="/privacy" 
-              class="text-sm text-gray-600 hover:text-primary transition-colors"
-            >
-              プライバシーポリシー
-            </a>
-            <span class="text-gray-400">|</span>
-            <a 
-              href="/terms" 
-              class="text-sm text-gray-600 hover:text-primary transition-colors"
-            >
-              利用規約
-            </a>
-          </div>
-          
-          <p class="text-sm text-gray-500 text-center mb-1">&copy; 2026 Akagami.net. All rights reserved.</p>
-          <p class="text-xs text-gray-400 text-center">運営：合同会社ジースリー</p>
-          
-          {/* Admin link - Desktop only, subtle */}
-          <div class="hidden lg:block fixed bottom-4 right-4">
-            <a 
-              href="/admin" 
-              class="text-xs text-gray-300 hover:text-gray-400 transition-colors opacity-30 hover:opacity-50"
-              style="font-size: 10px;"
-            >
-              管理画面
-            </a>
-          </div>
-        </div>
-      </footer>
+      <CommonFooter />
 
       {/* Authentication Modal */}
       <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
@@ -8040,14 +7907,28 @@ app.get('/instagram-faq', (c) => {
         <link href="/static/style.css" rel="stylesheet" />
       </head>
       <body class="bg-gray-50">
-        <div id="faq-app">
-          <div class="min-h-screen flex items-center justify-center bg-gray-100">
-            <div class="text-center">
-              <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
-              <p class="text-gray-600">読み込み中...</p>
+        <CommonHeader />
+        
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar */}
+            <CommonSidebar />
+
+            {/* FAQ Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
+              <div id="faq-app">
+                <div class="min-h-screen flex items-center justify-center bg-gray-100">
+                  <div class="text-center">
+                    <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+                    <p class="text-gray-600">読み込み中...</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </main>
+
+        <CommonFooter />
         
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
@@ -8085,14 +7966,28 @@ app.get('/tiktok-faq', (c) => {
         <link href="/static/style.css" rel="stylesheet" />
       </head>
       <body class="bg-gray-50">
-        <div id="faq-app">
-          <div class="min-h-screen flex items-center justify-center bg-gray-100">
-            <div class="text-center">
-              <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
-              <p class="text-gray-600">読み込み中...</p>
+        <CommonHeader />
+        
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar */}
+            <CommonSidebar />
+
+            {/* FAQ Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
+              <div id="faq-app">
+                <div class="min-h-screen flex items-center justify-center bg-gray-100">
+                  <div class="text-center">
+                    <i class="fas fa-spinner fa-spin text-5xl text-primary mb-4"></i>
+                    <p class="text-gray-600">読み込み中...</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </main>
+
+        <CommonFooter />
         
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
@@ -8150,6 +8045,8 @@ app.get('/sns-faq', (c) => {
             </div>
           </div>
         </main>
+
+        <CommonFooter />
 
         {/* Auth Modal */}
         <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
@@ -9023,6 +8920,8 @@ app.get('/company', (c) => {
             </div>
         </main>
 
+        <CommonFooter />
+
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
         <script src="/static/app.js?v=202602050526"></script>
@@ -9768,6 +9667,8 @@ app.get('/services', (c) => {
             </div>
         </main>
 
+        <CommonFooter />
+
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
         <script src="/static/app.js?v=202602050526"></script>
@@ -9936,6 +9837,8 @@ app.get('/speaking', (c) => {
             </div>
           </div>
         </main>
+
+        <CommonFooter />
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
