@@ -8989,45 +8989,37 @@ app.get('/announcements', async (c) => {
   function processContent(content: string) {
     let processedContent = content;
     
-    // Google Drive URL pattern: https://drive.google.com/file/d/{FILE_ID}/view
+    // First, replace Google Drive URLs with placeholders to avoid double-processing
     const googleDrivePattern = /https?:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\/[^\s]*/g;
-    const googleDriveUrls = content.match(googleDrivePattern);
+    const googleDriveMatches: Array<{url: string, fileId: string, placeholder: string}> = [];
+    let match;
     
-    if (googleDriveUrls) {
-      googleDriveUrls.forEach(url => {
-        // Extract file ID from Google Drive URL
-        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
-        if (match) {
-          const fileId = match[1];
-          // Try multiple Google Drive image formats
-          const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-          
-          // Create a clickable image that opens the original in a new tab
-          const imgWithLink = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4">
-            <img src="${thumbnailUrl}" 
-                 alt="画像" 
-                 class="max-w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" 
-                 loading="lazy"
-                 onerror="this.onerror=null; this.src='https://drive.google.com/uc?export=view&id=${fileId}'; this.parentElement.classList.add('border-2', 'border-gray-300', 'p-4'); this.parentElement.innerHTML='<p class=\\'text-gray-600\\'><i class=\\'fas fa-image\\'></i> 画像を表示できません。<a href=\\'${url}\\' target=\\'_blank\\' class=\\'text-blue-600 underline\\'>こちらをクリック</a>してGoogleドライブで開いてください。</p>';" />
-          </a>`;
-          processedContent = processedContent.replace(url, imgWithLink);
-        }
-      });
+    while ((match = googleDrivePattern.exec(content)) !== null) {
+      const url = match[0];
+      const fileId = match[1];
+      const placeholder = `___GDRIVE_${googleDriveMatches.length}___`;
+      googleDriveMatches.push({ url, fileId, placeholder });
+      processedContent = processedContent.replace(url, placeholder);
     }
     
     // Convert remaining URLs to clickable links
     const urlPattern = /https?:\/\/[^\s<]+/g;
-    const urls = processedContent.match(urlPattern);
-    if (urls) {
-      urls.forEach(url => {
-        // Skip if already processed (inside img tag or anchor tag)
-        if (!processedContent.includes(`src="${url}"`) && 
-            !processedContent.includes(`href="${url}"`)) {
-          const linkTag = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">${url}</a>`;
-          processedContent = processedContent.replace(url, linkTag);
-        }
-      });
-    }
+    processedContent = processedContent.replace(urlPattern, (url) => {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">${url}</a>`;
+    });
+    
+    // Replace Google Drive placeholders with image tags
+    googleDriveMatches.forEach(({ url, fileId, placeholder }) => {
+      const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4">
+        <img src="${thumbnailUrl}" 
+             alt="画像" 
+             class="max-w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" 
+             loading="lazy"
+             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'border-2 border-gray-300 p-4 rounded-lg text-center\\'><p class=\\'text-gray-600\\'><i class=\\'fas fa-image\\'></i> 画像を表示できません。<a href=\\'${url}\\' target=\\'_blank\\' class=\\'text-blue-600 underline\\'>こちらをクリック</a>してGoogleドライブで開いてください。</p></div>';" />
+      </a>`;
+      processedContent = processedContent.replace(placeholder, imgHtml);
+    });
     
     // Replace line breaks
     return processedContent.split('\n').join('<br>');
