@@ -1354,7 +1354,7 @@ function renderPDFList() {
       onclick="${cardClick}"
       ontouchstart="handleTouchStart(event, ${pdf.id})"
       ontouchend="handleTouchEnd(event)"
-      class="pdf-card ${bgColor} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 cursor-pointer flex flex-col"
+      class="pdf-card ${bgColor} rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border cursor-pointer flex flex-col"
       style="position: relative;"
       data-pdf-id="${pdf.id}"
     >
@@ -1365,8 +1365,8 @@ function renderPDFList() {
       ` : ''}
       
       ${pdf.thumbnail_url ? `
-        <!-- Thumbnail only (4:5 ratio) - No title/date -->
-        <div class="relative w-full bg-white" style="padding-bottom: 125%;">
+        <!-- Thumbnail only (4:5 ratio optimized for mobile) - No title/date -->
+        <div class="relative w-full bg-white" style="padding-bottom: 110%;">
           <img 
             data-src="${convertGoogleDriveUrl(pdf.thumbnail_url)}"
             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3C/svg%3E"
@@ -1377,25 +1377,25 @@ function renderPDFList() {
           />
           <div class="absolute inset-0 bg-gray-100 animate-pulse loading-placeholder"></div>
           ${downloaded ? `
-            <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
-              <i class="fas fa-check-circle mr-1"></i>DL済
+            <div class="absolute top-1 right-1 bg-primary text-white px-1.5 py-0.5 rounded-full text-xs font-bold shadow-lg">
+              <i class="fas fa-check-circle mr-0.5"></i>DL済
             </div>
           ` : ''}
           <!-- Download count overlay on image (bottom-left) -->
-          <div class="absolute bottom-2 left-2 text-white" style="font-size: 0.7rem;">
+          <div class="absolute bottom-1 left-1 text-white" style="font-size: 0.6rem;">
             DL数：${pdf.download_count || 0}
           </div>
           <!-- Action buttons overlay on image (bottom-right) -->
-          <div class="absolute bottom-2 right-2 flex items-center gap-2">
+          <div class="absolute bottom-1 right-1 flex items-center gap-1">
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
-              style="flex-shrink: 0; transform: translateY(9px);"
+              style="flex-shrink: 0; transform: translateY(6px);"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
-              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.86502rem;" aria-hidden="true"></i>
+              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.75rem;" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -1403,18 +1403,18 @@ function renderPDFList() {
         <!-- No thumbnail - Show title and date -->
         <div class="p-4 flex-1 flex flex-col">
           ${downloaded ? `
-            <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg z-10">
-              <i class="fas fa-check-circle mr-1"></i>DL済
+            <div class="absolute top-1 right-1 bg-primary text-white px-1.5 py-0.5 rounded-full text-xs font-bold shadow-lg z-10">
+              <i class="fas fa-check-circle mr-0.5"></i>DL済
             </div>
           ` : ''}
-          <h3 class="text-sm font-bold text-gray-800 leading-snug break-words mb-2 line-clamp-2 flex-1">
+          <h3 class="text-xs font-bold text-gray-800 leading-snug break-words mb-1 line-clamp-2 flex-1">
             ${escapeHtml(pdf.title)}
           </h3>
           
-          <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="text-xs">${formatDate(pdf.created_at)}</span>
-              <span class="text-xs">DL: ${pdf.download_count || 0}</span>
+          <div class="flex items-center justify-between text-xs text-gray-500 mt-1">
+            <div class="flex items-center gap-1 flex-wrap">
+              <span class="text-xs" style="font-size: 0.6rem;">${formatDate(pdf.created_at)}</span>
+              <span class="text-xs" style="font-size: 0.6rem;">DL: ${pdf.download_count || 0}</span>
             </div>
             <div class="flex items-center gap-2">
               <button 
