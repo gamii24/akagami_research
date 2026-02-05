@@ -445,8 +445,7 @@ app.use('*', secureHeaders({
     defaultSrc: ["'self'"],
     scriptSrc: [
       "'self'",
-      "'unsafe-inline'", // Required for Tailwind CDN and inline scripts
-      "https://cdn.tailwindcss.com",
+      "'unsafe-inline'", // Required for inline scripts
       "https://cdn.jsdelivr.net",
       "https://www.googletagmanager.com",
       "https://www.google-analytics.com",
@@ -457,8 +456,7 @@ app.use('*', secureHeaders({
     ],
     styleSrc: [
       "'self'",
-      "'unsafe-inline'", // Required for Tailwind and inline styles
-      "https://cdn.tailwindcss.com",
+      "'unsafe-inline'", // Required for inline styles
       "https://cdn.jsdelivr.net",
       "https://ton.twimg.com" // Twitter styles
     ],
@@ -6756,7 +6754,7 @@ app.get('/news', async (c) => {
           `
         }} />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -7446,7 +7444,7 @@ app.get('/mypage', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>マイページ - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -7488,7 +7486,7 @@ app.get('/mypage', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
         <script src="/static/mypage.js?v=202601181337"></script>
         
         {/* Falling Hearts Animation - Different settings for mobile and PC */}
@@ -7649,7 +7647,7 @@ app.get('/question-finder', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>キーワードチェック - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -7860,7 +7858,7 @@ app.get('/question-finder', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js?v=202602051312"></script>
+        <script defer src="/static/app.js?v=202602051332"></script>
         <script defer src="/static/question-finder.js?v=2026011610"></script>
       </body>
     </html>
@@ -7877,7 +7875,7 @@ app.get('/instagram-faq', (c) => {
         <title>Instagram運用 SNSの疑問 - Akagami.net</title>
         <meta name="description" content="Instagram運用でSNSの疑問に赤髪が回答。フォロワーの増やし方、投稿のコツ、収益化まで現場のリアルな答えをまとめました。" />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -7936,7 +7934,7 @@ app.get('/tiktok-faq', (c) => {
         <title>TikTok運用 SNSの疑問 - Akagami.net</title>
         <meta name="description" content="TikTok運用でSNSの疑問に赤髪が回答。動画の作り方、バズらせ方、収益化まで現場のリアルな答えをまとめました。" />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -7995,7 +7993,7 @@ app.get('/sns-faq', (c) => {
         <title>SNS運用 SNSの疑問 - Akagami.net</title>
         <meta name="description" content="Instagram・TikTok・YouTube・Threadsなど、SNS運用でSNSの疑問に赤髪が回答。現場のリアルな答えをまとめました。" />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -8190,7 +8188,7 @@ app.get('/sns-faq', (c) => {
         
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js?v=202602051312"></script>
+        <script defer src="/static/app.js?v=202602051332"></script>
         <script defer src="/static/sns-faq.js?v=2026011610"></script>
       </body>
     </html>
@@ -8207,7 +8205,7 @@ app.get('/glossary', (c) => {
         <title>SNSマーケティング用語集 - Akagami.net</title>
         <meta name="description" content="SNSマーケティングに関する重要な用語を分かりやすく解説。Instagram、TikTok、YouTube、X（Twitter）などの専門用語を網羅した用語集です。" />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -8523,7 +8521,7 @@ app.get('/glossary', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
       </body>
     </html>,
     {
@@ -8677,7 +8675,7 @@ app.get('/company', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>会社概要 - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -8913,7 +8911,7 @@ app.get('/company', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
       </body>
     </html>,
     {
@@ -8932,7 +8930,7 @@ app.get('/contact', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>お問い合わせ - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -9032,7 +9030,7 @@ app.get('/contact', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
       </body>
     </html>,
     {
@@ -9051,7 +9049,7 @@ app.get('/privacy', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>プライバシーポリシー - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -9164,7 +9162,7 @@ app.get('/privacy', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
       </body>
     </html>,
     {
@@ -9183,7 +9181,7 @@ app.get('/terms', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>利用規約 - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -9368,7 +9366,7 @@ app.get('/terms', (c) => {
 
           <script src="/static/utils.js?v=202601181036"></script>
           <script src="/static/auth.js?v=202601181036"></script>
-          <script src="/static/app.js?v=202602051312"></script>
+          <script src="/static/app.js?v=202602051332"></script>
         </body>
     </html>,
     {
@@ -9387,7 +9385,7 @@ app.get('/services', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>事業紹介 - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -9664,7 +9662,7 @@ app.get('/services', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
       </body>
     </html>,
     {
@@ -9683,7 +9681,7 @@ app.get('/speaking', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>講演実績 - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -9836,7 +9834,7 @@ app.get('/speaking', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
       </body>
     </html>,
     {
@@ -9903,7 +9901,7 @@ app.get('/announcements', async (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>お知らせ - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -10048,7 +10046,7 @@ app.get('/announcements', async (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051312"></script>
+        <script src="/static/app.js?v=202602051332"></script>
       </body>
     </html>,
     {
@@ -10128,7 +10126,7 @@ app.get('/admin/announcements', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>お知らせ管理 - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -10303,7 +10301,7 @@ app.get('/admin/instagram-faq', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>SNS FAQ 管理 - Akagami.net</title>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -10622,7 +10620,7 @@ app.get('/admin', (c) => {
           `
         }} />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -10680,7 +10678,7 @@ app.get('/admin/news', (c) => {
           `
         }} />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -10738,7 +10736,7 @@ app.get('/admin/articles', requireAuth, (c) => {
           `
         }} />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -10799,7 +10797,7 @@ app.get('/admin/users', requireAuth, (c) => {
           `
         }} />
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/output.css" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{
           __html: `
             tailwind.config = {
@@ -10952,7 +10950,7 @@ app.get('/article/:slug', async (c) => {
           }} />
           
           {/* Tailwind CSS CDN for article styling */}
-          <script src="https://cdn.tailwindcss.com"></script>
+          <link href="/static/output.css" rel="stylesheet" />
           <script dangerouslySetInnerHTML={{
             __html: `
               tailwind.config = {
@@ -11025,7 +11023,7 @@ app.get('/article/:slug', async (c) => {
           
           <script src="/static/utils.js"></script>
           <script src="/static/auth.js"></script>
-          <script src="/static/app.js?v=202602051312"></script>
+          <script src="/static/app.js?v=202602051332"></script>
         </body>
       </html>
     )
@@ -11044,24 +11042,8 @@ app.notFound((c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>404 Not Found - Akagami.net</title>
         
-        {/* Performance Optimization */}
-        <link rel="preconnect" href="https://cdn.tailwindcss.com" />
-        <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
-        
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            tailwind.config = {
-              theme: {
-                extend: {
-                  colors: {
-                    primary: '#e75556',
-                  }
-                }
-              }
-            }
-          `
-        }} />
+        {/* Stylesheets */}
+        <link href="/static/output.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         
         <style dangerouslySetInnerHTML={{

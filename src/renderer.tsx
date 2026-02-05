@@ -85,10 +85,8 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
         {/* Performance Optimization - Preconnect to external domains */}
-        <link rel="preconnect" href="https://cdn.tailwindcss.com" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         
@@ -173,27 +171,8 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
           }} />
         ))}
         
-        {/* Tailwind CSS - using CDN temporarily, will optimize later */}
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            tailwind.config = {
-              darkMode: 'class',
-              theme: {
-                extend: {
-                  colors: {
-                    primary: '#e75556',
-                    secondary: '#e75556',
-                    accent: '#e75556',
-                    dark: '#333333',
-                    darker: '#1a1a1a',
-                    light: '#ffffff',
-                  }
-                }
-              }
-            }
-          `
-        }} />
+        {/* Tailwind CSS - Production build (optimized and purged) */}
+        <link href="/static/output.css" rel="stylesheet" />
         
         {/* Font Awesome - restored for proper icon rendering */}
         <link 
@@ -405,7 +384,7 @@ export const renderer = jsxRenderer(({ children, title, description, keywords, c
         </div>
         
         <script src="/static/utils.js?v=202601181036" defer></script>
-        <script src="/static/app.js?v=202602051312" defer></script>
+        <script src="/static/app.js?v=202602051332" defer></script>
         <script src="/static/auth.js?v=202601181036" defer></script>
       </body>
     </html>
