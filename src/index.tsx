@@ -194,6 +194,14 @@ function CommonSidebar() {
             <span>SNSの疑問</span>
           </a>
           <a
+            href="/glossary"
+            class="w-full px-4 py-3 bg-amber-50 hover:bg-amber-100 text-amber-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-amber-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="SNSマーケティング用語集を開く"
+          >
+            <i class="fas fa-book"></i>
+            <span>用語集</span>
+          </a>
+          <a
             href="https://resta24.jp/blog/"
             target="_blank"
             rel="noopener noreferrer"
@@ -8301,6 +8309,342 @@ app.get('/sns-faq', (c) => {
         <script defer src="/static/sns-faq.js?v=2026011610"></script>
       </body>
     </html>
+  )
+})
+
+// SNS Marketing Glossary Page
+app.get('/glossary', (c) => {
+  return c.html(
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SNSマーケティング用語集 - Akagami.net</title>
+        <meta name="description" content="SNSマーケティングに関する重要な用語を分かりやすく解説。Instagram、TikTok、YouTube、X（Twitter）などの専門用語を網羅した用語集です。" />
+        
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: '#e75556',
+                    beige: '#f5f2ed',
+                    dark: '#333333',
+                  }
+                }
+              }
+            }
+          `
+        }} />
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <link href="/static/style.css" rel="stylesheet" />
+      </head>
+      <body class="bg-beige">
+        {CommonHeader(c)}
+        
+        <main class="flex-1 p-6 lg:ml-0">
+          <div class="max-w-5xl mx-auto">
+            {/* Page Header */}
+            <div class="mb-8">
+              <h1 class="text-3xl font-bold text-dark mb-2">
+                <i class="fas fa-book mr-3" style="color: #e75556;"></i>
+                SNSマーケティング用語集
+              </h1>
+              <p class="text-gray-600">SNS Marketing Glossary</p>
+            </div>
+
+            {/* Introduction */}
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+              <p class="text-gray-700 leading-relaxed">
+                SNSマーケティングで使われる重要な用語を分かりやすく解説しています。
+                Instagram、TikTok、YouTube、X（Twitter）などのプラットフォーム別の用語や、
+                マーケティング全般で使用される専門用語を網羅しています。
+              </p>
+            </div>
+
+            {/* 基本用語 */}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-primary">
+                <i class="fas fa-star mr-2 text-primary"></i>
+                基本用語
+              </h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-primary pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">エンゲージメント（Engagement）</h3>
+                  <p class="text-gray-700">
+                    ユーザーが投稿に対して行う「いいね」「コメント」「シェア」「保存」などのアクション全般を指します。
+                    エンゲージメント率が高いほど、フォロワーとの関係性が良好で、アルゴリズムからも評価されやすくなります。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-primary pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">リーチ（Reach）</h3>
+                  <p class="text-gray-700">
+                    投稿を見たユニークユーザー数のこと。同じユーザーが複数回見ても1としてカウントされます。
+                    リーチを増やすことで、より多くの人に情報を届けることができます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-primary pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">インプレッション（Impression）</h3>
+                  <p class="text-gray-700">
+                    投稿が表示された回数の合計。同じユーザーに複数回表示された場合も全てカウントされます。
+                    インプレッション÷リーチで、平均表示回数を算出できます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-primary pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">アルゴリズム（Algorithm）</h3>
+                  <p class="text-gray-700">
+                    各SNSプラットフォームが、ユーザーに表示するコンテンツを決定するためのルールやシステム。
+                    エンゲージメント率、滞在時間、投稿頻度などさまざまな要素で評価されます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-primary pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">UGC（User Generated Content）</h3>
+                  <p class="text-gray-700">
+                    ユーザーが自発的に作成・投稿したコンテンツ。顧客の口コミ、レビュー、使用写真など。
+                    企業が作るコンテンツより信頼性が高く、マーケティングに活用されます。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Instagram用語 */}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-pink-500">
+                <i class="fab fa-instagram mr-2 text-pink-500"></i>
+                Instagram用語
+              </h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-pink-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">リール（Reels）</h3>
+                  <p class="text-gray-700">
+                    最大90秒のショート動画機能。発見タブに表示されやすく、フォロワー外へのリーチ拡大に効果的。
+                    音楽やエフェクトを使って、エンターテイメント性の高いコンテンツを作成できます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-pink-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">ストーリーズ（Stories）</h3>
+                  <p class="text-gray-700">
+                    24時間で消える短期コンテンツ。日常的な投稿やリアルタイム情報の共有に適しています。
+                    ステッカー、質問箱、アンケートなどインタラクティブな機能が豊富です。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-pink-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">保存数（Saves）</h3>
+                  <p class="text-gray-700">
+                    ユーザーが投稿を後で見返すために保存した回数。Instagramのアルゴリズムで重要視される指標の一つ。
+                    保存されやすいコンテンツは有益性が高いと評価されます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-pink-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">ハイライト（Highlights）</h3>
+                  <p class="text-gray-700">
+                    ストーリーズをプロフィールに永続的に保存できる機能。カテゴリごとに整理することで、
+                    プロフィールページを充実させ、新規フォロワーへの情報提供に活用できます。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* TikTok用語 */}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-blue-500">
+                <i class="fab fa-tiktok mr-2 text-blue-500"></i>
+                TikTok用語
+              </h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">おすすめ（For You Page / FYP）</h3>
+                  <p class="text-gray-700">
+                    TikTokのメインフィード。フォローしていないアカウントの動画も表示され、バズる可能性が高いページ。
+                    アルゴリズムによってユーザーの興味に合わせた動画が配信されます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">デュエット（Duet）</h3>
+                  <p class="text-gray-700">
+                    他のユーザーの動画と並べて自分の動画を投稿できる機能。リアクション動画やコラボレーションに使われます。
+                    エンゲージメントを高める効果的な手法です。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">視聴完了率</h3>
+                  <p class="text-gray-700">
+                    動画を最後まで見たユーザーの割合。TikTokのアルゴリズムで最も重視される指標の一つ。
+                    視聴完了率が高いほど、おすすめに表示されやすくなります。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">トレンド音源</h3>
+                  <p class="text-gray-700">
+                    TikTokで流行している音楽やサウンド。トレンド音源を使用することで、
+                    おすすめに表示されやすくなり、リーチ拡大が期待できます。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* YouTube用語 */}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-red-500">
+                <i class="fab fa-youtube mr-2 text-red-500"></i>
+                YouTube用語
+              </h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-red-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">CTR（Click Through Rate）</h3>
+                  <p class="text-gray-700">
+                    サムネイルとタイトルが表示された回数に対して、実際にクリックされた割合。
+                    CTRが高いほど、サムネイルとタイトルが魅力的だと判断されます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-red-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">平均視聴時間</h3>
+                  <p class="text-gray-700">
+                    視聴者が動画を平均して何分視聴したかを示す指標。YouTubeのアルゴリズムで重要視されます。
+                    視聴維持率と合わせて分析することで、動画の改善点が見つかります。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-red-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">ショート（Shorts）</h3>
+                  <p class="text-gray-700">
+                    最大60秒の縦型ショート動画。TikTokやInstagramリールと同様の形式で、
+                    新規視聴者獲得に効果的なフォーマットです。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-red-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">チャプター</h3>
+                  <p class="text-gray-700">
+                    動画を章立てして、視聴者が見たい部分にジャンプできる機能。
+                    ユーザビリティが向上し、視聴維持率の改善にもつながります。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* X（Twitter）用語 */}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-gray-700">
+                <i class="fab fa-x-twitter mr-2 text-gray-700"></i>
+                X（Twitter）用語
+              </h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-gray-700 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">リポスト（Repost / RT）</h3>
+                  <p class="text-gray-700">
+                    他のユーザーのポストを自分のフォロワーにシェアする機能。旧称はリツイート（Retweet）。
+                    リポストされることで、投稿のリーチが大きく拡大します。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-gray-700 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">インプレッション数</h3>
+                  <p class="text-gray-700">
+                    ポストがユーザーのタイムラインに表示された回数。X（Twitter）では特に重視される指標で、
+                    アナリティクスで確認できます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-gray-700 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">スペース（Space）</h3>
+                  <p class="text-gray-700">
+                    音声チャットルーム機能。リアルタイムで複数人と会話でき、
+                    フォロワーとのエンゲージメント強化やコミュニティ形成に活用できます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-gray-700 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">スレッド（Thread）</h3>
+                  <p class="text-gray-700">
+                    複数のポストを連続して投稿する形式。長文の情報を分割して伝えたい時に便利で、
+                    ストーリー性のあるコンテンツ作成に適しています。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* マーケティング用語 */}
+            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-green-500">
+                <i class="fas fa-chart-line mr-2 text-green-500"></i>
+                マーケティング用語
+              </h2>
+              <div class="space-y-6">
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">CVR（Conversion Rate / コンバージョン率）</h3>
+                  <p class="text-gray-700">
+                    アクセスしたユーザーのうち、購入や問い合わせなどの目標行動を達成した割合。
+                    CVR改善はマーケティングROI向上の鍵となります。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">KPI（Key Performance Indicator）</h3>
+                  <p class="text-gray-700">
+                    重要業績評価指標。ビジネスの目標達成度を測る具体的な指標。
+                    SNSマーケティングでは、フォロワー数、エンゲージメント率、CVRなどが設定されます。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">ペルソナ（Persona）</h3>
+                  <p class="text-gray-700">
+                    ターゲット顧客の具体的な人物像。年齢、性別、職業、趣味、悩みなどを詳細に設定し、
+                    コンテンツ制作やマーケティング戦略の指針とします。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">オーガニック（Organic）</h3>
+                  <p class="text-gray-700">
+                    広告を使わずに自然に獲得したリーチやフォロワー。
+                    広告（ペイド）と対比して使われ、長期的なアカウント成長の基盤となります。
+                  </p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h3 class="text-lg font-semibold text-dark mb-2">インフルエンサーマーケティング</h3>
+                  <p class="text-gray-700">
+                    影響力のある個人（インフルエンサー）に商品やサービスをPRしてもらうマーケティング手法。
+                    ターゲット層への信頼性の高いアプローチが可能です。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Back to Top Link */}
+            <div class="text-center mt-8">
+              <a href="/" class="inline-flex items-center text-primary hover:underline">
+                <i class="fas fa-arrow-left mr-2"></i>
+                トップページへ戻る
+              </a>
+            </div>
+          </div>
+        </main>
+
+        <script src="/static/utils.js?v=202601181036"></script>
+        <script src="/static/auth.js?v=202601181036"></script>
+        <script src="/static/app.js?v=202602050526"></script>
+      </body>
+    </html>,
+    {
+      title: 'SNSマーケティング用語集 - Akagami.net',
+      description: 'SNSマーケティングに関する重要な用語を分かりやすく解説。Instagram、TikTok、YouTube、X（Twitter）などの専門用語を網羅した用語集です。'
+    }
   )
 })
 
