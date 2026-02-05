@@ -4,9 +4,7 @@ if (!window.state) {
     pdfs: [],
     articles: [], // Infographic articles
     categories: [],
-    tags: [],
     selectedCategory: null,
-    selectedTags: [],
     searchQuery: '',
     downloadedPdfs: new Set(),
     allPdfs: [], // Store all PDFs for counting
@@ -533,18 +531,14 @@ function fallbackCopyToClipboard(text) {
 async function initApp() {
   loadDownloadedPdfs()
   
-  // Phase 1: Load categories and tags first (very fast)
-  await Promise.all([
-    loadCategories(),
-    loadTags()
-  ])
+  // Phase 1: Load categories first (very fast)
+  await loadCategories()
   
   // Restore state from URL if present
   restoreStateFromURL()
   
   // Render UI immediately (without waiting for PDFs)
   renderCategoryFilter()
-  renderTagFilter()
   setupEventListeners()
   
   // Show skeleton for PDF area only
@@ -576,12 +570,6 @@ function restoreStateFromURL() {
     state.selectedCategory = parseInt(categoryId)
   }
   
-  // Restore tags
-  const tagsParam = params.get('tags')
-  if (tagsParam) {
-    state.selectedTags = tagsParam.split(',').map(id => parseInt(id))
-  }
-  
   // Restore search query
   const search = params.get('search')
   if (search) {
@@ -599,10 +587,6 @@ function updateURL() {
   
   if (state.selectedCategory) {
     params.set('category', state.selectedCategory)
-  }
-  
-  if (state.selectedTags.length > 0) {
-    params.set('tags', state.selectedTags.join(','))
   }
   
   if (state.searchQuery) {
@@ -659,13 +643,6 @@ function applyFiltersFromAllPdfs() {
     state.pdfs = state.pdfs.filter(pdf => pdf.category_id === state.selectedCategory)
   }
   
-  // Apply tag filter
-  if (state.selectedTags.length > 0) {
-    state.pdfs = state.pdfs.filter(pdf => {
-      return pdf.tags && pdf.tags.some(tag => state.selectedTags.includes(tag.id))
-    })
-  }
-  
   // Apply search filter
   if (state.searchQuery) {
     const query = state.searchQuery.toLowerCase()
@@ -698,12 +675,9 @@ async function loadCategories() {
   }
 }
 
+// Tags feature removed - function kept for compatibility
 async function loadTags() {
-  try {
-    const response = await fetch('/api/tags')
-    state.tags = await response.json()
-  } catch (error) {
-  }
+  // Tags feature removed
 }
 
 async function loadPDFs() {
@@ -811,25 +785,6 @@ function renderCategoryFilter() {
       </div>
     </div>
     
-    <!-- Tags Section (at bottom) -->
-    <div class="mb-6 pt-3 border-t-2 border-gray-200">
-      <h2 class="text-base font-semibold mb-3 text-darker flex items-center">
-        <i class="fas fa-tags mr-2 text-primary"></i>タグ
-      </h2>
-      <div class="flex flex-wrap gap-1.5">
-        ${state.tags.map(tag => `
-          <button 
-            onclick="toggleTag(${tag.id})" 
-            class="tag-btn ${state.selectedTags.includes(tag.id) ? 'active' : ''} px-2.5 py-1.5 rounded-full text-xs font-medium"
-            aria-label="${escapeHtml(tag.name)}タグでフィルター"
-            aria-pressed="${state.selectedTags.includes(tag.id)}"
-            role="button"
-          >
-            <i class="fas fa-tag mr-1 text-xs" aria-hidden="true"></i>${escapeHtml(tag.name)}
-          </button>
-        `).join('')}
-      </div>
-    </div>
   `
   container.innerHTML = html
   
@@ -1059,15 +1014,6 @@ function renderPDFList() {
     const cat = state.categories.find(c => c.id === state.selectedCategory)
     if (cat) filterText.push(`カテゴリ: ${cat.name}`)
   }
-  if (state.selectedTags.length > 0) {
-    const tagNames = state.selectedTags.map(tagId => {
-      const tag = state.tags.find(t => t.id === tagId)
-      return tag ? tag.name : ''
-    }).filter(n => n)
-    if (tagNames.length > 0) {
-      filterText.push(`タグ: ${tagNames.join(', ')}`)
-    }
-  }
   if (state.searchQuery) {
     filterText.push(`検索: "${state.searchQuery}"`)
   }
@@ -1214,7 +1160,7 @@ function renderPDFList() {
   
   // Determine how many items to show
   const isMobile = window.innerWidth < 1024 // lg breakpoint
-  const isTopPage = !state.selectedCategory && state.selectedTags.length === 0 && !state.searchQuery && !state.showOnlyFavorites && !state.showDownloadHistory
+  const isTopPage = !state.selectedCategory && !state.searchQuery && !state.showOnlyFavorites && !state.showDownloadHistory
   let itemsToShow = combinedItems
   let hasMore = false
   
@@ -1710,33 +1656,9 @@ function filterByCategory(categoryId) {
   closeMobileMenu()
 }
 
+// Tags feature removed - function kept for compatibility
 function toggleTag(tagId) {
-  const index = state.selectedTags.indexOf(tagId)
-  const isAdding = index === -1
-  
-  if (index > -1) {
-    state.selectedTags.splice(index, 1)
-  } else {
-    state.selectedTags.push(tagId)
-  }
-  
-  // Track tag selection
-  const tag = state.tags.find(t => t.id === tagId)
-  if (tag) {
-    trackGAEvent(isAdding ? 'filter_tag_add' : 'filter_tag_remove', {
-      tag_id: tagId,
-      tag_name: tag.name
-    })
-  }
-  
-  state.showDownloadHistory = false // Clear download history mode
-  state.showAllMobile = false // Reset mobile "show all" state
-  updateURL()
-  renderTagFilter()
-  loadPDFs()
-  
-  // Close mobile menu after selection
-  closeMobileMenu()
+  // Tags feature removed
 }
 
 // Clear all filters

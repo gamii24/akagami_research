@@ -6310,7 +6310,7 @@ app.get('/', (c) => {
     ? categoryMeta[categoryId]
     : {
         title: "Akagami.net - SNSマーケティング・生成AI資料保管庫",
-        description: "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別・タグ別に検索できる便利な資料管理システム。",
+        description: "YouTube、Instagram、TikTokなどのSNSマーケティングや生成AIに関する資料を無料で公開。カテゴリ別に検索できる便利な資料管理システム。",
         keywords: "SNSマーケティング,YouTube,Instagram,TikTok,Threads,生成AI,マーケティング資料,無料資料,赤髪社長",
         name: null as string | null
       }
@@ -6494,9 +6494,6 @@ app.get('/', (c) => {
 
               {/* Category Filter */}
               <div id="category-filter"></div>
-
-              {/* Tag Filter */}
-              <div id="tag-filter"></div>
               
               {/* Download History Button */}
               <div class="mt-6 pt-6 border-t-2 border-gray-200">
