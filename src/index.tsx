@@ -9103,19 +9103,21 @@ app.get('/announcements', async (c) => {
         </div>
 
         {/* Image Modal */}
-        <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 z-[9999] hidden items-center justify-center p-4" onclick="window.closeImageModal()">
-          <div class="relative w-full h-full flex items-center justify-center">
+        <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); z-index: 10000;" onclick="window.closeImageModal()">
+          <div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
             <button 
               onclick="event.stopPropagation(); window.closeImageModal();" 
-              class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 text-4xl bg-black bg-opacity-50 rounded-full w-16 h-16 flex items-center justify-center"
-              aria-label="閉じる">
+              style="position: absolute; top: 1rem; right: 1rem; color: white; font-size: 2.5rem; background-color: rgba(0, 0, 0, 0.5); border-radius: 50%; width: 4rem; height: 4rem; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; z-index: 10001;"
+              aria-label="閉じる"
+              onmouseover="this.style.color='#d1d5db'"
+              onmouseout="this.style.color='white'">
               <i class="fas fa-times"></i>
             </button>
             <img 
               id="modalImage" 
               src="" 
               alt="拡大画像" 
-              class="max-w-full max-h-full object-contain"
+              style="max-width: 90%; max-height: 90%; object-fit: contain;"
               onclick="event.stopPropagation()" />
           </div>
         </div>
@@ -9136,10 +9138,9 @@ app.get('/announcements', async (c) => {
                   console.error('Failed to load image:', imageUrl);
                 };
                 modalImage.src = imageUrl;
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
+                modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
-                console.log('Modal opened, display:', window.getComputedStyle(modal).display);
+                console.log('Modal opened, display:', modal.style.display);
               } else {
                 console.error('Modal or modalImage element not found');
               }
@@ -9149,8 +9150,7 @@ app.get('/announcements', async (c) => {
               console.log('Closing modal');
               const modal = document.getElementById('imageModal');
               if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
+                modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
               }
             }
