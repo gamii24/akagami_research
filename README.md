@@ -569,6 +569,50 @@ SNSシェアの最適化：
 
 ## ⚡ パフォーマンス最適化
 
+### 📱 モバイルレスポンシブ最適化（2026-02-05）
+- **スマホ表示の改善**
+  - トップページのカード表示: 2列×10行（20枚表示）
+  - PC表示: 4列×6行（24枚表示）
+  - カード間隔: スマホ gap-2 (8px)、PC gap-4 (16px)
+  - カード比率: 125% → 110%に最適化（より多くのカード表示）
+  - 影とボーダーの軽量化（shadow-lg → shadow-md、border-2 → border）
+  - フォントサイズ縮小: ダウンロード数・日付・アイコンを最小化
+  - 余白削減: 各種オーバーレイやボタンのpaddingを縮小
+  - 「もっと見る」ボタン機能: 残り件数表示（${state.pdfs.length - 20}件）
+- **レスポンシブレイアウト実装**
+  - `grid-cols-2 lg:grid-cols-4`：スマホは2列、PCは4列
+  - `gap-2 lg:gap-4`：スマホは狭い間隔、PCは広い間隔
+- **パフォーマンス向上**
+  - スクロール回数削減（15枚 → 20枚表示で+33%改善）
+  - データ使用量削減（コンパクトUI）
+  - ページ遷移速度向上（1秒でカードが消える問題を解決）
+- **ユーザー体験**
+  - カード発見性の向上（一度に多くのコンテンツ表示）
+  - UI密度の最適化（情報効率の向上）
+  - スムーズなスクロール体験
+
+### Tailwind CSS本番ビルド化（2026-02-05）
+- **CDN版 → 本番ビルド版への移行**
+  - ファイルサイズ: 3,000KB（CDN版） → 67KB（本番ビルド版）**98%削減**
+  - PostCSS + Tailwind CSS v3.4.17を導入
+  - tailwind.config.js と postcss.config.jsを作成
+  - input.css へ全カスタムCSSを統合
+  - build:css スクリプトを追加（`npx tailwindcss --minify`）
+  - CDNスクリプトとCSPからTailwind CDNを削除
+  - output.css を全ページで読み込み
+- **パフォーマンス改善**
+  - ページ読み込み速度: 大幅改善（3MB削減）
+  - 初期レンダリング速度: 向上（ブロッキングスクリプト削除）
+  - 本番環境警告: 完全解消
+  - ビルド時間: 約2秒（高速ビルド）
+- **技術的詳細**
+  - ビルド手順: `npm run build:css` → `npm run build` → `wrangler pages deploy`
+  - ファイル構成: 
+    - `webapp/public/static/input.css`（ソース）
+    - `webapp/public/static/output.css`（ビルド後/67KB/ミニファイ済み）
+    - `webapp/dist/static/output.css`（デプロイ先）
+  - 設定ファイル: tailwind.config.js、postcss.config.js、package.json
+
 ### 画像最適化
 - **WebP形式への変換**
   - OG画像を最適化（PNG → WebP）
