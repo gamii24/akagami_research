@@ -8998,10 +8998,18 @@ app.get('/announcements', async (c) => {
         const match = url.match(/\/d\/([a-zA-Z0-9_-]+)\//);
         if (match) {
           const fileId = match[1];
-          // Convert to direct image URL
-          const directImageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-          const imgTag = `<img src="${directImageUrl}" alt="画像" class="max-w-full h-auto rounded-lg shadow-md my-4" loading="lazy" />`;
-          processedContent = processedContent.replace(url, imgTag);
+          // Try multiple Google Drive image formats
+          const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+          
+          // Create a clickable image that opens the original in a new tab
+          const imgWithLink = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4">
+            <img src="${thumbnailUrl}" 
+                 alt="画像" 
+                 class="max-w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" 
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='https://drive.google.com/uc?export=view&id=${fileId}'; this.parentElement.classList.add('border-2', 'border-gray-300', 'p-4'); this.parentElement.innerHTML='<p class=\\'text-gray-600\\'><i class=\\'fas fa-image\\'></i> 画像を表示できません。<a href=\\'${url}\\' target=\\'_blank\\' class=\\'text-blue-600 underline\\'>こちらをクリック</a>してGoogleドライブで開いてください。</p>';" />
+          </a>`;
+          processedContent = processedContent.replace(url, imgWithLink);
         }
       });
     }
@@ -9011,8 +9019,9 @@ app.get('/announcements', async (c) => {
     const urls = processedContent.match(urlPattern);
     if (urls) {
       urls.forEach(url => {
-        // Skip if already processed (inside img tag)
-        if (!processedContent.includes(`src="${url}"`)) {
+        // Skip if already processed (inside img tag or anchor tag)
+        if (!processedContent.includes(`src="${url}"`) && 
+            !processedContent.includes(`href="${url}"`)) {
           const linkTag = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">${url}</a>`;
           processedContent = processedContent.replace(url, linkTag);
         }
