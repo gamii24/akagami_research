@@ -1391,13 +1391,13 @@ function renderPDFList() {
       ` : ''}
       
       ${pdf.thumbnail_url ? `
-        <!-- Thumbnail only (4:5 ratio optimized for mobile) - No title/date -->
+        <!-- Thumbnail only (4:5 ratio for 1080×1350 images) - No title/date -->
         <div class="relative w-full bg-white" style="padding-bottom: 125%;">
           <img 
             data-src="${convertGoogleDriveUrl(pdf.thumbnail_url)}"
             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3C/svg%3E"
             alt="${escapeHtml(pdf.title)}"
-            class="absolute inset-0 w-full h-full object-contain lazy-image"
+            class="absolute inset-0 w-full h-full object-cover lazy-image"
             referrerpolicy="no-referrer"
             crossorigin="anonymous"
           />
