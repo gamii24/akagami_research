@@ -1212,7 +1212,7 @@ function renderPDFList() {
     return 0
   })
   
-  // Determine how many items to show on mobile
+  // Determine how many items to show
   const isMobile = window.innerWidth < 1024 // lg breakpoint
   const isTopPage = !state.selectedCategory && state.selectedTags.length === 0 && !state.searchQuery && !state.showOnlyFavorites && !state.showDownloadHistory
   let itemsToShow = combinedItems
@@ -1221,6 +1221,12 @@ function renderPDFList() {
   // On mobile top page, limit to 15 cards unless "show all" is clicked
   if (isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 15) {
     itemsToShow = combinedItems.slice(0, 15)
+    hasMore = true
+  }
+  
+  // On desktop top page, limit to 32 cards (4 columns × 8 rows) unless "show all" is clicked
+  if (!isMobile && isTopPage && !state.showAllMobile && combinedItems.length > 32) {
+    itemsToShow = combinedItems.slice(0, 32)
     hasMore = true
   }
   
