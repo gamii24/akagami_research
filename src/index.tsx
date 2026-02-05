@@ -9002,28 +9002,24 @@ app.get('/announcements', async (c) => {
       processedContent = processedContent.replace(url, placeholder);
     }
     
+    // Replace line breaks first (before adding HTML)
+    processedContent = processedContent.split('\n').join('<br>');
+    
     // Convert remaining URLs to clickable links
     const urlPattern = /https?:\/\/[^\s<]+/g;
     processedContent = processedContent.replace(urlPattern, (url) => {
       return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline break-all">${url}</a>`;
     });
     
-    // Replace Google Drive placeholders with image tags
+    // Replace Google Drive placeholders with image tags (single line, no line breaks)
     googleDriveMatches.forEach(({ url, fileId, placeholder }) => {
       const thumbnailUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
       const errorMsg = `画像を表示できません。<a href="${url}" target="_blank" class="text-blue-600 underline">こちらをクリック</a>してGoogleドライブで開いてください。`;
-      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4 max-w-2xl">
-        <img src="${thumbnailUrl}" 
-             alt="お知らせ画像" 
-             class="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" 
-             loading="lazy"
-             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=&quot;border-2 border-gray-300 p-4 rounded-lg text-center&quot;><p class=&quot;text-gray-600&quot;><i class=&quot;fas fa-image&quot;></i> ${errorMsg}</p></div>';" />
-      </a>`;
+      const imgHtml = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="block my-4 max-w-2xl"><img src="${thumbnailUrl}" alt="お知らせ画像" class="w-full h-auto rounded-lg shadow-md cursor-pointer hover:shadow-xl transition-shadow" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=&quot;border-2 border-gray-300 p-4 rounded-lg text-center&quot;><p class=&quot;text-gray-600&quot;><i class=&quot;fas fa-image&quot;></i> ${errorMsg}</p></div>';" /></a>`;
       processedContent = processedContent.replace(placeholder, imgHtml);
     });
     
-    // Replace line breaks
-    return processedContent.split('\n').join('<br>');
+    return processedContent;
   }
 
   return c.html(
