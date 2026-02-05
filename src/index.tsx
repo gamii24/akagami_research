@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import type { Context } from 'hono'
 import { cors } from 'hono/cors'
 import { secureHeaders } from 'hono/secure-headers'
+import { raw } from 'hono/html'
 import { renderer } from './renderer'
 import { 
   generateToken, 
@@ -9088,7 +9089,7 @@ app.get('/announcements', async (c) => {
                           })}
                         </span>
                       </div>
-                      <div class="text-gray-700 leading-relaxed announcement-content" dangerouslySetInnerHTML={{ __html: processContent(announcement.content) }}></div>
+                      <div class="text-gray-700 leading-relaxed announcement-content">{raw(processContent(announcement.content))}</div>
                     </div>
                   ))}
                 </div>
