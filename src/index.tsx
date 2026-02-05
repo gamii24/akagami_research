@@ -79,6 +79,19 @@ function CommonHeader() {
               <a href="/contact" class="text-white hover:text-red-100 transition-colors font-medium">
                 お問い合わせ
               </a>
+              
+              {/* Separator */}
+              <span class="text-white opacity-30">|</span>
+              
+              {/* External Links */}
+              <a href="https://resta24.jp/blog/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-red-100 transition-colors font-medium flex items-center gap-1">
+                BLOG
+                <i class="fas fa-external-link-alt text-xs"></i>
+              </a>
+              <a href="https://akagami-prompt.pages.dev/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-red-100 transition-colors font-medium flex items-center gap-1">
+                プロンプト
+                <i class="fas fa-external-link-alt text-xs"></i>
+              </a>
             </nav>
             
             {/* Mobile Menu Button */}
@@ -179,6 +192,26 @@ function CommonSidebar() {
           >
             <i class="fas fa-question-circle"></i>
             <span>SNSの疑問</span>
+          </a>
+          <a
+            href="https://resta24.jp/blog/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full px-4 py-3 bg-green-50 hover:bg-green-100 text-green-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-green-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="BLOGを開く"
+          >
+            <i class="fas fa-external-link-alt"></i>
+            <span>BLOG</span>
+          </a>
+          <a
+            href="https://akagami-prompt.pages.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full px-4 py-3 bg-teal-50 hover:bg-teal-100 text-teal-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-teal-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="プロンプトを開く"
+          >
+            <i class="fas fa-robot"></i>
+            <span>プロンプト</span>
           </a>
         </div>
 
