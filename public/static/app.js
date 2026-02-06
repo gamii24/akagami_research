@@ -1438,25 +1438,24 @@ function renderPDFList() {
           />
           <div class="absolute inset-0 bg-gray-100 animate-pulse loading-placeholder"></div>
           ${downloaded ? `
-            <div class="absolute top-1 right-1 bg-primary text-white px-1.5 py-0.5 rounded-full text-xs font-bold shadow-lg">
+            <div class="absolute top-1 right-1 bg-primary text-white px-1.5 py-0.5 rounded-full text-xs font-bold shadow-lg z-20">
               <i class="fas fa-check-circle mr-0.5"></i>DL済
             </div>
           ` : ''}
           <!-- Download count overlay on image (bottom-left) -->
-          <div class="absolute bottom-1 left-1 text-white" style="font-size: 0.6rem;">
-            DL数：${pdf.download_count || 0}
+          <div class="absolute bottom-2 left-2 text-white text-xs z-10" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">
+            <i class="fas fa-download mr-1"></i>${pdf.download_count || 0}
           </div>
           <!-- Action buttons overlay on image (bottom-right) -->
-          <div class="absolute bottom-1 right-1 flex items-center gap-1">
+          <div class="absolute bottom-2 right-2 z-10">
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
-              class="favorite-btn-small text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
+              class="favorite-btn-small text-white hover:text-red-400 transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
-              style="flex-shrink: 0; transform: translateY(6px);"
               aria-label="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
               aria-pressed="${favorite}"
             >
-              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 0.75rem;" aria-hidden="true"></i>
+              <i class="${favorite ? 'fas' : 'far'} fa-heart" style="font-size: 1rem; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));" aria-hidden="true"></i>
             </button>
           </div>
         </div>
