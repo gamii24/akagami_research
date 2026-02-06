@@ -1239,8 +1239,7 @@ function renderPDFList() {
           aria-label="${state.multiSelectMode ? '選択モードを終了' : '選択モードを開始'}"
           aria-pressed="${state.multiSelectMode}"
         >
-          <i class="fas ${state.multiSelectMode ? 'fa-times' : 'fa-check-square'}"></i>
-          <span class="hidden sm:inline">${state.multiSelectMode ? '選択終了' : '選択'}</span>
+          <span>${state.multiSelectMode ? '選択終了' : '選択'}</span>
           ${state.multiSelectMode && state.selectedPdfs.size > 0 ? `<span class="text-xs">(${state.selectedPdfs.size})</span>` : ''}
         </button>
         
