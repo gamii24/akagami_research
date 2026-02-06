@@ -950,6 +950,16 @@ function exitMultiSelectMode() {
   hideMultiSelectToolbar()
 }
 
+function toggleMultiSelectMode() {
+  if (state.multiSelectMode) {
+    exitMultiSelectMode()
+  } else {
+    state.multiSelectMode = true
+    renderPDFList()
+    showMultiSelectToolbar()
+  }
+}
+
 function togglePdfSelection(event, pdfId) {
   event.stopPropagation()
   

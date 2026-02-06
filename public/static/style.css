@@ -153,6 +153,29 @@
   font-weight: 500;
 }
 
+/* Multi-Select Toggle Button */
+.multi-select-toggle-btn {
+  background: white;
+  color: #4a5568;
+  border: 2px solid #e2e8f0;
+  font-weight: 500;
+}
+
+.multi-select-toggle-btn:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.multi-select-toggle-btn.active {
+  background: #3182ce;
+  color: white;
+  border-color: #3182ce;
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+  font-weight: 500;
+}
+
 /* PDF Card Styles */
 .pdf-card,
 .infographic-card,
@@ -1010,6 +1033,21 @@ body.dark-mode .favorite-filter-btn:hover {
 
 body.dark-mode .favorite-filter-btn.active {
   background-color: var(--primary);
+  color: white;
+}
+
+body.dark-mode .multi-select-toggle-btn {
+  background-color: #2d2d2d;
+  border-color: #404040;
+  color: #e0e0e0;
+}
+
+body.dark-mode .multi-select-toggle-btn:hover {
+  background-color: #353535;
+}
+
+body.dark-mode .multi-select-toggle-btn.active {
+  background-color: #3182ce;
   color: white;
 }
 
