@@ -1340,7 +1340,7 @@ function renderPDFList() {
     // Card event handlers - Desktop only long press, mobile uses select button
     const cardEvents = state.multiSelectMode 
       ? `onclick="togglePdfSelection(event, ${pdf.id})"`
-      : `onclick="handleCardClick(event, ${pdf.id}, '${downloadUrl}')"``
+      : `onclick="handleCardClick(event, ${pdf.id}, '${downloadUrl}')"`
     
     // List view
     if (state.viewMode === 'list') {
