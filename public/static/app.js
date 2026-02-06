@@ -1443,11 +1443,11 @@ function renderPDFList() {
             </div>
           ` : ''}
           <!-- Download count overlay on image (bottom-left) -->
-          <div class="absolute bottom-2 left-2 text-white text-xs z-10" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">
+          <div class="absolute bottom-1 left-2 text-white text-xs z-10" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">
             <i class="fas fa-download mr-1"></i>${pdf.download_count || 0}
           </div>
           <!-- Action buttons overlay on image (bottom-right) -->
-          <div class="absolute bottom-2 right-2 z-10">
+          <div class="absolute bottom-1 right-2 z-10">
             <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small text-white hover:text-red-400 transition-all duration-200 ${favorite ? 'active' : ''}"
