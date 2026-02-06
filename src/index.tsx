@@ -7490,7 +7490,7 @@ app.get('/mypage', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/utils.js"></script>
         <script src="/static/auth.js"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
         <script src="/static/mypage.js?v=202601181337"></script>
         
         {/* Falling Hearts Animation - Different settings for mobile and PC */}
@@ -7862,7 +7862,7 @@ app.get('/question-finder', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js?v=202602051520"></script>
+        <script defer src="/static/app.js?v=202602060748"></script>
         <script defer src="/static/question-finder.js?v=2026011610"></script>
       </body>
     </html>
@@ -8192,7 +8192,7 @@ app.get('/sns-faq', (c) => {
         
         <script defer src="/static/utils.js"></script>
         <script defer src="/static/auth.js"></script>
-        <script defer src="/static/app.js?v=202602051520"></script>
+        <script defer src="/static/app.js?v=202602060748"></script>
         <script defer src="/static/sns-faq.js?v=2026011610"></script>
       </body>
     </html>
@@ -8525,7 +8525,7 @@ app.get('/glossary', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
       </body>
     </html>,
     {
@@ -8915,7 +8915,7 @@ app.get('/company', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
       </body>
     </html>,
     {
@@ -9034,7 +9034,7 @@ app.get('/contact', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
       </body>
     </html>,
     {
@@ -9166,7 +9166,7 @@ app.get('/privacy', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
       </body>
     </html>,
     {
@@ -9370,7 +9370,7 @@ app.get('/terms', (c) => {
 
           <script src="/static/utils.js?v=202601181036"></script>
           <script src="/static/auth.js?v=202601181036"></script>
-          <script src="/static/app.js?v=202602051520"></script>
+          <script src="/static/app.js?v=202602060748"></script>
         </body>
     </html>,
     {
@@ -9666,7 +9666,7 @@ app.get('/services', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
       </body>
     </html>,
     {
@@ -9838,7 +9838,7 @@ app.get('/speaking', (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
       </body>
     </html>,
     {
@@ -10050,7 +10050,7 @@ app.get('/announcements', async (c) => {
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
-        <script src="/static/app.js?v=202602051520"></script>
+        <script src="/static/app.js?v=202602060748"></script>
       </body>
     </html>,
     {
@@ -11027,7 +11027,7 @@ app.get('/article/:slug', async (c) => {
           
           <script src="/static/utils.js"></script>
           <script src="/static/auth.js"></script>
-          <script src="/static/app.js?v=202602051520"></script>
+          <script src="/static/app.js?v=202602060748"></script>
         </body>
       </html>
     )
