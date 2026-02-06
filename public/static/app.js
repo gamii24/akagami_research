@@ -1221,6 +1221,19 @@ function renderPDFList() {
           ${state.showOnlyFavorites ? `<span class="text-xs">(${state.favoritePdfs.size})</span>` : ''}
         </button>
         
+        <!-- Multi-select Mode Toggle Button -->
+        <button 
+          onclick="toggleMultiSelectMode()" 
+          class="multi-select-toggle-btn ${state.multiSelectMode ? 'active' : ''} px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap flex-shrink-0"
+          title="${state.multiSelectMode ? '選択モードを終了' : '選択モード'}"
+          aria-label="${state.multiSelectMode ? '選択モードを終了' : '選択モードを開始'}"
+          aria-pressed="${state.multiSelectMode}"
+        >
+          <i class="fas ${state.multiSelectMode ? 'fa-times' : 'fa-check-square'}"></i>
+          <span class="hidden sm:inline">${state.multiSelectMode ? '選択終了' : '選択'}</span>
+          ${state.multiSelectMode && state.selectedPdfs.size > 0 ? `<span class="text-xs">(${state.selectedPdfs.size})</span>` : ''}
+        </button>
+        
         <!-- Separator (PC only) -->
         <div class="w-px h-6 bg-gray-300 flex-shrink-0 hidden lg:block"></div>
         
@@ -1372,15 +1385,6 @@ function renderPDFList() {
           
           <div class="flex items-center gap-2">
             <button 
-              onclick="enterMultiSelectMode(${pdf.id})"
-              class="select-btn-small bg-gray-100 hover:bg-gray-200 text-gray-700 rounded px-2 py-1 transition-all duration-200"
-              title="選択モードに入る"
-              style="flex-shrink: 0; font-size: 0.7rem; font-weight: 600;"
-              aria-label="選択モードに入る"
-            >
-              選択
-            </button>
-            <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
@@ -1436,15 +1440,6 @@ function renderPDFList() {
           <!-- Action buttons overlay on image (bottom-right) -->
           <div class="absolute bottom-1 right-1 flex items-center gap-1">
             <button 
-              onclick="enterMultiSelectMode(${pdf.id})"
-              class="select-btn-small bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-700 rounded px-1.5 py-0.5 transition-all duration-200 shadow-sm"
-              title="選択モードに入る"
-              style="flex-shrink: 0; font-size: 0.65rem; font-weight: 600;"
-              aria-label="選択モードに入る"
-            >
-              選択
-            </button>
-            <button 
               onclick="toggleFavorite(event, ${pdf.id})"
               class="favorite-btn-small text-white hover:text-gray-200 transition-all duration-200 ${favorite ? 'active' : ''}"
               title="${favorite ? 'お気に入りから削除' : 'お気に入りに追加'}"
@@ -1474,15 +1469,6 @@ function renderPDFList() {
               <span class="text-xs" style="font-size: 0.6rem;">DL: ${pdf.download_count || 0}</span>
             </div>
             <div class="flex items-center gap-2">
-              <button 
-                onclick="enterMultiSelectMode(${pdf.id})"
-                class="select-btn-small bg-gray-100 hover:bg-gray-200 text-gray-700 rounded px-2 py-1 transition-all duration-200"
-                title="選択モードに入る"
-                style="flex-shrink: 0; font-size: 0.7rem; font-weight: 600;"
-                aria-label="選択モードに入る"
-              >
-                選択
-              </button>
               <button 
                 onclick="toggleFavorite(event, ${pdf.id})"
                 class="favorite-btn-small ${favorite ? 'active' : ''}"
