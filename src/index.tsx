@@ -7446,6 +7446,29 @@ app.get('/glossary', (c) => {
                       TikTokの「おすすめ」、Instagramの「発見」など、各プラットフォームで名称が異なります。
                     </p>
                   </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">アナリティクス（Analytics）</h4>
+                    <p class="text-gray-700">
+                      データ分析機能。投稿のパフォーマンス、オーディエンスの属性、行動パターンなどを詳細に分析できます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">アンバサダー（Ambassador）</h4>
+                    <p class="text-gray-700">
+                      ブランドの公式代表者として継続的にプロモーションを行う人物。
+                      インフルエンサーよりも長期的な関係性を持ちます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">炎上（Flaming）</h4>
+                    <p class="text-gray-700">
+                      投稿やアカウントに対して批判的なコメントが殺到する現象。
+                      ブランドイメージに大きな影響を与える可能性があります。
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -7490,6 +7513,36 @@ app.get('/glossary', (c) => {
                     <p class="text-gray-700">
                       ユーザーが商品購入、会員登録、問い合わせなど、目標とするアクションを実行すること。
                       マーケティングの最終的な成果指標です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">キャンペーン（Campaign）</h4>
+                    <p class="text-gray-700">
+                      特定の目的を持った一連のマーケティング活動。ハッシュタグキャンペーンやプレゼント企画などが代表的です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">クリエイター（Creator）</h4>
+                    <p class="text-gray-700">
+                      オリジナルコンテンツを制作・発信する人。YouTuberや TikTokerなども含まれます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">クロスポスト（Cross-post）</h4>
+                    <p class="text-gray-700">
+                      同じコンテンツを複数のSNSプラットフォームに投稿すること。
+                      効率的ですが、各プラットフォームの特性に合わせた調整も重要です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">広告配信（Ad Delivery）</h4>
+                    <p class="text-gray-700">
+                      SNSプラットフォーム上で有料広告を表示すること。
+                      ターゲティング設定により特定のユーザー層に効率的にリーチできます。
                     </p>
                   </div>
                 </div>
@@ -7544,6 +7597,37 @@ app.get('/glossary', (c) => {
                     </p>
                   </div>
                 </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">スワイプアップ（Swipe Up）</h4>
+                    <p class="text-gray-700">
+                      Instagramストーリーズで上にスワイプすることで外部リンクに遷移できる機能。
+                      現在は「リンクステッカー」に変更されています。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ステルスマーケティング（Stealth Marketing）</h4>
+                    <p class="text-gray-700">
+                      広告であることを隠して宣伝する手法。日本では2023年10月から規制対象となり、
+                      PR表記が義務付けられています。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ソーシャルリスニング（Social Listening）</h4>
+                    <p class="text-gray-700">
+                      SNS上の会話や投稿を監視・分析し、ブランドや商品に対する評判、トレンドを把握する手法。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ソーシャルプルーフ（Social Proof）</h4>
+                    <p class="text-gray-700">
+                      他のユーザーの行動や評価を見て自分も同様の行動を取る心理現象。
+                      いいね数やフォロワー数が多いほど信頼される傾向があります。
+                    </p>
+                  </div>
               </div>
 
               {/* た行 */}
@@ -7586,6 +7670,30 @@ app.get('/glossary', (c) => {
                     <p class="text-gray-700">
                       現在SNS上で流行しているハッシュタグ、音源、チャレンジなど。
                       トレンドに乗ることでリーチを拡大できる可能性があります。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">チャレンジ（Challenge）</h4>
+                    <p class="text-gray-700">
+                      特定のハッシュタグや音源を使って多くのユーザーが参加する企画。
+                      TikTokで特に人気があり、バズる可能性が高いコンテンツ形式です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">動画マーケティング（Video Marketing）</h4>
+                    <p class="text-gray-700">
+                      動画コンテンツを活用したマーケティング手法。
+                      YouTubeショート、TikTok、Instagramリールなど、短尺動画が主流となっています。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">滞在時間（Watch Time）</h4>
+                    <p class="text-gray-700">
+                      ユーザーが投稿やプロフィールを閲覧した時間。
+                      長いほどアルゴリズムから高く評価される傾向があります。
                     </p>
                   </div>
                 </div>
@@ -7670,6 +7778,44 @@ app.get('/glossary', (c) => {
                     </p>
                   </div>
                 </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">パーソナライゼーション（Personalization）</h4>
+                    <p class="text-gray-700">
+                      ユーザーの興味関心や行動履歴に基づいて、個別最適化されたコンテンツを表示すること。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ビジネスアカウント（Business Account）</h4>
+                    <p class="text-gray-700">
+                      企業やブランドが利用する公式アカウント。
+                      インサイト機能や広告配信など、ビジネス向けの機能が利用できます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ブランディング（Branding）</h4>
+                    <p class="text-gray-700">
+                      ブランドの認知度や好感度を高めるための活動。
+                      SNSでは一貫性のあるビジュアルやトーンが重要です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ペルソナ（Persona）</h4>
+                    <p class="text-gray-700">
+                      ターゲットとなる架空の顧客像。年齢、性別、職業、興味関心などを具体的に設定します。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ボット（Bot）</h4>
+                    <p class="text-gray-700">
+                      自動化されたプログラム。SNSでは自動いいねや自動フォローなどに使われますが、
+                      多くのプラットフォームで規約違反とされています。
+                    </p>
+                  </div>
               </div>
 
               {/* ま行 */}
@@ -7759,6 +7905,38 @@ app.get('/glossary', (c) => {
                     </p>
                   </div>
                 </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ランディングページ（Landing Page / LP）</h4>
+                    <p class="text-gray-700">
+                      SNS広告やリンクからユーザーが最初に訪れるWebページ。
+                      コンバージョンを目的として最適化されたページです。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">リスティング広告（Listing Ads）</h4>
+                    <p class="text-gray-700">
+                      検索エンジンの検索結果に表示される広告。
+                      SNSマーケティングと組み合わせることで効果が高まります。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">リターゲティング（Retargeting）</h4>
+                    <p class="text-gray-700">
+                      一度Webサイトを訪れたユーザーに対して再度広告を表示する手法。
+                      Meta広告やGoogle広告で利用できます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">レスポンシブデザイン（Responsive Design）</h4>
+                    <p class="text-gray-700">
+                      スマートフォン、タブレット、PCなど、あらゆるデバイスで最適に表示されるデザイン。
+                      SNSからのリンク先ページでは必須です。
+                    </p>
+                  </div>
               </div>
 
               {/* わ行 */}
@@ -7814,6 +7992,122 @@ app.get('/glossary', (c) => {
                     <p class="text-gray-700">
                       検索エンジン最適化。GoogleやYahooなどの検索結果で上位表示させるための施策。
                       SNSとWebサイトを連携させる際に重要です。
+                    </p>
+                  </div>
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">A/Bテスト（A/B Testing）</h4>
+                    <p class="text-gray-700">
+                      2つの異なるバージョンのコンテンツを比較して、どちらがより効果的かを検証する手法。
+                      投稿時間、画像、キャプションなどを変えてテストします。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">API（Application Programming Interface）</h4>
+                    <p class="text-gray-700">
+                      アプリケーション間でデータをやり取りするための仕組み。
+                      SNS分析ツールなどが各プラットフォームのAPIを利用してデータを取得します。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">B2B（Business to Business）</h4>
+                    <p class="text-gray-700">
+                      企業間取引。B2B向けSNSマーケティングではLinkedInが特に重要です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">B2C（Business to Consumer）</h4>
+                    <p class="text-gray-700">
+                      企業と消費者間の取引。Instagram、TikTok、YouTubeなど多くのSNSがB2C向けマーケティングに活用されます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">CPA（Cost Per Action）</h4>
+                    <p class="text-gray-700">
+                      アクション単価。購入や登録などの成果1件あたりにかかった広告費用。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">CPC（Cost Per Click）</h4>
+                    <p class="text-gray-700">
+                      クリック単価。広告が1回クリックされるごとにかかる費用。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">CPM（Cost Per Mille）</h4>
+                    <p class="text-gray-700">
+                      インプレッション単価。広告が1000回表示されるごとにかかる費用。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">CTR（Click Through Rate）</h4>
+                    <p class="text-gray-700">
+                      クリック率。表示回数に対してクリックされた割合。
+                      広告やリンクの効果を測る重要指標です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">CV（Conversion）</h4>
+                    <p class="text-gray-700">
+                      コンバージョン。商品購入、資料請求、会員登録など、目標とする成果のこと。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">CVR（Conversion Rate）</h4>
+                    <p class="text-gray-700">
+                      コンバージョン率。訪問者数やクリック数に対する成果の割合。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">LTV（Life Time Value）</h4>
+                    <p class="text-gray-700">
+                      顧客生涯価値。1人の顧客が生涯を通じて企業にもたらす利益の総額。
+                      リピート購入を促すSNSマーケティングで重要な指標です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ROAS（Return On Ad Spend）</h4>
+                    <p class="text-gray-700">
+                      広告費用対効果。広告費1円あたりの売上。
+                      (売上 ÷ 広告費) × 100で算出されます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">SEM（Search Engine Marketing）</h4>
+                    <p class="text-gray-700">
+                      検索エンジンマーケティング。SEOとリスティング広告を含む総合的な検索エンジン対策。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">SMM（Social Media Marketing）</h4>
+                    <p class="text-gray-700">
+                      ソーシャルメディアマーケティング。SNSを活用したマーケティング活動全般を指します。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">UI（User Interface）</h4>
+                    <p class="text-gray-700">
+                      ユーザーインターフェース。ユーザーが操作する画面やデザインのこと。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">UX（User Experience）</h4>
+                    <p class="text-gray-700">
+                      ユーザー体験。製品やサービスを使った時の総合的な体験や満足度。
                     </p>
                   </div>
                 </div>
