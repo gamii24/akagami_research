@@ -7346,11 +7346,14 @@ app.get('/glossary', (c) => {
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
         <link href="/static/style.css" rel="stylesheet" />
       </head>
-      <body class="bg-beige">
-        {CommonHeader(c)}
-        
-        <main class="flex-1 p-6 lg:ml-0">
-          <div class="max-w-5xl mx-auto">
+      <body class="bg-gray-50 flex flex-col min-h-screen">
+        <CommonHeader />
+
+        {/* Main Content */}
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Glossary Content Area */}
+            <div class="lg:col-span-3 order-1 lg:order-2">
             {/* Page Header */}
             <div class="mb-8">
               <h1 class="text-3xl font-bold text-dark mb-2">
@@ -7638,8 +7641,14 @@ app.get('/glossary', (c) => {
                 トップページへ戻る
               </a>
             </div>
+            </div>
+
+            {/* Sidebar */}
+            <CommonSidebar />
           </div>
         </main>
+
+        <CommonFooter />
 
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
