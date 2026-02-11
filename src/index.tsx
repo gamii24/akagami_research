@@ -132,14 +132,6 @@ function CommonSidebar() {
             <span>資料一覧</span>
           </a>
           <a
-            href="/calendar/1"
-            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2 mb-3"
-            aria-label="SNS運用カレンダーを開く"
-          >
-            <i class="fas fa-calendar-alt"></i>
-            <span>SNS運用カレンダー</span>
-          </a>
-          <a
             href="/news"
             class="w-full px-4 py-3 bg-yellow-50 hover:bg-yellow-100 text-yellow-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-yellow-200 flex items-center justify-center gap-2 mb-3"
             aria-label="最新ニュースを開く"
@@ -170,6 +162,14 @@ function CommonSidebar() {
           >
             <i class="fas fa-book"></i>
             <span>用語集</span>
+          </a>
+          <a
+            href="/calendar/1"
+            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="SNS運用カレンダーを開く"
+          >
+            <i class="fas fa-calendar-alt"></i>
+            <span>SNS運用カレンダー</span>
           </a>
           <a
             href="https://resta24.jp/blog/"
