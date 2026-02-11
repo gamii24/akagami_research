@@ -7372,268 +7372,453 @@ app.get('/glossary', (c) => {
               </p>
             </div>
 
-            {/* 基本用語 */}
+            {/* あいうえお順用語集 */}
             <div class="bg-white rounded-lg shadow-md p-8 mb-6">
               <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-primary">
-                <i class="fas fa-star mr-2 text-primary"></i>
-                基本用語
+                <i class="fas fa-book-open mr-2 text-primary"></i>
+                SNSマーケティング用語集（あいうえお順）
               </h2>
-              <div class="space-y-6">
-                <div class="border-l-4 border-primary pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">エンゲージメント（Engagement）</h3>
-                  <p class="text-gray-700">
-                    ユーザーが投稿に対して行う「いいね」「コメント」「シェア」「保存」などのアクション全般を指します。
-                    エンゲージメント率が高いほど、フォロワーとの関係性が良好で、アルゴリズムからも評価されやすくなります。
-                  </p>
-                </div>
+              
+              {/* あ行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">あ行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">アカウント（Account）</h4>
+                    <p class="text-gray-700">
+                      SNSプラットフォーム上でユーザーが作成する個人またはビジネスのプロフィール。
+                      投稿、フォロー、メッセージなどの機能を利用するための基本単位。
+                    </p>
+                  </div>
 
-                <div class="border-l-4 border-primary pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">リーチ（Reach）</h3>
-                  <p class="text-gray-700">
-                    投稿を見たユニークユーザー数のこと。同じユーザーが複数回見ても1としてカウントされます。
-                    リーチを増やすことで、より多くの人に情報を届けることができます。
-                  </p>
-                </div>
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">アルゴリズム（Algorithm）</h4>
+                    <p class="text-gray-700">
+                      各SNSプラットフォームが、ユーザーに表示するコンテンツを決定するためのルールやシステム。
+                      エンゲージメント率、滞在時間、投稿頻度などさまざまな要素で評価されます。
+                    </p>
+                  </div>
 
-                <div class="border-l-4 border-primary pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">インプレッション（Impression）</h3>
-                  <p class="text-gray-700">
-                    投稿が表示された回数の合計。同じユーザーに複数回表示された場合も全てカウントされます。
-                    インプレッション÷リーチで、平均表示回数を算出できます。
-                  </p>
-                </div>
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">インサイト（Insights）</h4>
+                    <p class="text-gray-700">
+                      アカウントや投稿のパフォーマンスを分析するための統計データ。
+                      リーチ、エンゲージメント、フォロワーの属性などが確認できます。
+                    </p>
+                  </div>
 
-                <div class="border-l-4 border-primary pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">アルゴリズム（Algorithm）</h3>
-                  <p class="text-gray-700">
-                    各SNSプラットフォームが、ユーザーに表示するコンテンツを決定するためのルールやシステム。
-                    エンゲージメント率、滞在時間、投稿頻度などさまざまな要素で評価されます。
-                  </p>
-                </div>
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">インプレッション（Impression）</h4>
+                    <p class="text-gray-700">
+                      投稿が表示された回数の合計。同じユーザーに複数回表示された場合も全てカウントされます。
+                      インプレッション÷リーチで、平均表示回数を算出できます。
+                    </p>
+                  </div>
 
-                <div class="border-l-4 border-primary pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">UGC（User Generated Content）</h3>
-                  <p class="text-gray-700">
-                    ユーザーが自発的に作成・投稿したコンテンツ。顧客の口コミ、レビュー、使用写真など。
-                    企業が作るコンテンツより信頼性が高く、マーケティングに活用されます。
-                  </p>
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">インフルエンサー（Influencer）</h4>
+                    <p class="text-gray-700">
+                      SNS上で多くのフォロワーを持ち、影響力のある人物。
+                      企業とのタイアップ投稿やプロモーションを行うことが多い。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">エンゲージメント（Engagement）</h4>
+                    <p class="text-gray-700">
+                      ユーザーが投稿に対して行う「いいね」「コメント」「シェア」「保存」などのアクション全般を指します。
+                      エンゲージメント率が高いほど、フォロワーとの関係性が良好で、アルゴリズムからも評価されやすくなります。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">エンゲージメント率（Engagement Rate）</h4>
+                    <p class="text-gray-700">
+                      エンゲージメント数をリーチまたはフォロワー数で割った割合。
+                      投稿の質やフォロワーとの関係性を測る重要な指標です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">おすすめ（For You / Discover）</h4>
+                    <p class="text-gray-700">
+                      フォローしていないアカウントの投稿も表示される、アルゴリズムによるレコメンド機能。
+                      TikTokの「おすすめ」、Instagramの「発見」など、各プラットフォームで名称が異なります。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* か行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">か行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">拡散（Viral / Sharing）</h4>
+                    <p class="text-gray-700">
+                      コンテンツがユーザー間で共有され、急速に広まる現象。
+                      「バズる」とも表現されます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">コメント（Comment）</h4>
+                    <p class="text-gray-700">
+                      投稿に対してユーザーが残すテキストメッセージ。
+                      エンゲージメントの中でも特に価値の高いアクションとされています。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">コラボ投稿（Collaboration Post）</h4>
+                    <p class="text-gray-700">
+                      Instagramで複数のアカウントが共同で投稿する機能。
+                      両方のアカウントのフォロワーにリーチでき、相互にメリットがあります。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">コンテンツ（Content）</h4>
+                    <p class="text-gray-700">
+                      SNS上で投稿される画像、動画、テキストなどの総称。
+                      質の高いコンテンツ制作がSNSマーケティングの基本です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">コンバージョン（Conversion / CVR）</h4>
+                    <p class="text-gray-700">
+                      ユーザーが商品購入、会員登録、問い合わせなど、目標とするアクションを実行すること。
+                      マーケティングの最終的な成果指標です。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* さ行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">さ行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">サムネイル（Thumbnail）</h4>
+                    <p class="text-gray-700">
+                      動画のプレビュー画像。YouTubeやTikTokでは、サムネイルのクオリティがクリック率に大きく影響します。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">シェア（Share / Repost）</h4>
+                    <p class="text-gray-700">
+                      他のユーザーの投稿を自分のフォロワーに共有する機能。
+                      Xのリポスト、Instagramのストーリーズシェアなどがこれに該当します。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ショート動画（Short Video）</h4>
+                    <p class="text-gray-700">
+                      15秒〜60秒程度の縦型短尺動画。TikTok、Instagramリール、YouTubeショートなど、
+                      各プラットフォームで主流のコンテンツ形式です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ストーリーズ（Stories）</h4>
+                    <p class="text-gray-700">
+                      Instagramの24時間で消える投稿機能。日常的な発信やフォロワーとの交流に適しています。
+                      アンケート機能や質問機能も利用可能。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">スレッド（Thread）</h4>
+                    <p class="text-gray-700">
+                      Xで複数のポストを連続して投稿する形式。長文の内容を分割して発信する際に使用されます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">保存（Save）</h4>
+                    <p class="text-gray-700">
+                      ユーザーが投稿を後で見返すために保存した回数。Instagramのアルゴリズムで重要視される指標の一つ。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* た行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">た行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">タイムライン（Timeline / Feed）</h4>
+                    <p class="text-gray-700">
+                      フォローしているアカウントの投稿が時系列またはアルゴリズム順で表示される画面。
+                      各SNSのメインフィードです。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ターゲティング（Targeting）</h4>
+                    <p class="text-gray-700">
+                      広告配信やコンテンツ制作において、特定の属性（年齢、性別、興味関心など）を持つユーザー層に絞ってアプローチすること。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">タグ付け（Tagging）</h4>
+                    <p class="text-gray-700">
+                      投稿に他のアカウントを関連付ける機能。Instagramでは画像内にタグを付けることができ、
+                      タグ付けされたアカウントの投稿一覧に表示されます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">デュエット（Duet）</h4>
+                    <p class="text-gray-700">
+                      TikTokで他のユーザーの動画と並べて自分の動画を投稿できる機能。
+                      コラボレーションやリアクション動画に使われます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">トレンド（Trend）</h4>
+                    <p class="text-gray-700">
+                      現在SNS上で流行しているハッシュタグ、音源、チャレンジなど。
+                      トレンドに乗ることでリーチを拡大できる可能性があります。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* な行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">な行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ニッチ（Niche）</h4>
+                    <p class="text-gray-700">
+                      特定の狭い分野や専門領域。ニッチなアカウントは、特定のターゲットに深く刺さる傾向があります。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ノーティフィケーション（Notification）</h4>
+                    <p class="text-gray-700">
+                      新しいいいね、コメント、フォローなどのアクションを知らせる通知機能。
+                      エンゲージメントを促進する重要な要素です。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* は行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">は行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ハッシュタグ（Hashtag）</h4>
+                    <p class="text-gray-700">
+                      投稿を分類・検索しやすくするためのキーワード。「#」記号の後にキーワードを付けて使用します。
+                      適切なハッシュタグの選定がリーチ拡大の鍵となります。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">バズる（Go Viral）</h4>
+                    <p class="text-gray-700">
+                      投稿が急速に拡散され、多くのユーザーに見られること。
+                      通常よりも大幅に高いリーチとエンゲージメントを獲得した状態を指します。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">フィード（Feed）</h4>
+                    <p class="text-gray-700">
+                      Instagramのメイン投稿画面。通常の正方形・縦長・横長の画像や動画を投稿する場所。
+                      ストーリーズやリールとは異なる、永続的なコンテンツです。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">フォロワー（Follower）</h4>
+                    <p class="text-gray-700">
+                      自分のアカウントをフォローしているユーザー。フォロワー数は影響力の指標の一つですが、
+                      質（エンゲージメント率）も重要です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">フォロワー増加率（Follower Growth Rate）</h4>
+                    <p class="text-gray-700">
+                      一定期間におけるフォロワーの増加割合。アカウントの成長速度を測る指標です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">プロフィール（Profile / Bio）</h4>
+                    <p class="text-gray-700">
+                      アカウントの自己紹介欄。名前、説明文、リンク、アイコン画像などが含まれます。
+                      第一印象を決める重要な要素です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ポスト（Post）</h4>
+                    <p class="text-gray-700">
+                      SNSに投稿されるコンテンツの総称。Xでは旧「ツイート」がポストに改称されました。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* ま行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">ま行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">メンション（Mention / @）</h4>
+                    <p class="text-gray-700">
+                      投稿内で「@ユーザー名」の形式で他のアカウントを言及すること。
+                      メンションされたユーザーには通知が届きます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">メンバーシップ（Membership）</h4>
+                    <p class="text-gray-700">
+                      YouTubeで視聴者が月額料金を支払ってチャンネルを支援する仕組み。
+                      限定コンテンツやバッジなどの特典を提供できます。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* や行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">や行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ユーザー生成コンテンツ（UGC / User Generated Content）</h4>
+                    <p class="text-gray-700">
+                      ユーザーが自発的に作成・投稿したコンテンツ。顧客の口コミ、レビュー、使用写真など。
+                      企業が作るコンテンツより信頼性が高く、マーケティングに活用されます。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* ら行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">ら行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ライブ配信（Live Streaming）</h4>
+                    <p class="text-gray-700">
+                      リアルタイムで動画を配信する機能。視聴者とのインタラクティブなコミュニケーションが可能です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">リーチ（Reach）</h4>
+                    <p class="text-gray-700">
+                      投稿を見たユニークユーザー数のこと。同じユーザーが複数回見ても1としてカウントされます。
+                      リーチを増やすことで、より多くの人に情報を届けることができます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">リール（Reels）</h4>
+                    <p class="text-gray-700">
+                      Instagramの短尺縦型動画機能。TikTok形式の動画を投稿でき、
+                      発見タブでフォロワー外にもリーチしやすいフォーマットです。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">リンク（Link）</h4>
+                    <p class="text-gray-700">
+                      外部サイトへ誘導するURL。プロフィールやストーリーズ、投稿に設置でき、
+                      コンバージョンを促進する重要な要素です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">リポスト（Repost / Retweet）</h4>
+                    <p class="text-gray-700">
+                      他のユーザーの投稿を自分のフォロワーに共有すること。
+                      Xでは「リツイート」から「リポスト」に名称変更されました。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ROI（Return on Investment）</h4>
+                    <p class="text-gray-700">
+                      投資対効果。SNSマーケティングに投じた費用と、得られた成果の比率を表す指標。
+                      (売上 - 投資額) ÷ 投資額 × 100で算出されます。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* わ行 */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">わ行</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">ワードオブマウス（Word of Mouth / WOM）</h4>
+                    <p class="text-gray-700">
+                      口コミのこと。SNS上での自然な会話や評判の拡散を指します。
+                      信頼性が高く、マーケティング効果も高い手法です。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* アルファベット */}
+              <div class="mb-8">
+                <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">アルファベット</h3>
+                <div class="space-y-6">
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">CTA（Call to Action）</h4>
+                    <p class="text-gray-700">
+                      ユーザーに特定の行動を促すメッセージ。「詳しくはこちら」「今すぐ購入」などのボタンやテキスト。
+                      コンバージョン率を高めるために重要です。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">DM（Direct Message）</h4>
+                    <p class="text-gray-700">
+                      ユーザー間で個別にやり取りできるプライベートメッセージ機能。
+                      顧客対応やコラボレーションの交渉などに使用されます。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">KGI（Key Goal Indicator）</h4>
+                    <p class="text-gray-700">
+                      重要目標達成指標。ビジネスの最終的な目標を測る指標（売上、利益など）。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">KPI（Key Performance Indicator）</h4>
+                    <p class="text-gray-700">
+                      重要業績評価指標。目標達成のために追跡すべき中間指標（フォロワー数、エンゲージメント率など）。
+                    </p>
+                  </div>
+
+                  <div class="border-l-4 border-primary pl-4">
+                    <h4 class="text-lg font-semibold text-dark mb-2">SEO（Search Engine Optimization）</h4>
+                    <p class="text-gray-700">
+                      検索エンジン最適化。GoogleやYahooなどの検索結果で上位表示させるための施策。
+                      SNSとWebサイトを連携させる際に重要です。
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-
-            {/* Instagram用語 */}
-            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
-              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-pink-500">
-                <i class="fab fa-instagram mr-2 text-pink-500"></i>
-                Instagram用語
-              </h2>
-              <div class="space-y-6">
-                <div class="border-l-4 border-pink-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">リール（Reels）</h3>
-                  <p class="text-gray-700">
-                    最大90秒のショート動画機能。発見タブに表示されやすく、フォロワー外へのリーチ拡大に効果的。
-                    音楽やエフェクトを使って、エンターテイメント性の高いコンテンツを作成できます。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-pink-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">ストーリーズ（Stories）</h3>
-                  <p class="text-gray-700">
-                    24時間で消える短期コンテンツ。日常的な投稿やリアルタイム情報の共有に適しています。
-                    ステッカー、質問箱、アンケートなどインタラクティブな機能が豊富です。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-pink-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">保存数（Saves）</h3>
-                  <p class="text-gray-700">
-                    ユーザーが投稿を後で見返すために保存した回数。Instagramのアルゴリズムで重要視される指標の一つ。
-                    保存されやすいコンテンツは有益性が高いと評価されます。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-pink-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">ハイライト（Highlights）</h3>
-                  <p class="text-gray-700">
-                    ストーリーズをプロフィールに永続的に保存できる機能。カテゴリごとに整理することで、
-                    プロフィールページを充実させ、新規フォロワーへの情報提供に活用できます。
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* TikTok用語 */}
-            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
-              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-blue-500">
-                <i class="fab fa-tiktok mr-2 text-blue-500"></i>
-                TikTok用語
-              </h2>
-              <div class="space-y-6">
-                <div class="border-l-4 border-blue-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">おすすめ（For You Page / FYP）</h3>
-                  <p class="text-gray-700">
-                    TikTokのメインフィード。フォローしていないアカウントの動画も表示され、バズる可能性が高いページ。
-                    アルゴリズムによってユーザーの興味に合わせた動画が配信されます。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-blue-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">デュエット（Duet）</h3>
-                  <p class="text-gray-700">
-                    他のユーザーの動画と並べて自分の動画を投稿できる機能。リアクション動画やコラボレーションに使われます。
-                    エンゲージメントを高める効果的な手法です。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-blue-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">視聴完了率</h3>
-                  <p class="text-gray-700">
-                    動画を最後まで見たユーザーの割合。TikTokのアルゴリズムで最も重視される指標の一つ。
-                    視聴完了率が高いほど、おすすめに表示されやすくなります。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-blue-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">トレンド音源</h3>
-                  <p class="text-gray-700">
-                    TikTokで流行している音楽やサウンド。トレンド音源を使用することで、
-                    おすすめに表示されやすくなり、リーチ拡大が期待できます。
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* YouTube用語 */}
-            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
-              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-red-500">
-                <i class="fab fa-youtube mr-2 text-red-500"></i>
-                YouTube用語
-              </h2>
-              <div class="space-y-6">
-                <div class="border-l-4 border-red-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">CTR（Click Through Rate）</h3>
-                  <p class="text-gray-700">
-                    サムネイルとタイトルが表示された回数に対して、実際にクリックされた割合。
-                    CTRが高いほど、サムネイルとタイトルが魅力的だと判断されます。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-red-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">平均視聴時間</h3>
-                  <p class="text-gray-700">
-                    視聴者が動画を平均して何分視聴したかを示す指標。YouTubeのアルゴリズムで重要視されます。
-                    視聴維持率と合わせて分析することで、動画の改善点が見つかります。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-red-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">ショート（Shorts）</h3>
-                  <p class="text-gray-700">
-                    最大60秒の縦型ショート動画。TikTokやInstagramリールと同様の形式で、
-                    新規視聴者獲得に効果的なフォーマットです。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-red-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">チャプター</h3>
-                  <p class="text-gray-700">
-                    動画を章立てして、視聴者が見たい部分にジャンプできる機能。
-                    ユーザビリティが向上し、視聴維持率の改善にもつながります。
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* X（Twitter）用語 */}
-            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
-              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-gray-700">
-                <i class="fab fa-x-twitter mr-2 text-gray-700"></i>
-                X（Twitter）用語
-              </h2>
-              <div class="space-y-6">
-                <div class="border-l-4 border-gray-700 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">リポスト（Repost / RT）</h3>
-                  <p class="text-gray-700">
-                    他のユーザーのポストを自分のフォロワーにシェアする機能。旧称はリツイート（Retweet）。
-                    リポストされることで、投稿のリーチが大きく拡大します。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-gray-700 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">インプレッション数</h3>
-                  <p class="text-gray-700">
-                    ポストがユーザーのタイムラインに表示された回数。X（Twitter）では特に重視される指標で、
-                    アナリティクスで確認できます。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-gray-700 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">スペース（Space）</h3>
-                  <p class="text-gray-700">
-                    音声チャットルーム機能。リアルタイムで複数人と会話でき、
-                    フォロワーとのエンゲージメント強化やコミュニティ形成に活用できます。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-gray-700 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">スレッド（Thread）</h3>
-                  <p class="text-gray-700">
-                    複数のポストを連続して投稿する形式。長文の情報を分割して伝えたい時に便利で、
-                    ストーリー性のあるコンテンツ作成に適しています。
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* マーケティング用語 */}
-            <div class="bg-white rounded-lg shadow-md p-8 mb-6">
-              <h2 class="text-2xl font-bold text-dark mb-6 pb-3 border-b-2 border-green-500">
-                <i class="fas fa-chart-line mr-2 text-green-500"></i>
-                マーケティング用語
-              </h2>
-              <div class="space-y-6">
-                <div class="border-l-4 border-green-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">CVR（Conversion Rate / コンバージョン率）</h3>
-                  <p class="text-gray-700">
-                    アクセスしたユーザーのうち、購入や問い合わせなどの目標行動を達成した割合。
-                    CVR改善はマーケティングROI向上の鍵となります。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-green-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">KPI（Key Performance Indicator）</h3>
-                  <p class="text-gray-700">
-                    重要業績評価指標。ビジネスの目標達成度を測る具体的な指標。
-                    SNSマーケティングでは、フォロワー数、エンゲージメント率、CVRなどが設定されます。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-green-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">ペルソナ（Persona）</h3>
-                  <p class="text-gray-700">
-                    ターゲット顧客の具体的な人物像。年齢、性別、職業、趣味、悩みなどを詳細に設定し、
-                    コンテンツ制作やマーケティング戦略の指針とします。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-green-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">オーガニック（Organic）</h3>
-                  <p class="text-gray-700">
-                    広告を使わずに自然に獲得したリーチやフォロワー。
-                    広告（ペイド）と対比して使われ、長期的なアカウント成長の基盤となります。
-                  </p>
-                </div>
-
-                <div class="border-l-4 border-green-500 pl-4">
-                  <h3 class="text-lg font-semibold text-dark mb-2">インフルエンサーマーケティング</h3>
-                  <p class="text-gray-700">
-                    影響力のある個人（インフルエンサー）に商品やサービスをPRしてもらうマーケティング手法。
-                    ターゲット層への信頼性の高いアプローチが可能です。
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Back to Top Link */}
             <div class="text-center mt-8">
               <a href="/" class="inline-flex items-center text-primary hover:underline">
