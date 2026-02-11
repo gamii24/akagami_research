@@ -10954,6 +10954,7 @@ app.get('/article/:slug', async (c) => {
           }} />
           
           {/* Tailwind CSS CDN for article styling */}
+          <script src="https://cdn.tailwindcss.com"></script>
           <link href="/static/output.css" rel="stylesheet" />
           <script dangerouslySetInnerHTML={{
             __html: `
@@ -11020,7 +11021,11 @@ app.get('/article/:slug', async (c) => {
                 </div>
                 
                 {/* Article Content - Raw HTML */}
-                <div id="article-content" dangerouslySetInnerHTML={{ __html: article.content }}></div>
+                <div 
+                  id="article-content" 
+                  class="bg-white rounded-lg shadow-md p-6 prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: article.content }}
+                ></div>
               </div>
             </div>
           </main>
