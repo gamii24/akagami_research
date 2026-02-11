@@ -10861,17 +10861,36 @@ app.get('/article/:slug', async (c) => {
     
     const article = results[0]
     
+    // Extract styles and scripts from head if present
+    let customStyles = ''
+    let customScripts = ''
+    const headMatch = article.content.match(/<head[^>]*>([\s\S]*?)<\/head>/i)
+    if (headMatch) {
+      const headContent = headMatch[1]
+      // Extract style tags
+      const styleMatches = headContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi)
+      if (styleMatches) {
+        customStyles = styleMatches.join('\n')
+      }
+      // Extract script tags (but not external scripts already loaded)
+      const scriptMatches = headContent.match(/<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/gi)
+      if (scriptMatches) {
+        customScripts = scriptMatches.join('\n')
+      }
+    }
+    
     // Extract body content from full HTML if present
     let cleanContent = article.content
     const bodyMatch = cleanContent.match(/<body[^>]*>([\s\S]*)<\/body>/i)
     if (bodyMatch) {
       cleanContent = bodyMatch[1]
+    } else {
+      // If no body tag, just remove doctype, html, and head tags
+      cleanContent = cleanContent
+        .replace(/<!DOCTYPE[^>]*>/gi, '')
+        .replace(/<\/?html[^>]*>/gi, '')
+        .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
     }
-    // Remove <!DOCTYPE>, <html>, <head> tags if they exist
-    cleanContent = cleanContent
-      .replace(/<!DOCTYPE[^>]*>/gi, '')
-      .replace(/<\/?html[^>]*>/gi, '')
-      .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
     
     return c.html(
       <html lang="ja">
@@ -10988,7 +11007,13 @@ app.get('/article/:slug', async (c) => {
           {/* Google Fonts - Noto Sans JP */}
           <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
           
+          {/* Chart.js for graphs */}
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          
           <link rel="stylesheet" href="/static/style.css" />
+          
+          {/* Custom styles from article */}
+          {customStyles && <style dangerouslySetInnerHTML={{ __html: customStyles.replace(/<\/?style[^>]*>/gi, '') }} />}
         </head>
         <body class="bg-gray-50">
           {/* Header */}
@@ -11034,8 +11059,7 @@ app.get('/article/:slug', async (c) => {
                 
                 {/* Article Content - Raw HTML */}
                 <div 
-                  id="article-content" 
-                  class="bg-white rounded-lg shadow-md p-6 prose prose-lg max-w-none"
+                  id="article-content"
                   dangerouslySetInnerHTML={{ __html: cleanContent }}
                 ></div>
               </div>
@@ -11045,6 +11069,9 @@ app.get('/article/:slug', async (c) => {
           <script src="/static/utils.js"></script>
           <script src="/static/auth.js"></script>
           <script src="/static/app.js?v=202602060748"></script>
+          
+          {/* Custom scripts from article */}
+          {customScripts && <script dangerouslySetInnerHTML={{ __html: customScripts.replace(/<\/?script[^>]*>/gi, '') }} />}
         </body>
       </html>
     )
