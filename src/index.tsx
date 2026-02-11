@@ -10861,6 +10861,18 @@ app.get('/article/:slug', async (c) => {
     
     const article = results[0]
     
+    // Extract body content from full HTML if present
+    let cleanContent = article.content
+    const bodyMatch = cleanContent.match(/<body[^>]*>([\s\S]*)<\/body>/i)
+    if (bodyMatch) {
+      cleanContent = bodyMatch[1]
+    }
+    // Remove <!DOCTYPE>, <html>, <head> tags if they exist
+    cleanContent = cleanContent
+      .replace(/<!DOCTYPE[^>]*>/gi, '')
+      .replace(/<\/?html[^>]*>/gi, '')
+      .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
+    
     return c.html(
       <html lang="ja">
         <head>
@@ -11024,7 +11036,7 @@ app.get('/article/:slug', async (c) => {
                 <div 
                   id="article-content" 
                   class="bg-white rounded-lg shadow-md p-6 prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: article.content }}
+                  dangerouslySetInnerHTML={{ __html: cleanContent }}
                 ></div>
               </div>
             </div>
