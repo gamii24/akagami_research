@@ -7379,6 +7379,23 @@ app.get('/glossary', (c) => {
                 SNSマーケティング用語集（あいうえお順）
               </h2>
               
+              {/* 検索ボックス */}
+              <div class="mb-8">
+                <div class="relative">
+                  <input 
+                    type="text" 
+                    id="glossary-search" 
+                    placeholder="用語を検索... (例: エンゲージメント、KPI、リーチ)"
+                    class="w-full px-4 py-3 pl-12 border-2 border-gray-300 rounded-lg focus:border-primary focus:outline-none transition-colors"
+                  />
+                  <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">
+                  <i class="fas fa-info-circle mr-1"></i>
+                  <span id="total-terms"></span> • キーワードを入力すると該当する用語のみが表示されます
+                </p>
+              </div>
+              
               {/* あ行 */}
               <div class="mb-8">
                 <h3 class="text-xl font-bold text-primary mb-4 pb-2 border-b border-gray-200">あ行</h3>
@@ -8132,6 +8149,7 @@ app.get('/glossary', (c) => {
         <script src="/static/utils.js?v=202601181036"></script>
         <script src="/static/auth.js?v=202601181036"></script>
         <script src="/static/app.js?v=202602060748"></script>
+        <script src="/static/glossary.js"></script>
       </body>
     </html>,
     {
