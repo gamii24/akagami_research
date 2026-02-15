@@ -1629,6 +1629,31 @@ app.get('/api/analytics/users', requireAuth, async (c) => {
   }
 })
 
+// Get all registered users with full details (admin only)
+app.get('/api/admin/users', requireAuth, async (c) => {
+  try {
+    const { results: users } = await c.env.DB.prepare(`
+      SELECT 
+        id,
+        email,
+        name,
+        location,
+        birthday,
+        login_method,
+        created_at,
+        last_login,
+        email_verified
+      FROM users
+      ORDER BY created_at DESC
+    `).all()
+    
+    return c.json({ data: users })
+  } catch (error: any) {
+    console.error('Error fetching users:', error)
+    return c.json({ error: error.message }, 500)
+  }
+})
+
 // ============================================
 // API Routes - Categories
 // ============================================
