@@ -124,6 +124,16 @@ function CommonSidebar() {
         {/* Navigation Links */}
         <div class="mb-6">
           <a
+            href="https://akagami-zukai.pages.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full px-4 py-3 bg-pink-50 hover:bg-pink-100 text-pink-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-pink-200 flex items-center justify-center gap-2 mb-3"
+            aria-label="図解記事を開く"
+          >
+            <i class="fas fa-images"></i>
+            <span>図解記事</span>
+          </a>
+          <a
             href="/categories"
             class="w-full px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:text-gray-900 rounded-lg transition-colors font-medium border-2 border-indigo-200 flex items-center justify-center gap-2 mb-3"
             aria-label="資料一覧を開く"
