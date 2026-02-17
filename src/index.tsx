@@ -682,6 +682,8 @@ app.post('/api/user/login', async (c) => {
     const token = await generateUserToken(user.id as number, secret)
     setUserSessionCookie(c, token)
     
+    console.log('[LOGIN] User logged in:', user.email, 'Token set:', token.substring(0, 20) + '...')
+    
     return c.json({ 
       success: true, 
       user: { 
@@ -819,6 +821,8 @@ app.post('/api/user/logout', async (c) => {
 app.get('/api/user/me', async (c) => {
   const secret = getJWTSecret(c)
   const currentUser = await getCurrentUser(c, secret)
+  
+  console.log('[USER_ME] Request from:', c.req.url, 'User:', currentUser ? currentUser.userId : 'NOT_AUTH')
   
   if (!currentUser) {
     return c.json({ authenticated: false })

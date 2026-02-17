@@ -56,10 +56,12 @@ export function setUserSessionCookie(c: Context, token: string): void {
   setCookie(c, 'user_token', token, {
     httpOnly: true,
     secure: isProduction, // Auto-detect: true for HTTPS, false for local dev
-    sameSite: 'Lax',
+    sameSite: 'Lax', // Lax allows cookies on top-level navigation
     maxAge: 60 * 60 * 24 * 30, // 30 days
     path: '/',
   })
+  
+  console.log('[COOKIE_SET] Cookie set for domain:', c.req.url, 'Secure:', isProduction)
 }
 
 // Clear user session cookie
