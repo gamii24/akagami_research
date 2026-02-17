@@ -729,13 +729,21 @@ app.post('/api/user/send-magic-link', async (c) => {
     
     // Send magic link email
     const magicLink = `https://akagami.net/auth/magic-link?token=${token}`
-    await sendEmail({
+    const emailSent = await sendEmail({
       to: email,
       subject: 'Akagami.net ログインリンク',
-      html: getMagicLinkEmailHtml(user.name as string, magicLink),
-      text: `こんにちは、${user.name}さん。ログインリンク: ${magicLink} （15分間有効）`
+      html: getMagicLinkEmailHtml(user.name as string || 'ユーザー', magicLink),
+      text: `こんにちは、${user.name || 'ユーザー'}さん。ログインリンク: ${magicLink} （15分間有効）`
     }, c.env)
     
+    if (!emailSent) {
+      console.error('[MAGIC_LINK] Email sending failed for:', email)
+      return c.json({ 
+        error: 'メールの送信に失敗しました。しばらくしてから再度お試しください。' 
+      }, 500)
+    }
+    
+    console.log('[MAGIC_LINK] Email sent successfully to:', email)
     return c.json({ success: true, message: 'Magic link has been sent to your email.' })
   } catch (error: any) {
     console.error('Magic link error:', error)
