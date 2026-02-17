@@ -36,7 +36,7 @@ export async function sendEmail(options: EmailOptions, env?: EmailEnvironment): 
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Akagami.net <noreply@akagami.net>',
+        from: 'Akagami.net <onboarding@resend.dev>', // Using Resend's default domain for testing
         to: options.to,
         subject: options.subject,
         html: options.html,
