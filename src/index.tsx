@@ -35,6 +35,7 @@ type Bindings = {
   JWT_SECRET: string;
   ADMIN_PASSWORD: string;
   RESEND_API_KEY?: string;
+  PDF_BUCKET: R2Bucket;
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -1673,6 +1674,106 @@ app.get('/api/admin/users', requireAuth, async (c) => {
   } catch (error: any) {
     console.error('Error fetching users:', error)
     return c.json({ error: error.message }, 500)
+  }
+})
+
+// ============================================
+// ============================================
+// API Routes - PDF Upload to R2
+// ============================================
+
+// Upload PDF to R2 (protected)
+app.post('/api/pdfs/upload', requireAuth, async (c) => {
+  try {
+    const formData = await c.req.formData()
+    const file = formData.get('pdf') as File
+    
+    if (!file) {
+      return c.json({ error: 'No file provided' }, 400)
+    }
+    
+    // Validate file type
+    if (file.type !== 'application/pdf') {
+      return c.json({ error: 'Only PDF files are allowed' }, 400)
+    }
+    
+    // Validate file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024 // 50MB
+    if (file.size > maxSize) {
+      return c.json({ error: 'File size must be less than 50MB' }, 400)
+    }
+    
+    // Generate unique filename
+    const timestamp = Date.now()
+    const randomString = Math.random().toString(36).substring(2, 15)
+    const filename = `${timestamp}-${randomString}.pdf`
+    
+    // Upload to R2
+    const arrayBuffer = await file.arrayBuffer()
+    await c.env.PDF_BUCKET.put(filename, arrayBuffer, {
+      httpMetadata: {
+        contentType: 'application/pdf',
+      },
+    })
+    
+    // Generate R2 public URL (if bucket is public) or signed URL
+    const fileUrl = `https://pub-YOUR-BUCKET-ID.r2.dev/${filename}`
+    
+    console.log('[PDF_UPLOAD] File uploaded:', filename, 'Size:', file.size)
+    
+    return c.json({
+      success: true,
+      filename,
+      fileUrl,
+      size: file.size,
+      uploadedAt: new Date().toISOString()
+    })
+  } catch (error: any) {
+    console.error('[PDF_UPLOAD] Error:', error)
+    return c.json({ error: 'Upload failed' }, 500)
+  }
+})
+
+// Download PDF from R2 (public)
+app.get('/api/pdfs/download/:filename', async (c) => {
+  try {
+    const filename = c.req.param('filename')
+    
+    // Get file from R2
+    const object = await c.env.PDF_BUCKET.get(filename)
+    
+    if (!object) {
+      return c.json({ error: 'File not found' }, 404)
+    }
+    
+    // Return file
+    return new Response(object.body, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Cache-Control': 'public, max-age=31536000',
+      },
+    })
+  } catch (error: any) {
+    console.error('[PDF_DOWNLOAD] Error:', error)
+    return c.json({ error: 'Download failed' }, 500)
+  }
+})
+
+// Delete PDF from R2 (protected)
+app.delete('/api/pdfs/delete/:filename', requireAuth, async (c) => {
+  try {
+    const filename = c.req.param('filename')
+    
+    // Delete from R2
+    await c.env.PDF_BUCKET.delete(filename)
+    
+    console.log('[PDF_DELETE] File deleted:', filename)
+    
+    return c.json({ success: true })
+  } catch (error: any) {
+    console.error('[PDF_DELETE] Error:', error)
+    return c.json({ error: 'Delete failed' }, 500)
   }
 })
 
@@ -10786,4 +10887,234 @@ ${index + 1}. 会員番号: ${user.id}
     }
   }
 }
+
+// ============================================
+// Test Page - PDF Upload (テスト専用)
+// ============================================
+
+app.get('/test/pdf-upload', requireAuth, (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>PDFアップロードテスト - Akagami.net</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-100 min-h-screen p-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+          <h1 class="text-3xl font-bold text-gray-800 mb-6">
+            <i class="fas fa-upload mr-2 text-primary"></i>
+            PDFアップロードテスト
+          </h1>
+          
+          <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p class="text-sm text-yellow-800">
+              <i class="fas fa-exclamation-triangle mr-2"></i>
+              これはテスト機能です。本番環境では使用しないでください。
+            </p>
+          </div>
+          
+          <!-- Upload Form -->
+          <div class="mb-8">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">1. PDFファイルをアップロード</h2>
+            <form id="upload-form" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  PDFファイルを選択
+                </label>
+                <input 
+                  type="file" 
+                  id="pdf-file" 
+                  accept="application/pdf"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-red-600"
+                  required
+                />
+                <p class="mt-1 text-sm text-gray-500">最大50MB</p>
+              </div>
+              
+              <button 
+                type="submit" 
+                id="upload-btn"
+                class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                <i class="fas fa-cloud-upload-alt mr-2"></i>
+                アップロード
+              </button>
+            </form>
+          </div>
+          
+          <!-- Upload Result -->
+          <div id="upload-result" class="hidden mb-8">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">2. アップロード結果</h2>
+            <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p class="text-green-800 mb-2">
+                <i class="fas fa-check-circle mr-2"></i>
+                アップロード成功！
+              </p>
+              <div class="space-y-2 text-sm">
+                <p><strong>ファイル名:</strong> <code id="result-filename" class="bg-gray-100 px-2 py-1 rounded"></code></p>
+                <p><strong>ファイルサイズ:</strong> <span id="result-size"></span></p>
+                <p><strong>ダウンロードURL:</strong></p>
+                <div class="flex items-center gap-2 mt-2">
+                  <input 
+                    type="text" 
+                    id="download-url" 
+                    readonly 
+                    class="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded text-sm"
+                  />
+                  <button 
+                    onclick="copyUrl()" 
+                    class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 text-sm"
+                  >
+                    <i class="fas fa-copy mr-1"></i>
+                    コピー
+                  </button>
+                </div>
+                <a 
+                  id="download-link" 
+                  href="#" 
+                  target="_blank"
+                  class="inline-block mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  <i class="fas fa-download mr-2"></i>
+                  ダウンロードテスト
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Uploaded Files List -->
+          <div class="mb-8">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">3. アップロード済みファイル</h2>
+            <div id="files-list" class="space-y-2">
+              <p class="text-gray-500 text-sm">ファイルをアップロードすると、ここに表示されます。</p>
+            </div>
+          </div>
+          
+          <div class="mt-8 pt-6 border-t">
+            <a href="/admin" class="text-primary hover:underline">
+              <i class="fas fa-arrow-left mr-2"></i>
+              管理画面に戻る
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+      <script>
+        let uploadedFiles = []
+        
+        // Upload form handler
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+          e.preventDefault()
+          
+          const fileInput = document.getElementById('pdf-file')
+          const uploadBtn = document.getElementById('upload-btn')
+          const file = fileInput.files[0]
+          
+          if (!file) {
+            alert('ファイルを選択してください')
+            return
+          }
+          
+          // Show loading
+          uploadBtn.disabled = true
+          uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>アップロード中...'
+          
+          try {
+            // Create FormData
+            const formData = new FormData()
+            formData.append('pdf', file)
+            
+            // Upload
+            const response = await axios.post('/api/pdfs/upload', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              credentials: 'include'
+            })
+            
+            if (response.data.success) {
+              // Show result
+              showUploadResult(response.data)
+              
+              // Add to list
+              uploadedFiles.push(response.data)
+              updateFilesList()
+              
+              // Reset form
+              fileInput.value = ''
+              
+              alert('アップロード成功！')
+            }
+          } catch (error) {
+            console.error('Upload error:', error)
+            alert('アップロードに失敗しました: ' + (error.response?.data?.error || error.message))
+          } finally {
+            uploadBtn.disabled = false
+            uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-2"></i>アップロード'
+          }
+        })
+        
+        function showUploadResult(data) {
+          const resultDiv = document.getElementById('upload-result')
+          resultDiv.classList.remove('hidden')
+          
+          document.getElementById('result-filename').textContent = data.filename
+          document.getElementById('result-size').textContent = formatBytes(data.size)
+          
+          const downloadUrl = '/api/pdfs/download/' + data.filename
+          document.getElementById('download-url').value = window.location.origin + downloadUrl
+          document.getElementById('download-link').href = downloadUrl
+        }
+        
+        function updateFilesList() {
+          const listDiv = document.getElementById('files-list')
+          
+          if (uploadedFiles.length === 0) {
+            listDiv.innerHTML = '<p class="text-gray-500 text-sm">ファイルをアップロードすると、ここに表示されます。</p>'
+            return
+          }
+          
+          listDiv.innerHTML = uploadedFiles.map(file => \`
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded border">
+              <div class="flex-1">
+                <p class="font-medium text-sm">\${file.filename}</p>
+                <p class="text-xs text-gray-500">\${formatBytes(file.size)} • \${new Date(file.uploadedAt).toLocaleString('ja-JP')}</p>
+              </div>
+              <a 
+                href="/api/pdfs/download/\${file.filename}" 
+                target="_blank"
+                class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+              >
+                <i class="fas fa-download"></i>
+              </a>
+            </div>
+          \`).join('')
+        }
+        
+        function copyUrl() {
+          const input = document.getElementById('download-url')
+          input.select()
+          document.execCommand('copy')
+          alert('URLをコピーしました！')
+        }
+        
+        function formatBytes(bytes) {
+          if (bytes === 0) return '0 Bytes'
+          const k = 1024
+          const sizes = ['Bytes', 'KB', 'MB', 'GB']
+          const i = Math.floor(Math.log(bytes) / Math.log(k))
+          return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
+        }
+      </script>
+    </body>
+    </html>
+  `)
+})
+
 // Cache bust: 1770305932
